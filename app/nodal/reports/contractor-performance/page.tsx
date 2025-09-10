@@ -1,0 +1,131 @@
+'use client';
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Download, Eye, Clock, ThumbsUp, LogIn, MessageSquare, ThumbsDown } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { contractorTheme as theme } from "@/lib/theme";
+import { cn } from "@/lib/utils";
+
+export default function ContractorPerformanceReportPage() {
+
+    // Mock data focused on contractor administrative performance
+    const contractors = [
+        { 
+            name: "ABC Sanitation", 
+            avgGrievanceResponse: "18 Hours", 
+            ppeRequestFulfilled: "98%", 
+            overdueTasks: 2, 
+            lastLogin: "Today, 9:15 AM",
+            status: "Highly Responsive"
+        },
+        { 
+            name: "Rail Clean Services", 
+            avgGrievanceResponse: "26 Hours", 
+            ppeRequestFulfilled: "95%", 
+            overdueTasks: 1, 
+            lastLogin: "Today, 11:30 AM",
+            status: "Consistent"
+        },
+        { 
+            name: "Municipal Services", 
+            avgGrievanceResponse: "38 Hours", 
+            ppeRequestFulfilled: "90%", 
+            overdueTasks: 5, 
+            lastLogin: "Yesterday, 4:00 PM",
+            status: "Needs Follow-up"
+        },
+        { 
+            name: "City Maintenance", 
+            avgGrievanceResponse: "52 Hours (SLA Miss)", 
+            ppeRequestFulfilled: "85%", 
+            overdueTasks: 8, 
+            lastLogin: "3 days ago",
+            status: "Unresponsive"
+        },
+    ];
+
+  return (
+    <div className={cn("space-y-8", theme.page.gradientBackground)}>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <div>
+            <h2 className="text-3xl font-bold text-gray-800">Contractor Performance</h2>
+            <p className="text-gray-600 mt-1">Analyze contractor responsiveness and administrative consistency.</p>
+        </div>
+        <div className="flex items-center space-x-2 mt-4 sm:mt-0">
+          <Button className={theme.button.secondary}><Download className="h-4 w-4 mr-2" />Export Report</Button>
+        </div>
+      </div>
+
+      {/* Contractor Performance KPIs */}
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Card className="border-0 rounded-xl bg-white text-gray-800 shadow-lg">
+          <CardHeader className="pb-2 flex flex-row items-center justify-between"><CardTitle className="text-sm font-medium text-gray-500">Zone Avg. Response Time</CardTitle><Clock className="h-5 w-5 text-blue-500" /></CardHeader>
+          <CardContent><div className="text-3xl font-bold">33 Hours</div><p className="text-xs text-gray-500">For all grievances</p></CardContent>
+        </Card>
+        <Card className="border-0 rounded-xl bg-white text-gray-800 shadow-lg">
+          <CardHeader className="pb-2 flex flex-row items-center justify-between"><CardTitle className="text-sm font-medium text-gray-500">Active Contractors</CardTitle><LogIn className="h-5 w-5 text-green-500" /></CardHeader>
+          <CardContent><div className="text-3xl font-bold">3 / 4</div><p className="text-xs text-gray-500">Logged in within last 24 hours</p></CardContent>
+        </Card>
+         <Card className="border-0 rounded-xl bg-white text-gray-800 shadow-lg">
+          <CardHeader className="pb-2 flex flex-row items-center justify-between"><CardTitle className="text-sm font-medium text-gray-500">Unresponsive Contractors</CardTitle><ThumbsDown className="h-5 w-5 text-red-500" /></CardHeader>
+          <CardContent><div className="text-3xl font-bold">1</div><p className="text-xs text-gray-500">Missed 48hr SLA on grievances</p></CardContent>
+        </Card>
+      </div> */}
+
+      <Card className={theme.card.container}>
+        <CardHeader className={theme.card.header}>
+            <CardTitle className={theme.card.title}>Contractor Responsiveness Roster</CardTitle>
+            <CardDescription className={theme.card.description}>
+                This data is compiled from system logs and their actions on the grievance and PPE modules.
+            </CardDescription>
+        </CardHeader>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="px-6 py-4 text-sm font-semibold text-gray-500 uppercase">Contractor</TableHead>
+                <TableHead className="px-6 py-4 text-sm font-semibold text-gray-500 uppercase">Avg. Grievance Response</TableHead>
+                <TableHead className="px-6 py-4 text-sm font-semibold text-gray-500 uppercase">Overdue Tasks</TableHead>
+                <TableHead className="px-6 py-4 text-sm font-semibold text-gray-500 uppercase">Last System Login</TableHead>
+                <TableHead className="px-6 py-4 text-sm font-semibold text-gray-500 uppercase">Responsiveness Status</TableHead>
+                <TableHead className="text-right px-6 py-4 text-sm font-semibold text-gray-500 uppercase">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {contractors.map((c) => (
+                <TableRow key={c.name} className="border-t border-gray-100">
+                  <TableCell className="px-6 py-4">
+                    <div className="flex items-center space-x-3">
+                        <Avatar><AvatarFallback>{c.name.substring(0, 2)}</AvatarFallback></Avatar>
+                        <span className="font-medium text-gray-800">{c.name}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell className={cn("px-6 py-4 font-semibold", c.avgGrievanceResponse.includes('SLA') ? 'text-red-600' : 'text-gray-700')}>{c.avgGrievanceResponse}</TableCell>
+                  <TableCell className={cn("px-6 py-4 font-bold text-center", c.overdueTasks > 4 ? 'text-red-600' : 'text-gray-700')}>{c.overdueTasks}</TableCell>
+                  <TableCell className="px-6 py-4 text-gray-600">{c.lastLogin}</TableCell>
+                  <TableCell className="px-6 py-4">
+                  <Badge 
+                      className={cn("font-semibold text-xs py-1 px-3 rounded-full",
+                          c.status === 'Unresponsive' ? "bg-red-100 text-red-800 border border-red-200" :
+                          c.status === 'Highly Responsive' ? "bg-green-100 text-green-800 border border-green-200" :
+                          "bg-yellow-100 text-yellow-800 border border-yellow-200"
+                      )}
+                  >
+                      {c.status}
+                  </Badge>
+                  </TableCell>
+                  <TableCell className="text-right px-6 py-4">
+                    <Button variant="outline" size="sm"><Eye className="h-4 w-4 mr-2"/>View Dashboard</Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
