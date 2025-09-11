@@ -7,11 +7,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Download, Eye } from "lucide-react";
 import { contractorTheme } from "@/lib/theme";
 
-const statusColors: Record<string, string> = {
-  'High Performing': 'bg-green-500 text-white',
-  'Good Standing': 'bg-blue-500 text-white',
-  'Under Watch': 'bg-yellow-400 text-gray-900',
-  'Needs Intervention': 'bg-red-500 text-white',
+const statusGradients: Record<string, string> = {
+  'High Performing': 'bg-gradient-to-r from-green-400 via-emerald-400 to-teal-400 text-white',
+  'Good Standing': 'bg-gradient-to-r from-blue-400 via-sky-400 to-cyan-400 text-white',
+  'Under Watch': 'bg-gradient-to-r from-yellow-300 via-yellow-400 to-orange-300 text-gray-900',
+  'Needs Intervention': 'bg-gradient-to-r from-red-500 via-pink-500 to-orange-400 text-white',
 };
 
 export default function NationalOverviewReportPage() {
@@ -39,8 +39,8 @@ export default function NationalOverviewReportPage() {
         </div>
       </div>
 
-      <Card className="shadow-lg border-0 bg-gradient-to-br from-primary-100 via-secondary-100 to-accent-50 text-gray-900 dark:text-white">
-        <CardHeader className="bg-gradient-to-r from-primary-500 via-secondary-400 to-accent-400 rounded-t-lg text-white">
+      <Card className="shadow-2xl border border-blue-200 bg-gradient-to-br from-blue-50 via-cyan-50 to-emerald-50 text-gray-900 dark:text-white rounded-2xl">
+        <CardHeader className="bg-gradient-to-r from-primary-500 via-secondary-400 to-accent-400 rounded-t-2xl text-white shadow-md">
             <CardTitle className="text-lg font-semibold text-blue-600 drop-shadow">National Performance Roster</CardTitle>
             <CardDescription className="text-white/90">
                 This master table aggregates key performance indicators from all state-level reports.
@@ -50,8 +50,9 @@ export default function NationalOverviewReportPage() {
              </div>
         </CardHeader>
         <CardContent className="p-0">
-          <Table className="rounded-b-lg overflow-hidden">
-            <TableHeader className="bg-gradient-to-r from-blue-100 via-blue-50 to-accent-100">
+          <div className="rounded-b-2xl overflow-hidden bg-gradient-to-br from-white via-blue-50 to-emerald-50">
+            <Table>
+              <TableHeader className="bg-gradient-to-r from-blue-100 via-blue-50 to-accent-100">
               <TableRow>
                 <TableHead className="text-blue-700 font-bold">State / UT</TableHead>
                 <TableHead className="text-blue-700 font-bold">Incidents (30d)</TableHead>
@@ -64,14 +65,30 @@ export default function NationalOverviewReportPage() {
             </TableHeader>
             <TableBody>
               {states.map(s => (
-                <TableRow key={s.name} className="hover:bg-blue-50/60 even:bg-blue-50/30 transition">
+                <TableRow key={s.name} className="hover:scale-[1.01] hover:shadow-lg hover:z-10 hover:bg-gradient-to-r hover:from-blue-100 hover:via-cyan-100 hover:to-emerald-100 even:bg-gradient-to-r even:from-blue-50 even:via-blue-100 even:to-emerald-50 transition-all duration-200">
                   <TableCell className="font-medium">{s.name}</TableCell>
                   <TableCell className={`font-semibold text-center ${s.incidents > 50 ? 'text-red-600' : 'text-green-600'}`}>{s.incidents}</TableCell>
                   <TableCell className={`font-bold text-center ${s.fatalities > 0 ? 'text-red-600' : 'text-green-600'}`}>{s.fatalities}</TableCell>
                   <TableCell className="text-center">{s.nonCompliantChecklists.toLocaleString()}</TableCell>
                   <TableCell className="text-center">{s.openGrievances}</TableCell>
                   <TableCell className="text-center">
-                    <span className={`px-2 py-1 rounded-full text-xs font-semibold ${statusColors[s.status as keyof typeof statusColors] || 'bg-gray-300 text-gray-800'}`}>{s.status}</span>
+                    {s.status === 'Needs Intervention' ? (
+                      <div className="flex flex-row items-center justify-end">
+                        <span className="px-6 py-1 rounded-full text-sm font-bold shadow-lg bg-gradient-to-r from-red-500 via-pink-500 to-orange-400 text-white w-fit whitespace-nowrap">Needs Intervention</span>
+                      </div>
+                    ) : s.status === 'High Performing' ? (
+                      <div className="flex flex-row items-center justify-end">
+                        <span className="px-6 py-1 rounded-full text-sm font-bold shadow-lg bg-green-500 text-white w-fit">High Performing</span>
+                      </div>
+                    ) : s.status === 'Good Standing' ? (
+                      <div className="flex flex-row items-center justify-end">
+                        <span className="px-6 py-1 rounded-full text-sm font-bold shadow-lg bg-blue-500 text-white w-fit">Good Standing</span>
+                      </div>
+                    ) : (
+                      <span className={`px-3 py-1.5 rounded-full text-sm font-bold shadow-lg ring-2 ring-white/70 transition-transform duration-200 ${statusGradients[s.status as keyof typeof statusGradients] || 'bg-gray-300 text-gray-800'} hover:scale-105`}>
+                        {s.status}
+                      </span>
+                    )}
                   </TableCell>
                   <TableCell className="text-right">
                       <Button size="sm" variant="outline" className="border-blue-300 text-blue-700 bg-gradient-to-r from-blue-50 to-accent-50"><Eye className="h-4 w-4 mr-2"/>View State Dashboard</Button>
@@ -79,7 +96,8 @@ export default function NationalOverviewReportPage() {
                 </TableRow>
               ))}
             </TableBody>
-          </Table>
+            </Table>
+          </div>
         </CardContent>
       </Card>
     </div>

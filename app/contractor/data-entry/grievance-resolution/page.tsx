@@ -98,12 +98,12 @@ export default function GrievanceEntryPage() {
                 <div className="md:col-span-2">
                   <Label htmlFor="supporting-proof" className="text-gray-700 font-semibold mb-2 block">Upload Supporting Proof (Optional)</Label>
                   {/* Adjusted file input styling */}
-                  <Input 
-                    id="supporting-proof" 
-                    type="file" 
-                    className="border-gray-300 focus:border-indigo-600 focus:ring-3 focus:ring-indigo-200 transition-all duration-300 rounded-xl px-4 py-2.5 
-                               file:text-white file:bg-indigo-600 file:border-0 file:rounded-md file:px-4 file:py-1.5 file:h-9 
-                               hover:file:bg-indigo-700 cursor-pointer" 
+                  <Input
+                    id="supporting-proof"
+                    type="file"
+                    className="border-gray-300 focus:border-indigo-600 focus:ring-3 focus:ring-indigo-200 transition-all duration-300 rounded-xl px-4 py-2.5
+                               file:text-gray-700 file:bg-transparent file:border-0 file:rounded-md file:px-0 file:py-0 file:h-auto file:font-bold
+                               hover:file:bg-transparent cursor-pointer file:mr-2"
                   />
                   <p className="text-sm text-gray-500 mt-2 flex items-center space-x-1">
                     <UploadCloud className="h-4 w-4 text-gray-400" />

@@ -20,15 +20,15 @@ export default function FundAllocationPage() {
         remaining: 810,
     };
 
-  return (
-    <div className={cn("min-h-screen space-y-8 p-6 md:p-8", contractorTheme.page.gradientBackground)}>
+ return (
+    <div className={cn("min-h-screen space-y-8 p-6 md:p-10", contractorTheme.page.gradientBackground)}>
       <div>
-        <h2 className="text-3xl font-bold text-slate-800">Fund Allocation Tracker</h2>
-        <p className="text-slate-600 mt-1">Allocate and track the disbursement of state funds to districts.</p>
+        <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800 tracking-tight">Fund Allocation Tracker</h1>
+        <p className="text-gray-600 mt-2 text-xl">Allocate and track the disbursement of state funds to districts.</p>
       </div>
 
       {/* State Budget KPIs */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <DashboardCard
             title="Total State Budget"
             value={`₹${budget.total / 100} Cr`}
@@ -52,58 +52,59 @@ export default function FundAllocationPage() {
         />
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-8 items-start">
-        {/* Left Column: Allocate New Funds Form */}
-        <div className="lg:col-span-3">
-          <Card className={cn(contractorTheme.card.container)}>
-            <CardHeader className={cn(contractorTheme.card.header)}>
-              <CardTitle className={cn(contractorTheme.card.title, "flex items-center space-x-2")}>
-                <Plus className="h-5 w-5" />
-                <span>Allocate New Funds</span>
-              </CardTitle>
-              <CardDescription className={cn(contractorTheme.card.description)}>
-                Create a new, trackable fund allocation for a district.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="target-district" className={cn(contractorTheme.form.label)}>Target District</Label>
-                <Select>
-                  <SelectTrigger className={cn(contractorTheme.form.select)}><SelectValue placeholder="Select a district..." /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="kolkata">Kolkata</SelectItem>
-                    <SelectItem value="howrah">Howrah</SelectItem>
-                    <SelectItem value="s24p">South 24 Parganas</SelectItem>
-                    <SelectItem value="jalpaiguri">Jalpaiguri</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="fund-category" className={cn(contractorTheme.form.label)}>Fund Category</Label>
-                <Select>
-                  <SelectTrigger className={cn(contractorTheme.form.select)}><SelectValue placeholder="Select category..." /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="mechanization">Mechanization Equipment</SelectItem>
-                    <SelectItem value="welfare">Emergency Welfare / Compensation</SelectItem>
-                    <SelectItem value="training">Training Programs Grant</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="amount" className={cn(contractorTheme.form.label)}>Amount (in ₹ Lakhs)</Label>
-                <Input id="amount" type="number" placeholder="e.g., 50" className={cn(contractorTheme.form.input)} />
-              </div>
-              <div>
-                <Label htmlFor="notes" className={cn(contractorTheme.form.label)}>Justification / Memo No.</Label>
-                <Textarea id="notes" placeholder="Provide official reason and memo number..." className={cn(contractorTheme.form.textarea)} />
-              </div>
-              <Button className={cn(contractorTheme.button.primary, "w-full")}>
-                <Plus className="h-4 w-4 mr-2" />
-                Authorize & Log Allocation
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
+      {/* Allocate New Funds Form */}
+      <div>
+        <Card className="bg-white/70 backdrop-blur-sm border border-white/30 shadow-lg rounded-2xl overflow-hidden">
+          <CardHeader className="p-6 md:p-8 bg-gradient-to-r from-blue-600 to-purple-700 text-white">
+            <CardTitle className="text-2xl font-bold flex items-center">
+              <Plus className="h-6 w-6 mr-3" />
+              <span>Allocate New Funds</span>
+            </CardTitle>
+            <CardDescription className="text-purple-100 mt-1">
+              Create a new, trackable fund allocation for a district.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-6 md:p-8 space-y-6">
+            <div>
+              <Label htmlFor="target-district" className="text-gray-700 font-semibold mb-2 block">Target District</Label>
+              <Select>
+                <SelectTrigger className={cn(contractorTheme.form.select, "py-2.5 px-4 rounded-lg")}><SelectValue placeholder="Select a district..." /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="kolkata">Kolkata</SelectItem>
+                  <SelectItem value="howrah">Howrah</SelectItem>
+                  <SelectItem value="s24p">South 24 Parganas</SelectItem>
+                  <SelectItem value="jalpaiguri">Jalpaiguri</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="fund-category" className="text-gray-700 font-semibold mb-2 block">Fund Category</Label>
+              <Select>
+                <SelectTrigger className={cn(contractorTheme.form.select, "py-2.5 px-4 rounded-lg")}><SelectValue placeholder="Select category..." /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="mechanization">Mechanization Equipment</SelectItem>
+                  <SelectItem value="welfare">Emergency Welfare / Compensation</SelectItem>
+                  <SelectItem value="training">Training Programs Grant</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="amount" className="text-gray-700 font-semibold mb-2 block">Amount (in ₹ Lakhs)</Label>
+              <Input id="amount" type="number" placeholder="e.g., 50" className={cn(contractorTheme.form.input, "py-2.5 px-4 rounded-lg")} />
+            </div>
+            <div>
+              <Label htmlFor="notes" className="text-gray-700 font-semibold mb-2 block">Justification / Memo No.</Label>
+              <Textarea id="notes" placeholder="Provide official reason and memo number for tracking..." className={cn(contractorTheme.form.textarea, "min-h-[100px] rounded-lg")} />
+            </div>
+            <Button className={cn(
+                "w-full py-3.5 text-base font-bold text-white transition-all duration-300 transform hover:scale-105 hover:shadow-xl",
+                "bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg"
+            )}>
+              <Plus className="h-5 w-5 mr-2" />
+              Authorize & Log Allocation
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

@@ -35,8 +35,9 @@ export default function DistrictComplianceReportPage() {
         }
     };
 
-  return (
-    <div className={cn("space-y-8", contractorTheme.page.gradientBackground, "p-6 md:p-8")}>
+ return (
+    // UPDATED: Added min-h-screen to ensure the container covers the full page height
+    <div className={cn("min-h-screen space-y-8", contractorTheme.page.gradientBackground, "p-6 md:p-8")}>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div>
             <h2 className="text-3xl font-bold text-slate-800">District Compliance Report</h2>
@@ -81,7 +82,7 @@ export default function DistrictComplianceReportPage() {
                 }],
               }}
               options={{ responsive: true, maintainAspectRatio: false, scales: { y: { min: 60, max: 100 } } }}
-            />
+           />
         </CardContent>
       </Card> */}
       

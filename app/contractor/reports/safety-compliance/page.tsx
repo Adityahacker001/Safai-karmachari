@@ -234,7 +234,6 @@ export default function SafetyComplianceReportPage() {
                             <TableRow className="border-b border-gray-200">
                                 <TableHead className="py-4 px-6 text-gray-700 font-bold text-base">Worker</TableHead>
                                 <TableHead className="py-4 px-6 text-gray-700 font-bold text-base">Submission Time</TableHead>
-                                <TableHead className="py-4 px-6 text-gray-700 font-bold text-base">Status</TableHead>
                                 <TableHead className="py-4 px-6 text-gray-700 font-bold text-base">Provided Items</TableHead>
                                 <TableHead className="py-4 px-6 text-gray-700 font-bold text-base">Remarks</TableHead>
                             </TableRow>
@@ -249,11 +248,6 @@ export default function SafetyComplianceReportPage() {
                                 <TableRow key={log.worker} className={`border-b border-gray-100 transition-colors duration-150 ${log.status!== 'Compliant'? 'bg-red-50 hover:bg-red-100' : 'hover:bg-gray-50'}`}>
                                     <TableCell className="py-4 px-6 font-semibold text-gray-800 text-base">{log.worker}</TableCell>
                                     <TableCell className="py-4 px-6 text-gray-700 text-base">{log.time}</TableCell>
-                                    <TableCell className="py-4 px-6">
-                                        <Badge variant="outline" className={`${getStatusBadgeClasses(log.status)} px-3 py-1 text-sm rounded-full`}>
-                                            {log.status}
-                                        </Badge>
-                                    </TableCell>
                                     <TableCell className="py-4 px-6 text-gray-700 text-base">
                                         {log.status === 'Not Submitted' ? 'N/A' : providedItems.join(', ')}
                                     </TableCell>

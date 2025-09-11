@@ -111,7 +111,7 @@ export default function TrainingAssignmentPage() {
                                     </CardHeader>
                                     <CardContent className="p-0">
                                         <p className="text-base text-gray-700 mb-4 leading-relaxed">{selectedModule.description}</p>
-                                        <Badge className="bg-blue-500 text-white text-sm px-4 py-1.5 rounded-full font-medium">
+                                        <Badge className="bg-blue-500 text-white text-sm px-4 py-1.5 rounded-full font-medium hover:bg-green-500 hover:text-white transition-colors duration-200">
                                             <CalendarCheck className="h-4 w-4 mr-2" /> Duration: {selectedModule.duration}
                                         </Badge>
                                     </CardContent>

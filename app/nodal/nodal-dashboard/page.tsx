@@ -21,7 +21,20 @@ export default function NodalDashboard() {
         <h1 className="text-3xl font-bold text-slate-800">Nodal Officer Dashboard</h1>
 
         {/* Dashboard Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+          {/* Row 1: 4 Cards */}
+          <div className={cn(contractorTheme.kpiCard.base, 'bg-gradient-to-br from-blue-500 to-blue-700')}>
+            <Building className={cn(contractorTheme.kpiCard.icon)} strokeWidth={1} />
+            <p className="text-base font-medium text-white/80">Total Contractors</p>
+            <p className="text-4xl font-bold">28</p>
+            <p className="text-sm text-white/80 mt-1">Registered contractors</p>
+          </div>
+          <div className={cn(contractorTheme.kpiCard.base, 'bg-gradient-to-br from-green-500 to-emerald-600')}>
+            <Award className={cn(contractorTheme.kpiCard.icon)} strokeWidth={1} />
+            <p className="text-base font-medium text-white/80">Total Workers</p>
+            <p className="text-4xl font-bold">1,247</p>
+            <p className="text-sm text-white/80 mt-1">Registered workers</p>
+          </div>
           <div className={cn(contractorTheme.kpiCard.base, contractorTheme.kpiCard.grievances)}>
             <AlertTriangle className={cn(contractorTheme.kpiCard.icon)} strokeWidth={1} />
             <p className="text-base font-medium text-white/80">Manual Scavenging Alerts</p>
@@ -34,22 +47,15 @@ export default function NodalDashboard() {
             <p className="text-4xl font-bold">47</p>
             <p className="text-sm text-white/80 mt-1">Under review</p>
           </div>
-          <div className={cn(contractorTheme.kpiCard.base, contractorTheme.kpiCard.safety)}>
-            <Shield className={cn(contractorTheme.kpiCard.icon)} strokeWidth={1} />
-            <p className="text-base font-medium text-white/80">Safety Compliance</p>
-            <p className="text-4xl font-bold">91.5%</p>
-            <p className="text-sm text-white/80 mt-1">Zone average</p>
-          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Row 2: 4 Cards */}
           <div className={cn(contractorTheme.kpiCard.base, 'bg-gradient-to-br from-fuchsia-600 to-pink-600')}>
             <Award className={cn(contractorTheme.kpiCard.icon)} strokeWidth={1} />
             <p className="text-base font-medium text-white/80">Recognition Pending</p>
             <p className="text-4xl font-bold">12</p>
             <p className="text-sm text-white/80 mt-1">Nominations to review</p>
           </div>
-        </div>
-
-        {/* Secondary Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className={cn(contractorTheme.kpiCard.base, contractorTheme.kpiCard.workers)}>
             <Building className={cn(contractorTheme.kpiCard.icon)} strokeWidth={1} />
             <p className="text-base font-medium text-white/80">Contractors Monitored</p>
@@ -68,13 +74,9 @@ export default function NodalDashboard() {
             <p className="text-4xl font-bold">9.1</p>
             <p className="text-sm text-white/80 mt-1">Out of 10</p>
           </div>
-          <div className={cn(contractorTheme.kpiCard.base, contractorTheme.kpiCard.attendance)}>
-            <TrendingUp className={cn(contractorTheme.kpiCard.icon)} strokeWidth={1} />
-            <p className="text-base font-medium text-white/80">Performance Trend</p>
-            <p className="text-4xl font-bold">Improving</p>
-            <p className="text-sm text-white/80 mt-1">Overall trajectory</p>
-          </div>
         </div>
+
+        {/* Secondary Metrics */}
 
         {/* Quick Actions */}
         <div className={cn(contractorTheme.card.container, 'bg-white')}>

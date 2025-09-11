@@ -196,14 +196,14 @@ export default function TrainingCoverageReportPage() {
                         <p className="text-sm text-green-100 mt-1">Trainings successfully completed</p>
                     </CardContent>
                 </Card>
-                <Card className="border-0 rounded-2xl bg-gradient-to-br from-red-500 to-rose-600 text-white shadow-xl transform transition-all duration-300 hover:scale-105">
+                <Card className="border-0 rounded-2xl bg-gradient-to-br from-orange-400 to-amber-500 text-white shadow-xl transform transition-all duration-300 hover:scale-105">
                     <CardHeader className="pb-2 flex flex-row items-center justify-between">
-                        <CardTitle className="text-base font-medium text-red-100">Overdue</CardTitle>
-                        <AlertTriangle className="h-6 w-6 text-red-200" />
+                        <CardTitle className="text-base font-medium text-amber-100">Overdue</CardTitle>
+                        <AlertTriangle className="h-6 w-6 text-amber-200" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-4xl font-bold">{totalOverdue}</div>
-                        <p className="text-sm text-red-100 mt-1">Require immediate follow-up</p>
+                        <p className="text-sm text-amber-100 mt-1">Require immediate follow-up</p>
                     </CardContent>
                 </Card>
                 <Card className="border-0 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-xl transform transition-all duration-300 hover:scale-105">

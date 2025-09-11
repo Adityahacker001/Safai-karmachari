@@ -47,8 +47,9 @@ export default function ContractorPerformanceReportPage() {
         },
     ];
 
-  return (
-    <div className={cn("space-y-8", theme.page.gradientBackground)}>
+ return (
+    // UPDATED: Added min-h-screen and padding to make the background cover the full page
+    <div className={cn("min-h-screen p-6 md:p-12 space-y-8", theme.page.gradientBackground)}>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div>
             <h2 className="text-3xl font-bold text-gray-800">Contractor Performance</h2>
@@ -108,13 +109,13 @@ export default function ContractorPerformanceReportPage() {
                   <TableCell className="px-6 py-4 text-gray-600">{c.lastLogin}</TableCell>
                   <TableCell className="px-6 py-4">
                   <Badge 
-                      className={cn("font-semibold text-xs py-1 px-3 rounded-full",
-                          c.status === 'Unresponsive' ? "bg-red-100 text-red-800 border border-red-200" :
-                          c.status === 'Highly Responsive' ? "bg-green-100 text-green-800 border border-green-200" :
-                          "bg-yellow-100 text-yellow-800 border border-yellow-200"
-                      )}
+                        className={cn("font-semibold text-xs py-1 px-3 rounded-full",
+                            c.status === 'Unresponsive' ? "bg-red-100 text-red-800 border border-red-200" :
+                            c.status === 'Highly Responsive' ? "bg-green-100 text-green-800 border border-green-200" :
+                            "bg-yellow-100 text-yellow-800 border border-yellow-200"
+                        )}
                   >
-                      {c.status}
+                        {c.status}
                   </Badge>
                   </TableCell>
                   <TableCell className="text-right px-6 py-4">

@@ -56,7 +56,18 @@ export default function ContractorDashboard() {
         <h1 className="text-3xl font-bold text-slate-800">Contractor Overview</h1>
 
         {/* Dashboard Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+          {/* Card 0: Top 5 Workers */}
+          <div className="relative p-0 flex flex-col items-center justify-center rounded-2xl bg-gradient-to-br from-pink-500 to-pink-700 text-white shadow-xl col-span-1 min-h-[170px]">
+            <div className="flex flex-col items-center justify-center w-full py-6">
+              <div className="bg-white/20 rounded-full p-5 mb-3 shadow-lg flex items-center justify-center">
+                <Users className="h-10 w-10 text-white drop-shadow-lg" />
+              </div>
+              <p className="font-extrabold text-xl tracking-tight text-white text-center drop-shadow-sm">Top 5 Workers</p>
+              <span className="mt-2 text-xs text-pink-200 font-medium text-center">Based on performance & attendance</span>
+            </div>
+          </div>
+
           {/* Card 1: Total Workers */}
           <div className="relative p-6 overflow-hidden rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 text-white shadow-lg">
             <Users className="absolute -right-6 -bottom-6 h-28 w-28 text-white/10" strokeWidth={1} />

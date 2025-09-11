@@ -118,19 +118,43 @@ export default function PolicyTrackingReportPage() {
                   <TableCell className="text-right">
                     <Dialog>
                         <DialogTrigger asChild><Button className={cn(contractorTheme.button.secondary, "!px-4 !py-2 text-sm") }><Eye className="h-4 w-4 mr-2"/>View Breakdown</Button></DialogTrigger>
-                        <DialogContent>
+                        <DialogContent className="p-0 overflow-hidden bg-gradient-to-br from-blue-50 via-white to-purple-100 rounded-2xl shadow-xl border-0">
+                          <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 px-6 py-4">
                             <DialogHeader>
-                                <DialogTitle>District Breakdown: {policy.name}</DialogTitle>
-                                <DialogDescription>Compliance status for each district.</DialogDescription>
+                              <DialogTitle className="text-white text-2xl font-bold drop-shadow">District Breakdown: {policy.name}</DialogTitle>
+                              <DialogDescription className="text-blue-100">Compliance status for each district.</DialogDescription>
                             </DialogHeader>
-                            <div className="py-4">
-                               <Table><TableHeader><TableRow><TableHead>District</TableHead><TableHead>Compliance Status</TableHead></TableRow></TableHeader>
-                               <TableBody>
-                                 {policy.breakdown.map(d => (
-                                    <TableRow key={d.name}><TableCell>{d.name}</TableCell><TableCell className="font-semibold">{d.compliance}%</TableCell></TableRow>
-                                 ))}
-                               </TableBody></Table>
-                            </div>
+                          </div>
+                          <div className="py-6 px-6">
+                            <Table>
+                              <TableHeader>
+                                <TableRow>
+                                  <TableHead className="text-lg text-blue-700">District</TableHead>
+                                  <TableHead className="text-lg text-blue-700">Compliance Status</TableHead>
+                                </TableRow>
+                              </TableHeader>
+                              <TableBody>
+                                {policy.breakdown.map(d => (
+                                  <TableRow key={d.name} className="hover:bg-blue-50/60 transition-colors">
+                                    <TableCell className="font-semibold text-purple-700">{d.name}</TableCell>
+                                    <TableCell>
+                                      <span
+                                        className={
+                                          d.compliance >= 85
+                                            ? 'inline-block px-3 py-1 rounded-full bg-green-100 text-green-700 font-bold shadow'
+                                            : d.compliance >= 70
+                                            ? 'inline-block px-3 py-1 rounded-full bg-yellow-100 text-yellow-800 font-bold shadow'
+                                            : 'inline-block px-3 py-1 rounded-full bg-red-100 text-red-700 font-bold shadow'
+                                        }
+                                      >
+                                        {d.compliance}%
+                                      </span>
+                                    </TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </div>
                         </DialogContent>
                     </Dialog>
                   </TableCell>

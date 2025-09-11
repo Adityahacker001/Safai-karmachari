@@ -1,18 +1,17 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { cn } from '@/lib/utils';
-import { 
-  Users, 
-  FileText, 
-  BarChart3, 
-  Shield, 
-  Building, 
-  MapPin, 
+import React, { useState, useEffect } from "react";
+// Using standard <a> tags for broader compatibility
+// Using window.location.pathname for broader compatibility
+import { cn } from "@/lib/utils";
+import {
+  Users,
+  FileText,
+  BarChart3,
+  Shield,
+  Building,
+  MapPin,
   Globe,
-  ClipboardList,
   UserPlus,
   Clock,
   AlertTriangle,
@@ -20,26 +19,22 @@ import {
   DollarSign,
   CheckSquare,
   Award,
-  PieChart,
-  Briefcase,
-  Settings,
-  Bell,
-  LogOut,
   ChevronDown,
   ChevronRight,
-  FilePlus,
-} from 'lucide-react';
+  LogOut,
+} from "lucide-react";
 
 interface SidebarProps {
-  role: 'contractor' | 'nodal' | 'district' | 'state' | 'national';
+  role: "contractor" | "nodal" | "district" | "state" | "national";
 }
+
 
 const roleConfig = {
   contractor: {
     title: 'Contractor Dashboard',
     icon: Users,
-    color: 'text-blue-600',
-    bgColor: 'bg-blue-50',
+    color: 'text-sky-400',
+    bgColor: 'from-sky-900/30 to-slate-900',
     dataEntry: [
       { name: 'Worker Registration', icon: UserPlus, href: '/contractor/data-entry/worker-registration' },
       { name: 'Attendance & PPE Log', icon: Clock, href: '/contractor/data-entry/attendance-ppe' },
@@ -57,8 +52,8 @@ const roleConfig = {
   nodal: {
     title: 'Nodal Officer Interface',
     icon: Shield,
-    color: 'text-green-600',
-    bgColor: 'bg-green-50',
+    color: 'text-emerald-400',
+    bgColor: 'from-emerald-900/30 to-slate-900',
     dataEntry: [
       { name: 'Compliance Checklist', icon: CheckSquare, href: '/nodal/data-entry/compliance-checklist' },
       { name: 'Recognition Nomination', icon: Award, href: '/nodal/data-entry/recognition-nomination' },
@@ -66,30 +61,30 @@ const roleConfig = {
     reports: [
       { name: 'Incident Management', icon: AlertTriangle, href: '/nodal/reports/incident-management' },
       { name: 'Contractor Performance', icon: BarChart3, href: '/nodal/reports/contractor-performance' },
+      { name: 'All Reports', icon: FileText, href: '/nodal/reports/All-reports' },
       { name: 'Compliance Overview', icon: CheckSquare, href: '/nodal/reports/compliance-overview' },
     ],
   },
   district: {
-    title: 'District Monitoring System',
+    title: 'District Monitoring',
     icon: Building,
-    color: 'text-orange-600',
-    bgColor: 'bg-orange-50',
+    color: 'text-amber-400',
+    bgColor: 'from-amber-900/30 to-slate-900',
     dataEntry: [
-      { name: 'Budget Utilization', icon: DollarSign, href: '/district/data-entry/budget-utilization' },
       { name: 'Recognition Review', icon: Award, href: '/district/data-entry/recognition-review' },
     ],
     reports: [
       { name: 'District Compliance', icon: CheckSquare, href: '/district/reports/district-compliance' },
-      { name: 'Budget Reports', icon: DollarSign, href: '/district/reports/budget-reports' },
       { name: 'Recognition System', icon: Award, href: '/district/reports/recognition-system' },
       { name: 'Unit Performance', icon: Building, href: '/district/reports/unit-performance' },
+      { name: 'All Reports', icon: FileText, href: '/district/reports/All-reports' },
     ],
   },
   state: {
     title: 'State Command Centre',
     icon: MapPin,
-    color: 'text-purple-600',
-    bgColor: 'bg-purple-50',
+    color: 'text-purple-400',
+    bgColor: 'from-purple-900/30 to-slate-900',
     dataEntry: [
       { name: 'State-wide Compliance', icon: CheckSquare, href: '/state/data-entry/statewide-compliance' },
       { name: 'Fund Allocation', icon: DollarSign, href: '/state/data-entry/fund-allocation' },
@@ -99,18 +94,15 @@ const roleConfig = {
       { name: 'State Compliance', icon: BarChart3, href: '/state/reports/state-compliance' },
       { name: 'Fund Allocation Reports', icon: DollarSign, href: '/state/reports/fund-allocation' },
       { name: 'Policy Tracking', icon: FileText, href: '/state/reports/policy-tracking' },
+      { name: 'All Reports', icon: FileText, href: '/state/reports/All-reports' },
       { name: 'District Performance', icon: Building, href: '/state/reports/district-performance' },
     ],
   },
   national: {
-    title: 'National Dashboard (NCSK)',
+    title: 'National Dashboard',
     icon: Globe,
-    color: 'text-indigo-600',
-    bgColor: 'bg-indigo-50',
-    customLinks: [
-      { name: 'Manual Scavenging Alerts', icon: AlertTriangle, href: '/national/manual-scavenging-alerts' },
-      { name: 'State and District Oversight', icon: Building, href: '/national/state-district-oversight' },
-    ],
+    color: 'text-indigo-400',
+    bgColor: 'from-indigo-900/30 to-slate-900',
     dataEntry: [
       { name: 'Directive Issuance', icon: FileText, href: '/national/data-entry/directive-issuance' },
       { name: 'Recognition Nomination', icon: Award, href: '/national/data-entry/national-recognition' },
@@ -119,77 +111,72 @@ const roleConfig = {
       { name: 'National Overview', icon: Globe, href: '/national/reports/national-overview' },
       { name: 'Directive Tracking', icon: FileText, href: '/national/reports/directive-tracking' },
       { name: 'Annual Reports', icon: FileText, href: '/national/reports/annual-reports' },
+      { name: 'All Reports', icon: FileText, href: '/national/reports/All-reports' },
       { name: 'Recognition Leaderboard', icon: Award, href: '/national/reports/recognition-leaderboard' },
       { name: 'Initiate Award', icon: Award, href: '/national/reports/initiate-award' },
     ],
-  }
+  },
 };
 
-export default function Sidebar({ role }: SidebarProps) {
-  const pathname = usePathname();
-  const config = roleConfig[role];
+export default function Sidebar({ role = "contractor" }: SidebarProps) {
+  const [pathname, setPathname] = useState("");
+  useEffect(() => {
+    // Check if window is defined to prevent SSR errors
+    if (typeof window !== 'undefined') {
+      setPathname(window.location.pathname);
+    }
+  }, []);
+  
+  // Fallback to contractor config if the role is invalid or not provided
+  const config = roleConfig[role] || roleConfig.contractor;
   const RoleIcon = config.icon;
   const [isDataEntryOpen, setIsDataEntryOpen] = useState(true);
   const [isReportsOpen, setIsReportsOpen] = useState(true);
 
   return (
-    <div className="flex flex-col h-full bg-gradient-to-b from-gray-50 to-white border-r border-gray-200">
-      {/* Role-specific Header */}
-      <div className={cn("p-4 flex items-center space-x-3 border-b border-gray-200", config.bgColor)}>
-        <RoleIcon className={cn("h-6 w-6", config.color)} />
-        <h3 className={cn("text-md font-semibold", config.color)}>
+    <div className="flex flex-col h-full bg-gradient-to-b from-blue-900 to-indigo-950 text-white shadow-2xl border-r border-blue-800 relative">
+      {/* Frosted Glass Overlay */}
+      <div className="absolute inset-0 backdrop-blur-xl bg-white/5" />
+
+      {/* Header */}
+      <div
+        className={cn(
+          "relative p-4 flex items-center space-x-3 bg-gradient-to-r rounded-br-2xl shadow-lg border-b border-white/10 z-10",
+          config.bgColor
+        )}
+      >
+        <div className="p-2 rounded-xl bg-white/20 backdrop-blur-md shadow-md">
+          <RoleIcon className={cn("h-6 w-6", config.color)} />
+        </div>
+        <h3 className={cn("text-md font-bold drop-shadow-lg", config.color)}>
           {config.title}
         </h3>
       </div>
 
-      
-
       {/* Navigation */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto relative z-10">
         <nav className="p-4 space-y-6">
-          {/* Dashboard */}
-          <Link
+          {/* Dashboard Link */}
+          <a
             href={`/${role}/${role}-dashboard`}
             className={cn(
-              "flex items-center space-x-3 px-4 py-2 rounded-lg text-sm font-medium transition-all",
+              "flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold relative group transition-all duration-300",
               pathname === `/${role}/${role}-dashboard`
-                ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-sm"
-                : "text-gray-600 hover:bg-gray-50"
+                ? "bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-xl scale-[1.03] border border-indigo-400/50"
+                : "text-gray-300 hover:text-white hover:scale-[1.02]"
             )}
           >
-            <BarChart3 className="h-4 w-4" />
-            <span>Dashboard</span>
-          </Link>
+            {/* Animated Gradient Background on Hover */}
+            <span className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-xl blur-sm transition-all duration-500" />
+            <BarChart3 className="h-4 w-4 relative z-10" />
+            <span className="relative z-10">Dashboard</span>
+          </a>
 
-          {/* Custom Links for National Role */}
-          {role === 'national' && 'customLinks' in config && config.customLinks && (
-            <div className="space-y-2">
-              {config.customLinks.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={cn(
-                      "flex items-center space-x-3 px-4 py-2 rounded-lg text-sm font-medium transition-all",
-                      pathname === item.href
-                        ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-sm"
-                        : "text-gray-600 hover:bg-gray-50"
-                    )}
-                  >
-                    <Icon className="h-4 w-4" />
-                    <span>{item.name}</span>
-                  </Link>
-                );
-              })}
-            </div>
-          )}
-
-          {/* Data Entry Section */}
+          {/* Collapsible Section */}
           <div className="space-y-2">
             <button
               onClick={() => setIsDataEntryOpen(!isDataEntryOpen)}
-              className="w-full flex items-center justify-between px-4 py-2 text-sm font-semibold text-gray-600"
+              className="w-full flex items-center justify-between px-4 py-2 text-sm font-bold text-gray-200 bg-white/5 rounded-lg hover:bg-white/10 transition-all"
             >
               <span>Data Entry</span>
               {isDataEntryOpen ? (
@@ -199,34 +186,35 @@ export default function Sidebar({ role }: SidebarProps) {
               )}
             </button>
             {isDataEntryOpen && (
-              <div className="space-y-1 pl-4">
+              <div className="space-y-2 pl-4">
                 {config.dataEntry.map((item) => {
                   const Icon = item.icon;
                   return (
-                    <Link
+                    <a
                       key={item.href}
                       href={item.href}
                       className={cn(
-                        "flex items-center space-x-3 px-4 py-2 rounded-lg text-sm font-medium transition-all",
+                        "flex items-center space-x-3 px-4 py-2 rounded-lg text-sm font-medium relative group transition-all duration-300",
                         pathname === item.href
-                          ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-sm"
-                          : "text-gray-600 hover:bg-gray-50"
+                          ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg scale-[1.03] border border-cyan-400/50"
+                          : "text-gray-300 hover:text-white hover:scale-[1.02]"
                       )}
                     >
-                      <Icon className="h-4 w-4" />
-                      <span>{item.name}</span>
-                    </Link>
+                      <span className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-r from-green-400 via-blue-500 to-purple-500 rounded-lg blur-sm transition-all duration-500" />
+                      <Icon className="h-4 w-4 relative z-10" />
+                      <span className="relative z-10">{item.name}</span>
+                    </a>
                   );
                 })}
               </div>
             )}
           </div>
 
-          {/* Reports Section */}
+          {/* Reports */}
           <div className="space-y-2">
             <button
               onClick={() => setIsReportsOpen(!isReportsOpen)}
-              className="w-full flex items-center justify-between px-4 py-2 text-sm font-semibold text-gray-600"
+              className="w-full flex items-center justify-between px-4 py-2 text-sm font-bold text-gray-200 bg-white/5 rounded-lg hover:bg-white/10 transition-all"
             >
               <span>Reports & Analytics</span>
               {isReportsOpen ? (
@@ -236,23 +224,24 @@ export default function Sidebar({ role }: SidebarProps) {
               )}
             </button>
             {isReportsOpen && (
-              <div className="space-y-1 pl-4">
+              <div className="space-y-2 pl-4">
                 {config.reports.map((item) => {
                   const Icon = item.icon;
                   return (
-                    <Link
+                    <a
                       key={item.href}
                       href={item.href}
                       className={cn(
-                        "flex items-center space-x-3 px-4 py-2 rounded-lg text-sm font-medium transition-all",
+                        "flex items-center space-x-3 px-4 py-2 rounded-lg text-sm font-medium relative group transition-all duration-300",
                         pathname === item.href
-                          ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-sm"
-                          : "text-gray-600 hover:bg-gray-50"
+                          ? "bg-gradient-to-r from-pink-500 to-red-600 text-white shadow-lg scale-[1.03] border border-pink-400/50"
+                          : "text-gray-300 hover:text-white hover:scale-[1.02]"
                       )}
                     >
-                      <Icon className="h-4 w-4" />
-                      <span>{item.name}</span>
-                    </Link>
+                      <span className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-r from-yellow-400 via-pink-500 to-red-500 rounded-lg blur-sm transition-all duration-500" />
+                      <Icon className="h-4 w-4 relative z-10" />
+                      <span className="relative z-10">{item.name}</span>
+                    </a>
                   );
                 })}
               </div>
@@ -262,18 +251,17 @@ export default function Sidebar({ role }: SidebarProps) {
       </div>
 
       {/* Footer */}
-      <div className="p-4 border-t border-gray-200 bg-gray-50">
-        <div className="space-y-2">
-         
-          <Link
-            href="/"
-            className="flex items-center space-x-3 px-4 py-2 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-all"
-          >
-            <LogOut className="h-4 w-4" />
-            <span>Log Out</span>
-          </Link>
-        </div>
+      <div className="p-4 border-t border-white/10 bg-white/5 relative z-10">
+        <a
+          href="/"
+          className="flex items-center space-x-3 px-4 py-2 rounded-xl text-sm font-medium text-red-400 hover:text-red-200 hover:bg-red-500/10 transition-all relative group"
+        >
+          <span className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-r from-red-500 via-pink-600 to-purple-600 rounded-xl blur-md transition-all duration-500" />
+          <LogOut className="h-4 w-4 relative z-10" />
+          <span className="relative z-10">Log Out</span>
+        </a>
       </div>
     </div>
   );
 }
+

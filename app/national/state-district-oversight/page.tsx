@@ -77,12 +77,24 @@ export default function OversightPage() {
                                     <DialogTitle className="text-2xl">State Dashboard Summary: {viewingState.name}</DialogTitle>
                                     <DialogDescription>A read-only overview of the state's key performance indicators.</DialogDescription>
                                 </DialogHeader>
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-4">
-                                    <div className="p-4 bg-gray-50 rounded-lg border text-center"><p className="text-xs text-gray-500">Total Districts</p><p className="text-xl font-bold">23</p></div>
-                                    <div className="p-4 bg-gray-50 rounded-lg border text-center"><p className="text-xs text-gray-500">Incidents (30d)</p><p className="text-xl font-bold">{viewingState.incidents}</p></div>
-                                    <div className="p-4 bg-gray-50 rounded-lg border text-center"><p className="text-xs text-gray-500">Budget Utilized</p><p className="text-xl font-bold">82%</p></div>
-                                    <div className="p-4 bg-gray-50 rounded-lg border text-center"><p className="text-xs text-gray-500">Training Coverage</p><p className="text-xl font-bold">89%</p></div>
-                                </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-4">
+                  <div className="p-4 rounded-xl shadow bg-gradient-to-br from-indigo-200 via-blue-100 to-purple-100 text-center border-0">
+                    <p className="text-xs font-semibold text-indigo-700 mb-1">Total Districts</p>
+                    <p className="text-2xl font-extrabold text-indigo-900">23</p>
+                  </div>
+                  <div className="p-4 rounded-xl shadow bg-gradient-to-br from-blue-200 via-cyan-100 to-green-100 text-center border-0">
+                    <p className="text-xs font-semibold text-blue-700 mb-1">Incidents (30d)</p>
+                    <p className="text-2xl font-extrabold text-blue-900">{viewingState.incidents}</p>
+                  </div>
+                  <div className="p-4 rounded-xl shadow bg-gradient-to-br from-orange-200 via-yellow-100 to-pink-100 text-center border-0">
+                    <p className="text-xs font-semibold text-orange-700 mb-1">Budget Utilized</p>
+                    <p className="text-2xl font-extrabold text-orange-900">82%</p>
+                  </div>
+                  <div className="p-4 rounded-xl shadow bg-gradient-to-br from-purple-200 via-pink-100 to-yellow-100 text-center border-0">
+                    <p className="text-xs font-semibold text-purple-700 mb-1">Training Coverage</p>
+                    <p className="text-2xl font-extrabold text-purple-900">89%</p>
+                  </div>
+                </div>
                                 </DialogContent>
                             )}
                         </Dialog>
@@ -101,7 +113,18 @@ export default function OversightPage() {
             <CardHeader className={cn(contractorTheme.table.header)}>
                 <CardTitle className={cn(contractorTheme.table.headerTitle)}>District-Level Overview</CardTitle>
                 <CardDescription className={cn(contractorTheme.table.headerDescription)}>Select a state to view the performance of its districts.</CardDescription>
-                <div className="pt-4"><label className="block text-sm font-medium text-gray-700 mb-2">Select State / UT</label><Select><SelectTrigger className={cn(contractorTheme.form.select, "w-[300px]") }><SelectValue placeholder="Select a state..." /></SelectTrigger><SelectContent><SelectItem value="wb">West Bengal</SelectItem><SelectItem value="mh">Maharashtra</SelectItem></SelectContent></Select></div>
+                <div className="pt-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Select State / UT</label>
+                  <Select>
+                    <SelectTrigger className={cn(contractorTheme.form.select, "w-[300px]") }>
+                      <SelectValue placeholder={<span className="text-black">Select a state...</span>} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="wb">West Bengal</SelectItem>
+                      <SelectItem value="mh">Maharashtra</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
             </CardHeader>
             <CardContent>
               <Table>
@@ -114,7 +137,21 @@ export default function OversightPage() {
                       <TableCell className={`font-bold text-center ${d.fatalities > 0 ? 'text-red-600' : 'text-green-600'}`}>{d.fatalities}</TableCell>
                       <TableCell className="text-center">{d.openGrievances}</TableCell>
                       <TableCell className="font-semibold text-center">{d.complianceScore}%</TableCell>
-                      <TableCell><Badge variant={d.status === 'Excellent' ? 'default' : d.status === 'Needs Improvement' ? 'destructive' : 'secondary'}>{d.status}</Badge></TableCell>
+                      <TableCell>
+                        {d.status === 'Excellent' ? (
+                          <span className="inline-block px-4 py-1 rounded-full font-semibold text-white text-sm shadow bg-gradient-to-r from-emerald-400 via-teal-400 to-blue-500">
+                            Excellent
+                          </span>
+                        ) : d.status === 'Needs Improvement' ? (
+                          <span className="inline-block px-4 py-1 rounded-full font-semibold text-white text-sm shadow bg-gradient-to-r from-red-500 via-pink-500 to-orange-400">
+                            Needs Improvement
+                          </span>
+                        ) : (
+                          <span className="inline-block px-4 py-1 rounded-full font-semibold text-gray-800 bg-gray-100 text-sm shadow">
+                            {d.status}
+                          </span>
+                        )}
+                      </TableCell>
                       <TableCell className="text-right">
                         <Dialog onOpenChange={(isOpen) => !isOpen && setViewingDistrict(null)}>
                             <DialogTrigger asChild><Button size="sm" className={cn(contractorTheme.button.secondary)} onClick={() => setViewingDistrict(d)}><Eye className="h-4 w-4 mr-2"/>View District Dashboard</Button></DialogTrigger>
@@ -123,12 +160,24 @@ export default function OversightPage() {
                                     <DialogTitle className="text-2xl">District Dashboard Summary: {viewingDistrict.name}</DialogTitle>
                                     <DialogDescription>A read-only overview of the district's key performance indicators.</DialogDescription>
                                 </DialogHeader>
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-4">
-                                    <div className="p-4 bg-gray-50 rounded-lg border text-center"><p className="text-xs text-gray-500">Total Nodal Units</p><p className="text-xl font-bold">12</p></div>
-                                    <div className="p-4 bg-gray-50 rounded-lg border text-center"><p className="text-xs text-gray-500">Incidents (30d)</p><p className="text-xl font-bold">{viewingDistrict.incidents}</p></div>
-                                    <div className="p-4 bg-gray-50 rounded-lg border text-center"><p className="text-xs text-gray-500">PPE Compliance</p><p className="text-xl font-bold">{viewingDistrict.complianceScore}%</p></div>
-                                    <div className="p-4 bg-gray-50 rounded-lg border text-center"><p className="text-xs text-gray-500">Open Grievances</p><p className="text-xl font-bold">{viewingDistrict.openGrievances}</p></div>
-                                </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-4">
+                  <div className="p-4 rounded-xl shadow bg-gradient-to-br from-blue-200 via-cyan-100 to-green-100 text-center border-0">
+                    <p className="text-xs font-semibold text-blue-700 mb-1">Total Nodal Units</p>
+                    <p className="text-2xl font-extrabold text-blue-900">12</p>
+                  </div>
+                  <div className="p-4 rounded-xl shadow bg-gradient-to-br from-indigo-200 via-blue-100 to-purple-100 text-center border-0">
+                    <p className="text-xs font-semibold text-indigo-700 mb-1">Incidents (30d)</p>
+                    <p className="text-2xl font-extrabold text-indigo-900">{viewingDistrict.incidents}</p>
+                  </div>
+                  <div className="p-4 rounded-xl shadow bg-gradient-to-br from-orange-200 via-yellow-100 to-pink-100 text-center border-0">
+                    <p className="text-xs font-semibold text-orange-700 mb-1">PPE Compliance</p>
+                    <p className="text-2xl font-extrabold text-orange-900">{viewingDistrict.complianceScore}%</p>
+                  </div>
+                  <div className="p-4 rounded-xl shadow bg-gradient-to-br from-purple-200 via-pink-100 to-yellow-100 text-center border-0">
+                    <p className="text-xs font-semibold text-purple-700 mb-1">Open Grievances</p>
+                    <p className="text-2xl font-extrabold text-purple-900">{viewingDistrict.openGrievances}</p>
+                  </div>
+                </div>
                                 </DialogContent>
                             )}
                         </Dialog>

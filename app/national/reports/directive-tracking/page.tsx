@@ -42,73 +42,92 @@ export default function DirectiveTrackingReportPage() {
         </div>
       </div>
 
-      <Card className={cn(contractorTheme.card.container)}>
+      <Card className={cn(contractorTheme.card.container, "shadow-2xl border border-blue-200 bg-gradient-to-br from-white via-blue-50 to-emerald-50 rounded-2xl") }>
         <CardHeader className={cn(contractorTheme.card.header)}>
             <CardTitle className={cn(contractorTheme.card.title)}>Master Directive Log</CardTitle>
             <CardDescription className={cn(contractorTheme.card.description)}>
                 Historical record of all directives issued by the National Commission.
             </CardDescription>
         </CardHeader>
-        <CardContent className={cn(contractorTheme.card.content)}>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Directive Title</TableHead>
-                <TableHead>Issued</TableHead>
-                <TableHead>Deadline</TableHead>
-                <TableHead>States Responded</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {directives.map((d) => (
-                <TableRow key={d.id}>
-                  <TableCell className="font-medium">{d.title}</TableCell>
-                  <TableCell>{d.issued}</TableCell>
-                  <TableCell>{d.deadline}</TableCell>
-                  <TableCell className="font-semibold">{d.responded} / {d.total}</TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={d.status === 'Overdue' ? 'destructive' : d.status === 'Completed' ? 'default' : 'secondary'}
-                      className={d.status === 'Completed' ? 'bg-green-500 text-white' : ''}
-                    >
-                      {d.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Dialog>
-                        <DialogTrigger asChild>
-                            <Button className={cn(contractorTheme.button.secondary, "!px-4 !py-2 text-sm") }><Eye className="h-4 w-4 mr-2"/>View Responses</Button>
-                        </DialogTrigger>
-                        <DialogContent className="max-w-2xl">
-                            <DialogHeader>
-                                <DialogTitle>Response Status: {d.title}</DialogTitle>
-                                <DialogDescription>State-by-state breakdown of responses.</DialogDescription>
-                            </DialogHeader>
-                            <div className="py-4">
-                                <Table>
+        <CardContent className={cn(contractorTheme.card.content, "p-0") }>
+          <div className="rounded-b-2xl overflow-hidden bg-gradient-to-br from-white via-blue-50 to-emerald-50">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Directive Title</TableHead>
+                  <TableHead>Issued</TableHead>
+                  <TableHead>Deadline</TableHead>
+                  <TableHead>States Responded</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {directives.map((d) => (
+                  <TableRow key={d.id} className="hover:scale-[1.01] hover:shadow-lg hover:z-10 hover:bg-gradient-to-r hover:from-blue-100 hover:via-cyan-100 hover:to-emerald-100 even:bg-gradient-to-r even:from-blue-50 even:via-blue-100 even:to-emerald-50 transition-all duration-200">
+                    <TableCell className="font-medium">{d.title}</TableCell>
+                    <TableCell>{d.issued}</TableCell>
+                    <TableCell>{d.deadline}</TableCell>
+                    <TableCell className="font-semibold">{d.responded} / {d.total}</TableCell>
+                    <TableCell>
+                      {d.status === 'Overdue' ? (
+                        <span className="inline-block px-4 py-1 rounded-full font-semibold text-white text-sm shadow bg-gradient-to-r from-red-500 via-pink-500 to-orange-400">Overdue</span>
+                      ) : d.status === 'Completed' ? (
+                        <span className="inline-block px-4 py-1 rounded-full font-semibold text-white text-sm shadow bg-gradient-to-r from-green-400 via-emerald-400 to-teal-400">Completed</span>
+                      ) : d.status === 'In Progress' ? (
+                        <span className="inline-block px-4 py-1 rounded-full font-semibold text-white text-sm shadow bg-gradient-to-r from-yellow-400 via-orange-400 to-pink-400">In Progress</span>
+                      ) : d.status === 'New' ? (
+                        <span className="inline-block px-4 py-1 rounded-full font-semibold text-gray-800 text-sm shadow bg-gradient-to-r from-blue-100 via-blue-200 to-cyan-100">New</span>
+                      ) : (
+                        <Badge>{d.status}</Badge>
+                      )}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Dialog>
+                          <DialogTrigger asChild>
+                              <Button className={cn(contractorTheme.button.secondary, "!px-4 !py-2 text-sm") }><Eye className="h-4 w-4 mr-2"/>View Responses</Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-2xl">
+                              <DialogHeader>
+                                  <DialogTitle>Response Status: {d.title}</DialogTitle>
+                                  <DialogDescription>State-by-state breakdown of responses.</DialogDescription>
+                              </DialogHeader>
+                              <div className="py-4">
+                                <div className="rounded-2xl shadow-lg bg-gradient-to-br from-white via-blue-50 to-emerald-50 p-2">
+                                  <Table>
                                     <TableHeader><TableRow><TableHead>State/UT</TableHead><TableHead>Response Status</TableHead><TableHead>Date</TableHead></TableRow></TableHeader>
                                     <TableBody>
-                                        {stateResponses.map(r => (
-                                            <TableRow key={r.state}>
-                                                <TableCell className="font-medium">{r.state}</TableCell>
-                                                <TableCell><Badge variant={r.status === 'Pending' ? 'destructive' : 'default'}>{r.status}</Badge></TableCell>
-                                                <TableCell>{r.date}</TableCell>
-                                            </TableRow>
-                                        ))}
-                                        <TableRow><TableCell colSpan={3} className="text-center text-sm text-gray-500">... and 24 other states.</TableCell></TableRow>
+                                      {stateResponses.map(r => (
+                                        <TableRow key={r.state} className="even:bg-gradient-to-r even:from-blue-50 even:via-blue-100 even:to-emerald-50">
+                                          <TableCell className="font-medium">{r.state}</TableCell>
+                                          <TableCell>
+                                            {r.status === 'Action Logged' ? (
+                                              <span className="inline-block px-3 py-1 rounded-full font-semibold text-white text-xs shadow bg-gradient-to-r from-blue-600 via-sky-400 to-cyan-400">Action Logged</span>
+                                            ) : r.status === 'Acknowledged' ? (
+                                              <span className="inline-block px-3 py-1 rounded-full font-semibold text-white text-xs shadow bg-gradient-to-r from-purple-500 via-pink-400 to-fuchsia-400">Acknowledged</span>
+                                            ) : r.status === 'Pending' ? (
+                                              <span className="inline-block px-3 py-1 rounded-full font-semibold text-white text-xs shadow bg-gradient-to-r from-red-500 via-pink-500 to-orange-400">Pending</span>
+                                            ) : (
+                                              <Badge>{r.status}</Badge>
+                                            )}
+                                          </TableCell>
+                                          <TableCell>{r.date}</TableCell>
+                                        </TableRow>
+                                      ))}
+                                      <TableRow><TableCell colSpan={3} className="text-center text-sm text-gray-500">... and 24 other states.</TableCell></TableRow>
                                     </TableBody>
-                                </Table>
-                            </div>
-                            <DialogFooter><Button className={cn(contractorTheme.button.secondary)}>Close</Button></DialogFooter>
-                        </DialogContent>
-                    </Dialog>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                                  </Table>
+                                </div>
+                              </div>
+                              <DialogFooter><Button className={cn(contractorTheme.button.secondary)}>Close</Button></DialogFooter>
+                          </DialogContent>
+                      </Dialog>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
     </div>

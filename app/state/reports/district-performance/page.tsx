@@ -66,14 +66,22 @@ export default function DistrictPerformanceReportPage() {
                   <TableCell className="text-right">
                     <Dialog>
                       <DialogTrigger asChild><Button className={cn(contractorTheme.button.secondary, "!px-4 !py-2 text-sm") }><Eye className="h-4 w-4 mr-2"/>View Submitted Report</Button></DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>Monthly Summary: {d.name}</DialogTitle>
-                          <DialogDescription>Read-only view of the official report submitted by the District Administrator.</DialogDescription>
-                        </DialogHeader>
-                        <div className="py-4 space-y-4 text-sm">
-                          <p><strong>Executive Summary:</strong> "Performance in {d.name} remains steady, although an increase in incidents in the southern zones requires attention..."</p>
-                          <p><strong>Actions Taken:</strong> "A formal warning has been issued to the underperforming Nodal unit..."</p>
+                      <DialogContent className="p-0 overflow-hidden bg-gradient-to-br from-blue-50 via-white to-purple-100 rounded-2xl shadow-xl border-0">
+                        <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 px-6 py-4">
+                          <DialogHeader>
+                            <DialogTitle className="text-white text-2xl font-bold drop-shadow">Monthly Summary: {d.name}</DialogTitle>
+                            <DialogDescription className="text-blue-100">Read-only view of the official report submitted by the District Administrator.</DialogDescription>
+                          </DialogHeader>
+                        </div>
+                        <div className="py-6 px-6 space-y-6 text-base">
+                          <div className="bg-blue-50 border-l-4 border-blue-400 rounded-lg p-4 shadow-sm">
+                            <span className="font-bold text-blue-700">Executive Summary:</span>
+                            <span className="block text-blue-900 mt-1">"Performance in {d.name} remains steady, although an increase in incidents in the southern zones requires attention..."</span>
+                          </div>
+                          <div className="bg-purple-50 border-l-4 border-purple-400 rounded-lg p-4 shadow-sm">
+                            <span className="font-bold text-purple-700">Actions Taken:</span>
+                            <span className="block text-purple-900 mt-1">"A formal warning has been issued to the underperforming Nodal unit..."</span>
+                          </div>
                         </div>
                       </DialogContent>
                     </Dialog>

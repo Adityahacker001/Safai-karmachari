@@ -27,29 +27,30 @@ export default function ComplianceOverviewReportPage() {
         { item: "Gloves (Damaged/Missing)", count: 7, severity: "High" },
     ];
 
-  return (
-    <div className={cn("space-y-8", theme.page.gradientBackground)}>
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-        <div>
-            <h2 className="text-3xl font-bold text-gray-800">Compliance Overview</h2>
-            <p className="text-gray-600 mt-1">Analyze contractor audit results and daily safety checklist data.</p>
+ return (
+    // UPDATED: Added padding here to ensure the background covers the full page with content spacing
+    <div className={cn("min-h-screen w-full p-6 md:p-12", theme.page.gradientBackground)}>
+        {/* UPDATED: Removed vertical padding from this inner container to prevent doubling up */}
+      <div className="max-w-7xl mx-auto space-y-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <div>
+              <h2 className="text-3xl font-bold text-gray-800">Compliance Overview</h2>
+              <p className="text-gray-600 mt-1">Analyze contractor audit results and daily safety checklist data.</p>
+          </div>
+          <div className="flex items-center space-x-2 mt-4 sm:mt-0">
+            <Button className={theme.button.secondary}><Download className="h-4 w-4 mr-2" />Export Summary</Button>
+          </div>
         </div>
-        <div className="flex items-center space-x-2 mt-4 sm:mt-0">
-          <Button className={theme.button.secondary}><Download className="h-4 w-4 mr-2" />Export Summary</Button>
-        </div>
-      </div>
 
-     
-      
-      {/* Two-Column Layout for Tables */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+        {/* Two-Column Layout for Tables */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
           {/* Left Column: Official Audit Log */}
-          <Card className={theme.card.container}>
-            <CardHeader className={theme.card.header}>
-                <CardTitle className={theme.card.title}>Official Audit Log</CardTitle>
-                <CardDescription className={theme.card.description}>History of compliance audits conducted by the Nodal Officer.</CardDescription>
-            </CardHeader>
-            <CardContent className="p-0">
+          <Card className={cn(theme.card.container, "flex flex-col min-h-[420px]")}> 
+            <div className="rounded-t-3xl bg-gradient-to-r from-indigo-600 via-purple-600 to-fuchsia-500 px-8 py-7">
+              <h3 className="text-3xl font-extrabold text-white mb-1">Official Audit Log</h3>
+              <p className="text-white/80 text-lg">History of compliance audits conducted by the Nodal Officer.</p>
+            </div>
+            <CardContent className="p-0 flex-1 flex flex-col justify-end">
               <Table>
                 <TableHeader><TableRow><TableHead className="px-6 py-4 text-sm font-semibold text-gray-500 uppercase">Contractor</TableHead><TableHead className="px-6 py-4 text-sm font-semibold text-gray-500 uppercase">Audit Date</TableHead><TableHead className="px-6 py-4 text-sm font-semibold text-gray-500 uppercase">Status</TableHead></TableRow></TableHeader>
                 <TableBody>
@@ -76,12 +77,12 @@ export default function ComplianceOverviewReportPage() {
           </Card>
 
           {/* Right Column: Top Violations from Daily Checklists */}
-          <Card className={theme.card.container}>
-            <CardHeader className={theme.card.header}>
-                <CardTitle className={theme.card.title}>Top 5 Daily Violations</CardTitle>
-                <CardDescription className={theme.card.description}>Aggregated from all daily worker safety submissions.</CardDescription>
-            </CardHeader>
-            <CardContent className="p-0">
+          <Card className={cn(theme.card.container, "flex flex-col min-h-[420px]")}> 
+            <div className="rounded-t-3xl bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-500 px-8 py-7">
+              <h3 className="text-3xl font-extrabold text-white mb-1">Top 5 Daily Violations</h3>
+              <p className="text-white/80 text-lg">Aggregated from all daily worker safety submissions.</p>
+            </div>
+            <CardContent className="p-0 flex-1 flex flex-col justify-end">
               <Table>
                 <TableHeader><TableRow><TableHead className="px-6 py-4 text-sm font-semibold text-gray-500 uppercase">Violation Item</TableHead><TableHead className="px-6 py-4 text-sm font-semibold text-gray-500 uppercase">Frequency</TableHead><TableHead className="px-6 py-4 text-sm font-semibold text-gray-500 uppercase">Severity</TableHead></TableRow></TableHeader>
                 <TableBody>
@@ -107,6 +108,7 @@ export default function ComplianceOverviewReportPage() {
               </Table>
             </CardContent>
           </Card>
+        </div>
       </div>
     </div>
   );

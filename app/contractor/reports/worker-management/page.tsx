@@ -397,8 +397,8 @@ export default function WorkerManagementReportPage() {
                         </Button>
                       </DialogTrigger>
                       {selectedWorker && selectedWorker.id === worker.id && (
-                        <DialogContent className="max-w-5xl p-0 bg-slate-50 rounded-3xl shadow-2xl">
-                          <DialogHeader className="p-8 bg-gradient-to-r from-indigo-600 to-violet-700 text-white rounded-t-3xl">
+                        <DialogContent className="max-w-5xl p-0 shadow-2xl rounded-3xl overflow-hidden bg-gradient-to-br from-indigo-100 via-blue-100 to-emerald-100">
+                          <DialogHeader className="p-8 bg-gradient-to-r from-indigo-600 to-violet-700 text-white w-full">
                             <div className="flex items-start space-x-6">
                               <Avatar className="h-28 w-28 border-4 border-white shadow-md">
                                 <AvatarImage src="/placeholder-user.jpg" alt={selectedWorker.name}/>
@@ -420,7 +420,7 @@ export default function WorkerManagementReportPage() {
                               </div>
                             </div>
                           </DialogHeader>
-                          <div className="p-8">
+                          <div className="p-8 bg-gradient-to-br from-indigo-50 via-blue-50 to-emerald-50 min-h-[400px]">
                             <Tabs defaultValue="compliance" className="w-full">
                               <TabsList className="grid w-full grid-cols-3 h-12 p-1 bg-slate-200 rounded-xl shadow-inner">
                                 <TabsTrigger value="compliance" className="flex items-center justify-center space-x-2 text-base font-semibold text-gray-700 data-[state=active]:bg-white data-[state=active]:text-indigo-700 data-[state=active]:shadow-md data-[state=active]:rounded-lg transition-all duration-300 ease-in-out">

@@ -62,37 +62,39 @@ export default function AnnualReportsPage() {
                 </div>
                 <Progress value={progress} className="h-3 bg-green-200 [&>div]:bg-green-500" />
             </div>
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>State / UT</TableHead>
-                        <TableHead>Submission Status</TableHead>
-                        <TableHead>Date Received</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {stateSubmissions.map(s => (
-                        <TableRow key={s.state}>
-                            <TableCell className="font-medium">{s.state}</TableCell>
-                            <TableCell>
-                                {s.status === 'Submitted' ? (
-                                    <div className="flex items-center text-green-600">
-                                        <CheckCircle className="h-4 w-4 mr-2"/>
-                                        <span className="font-semibold">Submitted</span>
-                                    </div>
-                                ) : (
-                                    <div className="flex items-center text-gray-500">
-                                        <Loader className="h-4 w-4 mr-2 animate-spin"/>
-                                        <span className="font-semibold">Pending</span>
-                                    </div>
-                                )}
-                            </TableCell>
-                            <TableCell>{s.date}</TableCell>
-                        </TableRow>
-                    ))}
-                    <TableRow><TableCell colSpan={3} className="text-center text-sm text-gray-500">... and 23 other states.</TableCell></TableRow>
-                </TableBody>
-            </Table>
+            <div className="rounded-2xl shadow-lg bg-gradient-to-br from-white via-blue-50 to-emerald-50 p-2">
+              <Table>
+                  <TableHeader>
+                      <TableRow>
+                          <TableHead>State / UT</TableHead>
+                          <TableHead>Submission Status</TableHead>
+                          <TableHead>Date Received</TableHead>
+                      </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                      {stateSubmissions.map((s, idx) => (
+                          <TableRow key={s.state} className={idx % 2 === 1 ? "bg-gradient-to-r from-blue-50 via-blue-100 to-emerald-50" : ""}>
+                              <TableCell className="font-medium">{s.state}</TableCell>
+                              <TableCell>
+                                  {s.status === 'Submitted' ? (
+                                      <div className="flex items-center text-green-600">
+                                          <CheckCircle className="h-4 w-4 mr-2"/>
+                                          <span className="font-semibold">Submitted</span>
+                                      </div>
+                                  ) : (
+                                      <div className="flex items-center text-gray-500">
+                                          <Loader className="h-4 w-4 mr-2 animate-spin"/>
+                                          <span className="font-semibold">Pending</span>
+                                      </div>
+                                  )}
+                              </TableCell>
+                              <TableCell>{s.date}</TableCell>
+                          </TableRow>
+                      ))}
+                      <TableRow><TableCell colSpan={3} className="text-center text-sm text-gray-500">... and 23 other states.</TableCell></TableRow>
+                  </TableBody>
+              </Table>
+            </div>
         </CardContent>
       </Card>
     </div>

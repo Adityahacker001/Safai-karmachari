@@ -21,26 +21,27 @@ const UnitPerformancePage = () => {
         { id: "U-007", zone: "Central Zone", type: "Contractor", ppe: 91, training: 93, grievances: 3, score: 8.7 },
     ];
 
+    const getTypeColor = (type: string) => {
+        if (type === "Contractor") return "bg-blue-100 text-blue-800 border-blue-200";
+        if (type === "Municipality") return "bg-purple-100 text-purple-800 border-purple-200";
+        return "bg-gray-100 text-gray-800 border-gray-200";
+    };
+
     const getScoreColor = (score: number) => {
         if (score >= 9) return "bg-green-100 text-green-800 border-green-200";
         if (score >= 8) return "bg-yellow-100 text-yellow-800 border-yellow-200";
         return "bg-red-100 text-red-800 border-red-200";
     };
 
-    const getTypeColor = (type: string) => {
-        if (type === 'Contractor') return "bg-blue-100 text-blue-800 border-blue-200";
-        return "bg-purple-100 text-purple-800 border-purple-200";
-    };
-
     return (
-        <div className={cn("space-y-8", contractorTheme.page.gradientBackground, "p-6 md:p-8")}>
+        <div className={cn("min-h-screen space-y-8", contractorTheme.page.gradientBackground, "p-6 md:p-8")}> 
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <h2 className="text-3xl font-bold text-slate-800">Unit Performance Report</h2>
-                    <p className="text-slate-600 mt-1">Review and compare the performance of all operational units.</p>
+                    <h2 className="text-3xl font-bold text-blue-900">Unit Performance Report</h2>
+                    <p className="text-blue-700 mt-1">Review and compare the performance of all operational units.</p>
                 </div>
                 <div className="flex items-center space-x-2 mt-4 sm:mt-0">
-                    <Button className={cn(contractorTheme.button.secondary, "text-sm")}><Download className="h-4 w-4 mr-2" />Export Report</Button>
+                    <Button className={cn(contractorTheme.button.secondary, "text-sm")}> <Download className="h-4 w-4 mr-2" />Export Report</Button>
                 </div>
             </div>
 
@@ -54,7 +55,7 @@ const UnitPerformancePage = () => {
                         <div className="flex items-center space-x-2 mt-4 sm:mt-0">
                             <Filter className="h-5 w-5 text-slate-300" />
                             <Select>
-                                <SelectTrigger className={cn(contractorTheme.form.select, "w-[180px] text-sm bg-white/10 text-white border-white/20")}>
+                                <SelectTrigger className={cn(contractorTheme.form.select, "w-[180px] text-sm bg-white/10 text-white border-white/20")}> 
                                     <SelectValue placeholder="Filter by Zone..." />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -66,7 +67,7 @@ const UnitPerformancePage = () => {
                                 </SelectContent>
                             </Select>
                             <Select>
-                                <SelectTrigger className={cn(contractorTheme.form.select, "w-[180px] text-sm bg-white/10 text-white border-white/20")}>
+                                <SelectTrigger className={cn(contractorTheme.form.select, "w-[180px] text-sm bg-white/10 text-white border-white/20")}> 
                                     <SelectValue placeholder="Filter by Type..." />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -82,24 +83,24 @@ const UnitPerformancePage = () => {
                     <Table>
                         <TableHeader>
                             <TableRow className="border-slate-200">
-                                <TableHead className="text-slate-600 font-bold"><Building className="inline-block h-4 w-4 mr-1" />Unit ID</TableHead>
-                                <TableHead className="text-slate-600 font-bold">Zone</TableHead>
-                                <TableHead className="text-slate-600 font-bold">Unit Type</TableHead>
-                                <TableHead className="text-center text-slate-600 font-bold"><Shield className="inline-block h-4 w-4 mr-1" />PPE Compliance</TableHead>
-                                <TableHead className="text-center text-slate-600 font-bold"><GraduationCap className="inline-block h-4 w-4 mr-1" />Training Coverage</TableHead>
-                                <TableHead className="text-center text-slate-600 font-bold"><AlertTriangle className="inline-block h-4 w-4 mr-1" />Grievances</TableHead>
-                                <TableHead className="text-center text-slate-600 font-bold"><Star className="inline-block h-4 w-4 mr-1" />Performance Score</TableHead>
+                                <TableHead className="text-blue-700 font-bold"><Building className="inline-block h-4 w-4 mr-1" />Unit ID</TableHead>
+                                <TableHead className="text-blue-700 font-bold">Zone</TableHead>
+                                <TableHead className="text-blue-700 font-bold">Unit Type</TableHead>
+                                <TableHead className="text-center text-blue-700 font-bold"><Shield className="inline-block h-4 w-4 mr-1" />PPE Compliance</TableHead>
+                                <TableHead className="text-center text-blue-700 font-bold"><GraduationCap className="inline-block h-4 w-4 mr-1" />Training Coverage</TableHead>
+                                <TableHead className="text-center text-blue-700 font-bold"><AlertTriangle className="inline-block h-4 w-4 mr-1" />Grievances</TableHead>
+                                <TableHead className="text-center text-blue-700 font-bold"><Star className="inline-block h-4 w-4 mr-1" />Performance Score</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {performanceData.map((unit) => (
                                 <TableRow key={unit.id} className="border-slate-100">
-                                    <TableCell className="font-medium text-slate-800">{unit.id}</TableCell>
-                                    <TableCell className="text-slate-700">{unit.zone}</TableCell>
+                                    <TableCell className="font-medium text-blue-900">{unit.id}</TableCell>
+                                    <TableCell className="text-blue-700">{unit.zone}</TableCell>
                                     <TableCell><Badge className={cn("font-semibold", getTypeColor(unit.type))}>{unit.type}</Badge></TableCell>
-                                    <TableCell className="text-center font-semibold text-slate-800">{unit.ppe}%</TableCell>
-                                    <TableCell className="text-center font-semibold text-slate-800">{unit.training}%</TableCell>
-                                    <TableCell className="text-center font-semibold text-slate-800">{unit.grievances}</TableCell>
+                                    <TableCell className="text-center font-semibold text-blue-900">{unit.ppe}%</TableCell>
+                                    <TableCell className="text-center font-semibold text-blue-900">{unit.training}%</TableCell>
+                                    <TableCell className="text-center font-semibold text-blue-900">{unit.grievances}</TableCell>
                                     <TableCell className="text-center">
                                         <Badge className={cn("font-bold text-sm", getScoreColor(unit.score))}>
                                             {unit.score.toFixed(1)}
@@ -107,6 +108,7 @@ const UnitPerformancePage = () => {
                                     </TableCell>
                                 </TableRow>
                             ))}
+*** End Patch
                         </TableBody>
                     </Table>
                 </CardContent>

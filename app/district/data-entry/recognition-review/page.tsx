@@ -45,8 +45,9 @@ export default function RecognitionReviewPage() {
         setIsModalOpen(true);
     };
 
-  return (
-    <div className={cn("space-y-8", theme.page.gradientBackground)}>
+    return (
+      // UPDATED: Replaced p-0 with responsive padding and added vertical spacing
+      <div className={cn("min-h-screen w-full p-6 md:p-12 space-y-8", theme.page?.gradientBackground || "bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50")}> 
       <div>
         <h2 className="text-3xl font-bold text-gray-800">Recognition Review</h2>
         <p className="text-gray-600 mt-1">Review and approve or reject award nominations submitted by Nodal Officers.</p>
@@ -117,8 +118,8 @@ export default function RecognitionReviewPage() {
               </div>
 
               <div className="space-y-4 pt-6 border-t">
-                 <h3 className="font-semibold text-sm text-gray-700">District Administrator's Review</h3>
-                 <div>
+                  <h3 className="font-semibold text-sm text-gray-700">District Administrator's Review</h3>
+                  <div>
                     <Label htmlFor="review-comments" className={theme.form.label}>Review Comments & Decision Rationale</Label>
                     <Textarea 
                       id="review-comments" 
@@ -126,12 +127,12 @@ export default function RecognitionReviewPage() {
                       disabled={selectedNomination.status !== 'Pending Review'}
                       className={theme.form.input}
                     />
-                 </div>
+                  </div>
               </div>
             </div>
             <DialogFooter>
-               {selectedNomination.status === 'Pending Review' ? (
-                   <div className="flex justify-end space-x-3 w-full">
+                {selectedNomination.status === 'Pending Review' ? (
+                    <div className="flex justify-end space-x-3 w-full">
                       <Button variant="outline" className="border-red-300 text-red-600 hover:bg-red-50 hover:text-red-700 font-semibold">
                           <X className="h-4 w-4 mr-2" />
                           Reject
@@ -140,12 +141,12 @@ export default function RecognitionReviewPage() {
                           <Check className="h-4 w-4 mr-2" />
                           Approve
                       </Button>
-                   </div>
-               ) : (
-                    <div className="p-3 bg-blue-50 text-blue-800 rounded-lg text-center font-medium w-full text-sm border border-blue-200">
-                        This nomination has already been {selectedNomination.status.toLowerCase()}. No further action is required.
                     </div>
-               )}
+                ) : (
+                    <div className="p-3 bg-blue-50 text-blue-800 rounded-lg text-center font-medium w-full text-sm border border-blue-200">
+                      This nomination has already been {selectedNomination.status.toLowerCase()}. No further action is required.
+                    </div>
+                )}
             </DialogFooter>
           </DialogContent>
         </Dialog>

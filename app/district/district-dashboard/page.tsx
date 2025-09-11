@@ -9,28 +9,31 @@ import {
   MapPin,
   Award,
   BarChart3,
-  TrendingUp
+  TrendingUp,
+  // NEW: Added icons for the new cards
+  Briefcase,
+  Users,
+  UserCog
 } from 'lucide-react';
-import { Pie } from "react-chartjs-2";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+// REMOVED: Chart.js imports are no longer needed
+// import { Pie } from "react-chartjs-2";
+// import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { contractorTheme } from '@/lib/theme';
 import { cn } from '@/lib/utils';
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+// REMOVED: Chart.js registration is no longer needed
+// ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function DistrictDashboard() {
-  const expenditureByCategory = {
-    labels: ["Mechanization", "Welfare", "Training", "PPE"],
-    data: [180, 75, 45, 85] // in Lakhs
-  };
-
-  const chartColors = ['#3b82f6', '#8b5cf6', '#10b981', '#f97316']; // blue, purple, green, orange
+  // REMOVED: Chart data is no longer needed
+  // const expenditureByCategory = { ... };
+  // const chartColors = [...];
 
   return (
-    <div className={cn("p-6 md:p-8 space-y-6 md:space-y-8", contractorTheme.page.gradientBackground)}>
-        {/* Dashboard Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className={cn("p-6 md:p-8 space-y-6 md:space-y-8 min-h-screen", contractorTheme.page.gradientBackground)}>
+        {/* All Dashboard Cards in a single wrapping grid */}
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-x-6 gap-y-10 flex-wrap">
           <DashboardCard
             title="Total Units"
             value="156"
@@ -39,36 +42,25 @@ export default function DistrictDashboard() {
             description="Active operational units"
           />
           <DashboardCard
-            title="PPE Compliance"
-            value="93.8%"
-            icon={Shield}
-            color="green"
-            description="District average"
-          />
-          <DashboardCard
-            title="Training Coverage"
-            value="88.5%"
-            icon={GraduationCap}
-            color="orange"
-            description="Workforce trained"
-          />
-          <DashboardCard
-            title="Budget Utilization"
-            value="72.3%"
-            icon={DollarSign}
-            color="purple"
-            description="FY 2024-25"
-          />
-        </div>
-
-        {/* Secondary Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <DashboardCard
-            title="Zone Performance"
-            value="8.4"
-            icon={BarChart3}
+            title="Total Contractors"
+            value="12"
+            icon={Briefcase}
             color="indigo"
-            description="Average score out of 10"
+            description="Registered agencies"
+          />
+          <DashboardCard
+            title="Total Workers"
+            value="1,842"
+            icon={Users}
+            color="blue"
+            description="Enrolled workforce"
+          />
+          <DashboardCard
+            title="Nodal Officers"
+            value="8"
+            icon={UserCog}
+            color="indigo"
+            description="District officials assigned"
           />
           <DashboardCard
             title="Recognition Awards"
@@ -84,18 +76,11 @@ export default function DistrictDashboard() {
             color="blue"
             description="Zones monitored"
           />
-          <DashboardCard
-            title="Efficiency Trend"
-            value="Rising"
-            icon={TrendingUp}
-            color="green"
-            description="Overall performance"
-          />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-6">
-          {/* Left Column: Budget Overview & Quick Actions */}
-          <div className="lg:col-span-2 space-y-6">
+        {/* UPDATED: Layout is now a single column as the chart was removed */}
+        <div className="grid grid-cols-1 gap-8 mt-6">
+          <div className="space-y-6">
             {/* Budget Overview */}
             <div className={cn(contractorTheme.card.container, "p-6")}>
               <h3 className="text-lg font-semibold text-gray-800 mb-4">Budget Overview</h3>
@@ -138,30 +123,8 @@ export default function DistrictDashboard() {
             </div>
           </div>
 
-          {/* Right Column: Expenditure Chart */}
-          <div className="lg:col-span-1">
-            <Card className={cn(contractorTheme.card.container, "h-full")}>
-                <CardHeader>
-                    <CardTitle className="text-gray-800">Expenditure by Category</CardTitle>
-                    <CardDescription className="text-gray-600">Visual breakdown of all spending.</CardDescription>
-                </CardHeader>
-                <CardContent className="h-80 flex items-center justify-center">
-                   <Pie
-                      data={{
-                        labels: expenditureByCategory.labels,
-                        datasets: [{
-                            label: 'Amount (in ₹ Lakhs)',
-                            data: expenditureByCategory.data,
-                            backgroundColor: chartColors,
-                          }],
-                      }}
-                      options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }}
-                    />
-                </CardContent>
-            </Card>
-          </div>
+          {/* REMOVED: The chart component was here */}
         </div>
-        </div>
-      
+    </div>
   );
 }

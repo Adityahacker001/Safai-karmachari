@@ -50,21 +50,21 @@ export default function RecognitionReportPage() {
 
       {/* Recognition KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className={cn(contractorTheme.kpiCard.base, contractorTheme.kpiCard.workers)}>
-          <CardHeader className="pb-2 flex flex-row items-center justify-between"><CardTitle className="text-sm font-medium text-blue-100">Total Nominations</CardTitle><Send className="h-5 w-5 text-blue-200" /></CardHeader>
-          <CardContent><div className="text-3xl font-bold">{nominations.length}</div><p className="text-xs text-blue-200">This quarter</p></CardContent>
+        <Card className={cn(contractorTheme.kpiCard.base, "bg-gradient-to-br from-blue-400 to-blue-600")}> 
+          <CardHeader className="pb-2 flex flex-row items-center justify-between"><CardTitle className="text-sm font-medium text-white">Total Nominations</CardTitle><Send className="h-5 w-5 text-blue-100" /></CardHeader>
+          <CardContent><div className="text-3xl font-bold text-white">{nominations.length}</div><p className="text-xs text-blue-100">This quarter</p></CardContent>
         </Card>
-         <Card className={cn(contractorTheme.kpiCard.base, contractorTheme.kpiCard.grievances)}>
-          <CardHeader className="pb-2 flex flex-row items-center justify-between"><CardTitle className="text-sm font-medium text-orange-100">Pending Review</CardTitle><Clock className="h-5 w-5 text-orange-200" /></CardHeader>
-          <CardContent><div className="text-3xl font-bold">{nominations.filter(n => n.status === 'Pending Review').length}</div><p className="text-xs text-orange-200">Awaiting your approval</p></CardContent>
+        <Card className={cn(contractorTheme.kpiCard.base, "bg-gradient-to-br from-orange-400 to-orange-600")}> 
+          <CardHeader className="pb-2 flex flex-row items-center justify-between"><CardTitle className="text-sm font-medium text-white">Pending Review</CardTitle><Clock className="h-5 w-5 text-orange-100" /></CardHeader>
+          <CardContent><div className="text-3xl font-bold text-white">{nominations.filter(n => n.status === 'Pending Review').length}</div><p className="text-xs text-orange-100">Awaiting your approval</p></CardContent>
         </Card>
-        <Card className={cn(contractorTheme.kpiCard.base, contractorTheme.kpiCard.attendance)}>
-          <CardHeader className="pb-2 flex flex-row items-center justify-between"><CardTitle className="text-sm font-medium text-green-100">Awards Approved</CardTitle><CheckCircle className="h-5 w-5 text-green-200" /></CardHeader>
-          <CardContent><div className="text-3xl font-bold">{nominations.filter(n => n.status === 'Approved').length}</div><p className="text-xs text-green-200">This quarter</p></CardContent>
+        <Card className={cn(contractorTheme.kpiCard.base, "bg-gradient-to-br from-green-400 to-green-600")}> 
+          <CardHeader className="pb-2 flex flex-row items-center justify-between"><CardTitle className="text-sm font-medium text-white">Awards Approved</CardTitle><CheckCircle className="h-5 w-5 text-green-100" /></CardHeader>
+          <CardContent><div className="text-3xl font-bold text-white">{nominations.filter(n => n.status === 'Approved').length}</div><p className="text-xs text-green-100">This quarter</p></CardContent>
         </Card>
-        <Card className={cn(contractorTheme.kpiCard.base, "bg-gradient-to-br from-slate-500 to-slate-700")}>
-          <CardHeader className="pb-2 flex flex-row items-center justify-between"><CardTitle className="text-sm font-medium text-slate-100">Nominations Rejected</CardTitle><XCircle className="h-5 w-5 text-slate-200" /></CardHeader>
-          <CardContent><div className="text-3xl font-bold">{nominations.filter(n => n.status === 'Rejected').length}</div><p className="text-xs text-slate-200">This quarter</p></CardContent>
+        <Card className={cn(contractorTheme.kpiCard.base, "bg-gradient-to-br from-pink-400 to-pink-600")}> 
+          <CardHeader className="pb-2 flex flex-row items-center justify-between"><CardTitle className="text-sm font-medium text-white">Nominations Rejected</CardTitle><XCircle className="h-5 w-5 text-pink-100" /></CardHeader>
+          <CardContent><div className="text-3xl font-bold text-white">{nominations.filter(n => n.status === 'Rejected').length}</div><p className="text-xs text-pink-100">This quarter</p></CardContent>
         </Card>
       </div>
 
