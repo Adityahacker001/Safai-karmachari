@@ -23,6 +23,18 @@ export default function RecognitionLeaderboardPage() {
         { rank: 2, name: "City Maintenance", state: "Delhi", awards: 10 },
         { rank: 3, name: "Urban Clean Co.", state: "Karnataka", awards: 9 },
     ];
+    const topstate = [
+        { rank: 1, name: "Uttar Pradesh", Score: "94.5", awards: 5 },
+        { rank: 2, name: "Maharashtra", Score: "92.5", awards: 4 },
+        { rank: 3, name: "Karnataka", Score: "89.7", awards: 4 },
+    ];
+
+    const topdistrict = [
+        { rank: 1, name: "Mumbai", state: "Maharashtra", awards: 12 },
+        { rank: 2, name: "Lucknow", state: "Uttar Pradesh", awards: 10 },
+        { rank: 3, name: "Kolkata", state: "West Bengal", awards: 9 },
+    ];
+    
     
     const nationalAwards = [
         { category: "Best Performing State", winner: "State of Kerala" },
@@ -105,6 +117,60 @@ export default function RecognitionLeaderboardPage() {
                 ))}
             </div>
 
+            {/* Custom 4 Cards Row (from image) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-2">
+                {/* Top State */}
+                <Card className="rounded-xl border-0 bg-gradient-to-br from-yellow-50 via-yellow-100 to-yellow-200 flex flex-col justify-between">
+                    <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
+                        <CardTitle className="text-sm font-medium text-yellow-800">Top State</CardTitle>
+                        <div className="p-2 bg-yellow-100 rounded-full">
+                            <Trophy className="h-5 w-5 text-yellow-500" />
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-2xl font-extrabold text-yellow-900">UP</div>
+                    </CardContent>
+                </Card>
+                {/* Top District */}
+                <Card className="rounded-xl border-0 bg-gradient-to-br from-blue-50 via-blue-100 to-blue-200 flex flex-col justify-between">
+                    <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
+                        <CardTitle className="text-sm font-medium text-blue-800">Top District</CardTitle>
+                        <div className="p-2 bg-blue-100 rounded-full">
+                            <Award className="h-5 w-5 text-blue-500" />
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-2xl font-extrabold text-blue-900">Mumbai</div>
+                    </CardContent>
+                </Card>
+                {/* Gold Tier */}
+                <Card className="rounded-xl border-0 bg-gradient-to-br from-yellow-100 via-yellow-200 to-yellow-300 flex flex-col justify-between">
+                    <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
+                        <CardTitle className="text-sm font-medium text-yellow-800">Gold Tier</CardTitle>
+                        <div className="p-2 bg-yellow-50 rounded-full">
+                            <Trophy className="h-5 w-5 text-yellow-700" />
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-3xl font-extrabold text-yellow-900">1,247</div>
+                        <p className="text-sm text-yellow-800">Exceptional Performance</p>
+                    </CardContent>
+                </Card>
+                {/* Silver Tier */}
+                <Card className="rounded-xl border-0 bg-gradient-to-br from-blue-100 via-blue-200 to-gray-100 flex flex-col justify-between">
+                    <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
+                        <CardTitle className="text-sm font-medium text-blue-900">Silver Tier</CardTitle>
+                        <div className="p-2 bg-blue-50 rounded-full">
+                            <Award className="h-5 w-5 text-blue-500" />
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-3xl font-extrabold text-blue-900">2,389</div>
+                        <p className="text-sm text-blue-900">High Performance</p>
+                    </CardContent>
+                </Card>
+            </div>
+
             {/* National Awards Roster */}
             <Card className="shadow-2xl border-0 rounded-2xl overflow-hidden">
                 <CardHeader className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white">
@@ -132,6 +198,63 @@ export default function RecognitionLeaderboardPage() {
                     </Table>
                 </CardContent>
             </Card>
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Top Recognized Workers */}
+                <Card className="shadow-2xl border-0 rounded-2xl overflow-hidden">
+                    <CardHeader className="bg-gradient-to-r from-blue-500 to-cyan-400 text-white">
+                        <CardTitle className="flex items-center text-2xl drop-shadow"><Star className="h-7 w-7 mr-3 text-yellow-200"/>State Leaderboard</CardTitle>
+                        <CardDescription className="text-white/80">Top workers with the most awards nationwide.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="p-0">
+                        <Table>
+                            <TableHeader className="bg-slate-100 dark:bg-slate-800">
+                                <TableRow>
+                                    <TableHead className="text-blue-700 dark:text-blue-300 font-semibold">Rank</TableHead>
+                                    <TableHead className="text-blue-700 dark:text-blue-300 font-semibold">Name & District</TableHead>
+                                    <TableHead className="text-center text-blue-700 dark:text-blue-300 font-semibold">Total Awards</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody className="bg-white dark:bg-gray-800">
+                                {topstate.map(worker => (
+                                    <TableRow key={worker.rank} className="hover:bg-blue-50/60 dark:hover:bg-blue-900/20 transition-colors duration-200">
+                                        <TableCell>{renderRank(worker.rank)}</TableCell>
+                                        <TableCell className="text-gray-800 dark:text-gray-200">{worker.name}{'district' in worker ? <p className="text-xs text-gray-500 dark:text-gray-400">{(worker as any).district}</p> : null}</TableCell>
+                                        <TableCell className="text-center font-bold text-xl text-blue-600 dark:text-blue-300">{worker.awards}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </CardContent>
+                </Card>
+
+                {/* Top Performing Contractors */}
+                <Card className="shadow-2xl border-0 rounded-2xl overflow-hidden">
+                    <CardHeader className="bg-gradient-to-r from-purple-600 to-violet-500 text-white">
+                        <CardTitle className="flex items-center text-2xl drop-shadow"><Award className="h-7 w-7 mr-3 text-purple-200"/>District Leaderboard</CardTitle>
+                        <CardDescription className="text-white/80">Top contractors with the most awards nationwide.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="p-0">
+                        <Table>
+                            <TableHeader className="bg-slate-100 dark:bg-slate-800">
+                                <TableRow>
+                                    <TableHead className="text-purple-700 dark:text-purple-300 font-semibold">Rank</TableHead>
+                                    <TableHead className="text-purple-700 dark:text-purple-300 font-semibold">Name & State</TableHead>
+                                    <TableHead className="text-center text-purple-700 dark:text-purple-300 font-semibold">Total Awards</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody className="bg-white dark:bg-gray-800">
+                                {topdistrict.map(contractor => (
+                                    <TableRow key={contractor.rank} className="hover:bg-purple-50/60 dark:hover:bg-purple-900/20 transition-colors duration-200">
+                                        <TableCell>{renderRank(contractor.rank)}</TableCell>
+                                        <TableCell className="text-gray-800 dark:text-gray-200">{contractor.name}<p className="text-xs text-gray-500 dark:text-gray-400">{contractor.state}</p></TableCell>
+                                        <TableCell className="text-center font-bold text-xl text-purple-600 dark:text-purple-300">{contractor.awards}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </CardContent>
+                </Card>
+            </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Top Recognized Workers */}
