@@ -122,14 +122,23 @@ const AuditLogs = () => {
       key: 'action', 
       header: 'Action', 
       sortable: true,
-      render: (value: string) => (
-        <div className="flex items-center space-x-2">
-          <div className={`p-1 rounded ${getActionColor(value)}`}>
-            {getActionIcon(value)}
+      render: (value: string) => {
+        let borderColor = '';
+        if (value.includes('Login')) borderColor = 'border-l-4 border-blue-400';
+        else if (value.includes('Created') || value.includes('Issued')) borderColor = 'border-l-4 border-green-400';
+        else if (value.includes('Updated')) borderColor = 'border-l-4 border-yellow-400';
+        else if (value.includes('Deactivated') || value.includes('Deleted')) borderColor = 'border-l-4 border-red-400';
+        else if (value.includes('Resolved')) borderColor = 'border-l-4 border-purple-400';
+        else borderColor = 'border-l-4 border-gray-200';
+        return (
+          <div className={`flex items-center space-x-2 pl-2 ${borderColor} bg-white/80 rounded-lg py-1`}> 
+            <div className={`p-1 rounded ${getActionColor(value)}`}>
+              {getActionIcon(value)}
+            </div>
+            <span className="text-sm font-medium">{value}</span>
           </div>
-          <span className="text-sm font-medium">{value}</span>
-        </div>
-      )
+        );
+      }
     },
     { 
       key: 'actor', 
@@ -160,7 +169,7 @@ const AuditLogs = () => {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 min-h-screen w-full bg-gradient-to-br from-blue-50 via-purple-50 to-pink-100 p-6 md:p-10">
       {/* Page Header */}
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Audit Logs</h1>
@@ -169,7 +178,7 @@ const AuditLogs = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white p-6 rounded-lg border border-gray-200">
+        <div className="p-6 rounded-xl shadow-md border border-blue-200 bg-gradient-to-br from-blue-200 via-blue-100 to-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 font-medium">Total Events</p>
@@ -181,7 +190,7 @@ const AuditLogs = () => {
           </div>
         </div>
         
-        <div className="bg-white p-6 rounded-lg border border-gray-200">
+  <div className="p-6 rounded-xl shadow-md border border-green-200 bg-gradient-to-br from-green-200 via-green-100 to-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 font-medium">Today's Events</p>
@@ -193,7 +202,7 @@ const AuditLogs = () => {
           </div>
         </div>
         
-        <div className="bg-white p-6 rounded-lg border border-gray-200">
+  <div className="p-6 rounded-xl shadow-md border border-purple-200 bg-gradient-to-br from-purple-200 via-purple-100 to-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 font-medium">Active Users</p>
@@ -205,7 +214,7 @@ const AuditLogs = () => {
           </div>
         </div>
         
-        <div className="bg-white p-6 rounded-lg border border-gray-200">
+  <div className="p-6 rounded-xl shadow-md border border-red-200 bg-gradient-to-br from-red-200 via-red-100 to-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 font-medium">Failed Attempts</p>
@@ -219,7 +228,7 @@ const AuditLogs = () => {
       </div>
 
       {/* Activity Summary */}
-      <div className="bg-white p-6 rounded-lg border border-gray-200">
+  <div className="bg-gradient-to-br from-white via-blue-50 to-purple-50 p-6 rounded-xl border border-gray-200 shadow-md">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Activity Summary</h3>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           <div className="text-center">
@@ -246,7 +255,7 @@ const AuditLogs = () => {
       </div>
 
       {/* Audit Logs Table */}
-      <div>
+      <div className="rounded-2xl overflow-hidden shadow-lg border border-blue-100 bg-gradient-to-br from-white via-blue-50 to-purple-50">
         <DataTable
           title="Audit Logs"
           columns={columns}

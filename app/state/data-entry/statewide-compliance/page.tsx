@@ -43,28 +43,28 @@ export default function StateComplianceFormPage() {
                 <BarChart3 className="h-5 w-5 text-gray-600"/>
                 <h3 className="text-lg font-semibold text-blue-600">Auto-Aggregated State Summary</h3>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                 <div className="p-4 bg-white/80 rounded-2xl border">
-                    <Label className="text-xs text-gray-500">Total Incidents (Month)</Label>
-                    <p className="text-2xl font-bold text-slate-800">{aggregatedStateData.totalIncidents}</p>
-                 </div>
-                 <div className="p-4 bg-white/80 rounded-2xl border">
-                    <Label className="text-xs text-gray-500">Avg. Compliance Score</Label>
-                    <p className="text-2xl font-bold text-slate-800">{aggregatedStateData.avgComplianceScore}</p>
-                 </div>
-                 <div className="p-4 bg-white/80 rounded-2xl border">
-                    <Label className="text-xs text-gray-500">Fatalities (YTD)</Label>
-                    <p className="text-2xl font-bold text-red-600">{aggregatedStateData.totalFatalitiesYTD}</p>
-                 </div>
-                 <div className="p-4 bg-white/80 rounded-2xl border col-span-2 md:col-span-1">
-                    <Label className="text-xs text-green-600">Top Performing District</Label>
-                    <p className="text-lg font-semibold text-slate-800">{aggregatedStateData.topPerformingDistrict}</p>
-                 </div>
-                 <div className="p-4 bg-white/80 rounded-2xl border col-span-2">
-                    <Label className="text-xs text-red-600">District Requiring Attention</Label>
-                    <p className="text-lg font-semibold text-slate-800">{aggregatedStateData.worstPerformingDistrict}</p>
-                 </div>
-              </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+            <div className="p-4 rounded-2xl border shadow-md bg-gradient-to-br from-blue-200 via-blue-100 to-white">
+              <Label className="text-xs text-gray-500">Total Incidents (Month)</Label>
+              <p className="text-2xl font-bold text-slate-800">{aggregatedStateData.totalIncidents}</p>
+            </div>
+            <div className="p-4 rounded-2xl border shadow-md bg-gradient-to-br from-green-200 via-green-100 to-white">
+              <Label className="text-xs text-gray-500">Avg. Compliance Score</Label>
+              <p className="text-2xl font-bold text-slate-800">{aggregatedStateData.avgComplianceScore}</p>
+            </div>
+            <div className="p-4 rounded-2xl border shadow-md bg-gradient-to-br from-red-200 via-red-100 to-white">
+              <Label className="text-xs text-gray-500">Fatalities (YTD)</Label>
+              <p className="text-2xl font-bold text-red-600">{aggregatedStateData.totalFatalitiesYTD}</p>
+            </div>
+            <div className="p-4 rounded-2xl border shadow-md bg-gradient-to-br from-purple-200 via-purple-100 to-white col-span-2 md:col-span-1">
+              <Label className="text-xs text-green-600">Top Performing District</Label>
+              <p className="text-lg font-semibold text-slate-800">{aggregatedStateData.topPerformingDistrict}</p>
+            </div>
+            <div className="p-4 rounded-2xl border shadow-md bg-gradient-to-br from-orange-200 via-orange-100 to-white col-span-2">
+              <Label className="text-xs text-red-600">District Requiring Attention</Label>
+              <p className="text-lg font-semibold text-slate-800">{aggregatedStateData.worstPerformingDistrict}</p>
+            </div>
+          </div>
             </div>
 
             {/* Section 2: State Administrator's Commentary */}

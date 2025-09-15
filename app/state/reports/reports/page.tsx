@@ -67,7 +67,7 @@ const Reports = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 min-h-screen w-full bg-gradient-to-br from-blue-50 via-purple-50 to-pink-100 p-6 md:p-10">
       {/* Page Header */}
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Reports & Analytics</h1>
@@ -76,7 +76,7 @@ const Reports = () => {
 
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white p-6 rounded-lg border border-gray-200">
+        <div className="p-6 rounded-xl shadow-md border border-blue-200 bg-gradient-to-br from-blue-200 via-blue-100 to-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 font-medium">Available Reports</p>
@@ -88,7 +88,7 @@ const Reports = () => {
           </div>
         </div>
         
-        <div className="bg-white p-6 rounded-lg border border-gray-200">
+  <div className="p-6 rounded-xl shadow-md border border-green-200 bg-gradient-to-br from-green-200 via-green-100 to-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 font-medium">Generated Today</p>
@@ -100,7 +100,7 @@ const Reports = () => {
           </div>
         </div>
         
-        <div className="bg-white p-6 rounded-lg border border-gray-200">
+  <div className="p-6 rounded-xl shadow-md border border-purple-200 bg-gradient-to-br from-purple-200 via-purple-100 to-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 font-medium">Total Downloads</p>
@@ -112,7 +112,7 @@ const Reports = () => {
           </div>
         </div>
         
-        <div className="bg-white p-6 rounded-lg border border-gray-200">
+  <div className="p-6 rounded-xl shadow-md border border-gray-200 bg-gradient-to-br from-gray-200 via-gray-100 to-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 font-medium">Data Size</p>
@@ -129,8 +129,15 @@ const Reports = () => {
       <div>
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Available Reports</h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {reports.map((report) => (
-            <div key={report.id} className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
+          {reports.map((report, idx) => (
+            <div
+              key={report.id}
+              className={
+                idx % 2 === 0
+                  ? "p-6 rounded-xl border shadow-md bg-gradient-to-br from-blue-100 via-white to-purple-100 hover:shadow-lg transition-shadow"
+                  : "p-6 rounded-xl border shadow-md bg-gradient-to-br from-pink-100 via-white to-yellow-100 hover:shadow-lg transition-shadow"
+              }
+            >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center space-x-3">
                   <div className="w-12 h-12 bg-blue-50 border border-blue-200 text-blue-600 rounded-lg flex items-center justify-center">
@@ -171,7 +178,7 @@ const Reports = () => {
       </div>
 
       {/* Custom Report Generator */}
-      <div className="bg-white p-6 rounded-lg border border-gray-200">
+  <div className="bg-gradient-to-br from-white via-blue-50 to-purple-50 p-6 rounded-xl border border-gray-200 shadow-md">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Custom Report Generator</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
           <div>

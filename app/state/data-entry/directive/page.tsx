@@ -104,7 +104,7 @@ const Directives = () => {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen w-full bg-gradient-to-br from-blue-50 via-purple-50 to-pink-100 p-6 md:p-10 space-y-8">
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -115,7 +115,7 @@ const Directives = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white p-6 rounded-lg border border-gray-200">
+        <div className="p-6 rounded-xl shadow-md border border-blue-200 bg-gradient-to-br from-blue-200 via-blue-100 to-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 font-medium">Total Directives</p>
@@ -126,8 +126,7 @@ const Directives = () => {
             </div>
           </div>
         </div>
-        
-        <div className="bg-white p-6 rounded-lg border border-gray-200">
+        <div className="p-6 rounded-xl shadow-md border border-green-200 bg-gradient-to-br from-green-200 via-green-100 to-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 font-medium">Active</p>
@@ -138,8 +137,7 @@ const Directives = () => {
             </div>
           </div>
         </div>
-        
-        <div className="bg-white p-6 rounded-lg border border-gray-200">
+        <div className="p-6 rounded-xl shadow-md border border-yellow-200 bg-gradient-to-br from-yellow-200 via-yellow-100 to-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 font-medium">Pending</p>
@@ -150,8 +148,7 @@ const Directives = () => {
             </div>
           </div>
         </div>
-        
-        <div className="bg-white p-6 rounded-lg border border-gray-200">
+        <div className="p-6 rounded-xl shadow-md border border-blue-200 bg-gradient-to-br from-blue-200 via-blue-100 to-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 font-medium">Completed</p>

@@ -134,7 +134,7 @@ const UserManagement = () => {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 min-h-screen w-full bg-gradient-to-br from-blue-50 via-purple-50 to-pink-100 p-6 md:p-10">
       {/* Page Header */}
       <div>
         <h1 className="text-2xl font-bold text-gray-900">User Management</h1>
@@ -143,7 +143,7 @@ const UserManagement = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white p-6 rounded-lg border border-gray-200">
+        <div className="p-6 rounded-xl shadow-md border border-blue-200 bg-gradient-to-br from-blue-200 via-blue-100 to-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 font-medium">Total Users</p>
@@ -155,7 +155,7 @@ const UserManagement = () => {
           </div>
         </div>
         
-        <div className="bg-white p-6 rounded-lg border border-gray-200">
+  <div className="p-6 rounded-xl shadow-md border border-green-200 bg-gradient-to-br from-green-200 via-green-100 to-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 font-medium">Active Users</p>
@@ -169,7 +169,7 @@ const UserManagement = () => {
           </div>
         </div>
         
-        <div className="bg-white p-6 rounded-lg border border-gray-200">
+  <div className="p-6 rounded-xl shadow-md border border-yellow-200 bg-gradient-to-br from-yellow-200 via-yellow-100 to-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 font-medium">Pending Approval</p>
@@ -183,7 +183,7 @@ const UserManagement = () => {
           </div>
         </div>
         
-        <div className="bg-white p-6 rounded-lg border border-gray-200">
+  <div className="p-6 rounded-xl shadow-md border border-red-200 bg-gradient-to-br from-red-200 via-red-100 to-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 font-medium">Inactive Users</p>
@@ -199,7 +199,7 @@ const UserManagement = () => {
       </div>
 
       {/* Role Distribution */}
-      <div className="bg-white p-6 rounded-lg border border-gray-200">
+  <div className="bg-gradient-to-br from-white via-blue-50 to-purple-50 p-6 rounded-xl border border-gray-200 shadow-md">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Role Distribution</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="text-center p-4 bg-blue-50 rounded-lg">

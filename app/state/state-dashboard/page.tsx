@@ -109,28 +109,6 @@ export default function StateDashboard() {
         />
       </div>
 
-      {/* Fund Allocation Overview - Enhanced Card Styling */}
-      <div className="bg-white/70 backdrop-blur-sm p-6 md:p-8 rounded-2xl shadow-lg border border-white/30">
-        <h3 className="text-2xl font-bold text-gray-800 mb-6 tracking-tight">Fund Allocation Status</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="text-center p-6 bg-gradient-to-br from-blue-100 to-white rounded-xl shadow-md border border-blue-200">
-            <div className="text-4xl font-extrabold text-blue-600">₹60.1Cr</div>
-            <div className="text-sm font-medium text-gray-600 mt-1">Total Allocated</div>
-          </div>
-          <div className="text-center p-6 bg-gradient-to-br from-green-100 to-white rounded-xl shadow-md border border-green-200">
-            <div className="text-4xl font-extrabold text-green-600">₹47.2Cr</div>
-            <div className="text-sm font-medium text-gray-600 mt-1">Utilized</div>
-          </div>
-          <div className="text-center p-6 bg-gradient-to-br from-orange-100 to-white rounded-xl shadow-md border border-orange-200">
-            <div className="text-4xl font-extrabold text-orange-600">₹12.9Cr</div>
-            <div className="text-sm font-medium text-gray-600 mt-1">Available</div>
-          </div>
-          <div className="text-center p-6 bg-gradient-to-br from-purple-100 to-white rounded-xl shadow-md border border-purple-200">
-            <div className="text-4xl font-extrabold text-purple-600">₹8.3Cr</div>
-            <div className="text-sm font-medium text-gray-600 mt-1">Pending Release</div>
-          </div>
-        </div>
-      </div>
 
       {/* Quick Actions - Enhanced Button Styling */}
       <div className="bg-white/70 backdrop-blur-sm p-6 md:p-8 rounded-2xl shadow-lg border border-white/30">

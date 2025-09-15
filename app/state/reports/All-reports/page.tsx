@@ -139,8 +139,7 @@ const PerformerCard = (props: PerformerCardProps) => {
                 
                 <div className="space-y-2 pt-3 border-t border-slate-200 dark:border-gray-700">
                     {/* Contractor Details */}
-                    {workerSatisfaction && <DetailRow icon={<Smile size={16}/>} label="Worker Satisfaction" value={<StarRating value={workerSatisfaction} />} />}
-                    {complianceRecord && <DetailRow icon={<ShieldCheck size={16}/>} label="Compliance Record" value={complianceRecord} />}
+                    {/* Removed Worker Satisfaction and Compliance Record rows as per request */}
                     {activeWarnings && <DetailRow icon={<FileWarning size={16}/>} label="Active Warnings" value={activeWarnings} className="text-red-600 dark:text-red-400" />}
 
                     {/* Worker Details */}
@@ -309,7 +308,7 @@ export default function PerformanceReportsPage() {
     };
 
     return (
-        <div className="space-y-8 p-4 md:p-6 bg-slate-100 dark:bg-gray-900 min-h-screen">
+        <div className="space-y-8 p-4 md:p-6 min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
             <div className="flex flex-wrap justify-between items-center gap-4">
                 <div>
                     <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Performance Reports Hub</h1>
@@ -318,9 +317,9 @@ export default function PerformanceReportsPage() {
                 <p className="text-sm text-gray-400 dark:text-gray-500">Last updated: {new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
             </div>
 
-            <Card className="shadow-2xl border-0 rounded-2xl overflow-hidden bg-white dark:bg-gray-800">
-                <CardHeader className="p-0 border-b border-slate-200 dark:border-gray-700">
-                     <div className="flex flex-wrap items-center gap-2 p-3 bg-slate-50 dark:bg-gray-900/50">
+            <Card className="shadow-2xl border-0 rounded-2xl overflow-hidden bg-gradient-to-br from-white via-blue-50 to-purple-50 dark:from-gray-800 dark:via-gray-900 dark:to-gray-900">
+              <CardHeader className="p-0 border-b border-slate-200 dark:border-gray-700 bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+                  <div className="flex flex-wrap items-center gap-2 p-3">
                         {mainTabs.map(tab => {
                             const Icon = tab.icon;
                             return ( <Button key={tab.id} variant="ghost" onClick={() => setActiveMainTab(tab.id)} className={cn("flex-auto justify-center text-center h-11 px-3 text-sm font-medium transition-all duration-300 rounded-lg", activeMainTab === tab.id ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold shadow-md' : 'text-gray-600 dark:text-gray-300 hover:bg-slate-200 dark:hover:bg-gray-700')}><Icon className="mr-2 h-5 w-5" /> {tab.label}</Button> );
