@@ -13,6 +13,7 @@ import {
   ArrowDown,
   Minus
 } from 'lucide-react';
+import DashboardCard from '@/components/dashboard/dashboard-card';
 
 // A helper component for the change indicator badge on cards
 type ChangeIndicatorProps = {
@@ -55,120 +56,203 @@ export default function ContractorDashboard() {
         
         <h1 className="text-3xl font-bold text-slate-800">Contractor Overview</h1>
 
-        {/* Dashboard Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-          {/* Card 0: Top 5 Workers */}
-          <div className="relative p-0 flex flex-col items-center justify-center rounded-2xl bg-gradient-to-br from-pink-500 to-pink-700 text-white shadow-xl col-span-1 min-h-[170px]">
-            <div className="flex flex-col items-center justify-center w-full py-6">
-              <div className="bg-white/20 rounded-full p-5 mb-3 shadow-lg flex items-center justify-center">
-                <Users className="h-10 w-10 text-white drop-shadow-lg" />
-              </div>
-              <p className="font-extrabold text-xl tracking-tight text-white text-center drop-shadow-sm">Top 5 Workers</p>
-              <span className="mt-2 text-xs text-pink-200 font-medium text-center">Based on performance & attendance</span>
-            </div>
-          </div>
+        {/* KPI Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <DashboardCard
+            title="Total Workers"
+            value="60"
+            icon={Users}
+            color="blue"
+          />
+          <DashboardCard
+            title="Today's Attendance"
+            value="48/60 (80%)"
+            change="12 not checked in"
+            icon={UserCheck}
+            color="green"
+          />
+          <DashboardCard
+            title="Grievances Assigned"
+            value="15"
+            change="10 Resolved | 5 Pending"
+            icon={AlertTriangle}
+            color="red"
+          />
+          <DashboardCard
+            title="PPE Coverage"
+            value="70%"
+            change="42 of 60 workers"
+            icon={Shield}
+            color="orange"
+          />
+          <DashboardCard
+            title="Training Completion"
+            value="60%"
+            change="36 of 60 workers"
+            icon={Activity}
+            color="purple"
+          />
+          <DashboardCard
+            title="Scheme Enrolment"
+            value="55%"
+            change="33 of 60 workers"
+            icon={MapPin}
+            color="indigo"
+          />
+        </div>
 
-          {/* Card 1: Total Workers */}
-          <div className="relative p-6 overflow-hidden rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 text-white shadow-lg">
-            <Users className="absolute -right-6 -bottom-6 h-28 w-28 text-white/10" strokeWidth={1} />
-            <div className="flex items-center space-x-4">
-              <div className="bg-white/20 p-3 rounded-xl">
-                <Users className="h-6 w-6" />
-              </div>
-              <p className="font-semibold text-blue-100">Total Workers</p>
+        {/* Graphs Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Attendance Trend Graph */}
+          <div className="bg-white rounded-2xl shadow-lg border border-slate-200/80 p-6 flex flex-col">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-slate-800">Attendance Trend</h2>
+              <span className="text-sm text-slate-500">Last 6 Months</span>
             </div>
-            <p className="mt-4 text-4xl font-bold tracking-tight">1,247</p>
-            <div className="mt-2">
-              <ChangeIndicator type="increase" text="+12 from last month" />
-            </div>
-          </div>
-
-          {/* Card 2: Active Today */}
-          <div className="relative p-6 overflow-hidden rounded-2xl bg-gradient-to-br from-green-500 to-green-700 text-white shadow-lg">
-            <UserCheck className="absolute -right-6 -bottom-6 h-28 w-28 text-white/10" strokeWidth={1} />
-            <div className="flex items-center space-x-4">
-              <div className="bg-white/20 p-3 rounded-xl">
-                <UserCheck className="h-6 w-6" />
-              </div>
-              <p className="font-semibold text-green-100">Active Today</p>
-            </div>
-            <p className="mt-4 text-4xl font-bold tracking-tight">1,156</p>
-            <div className="mt-2">
-              <ChangeIndicator type="increase" text="92.7% attendance" />
+            <div className="flex-1 flex items-center justify-center min-h-[240px] p-4">
+              <svg width="320" height="180" viewBox="0 0 320 180" className="w-full h-full">
+                {/* Gradient definition */}
+                <defs>
+                  <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.8"/>
+                    <stop offset="100%" stopColor="#1d4ed8" stopOpacity="1"/>
+                  </linearGradient>
+                  <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.2"/>
+                    <stop offset="100%" stopColor="#3b82f6" stopOpacity="0"/>
+                  </linearGradient>
+                </defs>
+                
+                {/* Grid lines */}
+                <g stroke="#e2e8f0" strokeWidth="1" opacity="0.5">
+                  <line x1="40" y1="20" x2="280" y2="20"/>
+                  <line x1="40" y1="50" x2="280" y2="50"/>
+                  <line x1="40" y1="80" x2="280" y2="80"/>
+                  <line x1="40" y1="110" x2="280" y2="110"/>
+                  <line x1="40" y1="140" x2="280" y2="140"/>
+                </g>
+                
+                {/* Y-axis labels */}
+                <g fill="#64748b" fontSize="11" textAnchor="end">
+                  <text x="35" y="25">100%</text>
+                  <text x="35" y="55">80%</text>
+                  <text x="35" y="85">60%</text>
+                  <text x="35" y="115">40%</text>
+                  <text x="35" y="145">20%</text>
+                </g>
+                
+                {/* Area under curve */}
+                <path
+                  d="M 60,120 L 100,100 L 140,80 L 180,90 L 220,70 L 260,60 L 260,140 L 60,140 Z"
+                  fill="url(#areaGradient)"
+                />
+                
+                {/* Main line */}
+                <polyline
+                  fill="none"
+                  stroke="url(#lineGradient)"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  points="60,120 100,100 140,80 180,90 220,70 260,60"
+                />
+                
+                {/* Data points */}
+                {[{x:60,y:120,val:"75%"},{x:100,y:100,val:"80%"},{x:140,y:80,val:"85%"},{x:180,y:90,val:"82%"},{x:220,y:70,val:"88%"},{x:260,y:60,val:"92%"}].map((point, i) => (
+                  <g key={i}>
+                    <circle cx={point.x} cy={point.y} r="5" fill="#fff" stroke="#3b82f6" strokeWidth="3"/>
+                    <circle cx={point.x} cy={point.y} r="2" fill="#3b82f6"/>
+                  </g>
+                ))}
+                
+                {/* X-axis labels */}
+                <g fill="#64748b" fontSize="11" textAnchor="middle">
+                  <text x="60" y="165">Apr</text>
+                  <text x="100" y="165">May</text>
+                  <text x="140" y="165">Jun</text>
+                  <text x="180" y="165">Jul</text>
+                  <text x="220" y="165">Aug</text>
+                  <text x="260" y="165">Sep</text>
+                </g>
+              </svg>
             </div>
           </div>
           
-          {/* Card 3: Grievances Pending */}
-          <div className="relative p-6 overflow-hidden rounded-2xl bg-gradient-to-br from-orange-500 to-orange-700 text-white shadow-lg">
-            <AlertTriangle className="absolute -right-6 -bottom-6 h-28 w-28 text-white/10" strokeWidth={1} />
-            <div className="flex items-center space-x-4">
-              <div className="bg-white/20 p-3 rounded-xl">
-                <AlertTriangle className="h-6 w-6" />
+          {/* Grievance Status Graph */}
+          <div className="bg-white rounded-2xl shadow-lg border border-slate-200/80 p-6 flex flex-col">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-slate-800">Grievance Status</h2>
+              <span className="text-sm text-slate-500">Current Month</span>
+            </div>
+            <div className="flex-1 flex items-center justify-center min-h-[240px]">
+              <div className="flex items-center space-x-8">
+                <svg width="160" height="160" viewBox="0 0 42 42" className="drop-shadow-lg">
+                  <defs>
+                    <linearGradient id="resolvedGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#10b981"/>
+                      <stop offset="100%" stopColor="#059669"/>
+                    </linearGradient>
+                    <linearGradient id="pendingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#f59e0b"/>
+                      <stop offset="100%" stopColor="#d97706"/>
+                    </linearGradient>
+                  </defs>
+                  
+                  {/* Background circle */}
+                  <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#f1f5f9" strokeWidth="3"/>
+                  
+                  {/* Resolved segment (67%) */}
+                  <circle
+                    cx="21"
+                    cy="21"
+                    r="15.915"
+                    fill="transparent"
+                    stroke="url(#resolvedGradient)"
+                    strokeWidth="3"
+                    strokeDasharray="67 33"
+                    strokeDashoffset="25"
+                    transform="rotate(-90 21 21)"
+                  />
+                  
+                  {/* Pending segment (33%) */}
+                  <circle
+                    cx="21"
+                    cy="21"
+                    r="15.915"
+                    fill="transparent"
+                    stroke="url(#pendingGradient)"
+                    strokeWidth="3"
+                    strokeDasharray="33 67"
+                    strokeDashoffset="-42"
+                    transform="rotate(-90 21 21)"
+                  />
+                  
+                  {/* Center circle */}
+                  <circle cx="21" cy="21" r="8" fill="#fff" className="drop-shadow-sm"/>
+                  
+                  {/* Center text */}
+                  <text x="21" y="18" textAnchor="middle" fontSize="5" fill="#374151" fontWeight="600">15</text>
+                  <text x="21" y="25" textAnchor="middle" fontSize="3.5" fill="#6b7280">Total</text>
+                </svg>
+                
+                <div className="flex flex-col space-y-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-4 h-4 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-sm"></div>
+                    <div>
+                      <div className="text-sm font-semibold text-slate-800">Resolved</div>
+                      <div className="text-xs text-slate-500">10 cases (67%)</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-4 h-4 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 shadow-sm"></div>
+                    <div>
+                      <div className="text-sm font-semibold text-slate-800">Pending</div>
+                      <div className="text-xs text-slate-500">5 cases (33%)</div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <p className="font-semibold text-orange-100">Grievances Pending</p>
             </div>
-            <p className="mt-4 text-4xl font-bold tracking-tight">23</p>
-            <div className="mt-2">
-              <ChangeIndicator type="decrease" text="-5 from yesterday" />
-            </div>
-          </div>
-
-          {/* Card 4: Safety Compliance */}
-          <div className="relative p-6 overflow-hidden rounded-2xl bg-gradient-to-br from-purple-500 to-purple-700 text-white shadow-lg">
-            <Shield className="absolute -right-6 -bottom-6 h-28 w-28 text-white/10" strokeWidth={1} />
-            <div className="flex items-center space-x-4">
-              <div className="bg-white/20 p-3 rounded-xl">
-                <Shield className="h-6 w-6" />
-              </div>
-              <p className="font-semibold text-purple-100">Safety Compliance</p>
-            </div>
-            <p className="mt-4 text-4xl font-bold tracking-tight">94.2%</p>
-            <div className="mt-2">
-              <ChangeIndicator type="increase" text="+2.1% this week" />
-            </div>
-          </div>
-        </div>
-
-        {/* Secondary Metrics */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* Card 5: Zone Coverage */}
-          <div className="bg-white p-5 rounded-2xl shadow-md border border-slate-200/80">
-            <div className="flex items-center justify-between">
-              <p className="font-medium text-slate-600">Zone Coverage</p>
-              <MapPin className="h-6 w-6 text-indigo-500" />
-            </div>
-            <p className="mt-2 text-3xl font-bold text-slate-900">12</p>
-            <p className="text-sm text-slate-500 mt-1">All zones active</p>
-          </div>
-
-          {/* Card 6: Training Progress */}
-          <div className="bg-white p-5 rounded-2xl shadow-md border border-slate-200/80">
-            <div className="flex items-center justify-between">
-              <p className="font-medium text-slate-600">Training Progress</p>
-              <Activity className="h-6 w-6 text-green-500" />
-            </div>
-            <p className="mt-2 text-3xl font-bold text-slate-900">87%</p>
-            <p className="text-sm text-slate-500 mt-1">Target: 90%</p>
-          </div>
-
-          {/* Card 7: Monthly Hours */}
-          <div className="bg-white p-5 rounded-2xl shadow-md border border-slate-200/80">
-            <div className="flex items-center justify-between">
-              <p className="font-medium text-slate-600">Monthly Hours</p>
-              <Clock className="h-6 w-6 text-blue-500" />
-            </div>
-            <p className="mt-2 text-3xl font-bold text-slate-900">28,456</p>
-            <p className="text-sm text-green-600 mt-1">+8.5% vs target</p>
-          </div>
-
-          {/* Card 8: Efficiency Score */}
-          <div className="bg-white p-5 rounded-2xl shadow-md border border-slate-200/80">
-            <div className="flex items-center justify-between">
-              <p className="font-medium text-slate-600">Efficiency Score</p>
-              <TrendingUp className="h-6 w-6 text-purple-500" />
-            </div>
-            <p className="mt-2 text-3xl font-bold text-slate-900">8.7 <span className="text-xl text-slate-400 font-normal">/ 10</span></p>
-            <p className="text-sm text-slate-500 mt-1">Above average</p>
           </div>
         </div>
 

@@ -1,204 +1,233 @@
-'use client';
+"use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Download, CheckCircle, Loader, UserCheck, UserX, AlertTriangle, Users, Shield } from "lucide-react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { UserCheck, UserX, Clock, Edit, Eye, Trash2, MessageCircle } from "lucide-react";
+import React from "react";
 
-export default function AttendanceReportPage() {
+const attendanceData = [
+	{
+		name: "Ramesh Kumar",
+		id: "WK001",
+		shift: "Morning",
+		status: "Present",
+		checkin: "06:30 AM",
+		checkout: "02:30 PM",
+	},
+	{
+		name: "Priya Sharma",
+		id: "WK002",
+		shift: "Evening",
+		status: "Present",
+		checkin: "02:00 PM",
+		checkout: "10:00 PM",
+	},
+	{
+		name: "Suresh Yadav",
+		id: "WK003",
+		shift: "Morning",
+		status: "Absent",
+		checkin: "-",
+		checkout: "-",
+	},
+	{
+		name: "Anita Devi",
+		id: "WK004",
+		shift: "Morning",
+		status: "Present",
+		checkin: "06:45 AM",
+		checkout: "02:45 PM",
+	},
+	{
+		name: "Mohan Lal",
+		id: "WK005",
+		shift: "Evening",
+		status: "Late",
+		checkin: "02:15 PM",
+		checkout: "-",
+	},
+];
 
-  // Mock data for the attendance report, mirroring Page 33 and adding more examples
-  const attendanceLogs = [
-      {
-        workerName: "Amit Kumar",
-        date: "2025-09-09",
-        checkIn: "08:15",
-        checkOut: "16:30",
-        workType: "Sweeping",
-        status: "Logged",
-        flag: null,
-      },
-      {
-        workerName: "Sunita Devi",
-        date: "2025-09-09",
-        checkIn: "08:20",
-        checkOut: "16:10",
-        workType: "Collection",
-        status: "Active",
-        flag: null,
-      },
-      {
-        workerName: "Abishek Singh",
-        date: "2025-09-09",
-        checkIn: "08:05",
-        checkOut: "",
-        workType: "Sweeping",
-        status: "Flagged",
-        flag: "No check-out recorded",
-      },
-      {
-        workerName: "Priya Sharma",
-        date: "2025-09-09",
-        checkIn: "08:10",
-        checkOut: "16:00",
-        workType: "Collection",
-        status: "Logged",
-        flag: null,
-      },
-      {
-        workerName: "Vijay Patel",
-        date: "2025-09-09",
-        checkIn: "",
-        checkOut: "",
-        workType: "Sweeping",
-        status: "Flagged",
-        flag: "No check-in/out",
-      },
-      {
-        workerName: "Meena Kumari",
-        date: "2025-09-09",
-        checkIn: "08:30",
-        checkOut: "16:20",
-        workType: "Collection",
-        status: "Logged",
-        flag: null,
-      },
-    ];
+const statusBadge = (status: string) => {
+	const statusClasses: Record<string, string> = {
+		Present: "bg-green-100 text-green-800",
+		Absent: "bg-red-100 text-red-800",
+		Late: "bg-yellow-100 text-yellow-800",
+	};
+	return (
+		<span
+			className={`px-2 py-1 rounded-full text-xs font-medium ${
+				statusClasses[status] || "bg-gray-100 text-gray-800"
+			}`}
+		>
+			{status}
+		</span>
+	);
+};
 
-  return (
-  <div className="min-h-screen p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-blue-100 via-purple-100 via-pink-100 via-rose-100 to-yellow-100">
-      <div className="max-w-7xl mx-auto space-y-8">
-        {/* Page Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-          <div>
-              <h1 className="text-3xl font-bold text-slate-800">Attendance Reports</h1>
-              <p className="mt-1 text-slate-500">Daily attendance logs automatically captured from the worker's app.</p>
-          </div>
-          <div className="flex items-center space-x-2 mt-4 sm:mt-0">
-            <Button variant="outline" className="bg-white"><Download className="h-4 w-4 mr-2" />Export Log (CSV)</Button>
-          </div>
-        </div>
-        
-        {/* KPIs */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Card className="rounded-2xl shadow-lg bg-gradient-to-br from-blue-600 via-blue-500 to-blue-400 text-white transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
-            <CardHeader className="pb-2 flex flex-row items-center justify-between">
-              <CardTitle className="text-base font-medium text-white">Total Workers</CardTitle>
-              <div className="p-2 bg-blue-500/30 rounded-lg">
-                  <Users className="h-6 w-6 text-white" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-4xl font-bold">1,247</div>
-              <p className="text-sm text-blue-100 mt-1">+12 from last month</p>
-            </CardContent>
-          </Card>
-          <Card className="rounded-2xl shadow-lg bg-gradient-to-br from-green-500 via-green-400 to-emerald-400 text-white transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
-            <CardHeader className="pb-2 flex flex-row items-center justify-between">
-              <CardTitle className="text-base font-medium text-white">Active Today</CardTitle>
-              <div className="p-2 bg-green-500/30 rounded-lg">
-                  <UserCheck className="h-6 w-6 text-white" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-4xl font-bold">1,156</div>
-              <p className="text-sm text-green-100 mt-1">92.7% attendance</p>
-            </CardContent>
-          </Card>
-          <Card className="rounded-2xl shadow-lg bg-gradient-to-br from-orange-500 via-orange-400 to-amber-400 text-white transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
-            <CardHeader className="pb-2 flex flex-row items-center justify-between">
-              <CardTitle className="text-base font-medium text-white">Grievances Pending</CardTitle>
-              <div className="p-2 bg-orange-500/30 rounded-lg">
-                  <AlertTriangle className="h-6 w-6 text-white" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-4xl font-bold">23</div>
-              <p className="text-sm text-orange-100 mt-1">-5 from yesterday</p>
-            </CardContent>
-          </Card>
-          <Card className="rounded-2xl shadow-lg bg-gradient-to-br from-purple-500 via-violet-500 to-fuchsia-500 text-white transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
-            <CardHeader className="pb-2 flex flex-row items-center justify-between">
-              <CardTitle className="text-base font-medium text-white">Safety Compliance</CardTitle>
-              <div className="p-2 bg-purple-500/30 rounded-lg">
-                  <Shield className="h-6 w-6 text-white" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-4xl font-bold">94.2%</div>
-              <p className="text-sm text-purple-100 mt-1">+2.1% this week</p>
-            </CardContent>
-          </Card>
-        </div>
+export default function WorkerAttendance() {
+	return (
+		<div className="space-y-6 p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-blue-100 via-purple-100 via-pink-100 via-rose-100 to-yellow-100 min-h-screen">
+			<div className="flex items-center justify-between">
+				<h1 className="text-2xl font-bold text-gray-900">Worker Attendance</h1>
+				<Button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+					Mark Attendance
+				</Button>
+			</div>
 
-        {/* Data Table and Filters */}
-        <Card className="bg-white shadow-sm border-slate-200">
-          <CardHeader>
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                  <div>
-                    <CardTitle>Daily Attendance Log</CardTitle>
-                    <CardDescription>
-                        Showing logs for the selected date and zone.
-                    </CardDescription>
-                  </div>
-                  <div className="flex items-center space-x-4 mt-4 sm:mt-0">
-                      <div className="flex items-center space-x-2">
-                        <Label htmlFor="report-date" className="text-sm text-slate-600">Date</Label>
-                        <Input id="report-date" type="date" defaultValue={new Date().toISOString().slice(0, 10)} className="w-40 bg-white border-slate-300" />
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Label htmlFor="report-zone" className="text-sm text-slate-600">Zone</Label>
-                        <Select><SelectTrigger className="w-40 bg-white border-slate-300"><SelectValue placeholder="All Zones" /></SelectTrigger><SelectContent><SelectItem value="all">All Zones</SelectItem><SelectItem value="zone1">Zone 1</SelectItem><SelectItem value="zone2">Zone 2</SelectItem></SelectContent></Select>
-                      </div>
-                  </div>
-              </div>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow className="border-slate-200">
-                  <TableHead className="text-xs font-medium text-slate-500 uppercase tracking-wider">Worker Name</TableHead>
-                  <TableHead className="text-xs font-medium text-slate-500 uppercase tracking-wider">Date</TableHead>
-                  <TableHead className="text-xs font-medium text-slate-500 uppercase tracking-wider">Check-In</TableHead>
-                  <TableHead className="text-xs font-medium text-slate-500 uppercase tracking-wider">Check-Out</TableHead>
-                  <TableHead className="text-xs font-medium text-slate-500 uppercase tracking-wider">Work Type</TableHead>
-                  <TableHead className="text-xs font-medium text-slate-500 uppercase tracking-wider">Status</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {attendanceLogs.map((log) => (
-                  <TableRow key={log.workerName} className={`border-slate-200 hover:bg-slate-50 ${log.flag? 'bg-amber-50' : ''}`}>
-                    <TableCell className="font-medium text-slate-800">{log.workerName}</TableCell>
-                    <TableCell className="text-slate-600">{log.date}</TableCell>
-                    <TableCell className="text-slate-600">{log.checkIn}</TableCell>
-                    <TableCell className="text-slate-600">{log.checkOut}</TableCell>
-                    <TableCell className="text-slate-600">{log.workType}</TableCell>
-                    <TableCell>
-                      <div className="flex flex-col items-start">
-                        <Badge variant="outline" className={
-                            log.status === 'Logged'? 'bg-green-100 text-green-800 border-green-200' :
-                            log.status === 'Active'? 'bg-sky-100 text-sky-800 border-sky-200' :
-                            log.status === 'Flagged'? 'bg-amber-100 text-amber-800 border-amber-200' : ''
-                        }>
-                          {log.status === 'Logged' && <CheckCircle className="h-3 w-3 mr-1.5"/>}
-                          {log.status === 'Active' && <Loader className="h-3 w-3 mr-1.5 animate-spin"/>}
-                          {log.status === 'Flagged' && <AlertTriangle className="h-3 w-3 mr-1.5"/>}
-                          {log.status}
-                        </Badge>
-                        {log.flag && <p className="text-xs text-red-600 mt-1.5">{log.flag}</p>}
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+				<Card className="rounded-2xl shadow-lg bg-gradient-to-br from-green-500 via-green-400 to-emerald-400 text-white">
+					<CardHeader className="pb-2 flex flex-row items-center justify-between">
+						<CardTitle className="text-base font-medium text-white">
+							Workers Present Today
+						</CardTitle>
+						<div className="p-2 bg-green-500/30 rounded-lg">
+							<UserCheck className="w-6 h-6 text-white" />
+						</div>
+					</CardHeader>
+					<CardContent>
+						<div className="text-4xl font-bold">
+							38{" "}
+							<span className="text-lg font-normal text-green-100">/ 43</span>
+						</div>
+					</CardContent>
+				</Card>
+				<Card className="rounded-2xl shadow-lg bg-gradient-to-br from-red-500 via-red-400 to-rose-400 text-white">
+					<CardHeader className="pb-2 flex flex-row items-center justify-between">
+						<CardTitle className="text-base font-medium text-white">
+							Absent Workers
+						</CardTitle>
+						<div className="p-2 bg-red-500/30 rounded-lg">
+							<UserX className="w-6 h-6 text-white" />
+						</div>
+					</CardHeader>
+					<CardContent>
+						<div className="text-4xl font-bold">5</div>
+					</CardContent>
+				</Card>
+				<Card className="rounded-2xl shadow-lg bg-gradient-to-br from-yellow-500 via-yellow-400 to-amber-400 text-white">
+					<CardHeader className="pb-2 flex flex-row items-center justify-between">
+						<CardTitle className="text-base font-medium text-white">
+							Late Check-ins
+						</CardTitle>
+						<div className="p-2 bg-yellow-500/30 rounded-lg">
+							<Clock className="w-6 h-6 text-white" />
+						</div>
+					</CardHeader>
+					<CardContent>
+						<div className="text-4xl font-bold">2</div>
+					</CardContent>
+				</Card>
+				<Card className="rounded-2xl shadow-lg bg-gradient-to-br from-blue-500 via-blue-400 to-sky-400 text-white">
+					<CardHeader className="pb-2 flex flex-row items-center justify-between">
+						<CardTitle className="text-base font-medium text-white">
+							Attendance Rate
+						</CardTitle>
+						<div className="p-2 bg-blue-500/30 rounded-lg">
+							<UserCheck className="w-6 h-6 text-white" />
+						</div>
+					</CardHeader>
+					<CardContent>
+						<div className="text-4xl font-bold">89%</div>
+						<p className="text-sm text-blue-100 mt-1">+2% from yesterday</p>
+					</CardContent>
+				</Card>
+			</div>
+
+			<div>
+				<h2 className="text-lg font-semibold text-gray-900 mb-4">
+					Worker-wise Attendance
+				</h2>
+				<Card className="bg-gradient-to-br from-cyan-50 via-blue-50 to-emerald-100 shadow-2xl border border-gray-100 rounded-3xl overflow-hidden">
+					<CardContent className="p-0">
+						<Table className="w-full">
+							<TableHeader className="bg-slate-50">
+								<TableRow className="border-b border-gray-200">
+									<TableHead className="py-4 px-6 text-slate-600 font-bold text-base">
+										Worker Name
+									</TableHead>
+									<TableHead className="py-4 px-6 text-slate-600 font-bold text-base">
+										Worker ID
+									</TableHead>
+									<TableHead className="py-4 px-6 text-slate-600 font-bold text-base">
+										Attendance Status
+									</TableHead>
+									<TableHead className="py-4 px-6 text-slate-600 font-bold text-base">
+										Check-in Time
+									</TableHead>
+									<TableHead className="py-4 px-6 text-slate-600 font-bold text-base">
+										Check-out Time
+									</TableHead>
+									<TableHead className="text-right py-4 px-6 text-slate-600 font-bold text-base">
+										Actions
+									</TableHead>
+								</TableRow>
+							</TableHeader>
+							<TableBody>
+								{attendanceData.map((row) => (
+									<TableRow
+										key={row.id}
+										className="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-150"
+									>
+										<TableCell className="py-4 px-6 font-semibold text-gray-800 text-base">
+											{row.name}
+										</TableCell>
+										<TableCell className="py-4 px-6 text-gray-700 text-base">
+											{row.id}
+										</TableCell>
+										<TableCell className="py-4 px-6">
+											{statusBadge(row.status)}
+										</TableCell>
+										<TableCell className="py-4 px-6 text-gray-700">
+											{row.checkin}
+										</TableCell>
+										<TableCell className="py-4 px-6 text-gray-700">
+											{row.checkout}
+										</TableCell>
+										<TableCell className="text-right py-4 px-6">
+											<div className="flex space-x-2 justify-end">
+												<button
+													className="text-blue-600 hover:text-blue-800"
+													title="Edit Attendance"
+												>
+													<Edit className="w-4 h-4" />
+												</button>
+												<button
+													className="text-gray-600 hover:text-gray-900"
+													title="View Details"
+												>
+													<Eye className="w-4 h-4" />
+												</button>
+												<button
+													className="text-red-600 hover:text-red-800"
+													title="Delete Record"
+												>
+													<Trash2 className="w-4 h-4" />
+												</button>
+												<button
+													className="text-yellow-600 hover:text-yellow-800"
+													title="Add Note"
+												>
+													<MessageCircle className="w-4 h-4" />
+												</button>
+											</div>
+										</TableCell>
+									</TableRow>
+								))}
+							</TableBody>
+						</Table>
+					</CardContent>
+				</Card>
+			</div>
+		</div>
+	);
 }
