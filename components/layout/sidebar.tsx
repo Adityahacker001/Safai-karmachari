@@ -25,12 +25,30 @@ const roleConfig = {
     contractor: {
         title: 'Contractor Dashboard', icon: Users, color: 'text-sky-400', bgColor: 'from-sky-900/30 to-slate-900',
         dataEntry: [ { name: 'Worker Registration', icon: UserPlus, href: '/contractor/data-entry/worker-registration' }, { name: 'Attendance & PPE Log', icon: Clock, href: '/contractor/data-entry/attendance-ppe' }, { name: 'Grievance Resolution', icon: AlertTriangle, href: '/contractor/data-entry/grievance-resolution' }, { name: 'Training Assignment', icon: GraduationCap, href: '/contractor/data-entry/training-assignment' }, ],
-        reports: [ { name: 'Worker Management', icon: Users, href: '/contractor/reports/worker-management' }, { name: 'Attendance Reports', icon: Clock, href: '/contractor/reports/attendance' }, { name: 'Grievance Tracking', icon: AlertTriangle, href: '/contractor/reports/grievance-tracking' }, { name: 'Training Coverage', icon: GraduationCap, href: '/contractor/reports/training-coverage' }, { name: 'Safety Compliance', icon: Shield, href: '/contractor/reports/safety-compliance' }, ],
+        reports: [
+          { name: 'Worker Management', icon: Users, href: '/contractor/reports/worker-management' },
+          { name: 'Attendance Reports', icon: Clock, href: '/contractor/reports/attendance' },
+          { name: 'Grievance Tracking', icon: AlertTriangle, href: '/contractor/reports/grievance-tracking' },
+          { name: 'Training Coverage', icon: GraduationCap, href: '/contractor/reports/training-coverage' },
+          { name: 'Safety Compliance', icon: Shield, href: '/contractor/reports/safety-compliance' },
+          { name: 'Audit Logs', icon: FileText, href: '/contractor/reports/audit-logs' },
+          { name: 'User Management', icon: Users, href: '/contractor/reports/user-management' },
+          { name: 'Reports & Analytics', icon: BarChart3, href: '/contractor/reports/reports' },
+        ],
     },
     nodal: {
         title: 'Nodal Officer Interface', icon: Shield, color: 'text-emerald-400', bgColor: 'from-emerald-900/30 to-slate-900',
         dataEntry: [ { name: 'Compliance Checklist', icon: CheckSquare, href: '/nodal/data-entry/compliance-checklist' }, { name: 'Recognition Nomination', icon: Award, href: '/nodal/data-entry/recognition-nomination' }, ],
-        reports: [ { name: 'Incident Management', icon: AlertTriangle, href: '/nodal/reports/incident-management' }, { name: 'Contractor Performance', icon: BarChart3, href: '/nodal/reports/contractor-performance' }, { name: 'All Reports', icon: FileText, href: '/nodal/reports/All-reports' }, { name: 'Compliance Overview', icon: CheckSquare, href: '/nodal/reports/compliance-overview' }, ],
+        reports: [ 
+            { name: 'Incident Management', icon: AlertTriangle, href: '/nodal/reports/incident-management' }, 
+            { name: 'Contractor Performance', icon: BarChart3, href: '/nodal/reports/contractor-performance' }, 
+            { name: 'Performance Reports', icon: FileText, href: '/nodal/reports/All-reports' }, 
+            { name: 'Compliance Overview', icon: CheckSquare, href: '/nodal/reports/compliance-overview' },
+            { name: 'Recognition', icon: Award, href: '/nodal/reports/recognition' },
+            { name: 'Audit Logs', icon: FileText, href: '/nodal/reports/audit-logs' },
+            { name: 'User Management', icon: Users, href: '/nodal/reports/user-management' },
+            { name: 'Reports & Analytics', icon: BarChart3, href: '/nodal/reports/reports-and-analytics' },
+        ],
     },
     district: {
         title: 'District Monitoring', icon: Building, color: 'text-amber-400', bgColor: 'from-amber-900/30 to-slate-900',
@@ -116,6 +134,17 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
           >
             Dashboard
           </NavLink>
+
+          {role === 'nodal' && (
+            <NavLink
+              href="/nodal/directives"
+              icon={FileText}
+              activeClass="bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg scale-[1.03] border border-cyan-400/50"
+              inactiveClass="text-gray-300 hover:text-white hover:scale-[1.02]"
+            >
+              Directives
+            </NavLink>
+          )}
 
           {/* Data Entry Section */}
           <div className="space-y-2">

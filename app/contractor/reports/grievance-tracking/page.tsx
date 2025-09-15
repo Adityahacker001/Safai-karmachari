@@ -101,6 +101,7 @@ export default function GrievanceTrackingReportPage() {
 
 
     const [selectedGrievance, setSelectedGrievance] = useState<any | null>(null);
+    const [modalStatus, setModalStatus] = useState<string | null>(null);
 
     // Helper function to get badge color classes based on status (no red or black)
     const getStatusBadgeClass = (status: string) => {
@@ -258,13 +259,21 @@ export default function GrievanceTrackingReportPage() {
                                         </span>
                                     </TableCell>
                                     <TableCell className="text-right py-4 px-6">
-                                        <Dialog onOpenChange={(isOpen) => !isOpen && setSelectedGrievance(null)}>
+                                        <Dialog onOpenChange={(isOpen) => {
+                                            if (!isOpen) {
+                                                setSelectedGrievance(null);
+                                                setModalStatus(null);
+                                            }
+                                        }}>
                                             <DialogTrigger asChild>
                                                 <Button
                                                     variant="outline"
                                                     size="sm"
                                                     className="text-blue-600 border-blue-300 hover:bg-blue-50 px-4 py-2 rounded-lg transition-all duration-200"
-                                                    onClick={() => setSelectedGrievance(g)}
+                                                    onClick={() => {
+                                                        setSelectedGrievance(g);
+                                                        setModalStatus(g.status);
+                                                    }}
                                                 >
                                                     <Eye className="h-4 w-4 mr-2" />View Details
                                                 </Button>
@@ -298,6 +307,40 @@ export default function GrievanceTrackingReportPage() {
                                                         )}
                                                     </div>
                                                     <DialogFooter className="p-6 bg-gray-50 rounded-b-3xl border-t border-gray-200">
+                                                        <div className="flex flex-wrap gap-2 mr-auto">
+                                                            <Button
+                                                                variant="secondary"
+                                                                className="px-4 py-2 rounded-lg"
+                                                                onClick={() => setModalStatus('Pending')}
+                                                                disabled={modalStatus === 'Pending'}
+                                                            >
+                                                                Pending
+                                                            </Button>
+                                                            <Button
+                                                                variant="secondary"
+                                                                className="px-4 py-2 rounded-lg"
+                                                                onClick={() => setModalStatus('In Progress')}
+                                                                disabled={modalStatus === 'In Progress'}
+                                                            >
+                                                                In Progress
+                                                            </Button>
+                                                            <Button
+                                                                variant="secondary"
+                                                                className="px-4 py-2 rounded-lg"
+                                                                onClick={() => setModalStatus('Resolved')}
+                                                                disabled={modalStatus === 'Resolved'}
+                                                            >
+                                                                Resolved
+                                                            </Button>
+                                                            <Button
+                                                                variant="destructive"
+                                                                className="px-4 py-2 rounded-lg"
+                                                                onClick={() => setModalStatus('Escalated')}
+                                                                disabled={modalStatus === 'Escalated' || modalStatus === 'Resolved'}
+                                                            >
+                                                                Escalate to Nodal Officer
+                                                            </Button>
+                                                        </div>
                                                         <DialogClose asChild>
                                                             <Button variant="outline" className="px-6 py-2.5 rounded-lg">Close</Button>
                                                         </DialogClose>
