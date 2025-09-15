@@ -4,7 +4,7 @@ import DashboardLayout from '@/components/layout/dashboard-layout';
 
 export default function StateDashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <DashboardLayout role="state" name="Fund Allocation">
+    <DashboardLayout role="state" name="Directives">
       {children}
     </DashboardLayout>
   );

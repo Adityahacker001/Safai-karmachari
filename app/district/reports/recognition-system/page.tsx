@@ -1,129 +1,216 @@
 "use client";
+import React from 'react';
+import DashboardCard from '@/components/dashboard/dashboard-card';
+import DataTable from '@/components/ui/data-table';
+import {
+  Award,
+  TrendingUp,
+  Star,
+  Trophy,
+  Medal,
+  Crown
+} from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Download, Award, CheckCircle, XCircle, Send, Clock } from "lucide-react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { Bar } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip, Legend } from "chart.js";
-import { contractorTheme } from "@/lib/theme";
-import { cn } from "@/lib/utils";
+const Recognition: React.FC = () => {
+  const nodalLeaderboard = [
+    {
+      rank: 1,
+      officer: 'Priya Sharma',
+      zone: 'Zone B',
+      score: 94.5,
+      grievances: '45/52',
+      compliance: '98%'
+    },
+    {
+      rank: 2,
+      officer: 'Rajesh Kumar',
+      zone: 'Zone A',
+      score: 91.2,
+      grievances: '38/45',
+      compliance: '95%'
+    },
+    {
+      rank: 3,
+      officer: 'Amit Singh',
+      zone: 'Zone C',
+      score: 89.7,
+      grievances: '32/38',
+      compliance: '94%'
+    }
+  ];
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
+  const contractorLeaderboard = [
+    {
+      rank: 1,
+      contractor: 'Clean City Services',
+      workers: 150,
+      welfare: '92%',
+      recognition: 'A+',
+      score: 95.2
+    },
+    {
+      rank: 2,
+      contractor: 'Metro Clean Services',
+      workers: 110,
+      welfare: '88%',
+      recognition: 'A',
+      score: 91.8
+    },
+    {
+      rank: 3,
+      contractor: 'Green Solutions Ltd',
+      workers: 120,
+      welfare: '85%',
+      recognition: 'A',
+      score: 90.5
+    }
+  ];
 
-export default function RecognitionReportPage() {
+  const nodalColumns = [
+    { 
+      key: 'rank', 
+      header: 'Rank',
+      render: (value: number) => (
+        <div className="flex items-center space-x-2">
+          {value === 1 && <Crown className="h-4 w-4 text-yellow-500" />}
+          {value === 2 && <Medal className="h-4 w-4 text-gray-400" />}
+          {value === 3 && <Medal className="h-4 w-4 text-yellow-600" />}
+          <span className="font-bold">{value}</span>
+        </div>
+      )
+    },
+    { key: 'officer', header: 'Nodal Officer' },
+    { key: 'zone', header: 'Zone' },
+    { key: 'score', header: 'Score' },
+    { key: 'grievances', header: 'Grievances Resolved' },
+    { key: 'compliance', header: 'Compliance Rate' }
+  ];
 
-    // Mock data for the nomination history
-    const nominations = [
-      { id: 'NOM-001', nominee: "Abishek Das", category: "Best Safai Karmachari", nominator: "B. Adhikari (Central Zone A)", submitted: "2025-08-20", status: "Approved" },
-      { id: 'NOM-002', nominee: "North Zone B Team", category: "Best ULB/Zone", nominator: "S. Devi (North Zone B)", submitted: "2025-08-18", status: "Approved" },
-      { id: 'NOM-003', nominee: "Priya Sharma", category: "Safety Champion", nominator: "P. Sharma (Central Zone B)", submitted: "2025-08-28", status: "Pending Review" },
-      { id: 'NOM-004', nominee: "Citizen Reporter #C-4567", category: "Civic Engagement Award", nominator: "A. Singh (North Zone A)", submitted: "2025-08-25", status: "Pending Review" },
-      { id: 'NOM-005', nominee: "Rail Clean Services", category: "Best Contractor", nominator: "B. Adhikari (Central Zone A)", submitted: "2025-07-15", status: "Rejected" },
-    ];
-
-    const getBadgeClass = (status: string) => {
-        switch (status) {
-            case "Approved":
-                return "bg-green-100 text-green-800 border-green-200";
-            case "Pending Review":
-                return "bg-yellow-100 text-yellow-800 border-yellow-200";
-            case "Rejected":
-                return "bg-red-100 text-red-800 border-red-200";
-            default:
-                return "bg-slate-100 text-slate-800 border-slate-200";
-        }
-    };
+  const contractorColumns = [
+    { 
+      key: 'rank', 
+      header: 'Rank',
+      render: (value: number) => (
+        <div className="flex items-center space-x-2">
+          {value === 1 && <Crown className="h-4 w-4 text-yellow-500" />}
+          {value === 2 && <Medal className="h-4 w-4 text-gray-400" />}
+          {value === 3 && <Medal className="h-4 w-4 text-yellow-600" />}
+          <span className="font-bold">{value}</span>
+        </div>
+      )
+    },
+    { key: 'contractor', header: 'Contractor' },
+    { key: 'workers', header: 'Workers' },
+    { key: 'welfare', header: 'Welfare Coverage' },
+    { 
+      key: 'recognition', 
+      header: 'Grade',
+      render: (value: string) => (
+        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+          value.startsWith('A') ? 'bg-green-100 text-green-800' :
+          value.startsWith('B') ? 'bg-yellow-100 text-yellow-800' :
+          'bg-red-100 text-red-800'
+        }`}>
+          {value}
+        </span>
+      )
+    },
+    { key: 'score', header: 'Total Score' }
+  ];
 
   return (
-    <div className={cn("space-y-8", contractorTheme.page.gradientBackground, "p-6 md:p-8")}>
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-        <div>
-            <h2 className="text-3xl font-bold text-slate-800">Recognition System Report</h2>
-            <p className="text-slate-600 mt-1">Analyze nomination trends and review the history of awards in your district.</p>
-        </div>
-        <div className="flex items-center space-x-2 mt-4 sm:mt-0">
-          <Button className={cn(contractorTheme.button.secondary, "text-sm")}><Download className="h-4 w-4 mr-2" />Export Summary</Button>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-gray-900">Recognition & Performance</h1>
+        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+          Generate Awards Report
+        </button>
+      </div>
+
+      {/* KPI Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <DashboardCard
+          title="Avg Recognition Score"
+          value="91.5%"
+          icon={Award}
+          color="orange"
+          description="2.3% up"
+        />
+        <DashboardCard
+          title="Top Performers"
+          value="18"
+          icon={Star}
+          color="blue"
+        />
+        <DashboardCard
+          title="Performance Growth"
+          value="8.5%"
+          icon={TrendingUp}
+          color="green"
+          description="this quarter"
+        />
+      </div>
+
+      {/* Worker Tier Distribution */}
+      <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <h3 className="text-lg font-medium text-gray-900 mb-4">Worker Recognition Distribution</h3>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="text-center">
+            <div className="w-16 h-16 mx-auto mb-2 rounded-full bg-yellow-100 flex items-center justify-center">
+              <Crown className="h-8 w-8 text-yellow-600" />
+            </div>
+            <h4 className="font-medium text-gray-900">Gold Tier</h4>
+            <p className="text-2xl font-bold text-yellow-600">142</p>
+            <p className="text-xs text-gray-500">Top 5%</p>
+          </div>
+          
+          <div className="text-center">
+            <div className="w-16 h-16 mx-auto mb-2 rounded-full bg-gray-100 flex items-center justify-center">
+              <Medal className="h-8 w-8 text-gray-600" />
+            </div>
+            <h4 className="font-medium text-gray-900">Silver Tier</h4>
+            <p className="text-2xl font-bold text-gray-600">428</p>
+            <p className="text-xs text-gray-500">Next 15%</p>
+          </div>
+          
+          <div className="text-center">
+            <div className="w-16 h-16 mx-auto mb-2 rounded-full bg-yellow-50 flex items-center justify-center">
+              <Trophy className="h-8 w-8 text-yellow-500" />
+            </div>
+            <h4 className="font-medium text-gray-900">Bronze Tier</h4>
+            <p className="text-2xl font-bold text-yellow-500">856</p>
+            <p className="text-xs text-gray-500">Next 30%</p>
+          </div>
+          
+          <div className="text-center">
+            <div className="w-16 h-16 mx-auto mb-2 rounded-full bg-blue-100 flex items-center justify-center">
+              <Star className="h-8 w-8 text-blue-600" />
+            </div>
+            <h4 className="font-medium text-gray-900">Standard</h4>
+            <p className="text-2xl font-bold text-blue-600">1,421</p>
+            <p className="text-xs text-gray-500">Remaining 50%</p>
+          </div>
         </div>
       </div>
 
-      {/* Recognition KPIs */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className={cn(contractorTheme.kpiCard.base, "bg-gradient-to-br from-blue-400 to-blue-600")}> 
-          <CardHeader className="pb-2 flex flex-row items-center justify-between"><CardTitle className="text-sm font-medium text-white">Total Nominations</CardTitle><Send className="h-5 w-5 text-blue-100" /></CardHeader>
-          <CardContent><div className="text-3xl font-bold text-white">{nominations.length}</div><p className="text-xs text-blue-100">This quarter</p></CardContent>
-        </Card>
-        <Card className={cn(contractorTheme.kpiCard.base, "bg-gradient-to-br from-orange-400 to-orange-600")}> 
-          <CardHeader className="pb-2 flex flex-row items-center justify-between"><CardTitle className="text-sm font-medium text-white">Pending Review</CardTitle><Clock className="h-5 w-5 text-orange-100" /></CardHeader>
-          <CardContent><div className="text-3xl font-bold text-white">{nominations.filter(n => n.status === 'Pending Review').length}</div><p className="text-xs text-orange-100">Awaiting your approval</p></CardContent>
-        </Card>
-        <Card className={cn(contractorTheme.kpiCard.base, "bg-gradient-to-br from-green-400 to-green-600")}> 
-          <CardHeader className="pb-2 flex flex-row items-center justify-between"><CardTitle className="text-sm font-medium text-white">Awards Approved</CardTitle><CheckCircle className="h-5 w-5 text-green-100" /></CardHeader>
-          <CardContent><div className="text-3xl font-bold text-white">{nominations.filter(n => n.status === 'Approved').length}</div><p className="text-xs text-green-100">This quarter</p></CardContent>
-        </Card>
-        <Card className={cn(contractorTheme.kpiCard.base, "bg-gradient-to-br from-pink-400 to-pink-600")}> 
-          <CardHeader className="pb-2 flex flex-row items-center justify-between"><CardTitle className="text-sm font-medium text-white">Nominations Rejected</CardTitle><XCircle className="h-5 w-5 text-pink-100" /></CardHeader>
-          <CardContent><div className="text-3xl font-bold text-white">{nominations.filter(n => n.status === 'Rejected').length}</div><p className="text-xs text-pink-100">This quarter</p></CardContent>
-        </Card>
+      {/* Leaderboards */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <DataTable
+          title="🏆 Nodal Officer Leaderboard"
+          columns={nodalColumns}
+          data={nodalLeaderboard}
+          actions={false}
+        />
+        
+        <DataTable
+          title="🏆 Contractor Leaderboard"
+          columns={contractorColumns}
+          data={contractorLeaderboard}
+          actions={false}
+        />
       </div>
-
-      {/* <Card className={cn(contractorTheme.card.container)}>
-        <CardHeader>
-            <CardTitle className="text-slate-800">Nominations by Category</CardTitle>
-            <CardDescription className="text-slate-600">
-                Breakdown of all nominations submitted within the district.
-            </CardDescription>
-        </CardHeader>
-        <CardContent className="h-72">
-           <Bar
-              data={{
-                labels: ["Best SK", "Best Contractor", "Best ULB/Zone", "Safety Champion", "Civic Award"],
-                datasets: [{ 
-                    label: 'Number of Nominations', 
-                    data: [1, 1, 1, 1, 1], // Simplified counts from mock data
-                    backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981', '#f97316', '#ef4444'] 
-                }],
-              }}
-              options={{ responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }}
-            />
-        </CardContent>
-      </Card>
-       */}
-      <Card className={cn(contractorTheme.table.container)}>
-        <CardHeader className={cn(contractorTheme.table.header)}>
-            <CardTitle className={cn(contractorTheme.table.headerTitle, "text-2xl")}>Recognition History Log</CardTitle>
-            <CardDescription className={cn(contractorTheme.table.headerDescription, "text-base")}>
-                Complete record of all nominations and their final status.
-            </CardDescription>
-        </CardHeader>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow className="border-slate-200">
-                <TableHead className="text-slate-600 font-bold">Nominee</TableHead>
-                <TableHead className="text-slate-600 font-bold">Category</TableHead>
-                <TableHead className="text-slate-600 font-bold">Nominated By</TableHead>
-                <TableHead className="text-slate-600 font-bold">Submitted On</TableHead>
-                <TableHead className="text-slate-600 font-bold">Final Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {nominations.map((nom) => (
-                <TableRow key={nom.id} className="border-slate-100">
-                  <TableCell className="font-medium text-slate-800">{nom.nominee}</TableCell>
-                  <TableCell className="text-slate-700">{nom.category}</TableCell>
-                  <TableCell className="text-slate-700">{nom.nominator}</TableCell>
-                  <TableCell className="text-slate-700">{nom.submitted}</TableCell>
-                  <TableCell>
-                    <Badge className={cn("font-semibold", getBadgeClass(nom.status))}>{nom.status}</Badge>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
     </div>
   );
-}
+};
+
+export default Recognition;
