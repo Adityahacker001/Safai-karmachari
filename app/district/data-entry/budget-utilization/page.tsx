@@ -19,7 +19,7 @@ export default function BudgetUtilizationPage() {
         spent: 385,
         remaining: 135,
     };
-
+//sssss
     const recentTransactions = [
         { id: "TRN-001", date: "2025-08-15", category: "Mechanization Equipment", amount: "₹25 Lakhs", notes: "Purchase of 2 new jetting machines for North Zone A." },
         { id: "TRN-002", date: "2025-08-10", category: "Emergency Welfare", amount: "₹5 Lakhs", notes: "Compensation disbursed for case ESC-003." },
