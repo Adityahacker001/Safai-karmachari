@@ -33,8 +33,13 @@ export default function GrievanceEntryPage() {
   return (
     // Main container with a professional and clean background gradient
     <div className="min-h-screen p-6 md:p-12 bg-gradient-to-br from-slate-50 to-blue-100 space-y-10">
-      <div>
-        <h2 className="text-4xl md:text-5xl font-extrabold text-gray-800 tracking-tight leading-tight">Log a New Grievance</h2>
+      <div className="max-w-full">
+        <h3
+          className="text-4xl md:text-5xl font-extrabold leading-tight whitespace-normal break-words bg-gradient-to-r from-blue-600 to-purple-500 text-transparent bg-clip-text"
+          style={{ WebkitTextFillColor: 'unset', lineHeight: '1.1', paddingBottom: '0.15em', marginBottom: 0 }}
+        >
+          Log a New Grievance
+        </h3>
         <p className="text-gray-600 mt-3 text-xl">Submit a new grievance on behalf of a worker.</p>
       </div>
 

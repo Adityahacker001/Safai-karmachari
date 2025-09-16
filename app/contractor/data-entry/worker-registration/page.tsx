@@ -15,7 +15,7 @@ export default function WorkerRegistrationPage() {
     // Main container with a vibrant, modern background gradient
     <div className="min-h-screen p-6 md:p-12 bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 space-y-10">
       <div>
-        <h2 className="text-4xl md:text-5xl font-extrabold text-gray-800 tracking-tight leading-tight">Worker Registration</h2>
+        <h2 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Worker Registration</h2>
         <p className="text-gray-600 mt-3 text-xl">Enter the new worker's details to add them to the system roster.</p>
       </div>
 

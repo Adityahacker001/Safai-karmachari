@@ -15,7 +15,7 @@ export default function AttendancePpePage() {
         // Main container with a soft, inviting background gradient
         <div className="min-h-screen p-6 md:p-12 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 space-y-10">
             <div>
-                <h2 className="text-4xl md:text-5xl font-extrabold text-gray-800 tracking-tight leading-tight">Attendance & PPE Log</h2>
+                <h2 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Attendance & PPE Log</h2>
                 <p className="text-gray-600 mt-3 text-xl">Log daily worker attendance and record the distribution of safety equipment.</p>
             </div>
 
