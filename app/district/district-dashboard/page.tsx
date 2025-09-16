@@ -22,7 +22,6 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { contractorTheme } from '@/lib/theme';
 import { cn } from '@/lib/utils';
-import KPICard from '@/components/dashboard/kpi-card';
 import { Bar, Pie } from 'react-chartjs-2';
 import {
   Chart as ChartJS,

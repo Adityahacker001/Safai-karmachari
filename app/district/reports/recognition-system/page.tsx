@@ -66,7 +66,11 @@ const Recognition: React.FC = () => {
     }
   ];
 
-  const nodalColumns = [
+  const nodalColumns: Array<{
+    key: string;
+    header: string;
+    render?: (value: any) => React.ReactNode;
+  }> = [
     { 
       key: 'rank', 
       header: 'Rank',
@@ -86,7 +90,11 @@ const Recognition: React.FC = () => {
     { key: 'compliance', header: 'Compliance Rate' }
   ];
 
-  const contractorColumns = [
+  const contractorColumns: Array<{
+    key: string;
+    header: string;
+    render?: (value: any) => React.ReactNode;
+  }> = [
     { 
       key: 'rank', 
       header: 'Rank',
@@ -152,63 +160,104 @@ const Recognition: React.FC = () => {
       </div>
 
       {/* Worker Tier Distribution */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Worker Recognition Distribution</h3>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="text-center">
-            <div className="w-16 h-16 mx-auto mb-2 rounded-full bg-yellow-100 flex items-center justify-center">
-              <Crown className="h-8 w-8 text-yellow-600" />
-            </div>
-            <h4 className="font-medium text-gray-900">Gold Tier</h4>
-            <p className="text-2xl font-bold text-yellow-600">142</p>
-            <p className="text-xs text-gray-500">Top 5%</p>
+     <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-lg">
+  <h3 className="text-lg font-medium text-gray-900 mb-6 text-center bg-gradient-to-r from-purple-200 via-pink-200 to-blue-200 py-2 rounded-lg shadow-sm">
+    Worker Recognition Distribution
+  </h3>
+  <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+    {[
+      { title: 'Gold Tier', count: '142', color: 'yellow', percent: 'Top 5%', icon: Crown },
+      { title: 'Silver Tier', count: '428', color: 'gray', percent: 'Next 15%', icon: Medal },
+      { title: 'Bronze Tier', count: '856', color: 'bronze', percent: 'Next 30%', icon: Trophy },
+      { title: 'Standard', count: '1,421', color: 'blue', percent: 'Remaining 50%', icon: Star },
+    ].map((tier, idx) => {
+      // Custom bronze color for Bronze Tier
+      const isBronze = tier.title === 'Bronze Tier';
+      const bronzeBg = 'bg-gradient-to-br from-[#cd7f32] via-[#e6b980] to-[#f8e0b0]';
+      const bronzeCircle = 'bg-[#e6b980]';
+      const bronzeText = 'text-[#a97142]';
+      return (
+        <div
+          key={idx}
+          className={
+            isBronze
+              ? `text-center rounded-xl p-4 ${bronzeBg} shadow-md hover:scale-105 transition-transform`
+              : `text-center rounded-xl p-4 bg-gradient-to-br from-${tier.color}-100 to-${tier.color}-50 shadow-md hover:scale-105 transition-transform`
+          }
+        >
+          <div
+            className={
+              isBronze
+                ? `w-16 h-16 mx-auto mb-2 rounded-full ${bronzeCircle} flex items-center justify-center shadow-inner`
+                : `w-16 h-16 mx-auto mb-2 rounded-full bg-${tier.color}-200 flex items-center justify-center shadow-inner`
+            }
+          >
+            <tier.icon className={isBronze ? `h-8 w-8 ${bronzeText}` : `h-8 w-8 text-${tier.color}-700`} />
           </div>
-          
-          <div className="text-center">
-            <div className="w-16 h-16 mx-auto mb-2 rounded-full bg-gray-100 flex items-center justify-center">
-              <Medal className="h-8 w-8 text-gray-600" />
-            </div>
-            <h4 className="font-medium text-gray-900">Silver Tier</h4>
-            <p className="text-2xl font-bold text-gray-600">428</p>
-            <p className="text-xs text-gray-500">Next 15%</p>
-          </div>
-          
-          <div className="text-center">
-            <div className="w-16 h-16 mx-auto mb-2 rounded-full bg-yellow-50 flex items-center justify-center">
-              <Trophy className="h-8 w-8 text-yellow-500" />
-            </div>
-            <h4 className="font-medium text-gray-900">Bronze Tier</h4>
-            <p className="text-2xl font-bold text-yellow-500">856</p>
-            <p className="text-xs text-gray-500">Next 30%</p>
-          </div>
-          
-          <div className="text-center">
-            <div className="w-16 h-16 mx-auto mb-2 rounded-full bg-blue-100 flex items-center justify-center">
-              <Star className="h-8 w-8 text-blue-600" />
-            </div>
-            <h4 className="font-medium text-gray-900">Standard</h4>
-            <p className="text-2xl font-bold text-blue-600">1,421</p>
-            <p className="text-xs text-gray-500">Remaining 50%</p>
-          </div>
+          <h4 className="font-medium text-gray-900">{tier.title}</h4>
+          <p className={isBronze ? `text-2xl font-bold ${bronzeText}` : `text-2xl font-bold text-${tier.color}-700`}>{tier.count}</p>
+          <p className="text-xs text-gray-500">{tier.percent}</p>
         </div>
-      </div>
+      );
+    })}
+  </div>
+</div>
 
       {/* Leaderboards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <DataTable
-          title="🏆 Nodal Officer Leaderboard"
-          columns={nodalColumns}
-          data={nodalLeaderboard}
-          actions={false}
-        />
-        
-        <DataTable
-          title="🏆 Contractor Leaderboard"
-          columns={contractorColumns}
-          data={contractorLeaderboard}
-          actions={false}
-        />
-      </div>
+  {/* Nodal Officer Leaderboard */}
+  <div className="overflow-x-auto rounded-xl shadow-lg">
+    <table className="min-w-full border-collapse">
+      <thead>
+        <tr className="bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 text-gray-900">
+          {nodalColumns.map(col => (
+            <th key={col.key} className="border border-gray-400 px-4 py-2 text-center font-extrabold">{col.header}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {nodalLeaderboard.map((row, idx) => (
+          <tr key={row.rank} className={idx % 2 === 0 ? 'bg-gray-50 hover:bg-gray-100' : 'bg-white hover:bg-gray-100'}>
+            {nodalColumns.map(col => (
+              <td key={col.key} className="border border-gray-300 px-4 py-2 text-center font-medium">
+                {col.render
+                  ? col.render(row[col.key as keyof typeof row] as any)
+                  : row[col.key as keyof typeof row]}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  {/* Contractor Leaderboard */}
+  <div className="overflow-x-auto rounded-xl shadow-lg">
+    <table className="min-w-full border-collapse">
+      <thead>
+        <tr className="bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 text-gray-900">
+          {contractorColumns.map(col => (
+            <th key={col.key} className="border border-gray-400 px-4 py-2 text-center font-extrabold">{col.header}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {contractorLeaderboard.map((row, idx) => (
+          <tr key={row.rank} className={idx % 2 === 0 ? 'bg-gray-50 hover:bg-gray-100' : 'bg-white hover:bg-gray-100'}>
+            {contractorColumns.map(col => (
+              <td key={col.key} className="border border-gray-300 px-4 py-2 text-center font-medium">
+                {col.render
+                  ? col.render(row[col.key as keyof typeof row])
+                  : row[col.key as keyof typeof row]}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</div>
+
     </div>
   );
 };

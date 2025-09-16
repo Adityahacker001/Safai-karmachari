@@ -171,21 +171,66 @@ const Grievances: React.FC = () => {
       </div>
 
       {/* Tab Content */}
-      {activeTab === 'summary' && (
-        <DataTable
-          title="Nodal Officer-wise Breakdown"
-          columns={summaryColumns}
-          data={nodalOfficerData}
-        />
-      )}
+     {activeTab === 'summary' && (
+  <div className="overflow-x-auto rounded-xl shadow-lg p-8 max-w-7xl mx-auto">
+    <table className="min-w-full border-collapse">
+      <thead>
+        <tr className="bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 text-gray-900">
+          {summaryColumns.map(col => (
+            <th key={col.key} className="border border-gray-400 px-4 py-2 text-center font-extrabold">{col.header}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {nodalOfficerData.map((row, idx) => (
+          <tr key={row.officer} className={idx % 2 === 0 ? 'bg-gray-50 hover:bg-gray-100' : 'bg-white hover:bg-gray-100'}>
+            <td className="border border-gray-300 px-4 py-2 text-center font-medium">{row.officer}</td>
+            <td className="border border-gray-300 px-4 py-2 text-center">{row.zone}</td>
+            <td className="border border-gray-300 px-4 py-2 text-center font-bold text-blue-600">{row.total}</td>
+            <td className="border border-gray-300 px-4 py-2 text-center font-bold text-green-600">{row.resolved}</td>
+            <td className="border border-gray-300 px-4 py-2 text-center font-bold text-orange-600">{row.pending}</td>
+            <td className="border border-gray-300 px-4 py-2 text-center font-bold text-red-600">{row.escalated}</td>
+            <td className="border border-gray-300 px-4 py-2 text-center font-medium">{row.avgTime}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)}
 
-      {activeTab === 'escalated' && (
-        <DataTable
-          title="Escalated Grievances List"
-          columns={escalatedColumns}
-          data={escalatedGrievances}
-        />
-      )}
+{activeTab === 'escalated' && (
+  <div className="overflow-x-auto rounded-xl shadow-lg p-8 max-w-7xl mx-auto">
+    <table className="min-w-full border-collapse">
+      <thead>
+        <tr className="bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 text-gray-900">
+          {escalatedColumns.map(col => (
+            <th key={col.key} className="border border-gray-400 px-4 py-2 text-center font-extrabold">{col.header}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {escalatedGrievances.map((row, idx) => (
+          <tr key={row.grievanceId} className={idx % 2 === 0 ? 'bg-gray-50 hover:bg-gray-100' : 'bg-white hover:bg-gray-100'}>
+            <td className="border border-gray-300 px-4 py-2 text-center font-medium">{row.grievanceId}</td>
+            <td className="border border-gray-300 px-4 py-2 text-center">{row.contractor}</td>
+            <td className="border border-gray-300 px-4 py-2 text-center">{row.officer}</td>
+            <td className="border border-gray-300 px-4 py-2 text-center">{row.dateRaised}</td>
+            <td className="border border-gray-300 px-4 py-2 text-center font-bold">{row.daysPending}</td>
+            <td className="border border-gray-300 px-4 py-2 text-center">
+              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                row.status === 'Under Review' ? 'bg-yellow-100 text-yellow-800' :
+                row.status === 'Awaiting Response' ? 'bg-red-100 text-red-800' :
+                'bg-blue-100 text-blue-800'
+              }`}>
+                {row.status}
+              </span>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)}    
     </div>
   );
 };

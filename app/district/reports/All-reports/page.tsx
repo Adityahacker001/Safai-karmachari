@@ -139,8 +139,7 @@ const PerformerCard = (props: PerformerCardProps) => {
                 
                 <div className="space-y-2 pt-3 border-t border-slate-200 dark:border-gray-700">
                     {/* Contractor Details */}
-                    {workerSatisfaction && <DetailRow icon={<Smile size={16}/>} label="Worker Satisfaction" value={<StarRating value={workerSatisfaction} />} />}
-                    {complianceRecord && <DetailRow icon={<ShieldCheck size={16}/>} label="Compliance Record" value={complianceRecord} />}
+                    {/* Removed Worker Satisfaction and Compliance Record rows as per request */}
                     {activeWarnings && <DetailRow icon={<FileWarning size={16}/>} label="Active Warnings" value={activeWarnings} className="text-red-600 dark:text-red-400" />}
 
                     {/* Worker Details */}
