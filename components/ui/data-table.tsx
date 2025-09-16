@@ -23,15 +23,18 @@ interface DataTableProps {
   onView?: (row: any) => void;
   onEdit?: (row: any) => void;
   onDelete?: (row: any) => void;
+  tableClassName?: string;
+  headerClassName?: string;
+  rowClassName?: string;
 }
 
-const DataTable: React.FC<DataTableProps> = ({ title, columns, data, actions, onView, onEdit, onDelete }) => {
+const DataTable: React.FC<DataTableProps> = ({ title, columns, data, actions, onView, onEdit, onDelete, tableClassName = '', headerClassName = '', rowClassName = '' }) => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
       <h3 className="text-lg font-medium text-gray-900 mb-4">{title}</h3>
       <div className="relative w-full overflow-auto">
-        <Table>
-          <TableHeader>
+        <Table className={tableClassName}>
+          <TableHeader className={headerClassName}>
             <TableRow>
               {columns.map((col) => (
                 <TableHead key={col.key}>{col.header}</TableHead>
@@ -41,7 +44,7 @@ const DataTable: React.FC<DataTableProps> = ({ title, columns, data, actions, on
           </TableHeader>
           <TableBody>
             {data.map((row, rowIndex) => (
-              <TableRow key={rowIndex}>
+              <TableRow key={rowIndex} className={rowClassName}>
                 {columns.map((col) => (
                   <TableCell key={col.key}>
                     {col.render ? col.render(row[col.key]) : row[col.key]}

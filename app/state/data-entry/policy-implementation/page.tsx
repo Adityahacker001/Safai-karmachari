@@ -1,4 +1,6 @@
-'client';
+
+'use client';
+
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,12 +10,46 @@ import { Textarea } from "@/components/ui/textarea";
 import { CheckCircle, Plus } from "lucide-react";
 import { contractorTheme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function PolicyImplementationLogPage() {
+  const [policyName, setPolicyName] = useState("");
+  const [policyDesc, setPolicyDesc] = useState("");
+  const [policyTarget, setPolicyTarget] = useState("");
+  const [policyDeadline, setPolicyDeadline] = useState("");
+  const [policyMemo, setPolicyMemo] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    // Simulate API call
+    setTimeout(() => {
+      setLoading(false);
+      toast({
+        title: "Policy Logged & Announced!",
+        description: (
+          <div>
+            <div className="font-semibold">{policyName || "(No Title)"}</div>
+            <div className="text-xs text-muted-foreground mt-1">All districts have been notified.</div>
+          </div>
+        ),
+        variant: "default",
+      });
+      setPolicyName("");
+      setPolicyDesc("");
+      setPolicyTarget("");
+      setPolicyDeadline("");
+      setPolicyMemo("");
+    }, 1200);
+  };
+
   return (
     <div className={cn("min-h-screen space-y-8 p-6 md:p-8", contractorTheme.page.gradientBackground)}>
       <div>
-        <h2 className="text-3xl font-bold text-slate-800">Policy Implementation Log</h2>
+        <h2 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Policy Implementation Log</h2>
         <p className="text-slate-600 mt-1">Formally log new state-wide policies and directives to begin tracking their implementation.</p>
       </div>
       <div className="grid lg:grid-cols-3 gap-8 items-start">
@@ -21,7 +57,7 @@ export default function PolicyImplementationLogPage() {
         <div className="lg:col-span-3">
           <Card className={cn(contractorTheme.card.container)}>
             <CardHeader className={cn(contractorTheme.card.header)}>
-              <CardTitle className={cn(contractorTheme.card.title, "flex items-center space-x-2")}> 
+              <CardTitle className={cn(contractorTheme.card.title, "flex items-center space-x-2")}>
                 <Plus className="h-5 w-5" />
                 <span>Log New Policy Initiative</span>
               </CardTitle>
@@ -30,32 +66,78 @@ export default function PolicyImplementationLogPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className={cn(contractorTheme.card.content, "space-y-4")}> 
-              <div>
-                <Label htmlFor="policy-name" className={cn(contractorTheme.form.label)}>Policy Name / Directive Title</Label>
-                <Input id="policy-name" placeholder="e.g., Waste Segregation Mandate 2025" className={cn(contractorTheme.form.input)} />
-              </div>
-              <div>
-                <Label htmlFor="policy-desc" className={cn(contractorTheme.form.label)}>Objectives & Key Goals</Label>
-                <Textarea id="policy-desc" placeholder="Describe the primary goals of this policy..." rows={4} className={cn(contractorTheme.form.textarea)} />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <Label htmlFor="policy-target" className={cn(contractorTheme.form.label)}>Target Compliance (%)</Label>
-                  <Input id="policy-target" type="number" placeholder="e.g., 90" className={cn(contractorTheme.form.input)} />
+                  <Label htmlFor="policy-name" className={cn(contractorTheme.form.label)}>Policy Name / Directive Title</Label>
+                  <Input
+                    id="policy-name"
+                    placeholder="e.g., Waste Segregation Mandate 2025"
+                    className={cn(contractorTheme.form.input)}
+                    value={policyName}
+                    onChange={e => setPolicyName(e.target.value)}
+                    required
+                  />
                 </div>
                 <div>
-                  <Label htmlFor="policy-deadline" className={cn(contractorTheme.form.label)}>Implementation Deadline</Label>
-                  <Input id="policy-deadline" type="date" className={cn(contractorTheme.form.input)} />
+                  <Label htmlFor="policy-desc" className={cn(contractorTheme.form.label)}>Objectives & Key Goals</Label>
+                  <Textarea
+                    id="policy-desc"
+                    placeholder="Describe the primary goals of this policy..."
+                    rows={4}
+                    className={cn(contractorTheme.form.textarea)}
+                    value={policyDesc}
+                    onChange={e => setPolicyDesc(e.target.value)}
+                    required
+                  />
                 </div>
-              </div>
-               <div>
-                <Label htmlFor="policy-memo" className={cn(contractorTheme.form.label)}>Official Announcement Memo</Label>
-                <Textarea id="policy-memo" placeholder="Write the official memo that will be sent to all District Administrators..." rows={4} className={cn(contractorTheme.form.textarea)} />
-              </div>
-              <Button className={cn(contractorTheme.button.primary, "w-full flex items-center")}> 
-                <CheckCircle className="h-4 w-4 mr-2" />
-                Log & Announce Policy
-              </Button>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="policy-target" className={cn(contractorTheme.form.label)}>Target Compliance (%)</Label>
+                    <Input
+                      id="policy-target"
+                      type="number"
+                      placeholder="e.g., 90"
+                      className={cn(contractorTheme.form.input)}
+                      value={policyTarget}
+                      onChange={e => setPolicyTarget(e.target.value)}
+                      min={0}
+                      max={100}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="policy-deadline" className={cn(contractorTheme.form.label)}>Implementation Deadline</Label>
+                    <Input
+                      id="policy-deadline"
+                      type="date"
+                      className={cn(contractorTheme.form.input)}
+                      value={policyDeadline}
+                      onChange={e => setPolicyDeadline(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+                <div>
+                  <Label htmlFor="policy-memo" className={cn(contractorTheme.form.label)}>Official Announcement Memo</Label>
+                  <Textarea
+                    id="policy-memo"
+                    placeholder="Write the official memo that will be sent to all District Administrators..."
+                    rows={4}
+                    className={cn(contractorTheme.form.textarea)}
+                    value={policyMemo}
+                    onChange={e => setPolicyMemo(e.target.value)}
+                    required
+                  />
+                </div>
+                <Button
+                  className={cn(contractorTheme.button.primary, "w-full flex items-center")}
+                  type="submit"
+                  disabled={loading}
+                >
+                  <CheckCircle className="h-4 w-4 mr-2" />
+                  {loading ? "Logging..." : "Log & Announce Policy"}
+                </Button>
+              </form>
             </CardContent>
           </Card>
         </div>

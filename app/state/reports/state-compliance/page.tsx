@@ -27,7 +27,7 @@ export default function StateComplianceReportPage() {
     <div className={cn("min-h-screen space-y-8 p-6 md:p-8", contractorTheme.page.gradientBackground)}>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div>
-            <h2 className="text-3xl font-bold text-slate-800">State Compliance Report (West Bengal)</h2>
+            <h2 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">State Compliance Report (West Bengal)</h2>
             <p className="text-slate-600 mt-1">Analyze compliance data aggregated from all district-level reports.</p>
         </div>
         <div className="flex items-center space-x-2 mt-4 sm:mt-0">

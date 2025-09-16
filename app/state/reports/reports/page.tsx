@@ -1,5 +1,6 @@
 "use client";   
 import React from 'react';
+import { Card, CardContent } from '@/components/ui/card';
 import { FileText, Download, Calendar, BarChart } from 'lucide-react';
 
 const Reports = () => {
@@ -67,85 +68,87 @@ const Reports = () => {
   };
 
   return (
-    <div className="space-y-6 min-h-screen w-full bg-gradient-to-br from-blue-50 via-purple-50 to-pink-100 p-6 md:p-10">
+    <div className="space-y-8 min-h-screen w-full bg-gradient-to-br from-blue-50 via-purple-50 to-pink-100 p-6 md:p-10">
       {/* Page Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Reports & Analytics</h1>
-        <p className="text-gray-600 mt-1">Generate and download comprehensive reports</p>
+      <div className="text-center md:text-left">
+        <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent drop-shadow-sm">
+          Reports & Analytics
+        </h1>
+        <p className="text-gray-600 mt-2 text-lg">Generate and download comprehensive reports</p>
       </div>
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="p-6 rounded-xl shadow-md border border-blue-200 bg-gradient-to-br from-blue-200 via-blue-100 to-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600 font-medium">Available Reports</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">{reports.length}</p>
-            </div>
-            <div className="w-12 h-12 bg-blue-50 border border-blue-200 text-blue-600 rounded-lg flex items-center justify-center">
-              <FileText className="w-6 h-6" />
-            </div>
+      {/* Quick Stats (New Card Layout) */}
+  <div className="grid gap-6 md:grid-cols-4">
+        {/* Available Reports */}
+        <Card className="relative overflow-hidden rounded-2xl shadow-lg bg-gradient-to-r from-orange-400 to-orange-500 text-white">
+          <CardContent className="p-6">
+            <p className="text-sm font-semibold">Available Reports</p>
+            <p className="text-3xl font-bold mt-2">{reports.length}</p>
+          </CardContent>
+          {/* Icon Watermark */}
+          <div className="absolute right-4 bottom-4 text-white/20 text-6xl">
+            <FileText className="w-8 h-8" />
           </div>
-        </div>
-        
-  <div className="p-6 rounded-xl shadow-md border border-green-200 bg-gradient-to-br from-green-200 via-green-100 to-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600 font-medium">Generated Today</p>
-              <p className="text-2xl font-bold text-green-600 mt-1">3</p>
-            </div>
-            <div className="w-12 h-12 bg-green-50 border border-green-200 text-green-600 rounded-lg flex items-center justify-center">
-              <Calendar className="w-6 h-6" />
-            </div>
+        </Card>
+
+        {/* Generated Today */}
+        <Card className="relative overflow-hidden rounded-2xl shadow-lg bg-gradient-to-r from-emerald-400 to-teal-500 text-white">
+          <CardContent className="p-6">
+            <p className="text-sm font-semibold">Generated Today</p>
+            <p className="text-3xl font-bold mt-2">3</p>
+          </CardContent>
+          {/* Icon Watermark */}
+          <div className="absolute right-4 bottom-4 text-white/20 text-6xl">
+            <Calendar className="w-8 h-8" />
           </div>
-        </div>
-        
-  <div className="p-6 rounded-xl shadow-md border border-purple-200 bg-gradient-to-br from-purple-200 via-purple-100 to-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600 font-medium">Total Downloads</p>
-              <p className="text-2xl font-bold text-purple-600 mt-1">247</p>
-            </div>
-            <div className="w-12 h-12 bg-purple-50 border border-purple-200 text-purple-600 rounded-lg flex items-center justify-center">
-              <Download className="w-6 h-6" />
-            </div>
+        </Card>
+
+        {/* Total Downloads */}
+        <Card className="relative overflow-hidden rounded-2xl shadow-lg bg-gradient-to-r from-purple-400 to-indigo-500 text-white">
+          <CardContent className="p-6">
+            <p className="text-sm font-semibold">Total Downloads</p>
+            <p className="text-3xl font-bold mt-2">247</p>
+          </CardContent>
+          {/* Icon Watermark */}
+          <div className="absolute right-4 bottom-4 text-white/20 text-6xl">
+            <Download className="w-8 h-8" />
           </div>
-        </div>
-        
-  <div className="p-6 rounded-xl shadow-md border border-gray-200 bg-gradient-to-br from-gray-200 via-gray-100 to-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600 font-medium">Data Size</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">14.1 MB</p>
-            </div>
-            <div className="w-12 h-12 bg-gray-50 border border-gray-200 text-gray-600 rounded-lg flex items-center justify-center">
-              <BarChart className="w-6 h-6" />
-            </div>
+        </Card>
+
+        {/* Data Size */}
+        <Card className="relative overflow-hidden rounded-2xl shadow-lg bg-gradient-to-r from-amber-400 to-orange-500 text-white">
+          <CardContent className="p-6">
+            <p className="text-sm font-semibold">Data Size</p>
+            <p className="text-3xl font-bold mt-2">14.1 MB</p>
+          </CardContent>
+          {/* Icon Watermark */}
+          <div className="absolute right-4 bottom-4 text-white/20 text-6xl">
+            <BarChart className="w-8 h-8" />
           </div>
-        </div>
+        </Card>
       </div>
 
       {/* Reports Grid */}
       <div>
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Available Reports</h2>
+        <h2 className="text-xl font-bold text-gray-900 mb-4">Available Reports</h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {reports.map((report, idx) => (
             <div
               key={report.id}
               className={
                 idx % 2 === 0
-                  ? "p-6 rounded-xl border shadow-md bg-gradient-to-br from-blue-100 via-white to-purple-100 hover:shadow-lg transition-shadow"
-                  : "p-6 rounded-xl border shadow-md bg-gradient-to-br from-pink-100 via-white to-yellow-100 hover:shadow-lg transition-shadow"
+                  ? "p-6 rounded-2xl border shadow-lg bg-gradient-to-br from-blue-100 via-white to-purple-100 hover:shadow-2xl hover:scale-[1.01] transition-all"
+                  : "p-6 rounded-2xl border shadow-lg bg-gradient-to-br from-pink-100 via-white to-yellow-100 hover:shadow-2xl hover:scale-[1.01] transition-all"
               }
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center space-x-3">
-                  <div className="w-12 h-12 bg-blue-50 border border-blue-200 text-blue-600 rounded-lg flex items-center justify-center">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-200 via-white to-blue-100 border border-blue-200 text-blue-600 rounded-xl flex items-center justify-center shadow-sm">
                     <FileText className="w-6 h-6" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900">{report.title}</h3>
-                    <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium mt-1 ${getCategoryColor(report.category)}`}>
+                    <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium mt-1 shadow-sm ${getCategoryColor(report.category)}`}>
                       {report.category}
                     </span>
                   </div>
@@ -155,20 +158,20 @@ const Reports = () => {
               <p className="text-sm text-gray-600 mb-4">{report.description}</p>
               
               <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-                <span>Last generated: {report.lastGenerated}</span>
-                <span>Size: {report.size}</span>
+                <span className="font-medium">📅 {report.lastGenerated}</span>
+                <span className="font-medium">💾 {report.size}</span>
               </div>
               
-              <div className="flex space-x-2">
-                <button className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+              <div className="flex flex-wrap gap-3">
+                <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:opacity-90 shadow-md transition">
                   <Download className="w-4 h-4" />
-                  <span>Download PDF</span>
+                  <span>PDF</span>
                 </button>
-                <button className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:opacity-90 shadow-md transition">
                   <Download className="w-4 h-4" />
-                  <span>Download Excel</span>
+                  <span>Excel</span>
                 </button>
-                <button className="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors">
+                <button className="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors shadow-sm">
                   Regenerate
                 </button>
               </div>
@@ -178,12 +181,12 @@ const Reports = () => {
       </div>
 
       {/* Custom Report Generator */}
-  <div className="bg-gradient-to-br from-white via-blue-50 to-purple-50 p-6 rounded-xl border border-gray-200 shadow-md">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Custom Report Generator</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+      <div className="bg-gradient-to-br from-white via-blue-50 to-purple-50 p-6 rounded-2xl border border-gray-200 shadow-lg hover:shadow-xl transition-all">
+        <h2 className="text-xl font-bold text-gray-900 mb-4">Custom Report Generator</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Report Type</label>
-            <select className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <select className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm">
               <option>Grievance Analysis</option>
               <option>Welfare Statistics</option>
               <option>Performance Metrics</option>
@@ -192,7 +195,7 @@ const Reports = () => {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Date Range</label>
-            <select className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <select className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm">
               <option>Last 30 days</option>
               <option>Last 3 months</option>
               <option>Last 6 months</option>
@@ -201,7 +204,7 @@ const Reports = () => {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Districts</label>
-            <select className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <select className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm">
               <option>All Districts</option>
               <option>Mumbai</option>
               <option>Pune</option>
@@ -209,7 +212,7 @@ const Reports = () => {
             </select>
           </div>
         </div>
-        <button className="flex items-center space-x-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+        <button className="flex items-center space-x-2 px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:opacity-90 transition-all shadow-md">
           <BarChart className="w-4 h-4" />
           <span>Generate Custom Report</span>
         </button>
