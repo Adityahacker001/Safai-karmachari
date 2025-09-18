@@ -89,14 +89,13 @@ const AuditLogs = () => {
       )
     },
     { key: 'details', header: 'Details' },
-    { key: 'ipAddress', header: 'IP Address' },
   ];
 
   const activityStats = [
-    { title: 'Total Activities Today', value: '24', icon: ScrollText, color: 'blue' },
-    { title: 'User Logins Today', value: '18', icon: User, color: 'green' },
-    { title: 'System Changes', value: '12', icon: Shield, color: 'yellow' },
-    { title: 'Average Response Time', value: '1.2s', icon: Clock, color: 'purple' },
+    { title: 'Total Activities Today', value: '24', icon: ScrollText, color: 'from-blue-500 to-indigo-500' },
+    { title: 'User Logins Today', value: '18', icon: User, color: 'from-green-500 to-emerald-500' },
+    { title: 'System Changes', value: '12', icon: Shield, color: 'from-yellow-500 to-orange-500' },
+    { title: 'Average Response Time', value: '1.2s', icon: Clock, color: 'from-purple-500 to-pink-500' },
   ];
 
   const actionTypes = [
@@ -108,34 +107,34 @@ const AuditLogs = () => {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-gradient-to-br from-gray-50 via-white to-gray-100 p-6 rounded-xl shadow-inner">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">Audit Logs</h1>
-        <p className="text-gray-600 mt-2">Track system activities and user actions</p>
+        <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent text-left">Audit Logs</h1>
+        <p className="text-gray-700 mt-2 text-left">Track system activities and user actions in real-time</p>
       </div>
 
       {/* Activity Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {activityStats.map((stat, index) => (
-          <div key={index} className="bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
+          <div key={index} className={`p-6 rounded-xl shadow-md text-white bg-gradient-to-r ${stat.color}`}>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">{stat.title}</p>
-                <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
+                <p className="text-sm font-medium opacity-90">{stat.title}</p>
+                <p className="text-3xl font-bold">{stat.value}</p>
               </div>
-              <stat.icon className="w-8 h-8 text-blue-600" />
+              <stat.icon className="w-10 h-10 opacity-90" />
             </div>
           </div>
         ))}
       </div>
 
       {/* Filters and Search */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Filter Audit Logs</h3>
+      <div className="bg-gradient-to-r from-indigo-50 via-white to-indigo-50 rounded-xl shadow-lg p-6 border border-indigo-100">
+        <h3 className="text-lg font-semibold text-indigo-700 mb-4">Filter Audit Logs</h3>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Date Range</label>
-            <select className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+            <select className="w-full p-2 border border-indigo-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
               <option>Last 24 hours</option>
               <option>Last 7 days</option>
               <option>Last 30 days</option>
@@ -144,7 +143,7 @@ const AuditLogs = () => {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Action Type</label>
-            <select className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+            <select className="w-full p-2 border border-indigo-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
               <option>All actions</option>
               <option>User Login</option>
               <option>Data Update</option>
@@ -154,7 +153,7 @@ const AuditLogs = () => {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">User Role</label>
-            <select className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+            <select className="w-full p-2 border border-indigo-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
               <option>All roles</option>
               <option>Administrator</option>
               <option>Contractor</option>
@@ -166,7 +165,7 @@ const AuditLogs = () => {
             <input
               type="text"
               placeholder="Search logs..."
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+              className="w-full p-2 border border-indigo-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
         </div>
@@ -174,52 +173,70 @@ const AuditLogs = () => {
 
       {/* Activity Breakdown */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Activity Breakdown (Last 7 Days)</h3>
+        <div className="bg-gradient-to-r from-blue-50 via-white to-blue-50 p-6 rounded-xl shadow-lg border border-blue-100">
+          <h3 className="text-lg font-semibold text-blue-700 mb-4">Activity Breakdown (Last 7 Days)</h3>
           <div className="space-y-3">
             {actionTypes.map((action, index) => (
               <div key={index} className="flex items-center justify-between">
                 <div className="flex items-center">
                   <div className={`w-3 h-3 rounded-full ${action.color} mr-3`}></div>
-                  <span className="text-sm text-gray-600">{action.type}</span>
+                  <span className="text-sm text-gray-700">{action.type}</span>
                 </div>
-                <span className="text-sm font-medium text-gray-900">{action.count}</span>
+                <span className="text-sm font-semibold text-gray-900">{action.count}</span>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Most Active Users</h3>
+        <div className="bg-gradient-to-r from-pink-50 via-white to-pink-50 p-6 rounded-xl shadow-lg border border-pink-100">
+          <h3 className="text-lg font-semibold text-pink-700 mb-4">Most Active Users</h3>
           <div className="space-y-3">
-            <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
-              <span className="text-sm font-medium">Rajesh Kumar</span>
-              <span className="text-sm text-gray-600">18 actions</span>
+            <div className="flex items-center justify-between p-2 bg-pink-100 rounded">
+              <span className="text-sm font-medium text-pink-900">Rajesh Kumar</span>
+              <span className="text-sm text-pink-800">18 actions</span>
             </div>
-            <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
-              <span className="text-sm font-medium">Priya Sharma</span>
-              <span className="text-sm text-gray-600">15 actions</span>
+            <div className="flex items-center justify-between p-2 bg-pink-100 rounded">
+              <span className="text-sm font-medium text-pink-900">Priya Sharma</span>
+              <span className="text-sm text-pink-800">15 actions</span>
             </div>
-            <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
-              <span className="text-sm font-medium">System Admin</span>
-              <span className="text-sm text-gray-600">12 actions</span>
+            <div className="flex items-center justify-between p-2 bg-pink-100 rounded">
+              <span className="text-sm font-medium text-pink-900">System Admin</span>
+              <span className="text-sm text-pink-800">12 actions</span>
             </div>
-            <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
-              <span className="text-sm font-medium">Amit Singh</span>
-              <span className="text-sm text-gray-600">9 actions</span>
+            <div className="flex items-center justify-between p-2 bg-pink-100 rounded">
+              <span className="text-sm font-medium text-pink-900">Amit Singh</span>
+              <span className="text-sm text-pink-800">9 actions</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Audit Logs Table */}
-      <DataTable
-        title="Recent Activity Logs"
-        columns={logColumns}
-        data={auditLogs}
-        actions={true}
-        onView={(row) => console.log('View log details:', row)}
-      />
+      <div className="bg-white p-6 rounded-xl shadow-xl border border-gray-300">
+        <h3 className="text-lg font-bold text-gray-800 mb-4">Recent Activity Logs</h3>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse border border-gray-400 text-sm">
+            <thead>
+              <tr className="bg-green-500 text-white text-center">
+                {logColumns.map((col, idx) => (
+                  <th key={idx} className="border border-gray-400 px-4 py-2">{col.header}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {auditLogs.map((row, rIdx) => (
+                <tr key={rIdx} className={rIdx % 2 === 0 ? "bg-white" : "bg-gray-100"}>
+                  {logColumns.map((col, cIdx) => (
+                    <td key={cIdx} className="border border-gray-400 px-4 py-2 text-center">
+                      {col.render ? col.render((row as any)[col.key]) : (row as any)[col.key]}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };

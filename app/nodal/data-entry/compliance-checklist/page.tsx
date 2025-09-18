@@ -106,7 +106,8 @@ export default function ComplianceChecklistPage() {
       ) : (
         <div>
           <div>
-            <h2 className="text-4xl md:text-5xl font-extrabold text-gray-700 tracking-tight leading-tight">Contractor Compliance Audit</h2>
+            <h2 className="text-3xl font-extrabold bg-gradient-to-r from-indigo-600 via-pink-600 to-yellow-500 bg-clip-text text-transparent">
+Contractor Compliance Audit</h2>
             <p className="text-gray-500 mt-3 text-xl">Select a contractor from the list to begin an audit.</p>
           </div>
           <Card className={cn("mt-10", contractorTheme.table.container)}>

@@ -109,48 +109,63 @@ const PerformerCard = (props: PerformerCardProps) => {
     const detailLabel = projects ? "Projects" : (tasksCompleted ? "Tasks Done" : "Reports");
     const detailValue = projects || tasksCompleted || reportsFiled;
 
+    // Only show Worker Satisfaction and Compliance Record if not in contractors tab
+    const isContractor = props && props.team === undefined && props.specialCommendations === undefined && props.disciplinaryActions === undefined;
+
+    // Slimmer style for worker cards
+    const isWorker = !!props.team;
     return (
         <Card className={cn(
             "border-l-4 shadow-md transition-all hover:shadow-lg hover:scale-[1.01]",
+            isWorker ? "min-h-[70px] py-1" : "min-h-[90px]",
             isGood ? "border-green-500 bg-green-50/50 dark:bg-green-900/10" : "border-red-500 bg-red-50/50 dark:bg-red-900/10"
         )}>
-            <CardHeader className="flex flex-row items-start justify-between pb-3">
+            <CardHeader className={cn(
+                "flex flex-row items-start justify-between px-3 md:px-4",
+                isWorker ? "pb-1 pt-1" : "pb-2 pt-2"
+            )}>
                 <div>
-                    <CardTitle className="text-xl font-bold text-gray-800 dark:text-gray-100">{name}</CardTitle>
-                    <CardDescription>{region}</CardDescription>
+                    <CardTitle className={cn("font-bold text-gray-800 dark:text-gray-100 leading-tight", isWorker ? "text-base" : "text-lg")}>{name}</CardTitle>
+                    <CardDescription className={isWorker ? "text-xs" : undefined}>{region}</CardDescription>
                 </div>
                  <div className={cn(
-                    "text-3xl font-extrabold flex items-center gap-2",
+                    "font-extrabold flex items-center gap-2",
+                    isWorker ? "text-xl" : "text-2xl",
                     isGood ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"
                 )}>
-                    {isGood ? <TrendingUp size={28}/> : <TrendingDown size={28}/>}
+                    {isGood ? <TrendingUp size={isWorker ? 18 : 22}/> : <TrendingDown size={isWorker ? 18 : 22}/>}
                     <StarRating value={score} />
                 </div>
             </CardHeader>
-            <CardContent className="space-y-4">
-                <p className="text-sm text-gray-600 dark:text-gray-300 italic">"{reason}"</p>
-                
-                <div className="space-y-2 pt-3 border-t border-slate-200 dark:border-gray-700">
+            <CardContent className={cn(
+                isWorker ? "space-y-1 py-1 px-3 md:px-4" : "space-y-2 py-2 px-3 md:px-4"
+            )}>
+                <p className={cn("italic mb-1", isWorker ? "text-[11px] text-gray-500 dark:text-gray-300" : "text-xs text-gray-600 dark:text-gray-300")}>"{reason}"</p>
+                <div className={cn(
+                    isWorker ? "space-y-0.5 pt-1 border-t border-slate-200 dark:border-gray-700" : "space-y-1 pt-2 border-t border-slate-200 dark:border-gray-700"
+                )}>
                     {/* Contractor Details */}
-                    {workerSatisfaction && <DetailRow icon={<Smile size={16}/>} label="Worker Satisfaction" value={<StarRating value={workerSatisfaction} />} />}
-                    {complianceRecord && <DetailRow icon={<ShieldCheck size={16}/>} label="Compliance Record" value={complianceRecord} />}
+                    {!isContractor && workerSatisfaction && <DetailRow icon={<Smile size={16}/>} label="Worker Satisfaction" value={<StarRating value={workerSatisfaction} />} />}
+                    {!isContractor && complianceRecord && <DetailRow icon={<ShieldCheck size={16}/>} label="Compliance Record" value={complianceRecord} />}
                     {activeWarnings && <DetailRow icon={<FileWarning size={16}/>} label="Active Warnings" value={activeWarnings} className="text-red-600 dark:text-red-400" />}
 
                     {/* Worker Details */}
                     {team && <DetailRow icon={<Building2 size={16}/>} label="Contractor" value={team} />}
                     {specialCommendations && <DetailRow icon={<Award size={16}/>} label="Commendations" value={specialCommendations} className="text-amber-600 dark:text-amber-400" />}
                     {disciplinaryActions && <DetailRow icon={<FileWarning size={16}/>} label="Disciplinary Actions" value={disciplinaryActions} className="text-red-600 dark:text-red-400" />}
-                    
                     {/* Nodal Officer Details */}
                     {initiativesLed && <DetailRow icon={<Lightbulb size={16}/>} label="Initiatives Led" value={initiativesLed} />}
                     {districtRatingChange && <DetailRow icon={<BarChart size={16}/>} label="District Rating Change" value={districtRatingChange} className={districtRatingChange.startsWith('+') ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'} />}
                 </div>
 
-                <div className="flex flex-wrap items-center gap-3 pt-3 border-t border-slate-200 dark:border-gray-700">
+                <div className={cn(
+                    "flex flex-wrap items-center gap-2 border-t border-slate-200 dark:border-gray-700",
+                    isWorker ? "pt-1" : "pt-2"
+                )}>
                     <StatPill icon={<Calendar size={14} />} label="Since" value={since} />
                     <StatPill icon={detailIcon} label={detailLabel} value={detailValue ?? ''} />
                     <div className="flex-grow"/>
-                    <Button variant="ghost" size="sm" className="text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/20">
+                    <Button variant="ghost" size="sm" className={cn("text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/20 px-2 py-1", isWorker ? "text-xs px-1 py-0.5" : undefined)}>
                         View Full Profile
                     </Button>
                 </div>
@@ -318,4 +333,3 @@ export default function PerformanceReportsPage() {
         </div>
     );
 }
-

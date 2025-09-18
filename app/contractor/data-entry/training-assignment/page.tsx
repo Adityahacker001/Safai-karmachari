@@ -48,7 +48,7 @@ export default function TrainingAssignmentPage() {
 
     return (
         <div className="min-h-screen p-6 md:p-12 bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 space-y-10">
-            <h2 className="text-4xl md:text-5xl font-extrabold text-gray-800 tracking-tight leading-tight mb-2">Assign Training</h2>
+            <h2 className="text-5xl font-extrabold text-blue-700">Assign Training</h2>
             <p className="text-gray-600 mb-8 text-xl">Browse modules and assign to workers.</p>
 
             {step === "list" && (

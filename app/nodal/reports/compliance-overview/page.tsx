@@ -34,7 +34,7 @@ export default function ComplianceOverviewReportPage() {
       <div className="max-w-7xl mx-auto space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div>
-              <h2 className="text-3xl font-bold text-gray-800">Compliance Overview</h2>
+              <h2 className="text-4xl font-extrabold bg-gradient-to-r from-indigo-600 via-pink-600 to-yellow-500 bg-clip-text text-transparent">Compliance Overview</h2>
               <p className="text-gray-600 mt-1">Analyze contractor audit results and daily safety checklist data.</p>
           </div>
           <div className="flex items-center space-x-2 mt-4 sm:mt-0">

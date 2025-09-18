@@ -13,13 +13,13 @@ import { Textarea } from "@/components/ui/textarea";
 export default function WorkerRegistrationPage() {
   return (
     // Main container with a vibrant, modern background gradient
-    <div className="min-h-screen p-6 md:p-12 bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 space-y-10">
+  <div className="min-h-screen p-6 md:p-12 bg-gradient-to-br from-blue-100 via-purple-100 to-blue-50 space-y-10">
       <div>
         <h2 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Worker Registration</h2>
         <p className="text-gray-600 mt-3 text-xl">Enter the new worker's details to add them to the system roster.</p>
       </div>
 
-      <Card className="bg-white shadow-2xl border border-gray-100 rounded-3xl overflow-hidden transform transition-all duration-300 hover:scale-[1.005]">
+      <Card className="bg-white shadow-2xl border border-gray-100 rounded-3xl overflow-hidden transform transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1">
         <CardHeader className="p-8 md:p-10 bg-gradient-to-r from-blue-600 to-purple-700 text-white shadow-lg">
           <CardTitle className="flex items-center space-x-4 text-3xl md:text-4xl font-bold">
             <UserPlus className="h-9 w-9 text-white" />
@@ -32,7 +32,7 @@ export default function WorkerRegistrationPage() {
         <CardContent className="p-8 md:p-10">
           <form className="space-y-12">
             {/* Section 1: Personal & Identity Information */}
-            <div className="p-6 border border-gray-100 rounded-xl bg-white">
+            <div className="p-6 border-2 border-blue-200 rounded-2xl bg-gradient-to-br from-blue-100 via-purple-100 to-blue-50 shadow-2xl transition-all duration-300 hover:scale-[1.02] hover:-translate-y-2">
               <div className="flex items-center space-x-3 mb-6 pb-4 border-b border-gray-200">
                 <User className="h-6 w-6 text-blue-600"/>
                 <h3 className="text-xl font-semibold text-gray-800">Personal & Identity Information</h3>
@@ -146,7 +146,7 @@ export default function WorkerRegistrationPage() {
             </div>
 
             {/* --- NEW SECTION: Emergency Contact Information --- */}
-            <div className="p-6 border border-gray-100 rounded-xl bg-white">
+            <div className="p-6 border-2 border-purple-200 rounded-2xl bg-gradient-to-br from-purple-100 via-white to-blue-50 shadow-2xl transition-all duration-300 hover:scale-[1.02] hover:-translate-y-2">
                 <div className="flex items-center space-x-3 mb-6 pb-4 border-b border-gray-200">
                     <Shield className="h-6 w-6 text-red-600"/>
                     <h3 className="text-xl font-semibold text-gray-800">Emergency Contact Information</h3>
@@ -168,7 +168,7 @@ export default function WorkerRegistrationPage() {
             </div>
 
             {/* Section 2: Employment & Financial Details (UNCHANGED) */}
-            <div className="p-8 border border-gray-200 rounded-2xl bg-gradient-to-br from-white to-purple-50 shadow-lg">
+            <div className="p-8 border-2 border-green-200 rounded-2xl bg-gradient-to-br from-green-100 via-white to-blue-50 shadow-2xl transition-all duration-300 hover:scale-[1.02] hover:-translate-y-2">
               <div className="flex items-center space-x-4 mb-8 pb-5 border-b border-purple-200">
                 <Briefcase className="h-7 w-7 text-purple-700"/>
                 <h3 className="text-2xl font-bold text-gray-800">Employment & Financial Details</h3>

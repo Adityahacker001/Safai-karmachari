@@ -14,13 +14,12 @@ interface Directive {
 }
 
 const Directives = () => {
-  const [activeTab, setActiveTab] = useState('received');
   const [showModal, setShowModal] = useState(false);
 
   const receivedDirectives = [
     {
       directiveId: 'DIR-2024-001',
-      from: 'District Administration',
+      from: 'Nodal Officer (District A)',
       subject: 'PPE Distribution Protocol Update',
       date: '2024-01-20',
       status: 'Active',
@@ -28,7 +27,7 @@ const Directives = () => {
     },
     {
       directiveId: 'DIR-2024-002',
-      from: 'State Health Department',
+      from: 'Nodal Officer (State Health)',
       subject: 'Health Checkup Schedule',
       date: '2024-01-18',
       status: 'Completed',
@@ -36,7 +35,7 @@ const Directives = () => {
     },
     {
       directiveId: 'DIR-2024-003',
-      from: 'District Administration',
+      from: 'Nodal Officer (District B)',
       subject: 'Training Program Implementation',
       date: '2024-01-15',
       status: 'Pending',
@@ -44,69 +43,9 @@ const Directives = () => {
     },
   ];
 
-  const issuedDirectives = [
-    {
-      directiveId: 'DIR-OUT-001',
-      to: 'ABC Cleaning Services',
-      subject: 'Safety Compliance Audit',
-      date: '2024-01-22',
-      status: 'Active',
-      priority: 'High'
-    },
-    {
-      directiveId: 'DIR-OUT-002',
-      to: 'All Contractors',
-      subject: 'Monthly Performance Review',
-      date: '2024-01-20',
-      status: 'Completed',
-      priority: 'Medium'
-    },
-    {
-      directiveId: 'DIR-OUT-003',
-      to: 'Urban Sanitation Ltd',
-      subject: 'Grievance Resolution Protocol',
-      date: '2024-01-19',
-      status: 'Pending',
-      priority: 'High'
-    },
-  ];
-
   const receivedColumns = [
     { key: 'directiveId', header: 'Directive ID' },
     { key: 'from', header: 'From' },
-    { key: 'subject', header: 'Subject' },
-    { key: 'date', header: 'Date' },
-    {
-      key: 'priority',
-      header: 'Priority',
-      render: (value: string) => (
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-          value === 'High' ? 'bg-red-200 text-red-800' :
-          value === 'Medium' ? 'bg-yellow-200 text-yellow-900' :
-          'bg-green-200 text-green-800'
-        }`}>
-          {value}
-        </span>
-      )
-    },
-    {
-      key: 'status',
-      header: 'Status',
-      render: (value: string) => (
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-          value === 'Active' ? 'bg-blue-200 text-blue-800' :
-          value === 'Completed' ? 'bg-green-200 text-green-800' :
-          'bg-yellow-200 text-yellow-800'
-        }`}>
-          {value}
-        </span>
-      )
-    },
-  ];
-
-  const issuedColumns = [
-    { key: 'directiveId', header: 'Directive ID' },
-    { key: 'to', header: 'To' },
     { key: 'subject', header: 'Subject' },
     { key: 'date', header: 'Date' },
     {
@@ -144,7 +83,7 @@ const Directives = () => {
           <h1 className="text-3xl font-extrabold bg-gradient-to-r from-indigo-600 via-pink-600 to-yellow-500 bg-clip-text text-transparent">
             Directives Management
           </h1>
-          <p className="text-gray-700 mt-2">Track received and issued directives</p>
+          <p className="text-gray-700 mt-2">Track directives received from Nodal Officers</p>
         </div>
         <div className="flex flex-col gap-4">
           <button
@@ -197,7 +136,7 @@ const Directives = () => {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <div className="bg-gradient-to-r from-blue-500 to-indigo-500 p-6 rounded-xl shadow-lg text-white">
           <div className="flex items-center justify-between">
             <div>
@@ -211,25 +150,12 @@ const Directives = () => {
           </div>
         </div>
 
-        <div className="bg-gradient-to-r from-green-500 to-emerald-500 p-6 rounded-xl shadow-lg text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium">Issued Directives</p>
-              <p className="text-3xl font-bold">{issuedDirectives.length}</p>
-              <p className="text-sm opacity-90">
-                Pending: {issuedDirectives.filter(d => d.status === 'Pending').length}
-              </p>
-            </div>
-            <Send className="w-10 h-10 opacity-90" />
-          </div>
-        </div>
-
         <div className="bg-gradient-to-r from-yellow-500 to-orange-500 p-6 rounded-xl shadow-lg text-white">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium">High Priority</p>
+              <p className="text-sm font-medium">High Priority Received</p>
               <p className="text-3xl font-bold">
-                {[...receivedDirectives, ...issuedDirectives].filter(d => d.priority === 'High').length}
+                {receivedDirectives.filter(d => d.priority === 'High').length}
               </p>
               <p className="text-sm opacity-90">Requiring attention</p>
             </div>
@@ -238,35 +164,15 @@ const Directives = () => {
         </div>
       </div>
 
-      {/* Tabs and Tables */}
+      {/* Table */}
       <div className="bg-white rounded-xl shadow-xl overflow-hidden">
         <div className="border-b border-gray-200 bg-gradient-to-r from-indigo-100 to-pink-100">
-          <nav className="-mb-px flex">
-            <button
-              onClick={() => setActiveTab('received')}
-              className={`py-4 px-6 text-sm font-medium border-b-4 transition-all ${
-                activeTab === 'received'
-                  ? 'border-indigo-500 text-indigo-700 bg-indigo-50'
-                  : 'border-transparent text-gray-600 hover:text-indigo-600 hover:bg-indigo-50'
-              }`}
-            >
-              Directives Received from District Admin
-            </button>
-            <button
-              onClick={() => setActiveTab('issued')}
-              className={`py-4 px-6 text-sm font-medium border-b-4 transition-all ${
-                activeTab === 'issued'
-                  ? 'border-pink-500 text-pink-700 bg-pink-50'
-                  : 'border-transparent text-gray-600 hover:text-pink-600 hover:bg-pink-50'
-              }`}
-            >
-              Directives Issued to Contractors
-            </button>
-          </nav>
+          <div className="py-4 px-6 text-sm font-medium text-indigo-700 bg-indigo-50">
+            Directives Received from Nodal Officer
+          </div>
         </div>
 
         <div className="p-4">
-          {activeTab === 'received' && (
             <DataTable
               title="Received Directives"
               columns={receivedColumns}
@@ -274,18 +180,6 @@ const Directives = () => {
               actions={true}
               onView={(row: Directive) => console.log('View directive:', row.directiveId)}
             />
-          )}
-          
-          {activeTab === 'issued' && (
-            <DataTable
-              title="Issued Directives"
-              columns={issuedColumns}
-              data={issuedDirectives}
-              actions={true}
-              onView={(row: Directive) => console.log('View directive:', row.directiveId)}
-              onEdit={(row: Directive) => console.log('Edit directive:', row.directiveId)}
-            />
-          )}
         </div>
       </div>
     </div>

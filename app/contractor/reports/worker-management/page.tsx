@@ -49,13 +49,14 @@ import {
 } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState } from "react";
+import React, { useState } from "react"; // Import React for useMemo
 
 export default function WorkerManagementReportPage() {
-  // State for status filter
+  // State for filters
   const [statusFilter, setStatusFilter] = useState<string>("all");
-  // State for zone filter
   const [zoneFilter, setZoneFilter] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState<string>(""); // State for the search input
+
   // Expanded mock data for the worker roster
   const workers = [
     {
@@ -245,7 +246,24 @@ export default function WorkerManagementReportPage() {
 
   const [selectedWorker, setSelectedWorker] = useState<any | null>(null);
 
-  // Updated helper function to return gradient classes for badges
+  // Filter workers based on search query and dropdown selections
+  const filteredWorkers = React.useMemo(() => {
+    const lowerCaseQuery = searchQuery.toLowerCase();
+    return workers.filter((worker) => {
+      const matchesSearch =
+        searchQuery === "" ||
+        worker.name.toLowerCase().includes(lowerCaseQuery) ||
+        worker.id.toLowerCase().includes(lowerCaseQuery);
+      const matchesStatus =
+        statusFilter === "all" || worker.status === statusFilter;
+      const matchesZone = zoneFilter === "all" || worker.zone === zoneFilter;
+
+      return matchesSearch && matchesStatus && matchesZone;
+    });
+  }, [searchQuery, statusFilter, zoneFilter, workers]);
+
+
+  // Helper function to return gradient classes for badges
   const getBadgeClass = (type: string, value: string) => {
     const baseClasses = "text-white border-transparent";
     switch (type) {
@@ -381,6 +399,8 @@ export default function WorkerManagementReportPage() {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
               <Input
                 placeholder="Search by name or ID..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-12 pr-4 py-2.5 max-w-full sm:max-w-xs bg-white/10 text-white placeholder:text-white border-slate-600 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-300 rounded-xl"
               />
             </div>
@@ -429,7 +449,7 @@ export default function WorkerManagementReportPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {workers.map((worker) => (
+              {filteredWorkers.map((worker) => (
                 <TableRow
                   key={worker.id}
                   className="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-150"
@@ -466,7 +486,7 @@ export default function WorkerManagementReportPage() {
                         </Button>
                       </DialogTrigger>
                       {selectedWorker && selectedWorker.id === worker.id && (
-                        <DialogContent className="max-w-5xl p-0 shadow-2xl rounded-3xl overflow-y-auto bg-gradient-to-br from-indigo-100 via-blue-100 to-emerald-100 max-h-[90vh]">
+                        <DialogContent className="max-w-5xl p-0 shadow-2xl rounded-3xl overflow-y-auto bg-gradient-to-br from-indigo-100 via-blue-100 to-emerald-100 max-h-[90vh] [&>button]:bg-white [&>button]:text-gray-800 [&>button]:rounded-full [&>button]:h-8 [&>button]:w-8 [&>button]:flex [&>button]:items-center [&>button]:justify-center [&>button:hover]:bg-gray-200">
                           <DialogHeader className="p-8 bg-gradient-to-r from-indigo-600 to-violet-700 text-white w-full">
                             <div className="flex items-start space-x-6">
                               <Avatar className="h-28 w-28 border-4 border-white shadow-md">
@@ -633,69 +653,7 @@ export default function WorkerManagementReportPage() {
                                 </div>
                               </CardContent>
                             </Card>
-                            {/* Zone Assignment */}
-                            <Card className="bg-gradient-to-br from-teal-500 to-cyan-600 text-white shadow-lg rounded-xl">
-                              <CardHeader>
-                                <CardTitle className="text-xl font-bold text-white">
-                                  Zone Assignment
-                                </CardTitle>
-                                <CardDescription className="text-teal-100">
-                                  Manage worker's assigned zone.
-                                </CardDescription>
-                              </CardHeader>
-                              <CardContent className="space-y-4">
-                                <div>
-                                  <Label
-                                    htmlFor="current-zone"
-                                    className="font-semibold text-teal-100"
-                                  >
-                                    Current Zone
-                                  </Label>
-                                  <p
-                                    id="current-zone"
-                                    className="text-lg font-bold text-white"
-                                  >
-                                    {selectedWorker.zone}
-                                  </p>
-                                </div>
-                                <div className="space-y-2">
-                                  <Label
-                                    htmlFor="new-zone"
-                                    className="font-semibold text-teal-100"
-                                  >
-                                    Change Zone
-                                  </Label>
-                                  <div className="flex items-center space-x-3">
-                                    <Select>
-                                      <SelectTrigger
-                                        id="new-zone"
-                                        className="flex-grow bg-white/20 border-white/30 rounded-lg focus:ring-2 focus:ring-white text-white"
-                                      >
-                                        <SelectValue placeholder="Select a new zone" />
-                                      </SelectTrigger>
-                                      <SelectContent className="bg-gray-800 text-white">
-                                        <SelectItem value="Zone 1">
-                                          Zone 1
-                                        </SelectItem>
-                                        <SelectItem value="Zone 2">
-                                          Zone 2
-                                        </SelectItem>
-                                        <SelectItem value="Zone 3">
-                                          Zone 3
-                                        </SelectItem>
-                                        <SelectItem value="Zone 4">
-                                          Zone 4
-                                        </SelectItem>
-                                      </SelectContent>
-                                    </Select>
-                                    <Button className="bg-white hover:bg-gray-100 text-teal-600 font-bold py-2 px-4 rounded-lg shadow-md transition-all duration-300 ease-in-out">
-                                      <Save className="h-4 w-4 mr-2" />
-                                      Update Zone
-                                    </Button>
-                                  </div>
-                                </div>
-                              </CardContent>
-                            </Card>
+                            {/* ...existing code... */}
                             {/* Tabs for Compliance, Training, Grievances (existing) */}
                             <Tabs defaultValue="compliance" className="w-full">
                               <TabsList className="grid w-full grid-cols-3 h-12 p-1 bg-slate-200 rounded-xl shadow-inner">
@@ -813,7 +771,7 @@ export default function WorkerManagementReportPage() {
                                                     )} px-3 py-1 text-sm font-semibold rounded-full`}
                                                   >
                                                     {t.status}
-                                                  </Badge>  
+                                                  </Badge>
                                                 </TableCell>
                                                 <TableCell className="py-3 px-4 text-gray-700">
                                                   {t.date}
@@ -899,107 +857,31 @@ export default function WorkerManagementReportPage() {
         </CardContent>
       </Card>
 
-      {/* Change Zone Section */}
-      <Card className="mt-10 bg-white border border-gray-200 shadow-xl rounded-3xl p-8">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold text-gray-800">Change Zone</CardTitle>
-          <CardDescription className="text-gray-600 mt-2 text-lg">
-            Search for a worker and update their assigned zone.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ChangeZoneSection workers={workers} />
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
-
-// Add this component at the bottom of the file
-function ChangeZoneSection({ workers }: { workers: any[] }) {
-  const [search, setSearch] = useState("");
-  const [selectedWorker, setSelectedWorker] = useState<any | null>(null);
-  const [newZone, setNewZone] = useState("");
-  const [success, setSuccess] = useState("");
-
-  // Filter workers by name or id
-  const filtered = workers.filter(
-    (w) =>
-      w.name.toLowerCase().includes(search.toLowerCase()) ||
-      w.id.toLowerCase().includes(search.toLowerCase())
-  );
-
-  const handleZoneChange = () => {
-    if (selectedWorker && newZone && selectedWorker.zone !== newZone) {
-      selectedWorker.zone = newZone;
-      setSuccess(`Zone changed for ${selectedWorker.name} to ${newZone}`);
-      setTimeout(() => setSuccess(""), 2500);
-    }
-  };
-
-  return (
-    <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center gap-4">
-        <Input
-          placeholder="Search by name or ID..."
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            setSelectedWorker(null);
-            setSuccess("");
-          }}
-          className="max-w-xs"
-        />
-        {filtered.length > 0 && search && (
-          <div className="bg-slate-50 border border-slate-200 rounded-lg shadow p-2 max-h-40 overflow-y-auto w-full md:w-72">
-            {filtered.slice(0, 5).map((w) => (
-              <div
-                key={w.id}
-                className={`px-3 py-2 cursor-pointer hover:bg-blue-100 rounded ${selectedWorker && selectedWorker.id === w.id ? "bg-blue-200" : ""}`}
-                onClick={() => {
-                  setSelectedWorker(w);
-                  setNewZone(w.zone);
-                  setSuccess("");
-                }}
-              >
-                <span className="font-semibold text-gray-800">{w.name}</span>
-                <span className="ml-2 text-gray-500 text-sm">({w.id})</span>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-      {selectedWorker && (
-        <div className="space-y-4 border-t pt-6 mt-2">
-          <div className="flex flex-col md:flex-row md:items-center gap-4">
-            <div>
-              <div className="font-semibold text-gray-700">Current Zone:</div>
-              <div className="text-lg text-blue-700">{selectedWorker.zone}</div>
-            </div>
-            <div>
-              <Label htmlFor="zone-select">New Zone</Label>
-              <select
-                id="zone-select"
-                value={newZone}
-                onChange={(e) => setNewZone(e.target.value)}
-                className="ml-2 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              >
-                <option value="">Select Zone</option>
-                <option value="Zone 1">Zone 1</option>
-                <option value="Zone 2">Zone 2</option>
-              </select>
-            </div>
-            <Button
-              onClick={handleZoneChange}
-              disabled={!newZone || newZone === selectedWorker.zone}
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-700 transition"
-            >
-              Change Zone
-            </Button>
-          </div>
-          {success && <div className="text-green-600 font-semibold mt-2">{success}</div>}
+      {/* Zone Assignment Section (as per image) */}
+      <div className="mt-10 bg-gradient-to-br from-teal-400 to-cyan-600 rounded-3xl p-8 text-white shadow-2xl">
+        <div className="mb-2">
+          <h3 className="text-3xl font-extrabold mb-1">Zone Assignment</h3>
+          <p className="text-lg opacity-90">Manage worker's assigned zone.</p>
         </div>
-      )}
+        <div className="mt-8 mb-4">
+          <div className="text-lg font-semibold">Current Zone</div>
+          <div className="text-2xl font-extrabold mt-1 mb-6">Zone 1</div>
+          <div className="text-lg font-semibold mb-2">Change Zone</div>
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <select className="flex-grow bg-cyan-300/60 border-2 border-white rounded-xl px-6 py-4 text-lg text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-white transition-all" defaultValue="">
+              <option value="" disabled>Select a new zone</option>
+              <option value="Zone 1">Zone 1</option>
+              <option value="Zone 2">Zone 2</option>
+              <option value="Zone 3">Zone 3</option>
+              <option value="Zone 4">Zone 4</option>
+            </select>
+            <button className="bg-white text-teal-600 font-bold text-lg px-8 py-4 rounded-xl shadow-lg flex items-center gap-2 hover:bg-gray-100 transition-all">
+              <Save className="h-6 w-6" />
+              Update Zone
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

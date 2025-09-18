@@ -62,6 +62,11 @@ const roleConfig = {
         icon: GraduationCap,
         href: "/contractor/data-entry/training-assignment",
       },
+      {
+         name: "Directive Issuance",
+        icon: FileText,
+        href: "/contractor/data-entry/directive",
+      },
     ],
     reports: [
       {

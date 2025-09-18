@@ -37,7 +37,7 @@ export default function RecognitionNominationPage() {
   return (
     <div className={cn("min-h-screen p-6 md:p-12 space-y-10", contractorTheme.page.formBackground)}>
       <div>
-        <h2 className="text-4xl md:text-5xl font-extrabold text-gray-700 tracking-tight leading-tight">Nominate for Recognition</h2>
+        <h2 className="text-5xl font-extrabold bg-gradient-to-r from-indigo-600 via-pink-600 to-yellow-500 bg-clip-text text-transparent">Nominate for Recognition</h2>
         <p className="text-gray-500 mt-3 text-xl">Submit a nomination for an outstanding worker or contractor.</p>
       </div>
 
