@@ -42,8 +42,8 @@ const Reports: React.FC = () => {
         { title: 'Daily Attendance Report', description: 'Worker attendance details for a selected date range.', format: ['PDF', 'Excel'], lastGenerated: '2025-09-16 06:25 PM' },
         { title: 'Grievance Report', description: 'Summary of all grievances raised and their current status.', format: ['PDF', 'Excel'], lastGenerated: '2025-09-16 04:30 PM' },
         { title: 'PPE & Training Coverage', description: 'Compliance status for worker PPE and mandatory training.', format: ['PDF', 'Excel'], lastGenerated: '2025-09-15 02:15 PM' },
-        { title: 'Weekly Performance Summary', description: 'Comprehensive performance metrics for the last week.', format: ['PDF'], lastGenerated: '2025-09-12 11:20 AM' },
-        { title: 'Monthly Summary Report', description: 'A complete overview of all activities and key metrics.', format: ['Excel'], lastGenerated: '2025-09-01 10:00 AM' }
+        { title: 'Weekly Performance Summary', description: 'Comprehensive performance metrics for the last week.', format: ['PDF', 'Excel'], lastGenerated: '2025-09-12 11:20 AM' },
+        { title: 'Monthly Summary Report', description: 'A complete overview of all activities and key metrics.', format: ['PDF', 'Excel'], lastGenerated: '2025-09-01 10:00 AM' }
     ];
 
     const quickStats = [

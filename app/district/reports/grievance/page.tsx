@@ -15,7 +15,7 @@ const Grievances: React.FC = () => {
 
   const nodalOfficerData = [
     {
-      officer: 'Rajesh Kumar',
+      officer: 'Abishek Kumar',
       zone: 'Zone A',
       total: 45,
       resolved: 38,
@@ -47,7 +47,7 @@ const Grievances: React.FC = () => {
     {
       grievanceId: 'GRV-2024-001',
       contractor: 'Clean City Services',
-      officer: 'Rajesh Kumar',
+      officer: 'Abishek Kumar',
       dateRaised: '2024-01-15',
       daysPending: 12,
       status: 'Under Review'

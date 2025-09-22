@@ -20,7 +20,7 @@ export default function WorkerRegistrationPage() {
       </div>
 
       <Card className="bg-white shadow-2xl border border-gray-100 rounded-3xl overflow-hidden transform transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1">
-        <CardHeader className="p-8 md:p-10 bg-gradient-to-r from-blue-600 to-purple-700 text-white shadow-lg">
+  <CardHeader className="p-8 md:p-10 bg-gradient-to-r from-blue-600 to-purple-700 text-white shadow-lg rounded-2xl">
           <CardTitle className="flex items-center space-x-4 text-3xl md:text-4xl font-bold">
             <UserPlus className="h-9 w-9 text-white" />
             <span>New Safai Karmachari Registration Form</span>

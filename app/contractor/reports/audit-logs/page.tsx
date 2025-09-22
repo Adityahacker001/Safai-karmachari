@@ -36,7 +36,7 @@ const AuditLogs: React.FC = () => {
         { timestamp: '2025-09-16 14:20:33', action: 'PPE Status Updated', actor: 'Contractor Admin', details: 'Updated PPE status for Worker ID: WK005', ipAddress: '192.168.1.100' },
         { timestamp: '2025-09-16 11:10:00', action: 'User Login', actor: 'Supervisor - Vikram Singh', details: 'System login - Dashboard accessed', ipAddress: '192.168.1.101' },
         { timestamp: '2025-09-15 17:30:55', action: 'Report Generated', actor: 'Contractor Admin', details: 'Generated Daily Attendance Report (PDF)', ipAddress: '192.168.1.100' },
-        { timestamp: '2025-09-15 16:45:21', action: 'Worker Added', actor: 'Contractor Admin', details: 'Added new worker: Rajesh Gupta (WK046)', ipAddress: '192.168.1.100' },
+        { timestamp: '2025-09-15 16:45:21', action: 'Worker Added', actor: 'Contractor Admin', details: 'Added new worker: Abishek Gupta (WK046)', ipAddress: '192.168.1.100' },
         { timestamp: '2025-09-15 15:20:18', action: 'Training Status Updated', actor: 'Supervisor - Vikram Singh', details: 'Marked training complete for Worker ID: WK002', ipAddress: '192.168.1.101' },
         { timestamp: '2025-09-15 14:10:07', action: 'Grievance Created', actor: 'System Auto', details: 'New grievance GR005 submitted by Worker ID: WK001', ipAddress: '192.168.1.102' }
     ];
@@ -147,7 +147,6 @@ const AuditLogs: React.FC = () => {
                                     <th className="text-left p-4 text-sm font-semibold text-white uppercase tracking-wider">Action</th>
                                     <th className="text-left p-4 text-sm font-semibold text-white uppercase tracking-wider">Actor</th>
                                     <th className="text-left p-4 text-sm font-semibold text-white uppercase tracking-wider">Details</th>
-                                    <th className="text-left p-4 text-sm font-semibold text-white uppercase tracking-wider">IP Address</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200/70">
@@ -157,7 +156,6 @@ const AuditLogs: React.FC = () => {
                                         <td className="p-4">{getActionBadge(row.action)}</td>
                                         <td className="p-4 text-sm text-slate-800 flex items-center"><div className="flex-shrink-0">{getAvatar(row.actor)}</div><span className="font-semibold">{row.actor}</span></td>
                                         <td className="p-4 text-sm text-slate-600 max-w-sm truncate" title={row.details}>{row.details}</td>
-                                        <td className="p-4 text-sm text-slate-700 font-mono">{row.ipAddress}</td>
                                     </tr>
                                 ))}
                             </tbody>

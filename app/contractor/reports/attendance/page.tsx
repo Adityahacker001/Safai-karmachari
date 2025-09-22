@@ -17,7 +17,7 @@ import React, { useState, useMemo } from "react"; // Added useState and useMemo
 
 const attendanceData = [
     {
-        name: "Ramesh Kumar",
+        name: "Abishek Kumar",
         id: "WK001",
         shift: "Morning",
         status: "Present",

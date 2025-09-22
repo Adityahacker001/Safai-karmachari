@@ -18,7 +18,7 @@ const UserManagement = () => {
   const users: User[] = [
     {
       userId: "USR-001",
-      name: "Rajesh Kumar",
+      name: "Abishek Kumar",
       role: "Contractor",
       company: "ABC Cleaning Services",
       status: "Active",

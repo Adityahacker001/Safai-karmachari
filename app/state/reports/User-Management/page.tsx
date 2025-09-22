@@ -7,12 +7,12 @@ const UserManagement = () => {
   const userData = [
     {
       id: "USR001",
-      name: "Rajesh Kumar",
+      name: "Abishek Kumar",
       role: "District Officer",
       district: "Mumbai",
       status: "Active",
       lastLogin: "2024-01-20 10:30 AM",
-      email: "rajesh.kumar@gov.in",
+      email: "abishek.kumar@gov.in",
     },
     {
       id: "USR002",

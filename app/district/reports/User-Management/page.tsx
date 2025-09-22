@@ -42,7 +42,7 @@ export default function DistrictUserManagement() {
 
   // Mock Users
   const users = [
-    { id: "USR-101", name: "Rajesh Kumar", role: "Contractor", zone: "North Zone", status: "Active", lastLogin: "2024-01-27" },
+    { id: "USR-101", name: "Abishek Kumar", role: "Contractor", zone: "North Zone", status: "Active", lastLogin: "2024-01-27" },
     { id: "USR-102", name: "Priya Sharma", role: "Nodal Officer", zone: "South Zone", status: "Active", lastLogin: "2024-01-26" },
     { id: "USR-103", name: "Amit Singh", role: "Supervisor", zone: "East Zone", status: "Pending Approval", lastLogin: "Never" },
     { id: "USR-104", name: "Sunita Devi", role: "Worker", zone: "West Zone", status: "Suspended", lastLogin: "2024-01-20" },

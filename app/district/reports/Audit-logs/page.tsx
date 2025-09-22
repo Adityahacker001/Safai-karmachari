@@ -22,7 +22,7 @@ const AuditLogs: React.FC = () => {
     {
       timestamp: "2025-09-16 17:15:25",
       action: "Grievance Created",
-      actor: "Rajesh Kumar",
+      actor: "Abishek Kumar",
       role: "Nodal Officer",
       details:
         "Created grievance GRV-2025-045 for contractor Clean City Services",
@@ -59,7 +59,7 @@ const AuditLogs: React.FC = () => {
     {
       timestamp: "2025-09-16 12:30:44",
       action: "Grievance Resolved",
-      actor: "Rajesh Kumar",
+      actor: "Abishek Kumar",
       role: "Nodal Officer",
       details:
         "Resolved grievance GRV-2025-042 with contractor acknowledgment",

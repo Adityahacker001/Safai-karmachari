@@ -28,7 +28,7 @@ export default function AuditLogs() {
     const [selectedTimeRange, setSelectedTimeRange] = useState('7days');
 
     const auditData = [
-    { timestamp: '2024-01-15 14:30:45', action: 'User Login', user: 'Rajesh Kumar', role: 'State Officer', details: 'Successful login from IP 203.192.45.12', status: 'Success', location: 'Lucknow, UP' },
+    { timestamp: '2024-01-15 14:30:45', action: 'User Login', user: 'Abishek Kumar', role: 'State Officer', details: 'Successful login from IP 203.192.45.12', status: 'Success', location: 'Lucknow, UP' },
     { timestamp: '2024-01-15 14:25:12', action: 'Directive Created', user: 'Admin User', role: 'National Admin', details: 'Created directive DIR-2024-001 for PPE Distribution', status: 'Success', location: 'New Delhi' },
     { timestamp: '2024-01-15 14:20:33', action: 'Report Downloaded', user: 'Priya Sharma', role: 'State Officer', details: 'Downloaded Monthly Grievance Report (January 2024)', status: 'Success', location: 'Mumbai, MH' },
     { timestamp: '2024-01-15 14:15:21', action: 'User Role Updated', user: 'Admin User', role: 'National Admin', details: 'Updated role for user USR-004 from District to State', status: 'Success', location: 'New Delhi' },

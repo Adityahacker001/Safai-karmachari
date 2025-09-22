@@ -8,7 +8,7 @@ const AuditLogs = () => {
     {
       timestamp: "2024-01-20 10:30:25",
       action: "Grievance Created",
-      actor: "Rajesh Kumar",
+      actor: "Abishek Kumar",
       role: "District Officer",
       details: "Created grievance GRV001 for contractor ABC Ltd",
       ipAddress: "192.168.1.100",

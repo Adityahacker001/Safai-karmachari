@@ -71,7 +71,7 @@ export default function UserManagement() {
     const [newUser, setNewUser] = useState({ name: '', email: '', role: 'District', state: '', district: '' });
 
     const userData = [
-        { id: 'USR-001', name: 'Rajesh Kumar', email: 'rajesh.kumar@up.gov.in', role: 'State', state: 'Uttar Pradesh', district: 'All', status: 'Active', lastLogin: '2024-01-15 10:30', created: '2023-08-15' },
+        { id: 'USR-001', name: 'Abishek Kumar', email: 'Abishek.kumar@up.gov.in', role: 'State', state: 'Uttar Pradesh', district: 'All', status: 'Active', lastLogin: '2024-01-15 10:30', created: '2023-08-15' },
         { id: 'USR-002', name: 'Priya Sharma', email: 'priya.sharma@mh.gov.in', role: 'State', state: 'Maharashtra', district: 'All', status: 'Active', lastLogin: '2024-01-15 14:20', created: '2023-09-10' },
         { id: 'USR-003', name: 'Amit Singh', email: 'amit.singh@lucknow.gov.in', role: 'District', state: 'Uttar Pradesh', district: 'Lucknow', status: 'Active', lastLogin: '2024-01-14 16:45', created: '2023-10-05' },
         { id: 'USR-004', name: 'Sunita Devi', email: 'sunita.devi@mumbai.gov.in', role: 'District', state: 'Maharashtra', district: 'Mumbai', status: 'Pending', lastLogin: 'Never', created: '2024-01-10' },

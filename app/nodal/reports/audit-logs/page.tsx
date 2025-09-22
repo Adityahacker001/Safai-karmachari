@@ -8,7 +8,7 @@ const AuditLogs = () => {
     {
       timestamp: '2024-01-27 14:30:25',
       action: 'Grievance Status Updated',
-      actor: 'Rajesh Kumar',
+      actor: 'Abishek Kumar',
       role: 'Contractor',
       details: 'Updated grievance GRV-2024-001 from Pending to Resolved',
       ipAddress: '192.168.1.45'
@@ -64,7 +64,7 @@ const AuditLogs = () => {
     {
       timestamp: '2024-01-26 14:10:55',
       action: 'Recognition Score Updated',
-      actor: 'Rajesh Kumar',
+      actor: 'Abishek Kumar',
       role: 'Contractor',
       details: 'Updated recognition scores for 30 workers',
       ipAddress: '192.168.1.45'
@@ -192,7 +192,7 @@ const AuditLogs = () => {
           <h3 className="text-lg font-semibold text-pink-700 mb-4">Most Active Users</h3>
           <div className="space-y-3">
             <div className="flex items-center justify-between p-2 bg-pink-100 rounded">
-              <span className="text-sm font-medium text-pink-900">Rajesh Kumar</span>
+              <span className="text-sm font-medium text-pink-900">Abishek Kumar</span>
               <span className="text-sm text-pink-800">18 actions</span>
             </div>
             <div className="flex items-center justify-between p-2 bg-pink-100 rounded">

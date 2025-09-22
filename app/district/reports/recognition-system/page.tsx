@@ -23,7 +23,7 @@ const Recognition: React.FC = () => {
     },
     {
       rank: 2,
-      officer: 'Rajesh Kumar',
+      officer: 'Abishek Kumar',
       zone: 'Zone A',
       score: 91.2,
       grievances: '38/45',
