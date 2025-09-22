@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { MessageSquare, Download, Clock, ThumbsUp, Eye, Search, Hourglass, CheckCircle2, ShieldAlert } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { X } from "lucide-react";
 import React, { useState } from "react";
 
 export default function GrievanceTrackingReportPage() {
@@ -124,7 +125,7 @@ export default function GrievanceTrackingReportPage() {
         <div className="min-h-screen p-6 md:p-12 bg-gradient-to-br from-blue-100 via-purple-100 via-pink-100 via-rose-100 to-yellow-100 space-y-10">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800 tracking-tight leading-tight">Grievance Tracking Report</h1>
+                    <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Grievance Tracking Report</h1>
                     <p className="text-gray-600 mt-3 text-xl">A historical log and analytical overview of all worker grievances.</p>
                 </div>
                 <div className="flex items-center space-x-4 mt-6 sm:mt-0">
@@ -280,6 +281,12 @@ export default function GrievanceTrackingReportPage() {
                                             </DialogTrigger>
                                             {selectedGrievance && selectedGrievance.id === g.id && (
                                                 <DialogContent className="max-w-2xl p-0 shadow-2xl rounded-3xl overflow-hidden bg-gradient-to-br from-blue-50 via-purple-50 to-pink-100">
+                                                    {/* Custom close (cross) button in top right with white bg */}
+                                                    <DialogClose asChild>
+                                                        <button className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white hover:bg-gray-200 focus:outline-none shadow">
+                                                            <X className="h-6 w-6 text-gray-800" />
+                                                        </button>
+                                                    </DialogClose>
                                                     <DialogHeader className={`p-8 text-white w-full ${selectedGrievance.status === 'Resolved' ? 'bg-gradient-to-r from-green-600 to-emerald-700' : selectedGrievance.status === 'Pending' ? 'bg-gradient-to-r from-blue-600 to-indigo-700' : selectedGrievance.status === 'In Progress' ? 'bg-gradient-to-r from-yellow-500 to-amber-600 text-gray-900' : 'bg-gradient-to-r from-purple-600 to-pink-600'}`}>
                                                         <DialogTitle className="text-3xl font-bold">Grievance Case File: {selectedGrievance.id}</DialogTitle>
                                                         <DialogDescription className="text-white/80 text-lg">

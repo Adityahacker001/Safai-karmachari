@@ -80,7 +80,7 @@ const Directives = () => {
     <div className="space-y-8 p-6 bg-gradient-to-br from-indigo-50 via-pink-50 to-yellow-50 rounded-xl shadow-lg">
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold bg-gradient-to-r from-indigo-600 via-pink-600 to-yellow-500 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
             Directives Management
           </h1>
           <p className="text-gray-700 mt-2">Track directives received from Nodal Officers</p>

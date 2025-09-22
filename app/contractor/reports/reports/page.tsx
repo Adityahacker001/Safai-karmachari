@@ -70,7 +70,7 @@ const Reports: React.FC = () => {
 
                 {/* --- HEADER WITH GRADIENT TEXT --- */}
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between">
-                    <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 text-transparent bg-clip-text mb-2 sm:mb-0">
+                    <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
                         Reports & Analytics
                     </h1>
                     <button className="relative group flex items-center space-x-2 bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-6 py-3 rounded-lg hover:shadow-2xl hover:shadow-indigo-500/40 transition-all duration-300 shadow-xl">

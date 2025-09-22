@@ -137,7 +137,7 @@ export default function SafetyComplianceReportPage() {
         <div className="min-h-screen p-6 md:p-12 bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 space-y-10">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800 tracking-tight leading-tight">Safety Compliance Report</h1>
+                    <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Safety Compliance Report</h1>
                     <p className="text-gray-600 mt-3 text-xl">Analyze daily PPE checklist submissions and track worker safety scores.</p>
                 </div>
                 <div className="flex items-center space-x-4 mt-6 sm:mt-0">

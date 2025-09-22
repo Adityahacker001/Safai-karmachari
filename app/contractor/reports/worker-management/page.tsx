@@ -306,7 +306,7 @@ export default function WorkerManagementReportPage() {
     <div className="min-h-screen p-6 md:p-12 bg-slate-50 space-y-10">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-800 tracking-tight leading-tight">
+          <h2 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
             Worker Management Report
           </h2>
           <p className="text-gray-600 mt-3 text-xl">

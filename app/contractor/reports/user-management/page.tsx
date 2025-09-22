@@ -79,7 +79,7 @@ const UserManagement: React.FC = () => {
 
                 {/* --- HEADER --- */}
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between">
-                    <h1 className="text-3xl font-bold text-slate-800 mb-2 sm:mb-0">User Management</h1>
+                    <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">User Management</h1>
                     <button className="flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-5 py-2.5 rounded-lg hover:shadow-xl transition-all duration-300 shadow-lg">
                         <UserPlus className="w-5 h-5" />
                         <span className="font-semibold">Add New Worker</span>

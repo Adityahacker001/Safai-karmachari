@@ -61,6 +61,28 @@ const districtReports = [
     { id: 'D04', name: "Howrah, WB", sanitationScore: 75.4, projectsCompleted: "88%", workerWelfare: 7.9, trend: 'declining' },
 ];
 
+// Split district reports into good and bad based on sanitationScore (arbitrary threshold: >=90 good, <90 bad)
+const goodDistricts = districtReports.filter(d => d.sanitationScore >= 90).map(d => ({
+    id: d.id,
+    name: d.name,
+    region: d.name,
+    score: d.sanitationScore,
+    reason: `Sanitation score is ${d.sanitationScore}%. Projects completed: ${d.projectsCompleted}.`,
+    since: 2020,
+    projects: Number(String(d.projectsCompleted).replace(/[^\d.]/g, "")),
+    // You can add more fields if needed
+}));
+const badDistricts = districtReports.filter(d => d.sanitationScore < 90).map(d => ({
+    id: d.id,
+    name: d.name,
+    region: d.name,
+    score: d.sanitationScore,
+    reason: `Sanitation score is ${d.sanitationScore}%. Projects completed: ${d.projectsCompleted}.`,
+    since: 2020,
+    projects: Number(String(d.projectsCompleted).replace(/[^\d.]/g, "")),
+    // You can add more fields if needed
+}));
+
 // --- REUSABLE COMPONENTS ---
 
 interface StatPillProps {
@@ -301,7 +323,7 @@ export default function PerformanceReportsPage() {
             case 'nodals':
                 return <PerformanceTabContent goodData={goodNodals} badData={badNodals} type="Nodal Officer" />;
             case 'districts':
-                return <RegionalTable data={districtReports.map(item => ({ ...item, trend: item.trend as 'improving' | 'stable' | 'declining' }))} title="District Performance Overview" />;
+                return <PerformanceTabContent goodData={goodDistricts} badData={badDistricts} type="District" />;
             default:
                 return null;
         }

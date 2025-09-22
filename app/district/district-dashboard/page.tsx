@@ -170,11 +170,6 @@ export default function DistrictDashboard() {
                 <p className="text-sm text-blue-700">Generate monthly report</p>
               </button>
               <button className={cn(contractorTheme.button.secondary, "p-4 text-left text-sm w-full")}> 
-                <DollarSign className="h-6 w-6 text-green-600 mb-2" />
-                <p className="font-medium text-green-900">Update Budget</p>
-                <p className="text-sm text-green-700">Record utilization data</p>
-              </button>
-              <button className={cn(contractorTheme.button.secondary, "p-4 text-left text-sm w-full")}> 
                 <Award className="h-6 w-6 text-purple-600 mb-2" />
                 <p className="font-medium text-purple-900">Review Recognitions</p>
                 <p className="text-sm text-purple-700">Process nominations</p>

@@ -51,7 +51,7 @@ const KPICard = ({ title, value, icon: Icon, color }: KPICardProps) => {
 
 
 export default function Grievances() {
-  const [activeTab, setActiveTab] = React.useState('all');
+  // Only one tab now, so no need for activeTab state
 
   const kpiData = [
     { title: 'Total Grievances', value: 2486, icon: MessageCircle, color: 'blue' },
@@ -68,7 +68,7 @@ export default function Grievances() {
      { id: 'GR-2024-005', date: '2024-01-11', state: 'Tamil Nadu', district: 'Chennai', category: 'Safety Gear', status: 'Resolved', priority: 'Low', days_pending: 0, },
   ];
 
-  const escalatedData = grievanceData.filter(g => g.status === 'Escalated');
+  // Removed escalatedData, not needed
 
 
   type StatusType = 'Pending' | 'Resolved' | 'Escalated' | 'Verified';
@@ -126,34 +126,7 @@ export default function Grievances() {
 
       {/* Main Content Area with Table */}
       <div className="bg-white/60 backdrop-blur-md rounded-2xl shadow-xl border border-gray-200/80">
-        {/* Tabs */}
-        <div className="px-6 pt-4 border-b border-gray-200">
-          <nav className="-mb-px flex space-x-8">
-            <button
-              onClick={() => setActiveTab('all')}
-              className={`py-4 px-1 border-b-4 font-semibold text-md transition-colors duration-300 ${
-                activeTab === 'all'
-                  ? 'border-indigo-500 text-indigo-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
-              }`}
-            >
-              All Grievances
-            </button>
-            <button
-              onClick={() => setActiveTab('escalated')}
-              className={`py-4 px-1 border-b-4 font-semibold text-md transition-colors duration-300 flex items-center space-x-2 ${
-                activeTab === 'escalated'
-                  ? 'border-indigo-500 text-indigo-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
-              }`}
-            >
-              <span>Escalated</span>
-              <span className="px-2.5 py-0.5 bg-orange-500 text-white rounded-full text-xs font-bold">
-                {escalatedData.length}
-              </span>
-            </button>
-          </nav>
-        </div>
+        {/* Only All Grievances tab remains, so remove tab UI */}
 
         {/* Data Table */}
         <div className="overflow-x-auto">
@@ -172,7 +145,7 @@ export default function Grievances() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {(activeTab === 'all' ? grievanceData : escalatedData).map((row) => (
+              {grievanceData.map((row) => (
                 <TableRow key={row.id} className="border-gray-200 hover:bg-gray-50/50 transition-colors">
                   <TableCell className="font-medium text-gray-800 p-6">{row.id}</TableCell>
                   <TableCell className="text-gray-600">{row.date}</TableCell>

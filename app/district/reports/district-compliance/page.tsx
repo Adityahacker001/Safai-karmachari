@@ -62,7 +62,6 @@ export default function DistrictComplianceReportPage() {
       <TableHead className="border border-gray-400 px-4 py-2 text-center font-extrabold">Compliance Score</TableHead>
       <TableHead className="border border-gray-400 px-4 py-2 text-center font-extrabold">Open Audit Warnings</TableHead>
       <TableHead className="border border-gray-400 px-4 py-2 text-center font-extrabold">Avg. Daily PPE Violations</TableHead>
-      <TableHead className="border border-gray-400 px-4 py-2 text-center font-extrabold">Status</TableHead>
       <TableHead className="border border-gray-400 px-4 py-2 text-center font-extrabold">Actions</TableHead>
     </TableRow>
   </TableHeader>
@@ -79,9 +78,6 @@ export default function DistrictComplianceReportPage() {
         <TableCell className={`border border-gray-300 px-4 py-2 text-center font-bold text-lg ${unit.score >= 90 ? "text-green-600" : unit.score >= 80 ? "text-orange-600" : "text-red-600"}`}>{unit.score}%</TableCell>
         <TableCell className={`border border-gray-300 px-4 py-2 text-center font-semibold ${unit.warnings > 0 ? 'text-orange-600' : 'text-gray-700'}`}>{unit.warnings}</TableCell>
         <TableCell className={`border border-gray-300 px-4 py-2 text-center font-semibold ${unit.violations > 10 ? 'text-red-600' : 'text-gray-700'}`}>{unit.violations}</TableCell>
-        <TableCell className="border border-gray-300 px-4 py-2 text-center">
-          <Badge className={cn("font-semibold", getBadgeClass(unit.status))}>{unit.status}</Badge>
-        </TableCell>
         <TableCell className="border border-gray-300 px-4 py-2 text-center">
           <Button className={cn(contractorTheme.button.secondary, "text-sm")} size="sm">
             <Eye className="h-4 w-4 mr-2"/>View Audit History

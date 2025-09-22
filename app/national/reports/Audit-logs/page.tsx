@@ -28,12 +28,12 @@ export default function AuditLogs() {
     const [selectedTimeRange, setSelectedTimeRange] = useState('7days');
 
     const auditData = [
-        { timestamp: '2024-01-15 14:30:45', action: 'User Login', user: 'Rajesh Kumar', role: 'State Officer', details: 'Successful login from IP 203.192.45.12', status: 'Success', ipAddress: '203.192.45.12', location: 'Lucknow, UP' },
-        { timestamp: '2024-01-15 14:25:12', action: 'Directive Created', user: 'Admin User', role: 'National Admin', details: 'Created directive DIR-2024-001 for PPE Distribution', status: 'Success', ipAddress: '10.0.0.1', location: 'New Delhi' },
-        { timestamp: '2024-01-15 14:20:33', action: 'Report Downloaded', user: 'Priya Sharma', role: 'State Officer', details: 'Downloaded Monthly Grievance Report (January 2024)', status: 'Success', ipAddress: '192.168.1.45', location: 'Mumbai, MH' },
-        { timestamp: '2024-01-15 14:15:21', action: 'User Role Updated', user: 'Admin User', role: 'National Admin', details: 'Updated role for user USR-004 from District to State', status: 'Success', ipAddress: '10.0.0.1', location: 'New Delhi' },
-        { timestamp: '2024-01-15 14:10:18', action: 'Login Failed', user: 'Unknown', role: 'N/A', details: 'Failed login attempt for email: test@example.com', status: 'Failed', ipAddress: '185.234.56.78', location: 'Unknown' },
-        { timestamp: '2024-01-15 14:05:44', action: 'Grievance Status Changed', user: 'Amit Singh', role: 'District Officer', details: 'Changed status of GR-2024-001 from Pending to Resolved', status: 'Success', ipAddress: '172.16.0.23', location: 'Lucknow, UP' },
+    { timestamp: '2024-01-15 14:30:45', action: 'User Login', user: 'Rajesh Kumar', role: 'State Officer', details: 'Successful login from IP 203.192.45.12', status: 'Success', location: 'Lucknow, UP' },
+    { timestamp: '2024-01-15 14:25:12', action: 'Directive Created', user: 'Admin User', role: 'National Admin', details: 'Created directive DIR-2024-001 for PPE Distribution', status: 'Success', location: 'New Delhi' },
+    { timestamp: '2024-01-15 14:20:33', action: 'Report Downloaded', user: 'Priya Sharma', role: 'State Officer', details: 'Downloaded Monthly Grievance Report (January 2024)', status: 'Success', location: 'Mumbai, MH' },
+    { timestamp: '2024-01-15 14:15:21', action: 'User Role Updated', user: 'Admin User', role: 'National Admin', details: 'Updated role for user USR-004 from District to State', status: 'Success', location: 'New Delhi' },
+    { timestamp: '2024-01-15 14:10:18', action: 'Login Failed', user: 'Unknown', role: 'N/A', details: 'Failed login attempt for email: test@example.com', status: 'Failed', location: 'Unknown' },
+    { timestamp: '2024-01-15 14:05:44', action: 'Grievance Status Changed', user: 'Amit Singh', role: 'District Officer', details: 'Changed status of GR-2024-001 from Pending to Resolved', status: 'Success', location: 'Lucknow, UP' },
     ];
 
     const actionStats = {
@@ -140,7 +140,6 @@ export default function AuditLogs() {
                                 <th className="text-left p-4 text-sm font-semibold text-slate-600">Role</th>
                                 <th className="text-left p-4 text-sm font-semibold text-slate-600">Details</th>
                                 <th className="text-center p-4 text-sm font-semibold text-slate-600">Status</th>
-                                <th className="text-left p-4 text-sm font-semibold text-slate-600">IP Address</th>
                                 <th className="text-left p-4 text-sm font-semibold text-slate-600">Location</th>
                                 <th className="text-right p-4 text-sm font-semibold text-slate-600">Actions</th>
                             </tr>
@@ -154,7 +153,6 @@ export default function AuditLogs() {
                                     <td className="p-4"><RolePill role={row.role as 'National Admin' | 'State Officer' | 'District Officer' | 'Nodal Officer' | 'N/A'} /></td>
                                     <td className="p-4 text-sm text-slate-600 max-w-xs truncate" title={row.details}>{row.details}</td>
                                     <td className="p-4 text-center"><StatusPill status={row.status as 'Success' | 'Failed' | 'Warning'} /></td>
-                                    <td className="p-4 text-sm text-slate-700 font-mono">{row.ipAddress}</td>
                                     <td className="p-4 text-sm text-slate-700">{row.location}</td>
                                     <td className="p-4 text-right">
                                         <button className="p-2 text-slate-500 hover:text-indigo-600 hover:bg-indigo-100 rounded-full transition-all">

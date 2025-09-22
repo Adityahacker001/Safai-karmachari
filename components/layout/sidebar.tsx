@@ -122,6 +122,11 @@ const roleConfig = {
         icon: CheckSquare,
         href: "/nodal/data-entry/compliance-checklist",
       },
+       {
+        name:  "Grievance Management",
+        icon: CheckSquare,
+        href: "/nodal/data-entry/Grievance",
+      },
       {
         name: "Recognition Nomination",
         icon: Award,
@@ -130,7 +135,7 @@ const roleConfig = {
     ],
     reports: [
       {
-        name: "Incident Management",
+        name: "Grievance Overview",
         icon: AlertTriangle,
         href: "/nodal/reports/incident-management",
       },
@@ -179,6 +184,11 @@ const roleConfig = {
         icon: FileText,
         href: "/district/data-entry/directive",
       },
+      {
+        name: "Grievance Management",
+        icon: FileText,
+        href: "/district/data-entry/Grievance",
+      },
     ],
     reports: [
       {
@@ -202,6 +212,11 @@ const roleConfig = {
         name: "Performance Reports",
         icon: FileText,
         href: "/district/reports/All-reports",
+      },
+       {
+        name: "User Management",
+        icon: FileText,
+        href: "/district/reports/User-Management",
       },
       { name: "Audit Logs", icon: Award, href: "/district/reports/Audit-logs" },
     ],
@@ -227,6 +242,11 @@ const roleConfig = {
         name: "Directive Issuance",
         icon: FileText,
         href: "/state/data-entry/directive",
+      },
+      {
+        name: "Grievance Management",
+        icon: FileText,
+        href: "/state/data-entry/Grievance-managment",
       },
     ],
     reports: [

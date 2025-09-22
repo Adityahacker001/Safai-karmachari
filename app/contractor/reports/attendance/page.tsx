@@ -93,7 +93,7 @@ export default function WorkerAttendance() {
     return (
         <div className="space-y-6 p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-blue-100 via-purple-100 via-pink-100 via-rose-100 to-yellow-100 min-h-screen">
             <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-bold text-gray-900">Worker Attendance</h1>
+                <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Worker Attendance</h1>
                 <Button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
                     Mark Attendance
                 </Button>

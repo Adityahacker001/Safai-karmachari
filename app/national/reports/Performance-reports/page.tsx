@@ -61,6 +61,44 @@ const districtReports = [
     { id: 'D04', name: "Howrah, WB", sanitationScore: 75.4, projectsCompleted: "88%", workerWelfare: 7.9, trend: 'declining' },
 ];
 
+// Split state and district reports into good and bad based on sanitationScore (>=90 good, <90 bad)
+const goodStates = stateReports.filter(s => s.sanitationScore >= 90).map(s => ({
+    id: s.id,
+    name: s.name,
+    region: s.name,
+    score: s.sanitationScore,
+    reason: `Sanitation score is ${s.sanitationScore}%. Projects completed: ${s.projectsCompleted}.`,
+    since: 2020,
+    projects: Number(String(s.projectsCompleted).replace(/[^\d.]/g, "")),
+}));
+const badStates = stateReports.filter(s => s.sanitationScore < 90).map(s => ({
+    id: s.id,
+    name: s.name,
+    region: s.name,
+    score: s.sanitationScore,
+    reason: `Sanitation score is ${s.sanitationScore}%. Projects completed: ${s.projectsCompleted}.`,
+    since: 2020,
+    projects: Number(String(s.projectsCompleted).replace(/[^\d.]/g, "")),
+}));
+const goodDistricts = districtReports.filter(d => d.sanitationScore >= 90).map(d => ({
+    id: d.id,
+    name: d.name,
+    region: d.name,
+    score: d.sanitationScore,
+    reason: `Sanitation score is ${d.sanitationScore}%. Projects completed: ${d.projectsCompleted}.`,
+    since: 2020,
+    projects: Number(String(d.projectsCompleted).replace(/[^\d.]/g, "")),
+}));
+const badDistricts = districtReports.filter(d => d.sanitationScore < 90).map(d => ({
+    id: d.id,
+    name: d.name,
+    region: d.name,
+    score: d.sanitationScore,
+    reason: `Sanitation score is ${d.sanitationScore}%. Projects completed: ${d.projectsCompleted}.`,
+    since: 2020,
+    projects: Number(String(d.projectsCompleted).replace(/[^\d.]/g, "")),
+}));
+
 // --- REUSABLE COMPONENTS ---
 
 interface StatPillProps {
@@ -293,8 +331,8 @@ export default function PerformanceReportsPage() {
             case 'contractors': return <PerformanceTabContent goodData={goodContractors} badData={badContractors} type="Contractor" />;
             case 'workers': return <PerformanceTabContent goodData={goodWorkers} badData={badWorkers} type="Worker" />;
             case 'nodals': return <PerformanceTabContent goodData={goodNodals} badData={badNodals} type="Nodal Officer" />;
-            case 'states': return <RegionalTable data={stateReports.map(item => ({ ...item, trend: item.trend as 'improving' | 'stable' | 'declining' }))} title="State Performance Overview" />;
-            case 'districts': return <RegionalTable data={districtReports.map(item => ({ ...item, trend: item.trend as 'improving' | 'stable' | 'declining' }))} title="District Performance Overview" />;
+            case 'states': return <PerformanceTabContent goodData={goodStates} badData={badStates} type="State" />;
+            case 'districts': return <PerformanceTabContent goodData={goodDistricts} badData={badDistricts} type="District" />;
             default: return null;
         }
     };
