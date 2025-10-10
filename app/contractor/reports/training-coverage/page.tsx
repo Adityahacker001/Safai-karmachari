@@ -22,8 +22,8 @@ export default function TrainingCoverageReportPage() {
             overdue: 2,
             completionRate: 89,
             workers: {
-                completed: ["Ravi Kumar", "Sunita Yadav", "Amit Patel", "Priya Sharma", "Mohan Singh", "Suresh Verma", "Anita Das", "Vijay Kumar", "Pooja Singh", "Rahul Mehra", "Deepak Joshi", "Kiran Bala", "Sanjay Gupta", "Meena Kumari", "Abishek Lal", "Geeta Devi", "Arun Kumar", "Seema Yadav", "Nitin Sharma", "Kavita Joshi"],
-                inProgress: ["Suresh Verma", "Anita Das", "Vijay Kumar"],
+                completed: ["Ravi Kumar", "Sunita Yadav", "Amit Patel", "Priya Sharma", "Mohan Singh", "Abishek Verma", "Anita Das", "Vijay Kumar", "Pooja Singh", "Rahul Mehra", "Deepak Joshi", "Kiran Bala", "Sanjay Gupta", "Meena Kumari", "Abishek Lal", "Geeta Devi", "Arun Kumar", "Seema Yadav", "Nitin Sharma", "Kavita Joshi"],
+                inProgress: ["Abishek Verma", "Anita Das", "Vijay Kumar"],
                 overdue: ["Pooja Singh", "Rahul Mehra"]
             }
         },
@@ -35,7 +35,7 @@ export default function TrainingCoverageReportPage() {
             overdue: 0,
             completionRate: 80,
             workers: {
-                completed: ["Ravi Kumar", "Sunita Yadav", "Amit Patel", "Priya Sharma", "Mohan Singh", "Suresh Verma", "Anita Das", "Vijay Kumar", "Pooja Singh", "Rahul Mehra", "Deepak Joshi", "Kiran Bala", "Sanjay Gupta", "Meena Kumari", "Abishek Lal", "Geeta Devi"],
+                completed: ["Ravi Kumar", "Sunita Yadav", "Amit Patel", "Priya Sharma", "Mohan Singh", "Abishek Verma", "Anita Das", "Vijay Kumar", "Pooja Singh", "Rahul Mehra", "Deepak Joshi", "Kiran Bala", "Sanjay Gupta", "Meena Kumari", "Abishek Lal", "Geeta Devi"],
                 inProgress: ["Arun Kumar", "Seema Yadav", "Nitin Sharma", "Kavita Joshi", "Ajay Singh", "Preeti Sharma", "Manoj Kumar", "Shalini Gupta"],
                 overdue: []
             }
@@ -48,7 +48,7 @@ export default function TrainingCoverageReportPage() {
             overdue: 4,
             completionRate: 92,
             workers: {
-                completed: ["Ravi Kumar", "Sunita Yadav", "Amit Patel", "Priya Sharma", "Mohan Singh", "Suresh Verma", "Anita Das", "Vijay Kumar", "Pooja Singh", "Rahul Mehra", "Deepak Joshi", "Kiran Bala", "Sanjay Gupta", "Meena Kumari", "Abishek Lal", "Geeta Devi", "Arun Kumar", "Seema Yadav", "Nitin Sharma", "Kavita Joshi", "Ajay Singh", "Preeti Sharma", "Manoj Kumar", "Shalini Gupta", "Rohit Sinha", "Neha Kumari", "Asha Devi", "Suman Yadav", "Pallab Das", "Sangeeta Sharma", "Vikas Gupta", "Pankaj Singh", "Ritu Sharma", "Amit Saini", "Sonia Mehra", "Dinesh Kumar", "Kusum Lata", "Rakesh Yadav", "Sushma Devi", "Vinod Kumar", "Meera Sharma", "Sanjana Singh", "Rohit Verma", "Nisha Kumari", "Kamal Singh", "Rina Das", "Suresh Kumar", "Anjali Sharma", "Ravi Saini", "Priya Mehra", "Deepa Kumari"],
+                completed: ["Ravi Kumar", "Sunita Yadav", "Amit Patel", "Priya Sharma", "Mohan Singh", "Abishek Verma", "Anita Das", "Vijay Kumar", "Pooja Singh", "Rahul Mehra", "Deepak Joshi", "Kiran Bala", "Sanjay Gupta", "Meena Kumari", "Abishek Lal", "Geeta Devi", "Arun Kumar", "Seema Yadav", "Nitin Sharma", "Kavita Joshi", "Ajay Singh", "Preeti Sharma", "Manoj Kumar", "Shalini Gupta", "Rohit Sinha", "Neha Kumari", "Asha Devi", "Suman Yadav", "Pallab Das", "Sangeeta Sharma", "Vikas Gupta", "Pankaj Singh", "Ritu Sharma", "Amit Saini", "Sonia Mehra", "Dinesh Kumar", "Kusum Lata", "Rakesh Yadav", "Sushma Devi", "Vinod Kumar", "Meera Sharma", "Sanjana Singh", "Rohit Verma", "Nisha Kumari", "Kamal Singh", "Rina Das", "Abishek Kumar", "Anjali Sharma", "Ravi Saini", "Priya Mehra", "Deepa Kumari"],
                 inProgress: ["Abishek Lal"],
                 overdue: ["Geeta Devi", "Arun Kumar", "Seema Yadav", "Nitin Sharma"]
             }
@@ -61,7 +61,7 @@ export default function TrainingCoverageReportPage() {
             overdue: 0,
             completionRate: 96,
             workers: {
-                completed: ["Ravi Kumar", "Sunita Yadav", "Amit Patel", "Priya Sharma", "Mohan Singh", "Suresh Verma", "Anita Das", "Vijay Kumar", "Pooja Singh", "Rahul Mehra", "Deepak Joshi", "Kiran Bala", "Sanjay Gupta", "Meena Kumari", "Abishek Lal", "Geeta Devi", "Arun Kumar", "Seema Yadav", "Nitin Sharma", "Kavita Joshi", "Ajay Singh", "Preeti Sharma", "Manoj Kumar", "Shalini Gupta", "Rohit Sinha", "Neha Kumari", "Asha Devi", "Suman Yadav", "Pallab Das", "Sangeeta Sharma", "Vikas Gupta", "Pankaj Singh", "Ritu Sharma", "Amit Saini", "Sonia Mehra", "Dinesh Kumar", "Kusum Lata", "Rakesh Yadav", "Sushma Devi", "Vinod Kumar", "Meera Sharma", "Sanjana Singh", "Rohit Verma", "Nisha Kumari", "Kamal Singh", "Rina Das", "Suresh Kumar", "Anjali Sharma", "Ravi Saini", "Priya Mehra"],
+                completed: ["Ravi Kumar", "Sunita Yadav", "Amit Patel", "Priya Sharma", "Mohan Singh", "Abishek Verma", "Anita Das", "Vijay Kumar", "Pooja Singh", "Rahul Mehra", "Deepak Joshi", "Kiran Bala", "Sanjay Gupta", "Meena Kumari", "Abishek Lal", "Geeta Devi", "Arun Kumar", "Seema Yadav", "Nitin Sharma", "Kavita Joshi", "Ajay Singh", "Preeti Sharma", "Manoj Kumar", "Shalini Gupta", "Rohit Sinha", "Neha Kumari", "Asha Devi", "Suman Yadav", "Pallab Das", "Sangeeta Sharma", "Vikas Gupta", "Pankaj Singh", "Ritu Sharma", "Amit Saini", "Sonia Mehra", "Dinesh Kumar", "Kusum Lata", "Rakesh Yadav", "Sushma Devi", "Vinod Kumar", "Meera Sharma", "Sanjana Singh", "Rohit Verma", "Nisha Kumari", "Kamal Singh", "Rina Das", "Abishek Kumar", "Anjali Sharma", "Ravi Saini", "Priya Mehra"],
                 inProgress: ["Deepa Kumari", "Rohit Sinha"],
                 overdue: []
             }
@@ -183,7 +183,7 @@ export default function TrainingCoverageReportPage() {
                     </CardHeader>
                     <CardContent>
                         <div className="text-4xl font-bold">{totalTrainings}</div>
-                        <p className="text-sm text-purple-100 mt-1">Total training assignments</p>
+                        <p className="text-sm text-purple-100 mt-1">Total training assigned</p>
                     </CardContent>
                 </Card>
                 <Card className="border-0 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-xl transform transition-all duration-300 hover:scale-105">

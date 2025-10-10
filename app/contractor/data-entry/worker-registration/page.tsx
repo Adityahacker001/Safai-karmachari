@@ -154,7 +154,7 @@ export default function WorkerRegistrationPage() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-5">
                     <div>
                         <Label htmlFor="emergencyContactName" className="text-gray-700 font-semibold mb-2 block">Emergency Contact Name</Label>
-                        <Input id="emergencyContactName" placeholder="e.g., Suresh Kumar" className="border-gray-300 focus:border-blue-600 focus:ring-3 focus:ring-blue-200 transition-all duration-300 rounded-xl px-4 py-2.5" />
+                        <Input id="emergencyContactName" placeholder="e.g., Abishek Kumar" className="border-gray-300 focus:border-blue-600 focus:ring-3 focus:ring-blue-200 transition-all duration-300 rounded-xl px-4 py-2.5" />
                     </div>
                     <div>
                         <Label htmlFor="emergencyContactRelation" className="text-gray-700 font-semibold mb-2 block">Relationship</Label>

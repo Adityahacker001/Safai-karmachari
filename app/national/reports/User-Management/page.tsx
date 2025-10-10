@@ -68,7 +68,7 @@ const RoleBreakdownCard = ({ stats }: { stats: RoleBreakdownStats }) => (
 
 export default function UserManagement() {
     const [showCreateModal, setShowCreateModal] = useState(false);
-    const [newUser, setNewUser] = useState({ name: '', email: '', role: 'District', state: '', district: '' });
+    const [newUser, setNewUser] = useState({ name: '', email: '', password: '', role: 'District', state: '', district: '' });
 
     const userData = [
         { id: 'USR-001', name: 'Abishek Kumar', email: 'Abishek.kumar@up.gov.in', role: 'State', state: 'Uttar Pradesh', district: 'All', status: 'Active', lastLogin: '2024-01-15 10:30', created: '2023-08-15' },
@@ -81,7 +81,7 @@ export default function UserManagement() {
     const handleCreateUser = () => {
         console.log('Creating user:', newUser);
         setShowCreateModal(false);
-        setNewUser({ name: '', email: '', role: 'District', state: '', district: '' });
+        setNewUser({ name: '', email: '', password: '', role: 'District', state: '', district: '' });
     };
 
     const roleStats = {
@@ -195,6 +195,10 @@ export default function UserManagement() {
                              <div>
                                <label className="block text-sm font-semibold text-slate-600 mb-1">Email</label>
                                <input type="email" value={newUser.email} onChange={(e) => setNewUser({ ...newUser, email: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="e.g., anjali.verma@gov.in" />
+                            </div>
+                            <div>
+                               <label className="block text-sm font-semibold text-slate-600 mb-1">Password</label>
+                               <input type="password" value={newUser.password} onChange={(e) => setNewUser({ ...newUser, password: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="Enter a secure password" />
                             </div>
                             <div>
                                 <label className="block text-sm font-semibold text-slate-600 mb-1">Role</label>

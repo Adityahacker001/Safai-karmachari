@@ -6,12 +6,12 @@ import { Award, Trophy, Medal, Star, TrendingUp, TrendingDown } from 'lucide-rea
 
 const Recognition = () => {
   const kpiData = [
-    { title: 'Avg Recognition Score', value: '87.3', icon: Star, color: 'blue' as const, subtitle: 'Nodal Area Average' },
     { title: 'Gold Tier Workers', value: 125, icon: Trophy, color: 'yellow' as const },
     { title: 'Silver Tier Workers', value: 298, icon: Medal, color: 'blue' as const },
     { title: 'Bronze Tier Workers', value: 156, icon: Award, color: 'green' as const },
     { title: 'Top Contractor', value: 'ABC Services', icon: Trophy, color: 'yellow' as const, subtitle: '92.5 Score' },
-    { title: 'Lowest Contractor', value: 'Green Earth', icon: Award, color: 'red' as const, subtitle: '76.2 Score' },
+    { title: 'Top Worker', value: 'Pallab Sharma', icon: Star, color: 'blue' as const, subtitle: '96 Score' },
+    { title: 'Most Improved Contractor', value: 'Urban Sanitation Ltd', icon: TrendingUp, color: 'green' as const, subtitle: '+8.4 Score' },
   ];
 
   const contractorLeaderboard = [
@@ -118,8 +118,11 @@ const Recognition = () => {
             case 4: // Top Contractor
               cardColor = 'bg-pink-600 text-white';
               break;
-            case 5: // Lowest Contractor
+            case 5: // Top Worker
               cardColor = 'bg-blue-700 text-white';
+              break;
+            case 6: // Most Improved Contractor
+              cardColor = 'bg-green-500 text-white';
               break;
             default:
               cardColor = 'bg-gray-400 text-white';

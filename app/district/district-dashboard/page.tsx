@@ -85,7 +85,7 @@ export default function DistrictDashboard() {
   return (
     <div className={cn("p-6 md:p-8 space-y-6 md:space-y-8 min-h-screen", contractorTheme.page.gradientBackground)}>
       {/* KPI Cards - Updated to use DashboardCard component */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <DashboardCard
           title="Total Nodal Officers"
           value="24"
@@ -110,26 +110,11 @@ export default function DistrictDashboard() {
           icon={MessageSquareWarning}
           color="red"
         />
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <DashboardCard
-          title="Avg. Resolution Time"
-          value="2.1 days"
-          icon={Clock}
-          color="blue"
-        />
         <DashboardCard
           title="Attendance %"
           value="87.5%"
           icon={UserCheck}
           color="green"
-        />
-        <DashboardCard
-          title="PPE Coverage %"
-          value="85.2%"
-          icon={Shield}
-          color="orange"
         />
         <DashboardCard
           title="Training Completion %"

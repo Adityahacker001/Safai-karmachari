@@ -2,7 +2,6 @@
 
 
 import DashboardLayout from '@/components/layout/dashboard-layout';
-import DashboardCard from '@/components/dashboard/dashboard-card';
 import {
   Globe,
   AlertTriangle,
@@ -27,6 +26,34 @@ import {
   LineChart,
   Line
 } from 'recharts';
+import { ReactNode } from 'react';
+
+
+// --- KPI Card Component (copied from grievance page) ---
+interface KPICardProps {
+  title: string;
+  value: string | number;
+  icon: React.ElementType;
+  color: 'yellow' | 'blue' | 'purple' | 'green';
+}
+const KPICard = ({ title, value, icon: Icon, color }: KPICardProps) => {
+  const colorSchemes: Record<KPICardProps['color'], string> = {
+    yellow: 'bg-gradient-to-br from-amber-400 to-orange-500',
+    blue: 'bg-gradient-to-br from-sky-400 to-blue-600',
+    purple: 'bg-gradient-to-br from-purple-500 to-indigo-600',
+    green: 'bg-gradient-to-br from-emerald-400 to-green-500',
+  };
+  const scheme = colorSchemes[color] || colorSchemes.blue;
+  return (
+    <div className={`relative ${scheme} p-6 rounded-2xl shadow-lg text-white overflow-hidden transition-transform transform hover:-translate-y-1 duration-300`}>
+      <Icon className="absolute -right-5 -bottom-5 h-28 w-28 text-white/20 transform" />
+      <div className="relative">
+        <p className="font-semibold text-lg">{title}</p>
+        <p className="text-5xl font-bold mt-2">{value}</p>
+      </div>
+    </div>
+  );
+};
 
 
 export default function NationalDashboard() {
@@ -51,83 +78,30 @@ export default function NationalDashboard() {
     { state: 'Karnataka', resolution_time: 3.1 },
   ];
 
-  return (
-    <div className="space-y-8 min-h-screen py-8 bg-gradient-to-br from-blue-100 via-slate-50 to-purple-100">
+  // Dashboard KPI data
+  const kpiData = [
+    { title: "State Count", value: "28", icon: MapPin, color: "blue" },
+    { title: "District Count", value: "806", icon: Globe, color: "green" },
+    { title: "Nodal Count", value: "452", icon: Shield, color: "purple" },
+    { title: "Contractor Count", value: "12,834", icon: FileText, color: "yellow" },
+    { title: "Workers Count", value: "5.2M", icon: TrendingUp, color: "blue" },
+    { title: "Nationwide Incident Count", value: "1,247", icon: AlertTriangle, color: "purple" },
+  ];
 
-      {/* Dashboard Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="rounded-xl shadow-md bg-gradient-to-r from-indigo-200 via-blue-100 to-purple-100 p-1">
-          <DashboardCard
-            title="State Count"
-            value="28"
-            icon={MapPin}
-            color="indigo"
-            description="Total States"
+  return (
+    <div className="space-y-8 min-h-screen py-8 bg-gradient-to-br ">
+
+      {/* Dashboard KPI Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {kpiData.map((kpi) => (
+          <KPICard
+            key={kpi.title}
+            title={kpi.title}
+            value={kpi.value}
+            icon={kpi.icon}
+            color={kpi.color as 'yellow' | 'blue' | 'purple' | 'green'}
           />
-        </div>
-        <div className="rounded-xl shadow-md bg-gradient-to-r from-blue-200 via-cyan-100 to-green-100 p-1">
-          <DashboardCard
-            title="District Count"
-            value="806"
-            icon={Globe}
-            color="blue"
-            description="Total Districts"
-          />
-        </div>
-        <div className="rounded-xl shadow-md bg-gradient-to-r from-purple-200 via-indigo-100 to-blue-100 p-1">
-          <DashboardCard
-            title="Nodal Count"
-            value="452"
-            icon={Shield}
-            color="indigo"
-            description="Nodal Officers"
-          />
-        </div>
-        <div className="rounded-xl shadow-md bg-gradient-to-r from-blue-200 via-green-100 to-yellow-100 p-1">
-          <DashboardCard
-            title="Contractor Count"
-            value="12,834"
-            icon={FileText}
-            color="blue"
-            description="Registered Contractors"
-          />
-        </div>
-        <div className="rounded-xl shadow-md bg-gradient-to-r from-orange-200 via-yellow-100 to-pink-100 p-1">
-          <DashboardCard
-            title="Workers Count"
-            value="5.2M"
-            icon={TrendingUp}
-            color="orange"
-            description="Registered Workers"
-          />
-        </div>
-        <div className="rounded-xl shadow-md bg-gradient-to-r from-red-200 via-orange-100 to-yellow-100 p-1">
-          <DashboardCard
-            title="Nationwide Incident Count"
-            value="1,247"
-            icon={AlertTriangle}
-            color="red"
-            description="All states combined"
-          />
-        </div>
-        <div className="rounded-xl shadow-md bg-gradient-to-r from-indigo-200 via-blue-100 to-purple-100 p-1">
-          <DashboardCard
-            title="States Monitored"
-            value="28"
-            icon={MapPin}
-            color="indigo"
-            description="Plus 8 UTs"
-          />
-        </div>
-        <div className="rounded-xl shadow-md bg-gradient-to-r from-purple-200 via-pink-100 to-yellow-100 p-1">
-          <DashboardCard
-            title="Recognition Programs"
-            value="347"
-            icon={Award}
-            color="purple"
-            description="Awards distributed"
-          />
-        </div>
+        ))}
       </div>
 
       {/* Grievance Analytics (Charts) */}

@@ -36,7 +36,7 @@ export default function DistrictComplianceReportPage() {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <h2 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">District Compliance Report</h2>
+                    <h2 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Nodal Compliance Report</h2>
                     <p className="text-slate-700 mt-1">Analyze compliance scores, audit histories, and violation trends across all Nodal units.</p>
                 </div>
                 <div className="flex items-center space-x-2 mt-4 sm:mt-0">

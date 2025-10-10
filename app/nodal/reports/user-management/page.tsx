@@ -26,15 +26,6 @@ const UserManagement = () => {
       joinDate: "2023-06-15",
     },
     {
-      userId: "USR-002",
-      name: "Priya Sharma",
-      role: "Worker Supervisor",
-      company: "City Maintenance Corp",
-      status: "Active",
-      lastLogin: "2024-01-26",
-      joinDate: "2023-08-22",
-    },
-    {
       userId: "USR-003",
       name: "Amit Singh",
       role: "Contractor",
@@ -42,15 +33,6 @@ const UserManagement = () => {
       status: "Pending Approval",
       lastLogin: "Never",
       joinDate: "2024-01-25",
-    },
-    {
-      userId: "USR-004",
-      name: "Sunita Devi",
-      role: "Worker Supervisor",
-      company: "Urban Sanitation Ltd",
-      status: "Active",
-      lastLogin: "2024-01-25",
-      joinDate: "2023-09-10",
     },
     {
       userId: "USR-005",

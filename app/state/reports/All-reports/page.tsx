@@ -35,7 +35,7 @@ const badContractors = [
 const goodWorkers = [
     { id: 'W001', name: "Ram Singh", region: "East Delhi", score: 99.1, reason: "Perfect attendance and recipient of 3 'Worker of the Month' awards.", since: 2019, tasksCompleted: 1520, lastReview: "2025-09-01", team: "Urban Hygiene Solutions", specialCommendations: "Safety Star Award Q2 2025" },
     { id: 'W002', name: "Priya Sharma", region: "Bangalore South", score: 98.4, reason: "Led a successful local community cleaning drive.", since: 2021, tasksCompleted: 1280, lastReview: "2025-08-28", team: "GreenScape Maintenance", specialCommendations: "Community Service Medal 2025" },
-    { id: 'W004', name: "Suresh Patil", region: "Pune", score: 97.9, reason: "Consistently receives positive feedback from citizens.", since: 2020, tasksCompleted: 1450, lastReview: "2025-09-03", team: "Apex Cleaners Inc.", specialCommendations: "Citizen Choice Award 2024" },
+    { id: 'W004', name: "Abishek Patil", region: "Pune", score: 97.9, reason: "Consistently receives positive feedback from citizens.", since: 2020, tasksCompleted: 1450, lastReview: "2025-09-03", team: "Apex Cleaners Inc.", specialCommendations: "Citizen Choice Award 2024" },
 ];
 const badWorkers = [
     { id: 'W003', name: "Amit Kumar", region: "Mumbai Central", score: 58.0, reason: "Repeatedly failed to adhere to waste segregation protocols.", since: 2022, tasksCompleted: 950, lastReview: "2025-07-15", team: "Legacy Sanitation", disciplinaryActions: 4 },

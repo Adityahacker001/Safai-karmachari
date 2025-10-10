@@ -49,7 +49,7 @@ export default function OversightPage() {
         {/* Tab 1: State Overview */}
         <TabsContent value="state-overview">
           <Card className={cn(contractorTheme.table.container)}>
-            <CardHeader className={cn(contractorTheme.table.header)}><CardTitle className={cn(contractorTheme.table.headerTitle)}>National Performance Roster</CardTitle><CardDescription className={cn(contractorTheme.table.headerDescription)}>Master list of all states and UTs.</CardDescription></CardHeader>
+            <CardHeader className={cn(contractorTheme.table.header)}><CardTitle className={cn(contractorTheme.table.headerTitle)}>National Performance Table</CardTitle><CardDescription className={cn(contractorTheme.table.headerDescription)}>Master list of all states and UTs.</CardDescription></CardHeader>
             <CardContent>
               <Table>
                 <TableHeader><TableRow><TableHead>State / UT</TableHead><TableHead>Incidents (30d)</TableHead><TableHead>Fatalities (YTD)</TableHead><TableHead>Open Grievances</TableHead><TableHead>Compliance Checks Failed</TableHead><TableHead>Status</TableHead><TableHead className="text-right">Actions</TableHead></TableRow></TableHeader>

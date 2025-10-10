@@ -128,7 +128,7 @@ export default function RecognitionLeaderboardPage() {
                         </div>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-extrabold text-yellow-900">UP</div>
+                        <div className="text-2xl font-extrabold text-yellow-900">West Bengal</div>
                     </CardContent>
                 </Card>
                 {/* Top District */}
@@ -140,33 +140,33 @@ export default function RecognitionLeaderboardPage() {
                         </div>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-extrabold text-blue-900">Mumbai</div>
+                        <div className="text-2xl font-extrabold text-blue-900">Hooghly</div>
                     </CardContent>
                 </Card>
                 {/* Gold Tier */}
                 <Card className="rounded-xl border-0 bg-gradient-to-br from-yellow-100 via-yellow-200 to-yellow-300 flex flex-col justify-between">
                     <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
-                        <CardTitle className="text-sm font-medium text-yellow-800">Gold Tier</CardTitle>
+                        <CardTitle className="text-sm font-medium text-yellow-800">Gold Tier Users</CardTitle>
                         <div className="p-2 bg-yellow-50 rounded-full">
                             <Trophy className="h-5 w-5 text-yellow-700" />
                         </div>
                     </CardHeader>
                     <CardContent>
                         <div className="text-3xl font-extrabold text-yellow-900">1,247</div>
-                        <p className="text-sm text-yellow-800">Exceptional Performance</p>
+                        <p className="text-sm text-yellow-800">Total users with exceptional performance</p>
                     </CardContent>
                 </Card>
                 {/* Silver Tier */}
                 <Card className="rounded-xl border-0 bg-gradient-to-br from-blue-100 via-blue-200 to-gray-100 flex flex-col justify-between">
                     <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
-                        <CardTitle className="text-sm font-medium text-blue-900">Silver Tier</CardTitle>
+                        <CardTitle className="text-sm font-medium text-blue-900">Silver Tier Users</CardTitle>
                         <div className="p-2 bg-blue-50 rounded-full">
                             <Award className="h-5 w-5 text-blue-500" />
                         </div>
                     </CardHeader>
                     <CardContent>
                         <div className="text-3xl font-extrabold text-blue-900">2,389</div>
-                        <p className="text-sm text-blue-900">High Performance</p>
+                        <p className="text-sm text-blue-900">Total users with high performance</p>
                     </CardContent>
                 </Card>
             </div>

@@ -33,7 +33,7 @@ const attendanceData = [
         checkout: "10:00 PM",
     },
     {
-        name: "Suresh Yadav",
+        name: "Abishek Yadav",
         id: "WK003",
         shift: "Morning",
         status: "Absent",

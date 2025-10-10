@@ -144,16 +144,27 @@ const Reports = () => {
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                  {report.format.split(", ").map((format) => (
-                    <button
-                      key={format}
-                      onClick={() => handleDownload(report.title, format)}
-                      className="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-blue-500 to-blue-700 text-white text-xs font-medium rounded-md hover:shadow-md transition"
-                    >
-                      <Download className="w-3 h-3 mr-1" />
-                      {format}
-                    </button>
-                  ))}
+                  <button
+                    onClick={() => handleDownload(report.title, 'View')}
+                    className="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-pink-500 to-purple-600 text-white text-xs font-medium rounded-md hover:shadow-md transition"
+                  >
+                    <FileText className="w-3 h-3 mr-1" />
+                    View
+                  </button>
+                  <button
+                    onClick={() => handleDownload(report.title, 'PDF')}
+                    className="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-blue-500 to-blue-700 text-white text-xs font-medium rounded-md hover:shadow-md transition"
+                  >
+                    <Download className="w-3 h-3 mr-1" />
+                    PDF
+                  </button>
+                  <button
+                    onClick={() => handleDownload(report.title, 'Excel')}
+                    className="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-green-500 to-green-700 text-white text-xs font-medium rounded-md hover:shadow-md transition"
+                  >
+                    <Download className="w-3 h-3 mr-1" />
+                    Excel
+                  </button>
                 </div>
               </div>
             ))}

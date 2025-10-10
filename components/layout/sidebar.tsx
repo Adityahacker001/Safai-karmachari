@@ -122,11 +122,11 @@ const roleConfig = {
         icon: CheckSquare,
         href: "/nodal/data-entry/compliance-checklist",
       },
-       {
-        name:  "Grievance Management",
-        icon: CheckSquare,
-        href: "/nodal/data-entry/Grievance",
-      },
+      //  {
+      //   name:  "Grievance Management",
+      //   icon: CheckSquare,
+      //   href: "/nodal/data-entry/Grievance",
+      // },
       {
         name: "Recognition Nomination",
         icon: Award,
@@ -184,15 +184,15 @@ const roleConfig = {
         icon: FileText,
         href: "/district/data-entry/directive",
       },
-      {
-        name: "Grievance Management",
-        icon: FileText,
-        href: "/district/data-entry/Grievance",
-      },
+      // {
+      //   name: "Grievance Management",
+      //   icon: FileText,
+      //   href: "/district/data-entry/Grievance",
+      // },
     ],
     reports: [
       {
-        name: "District Compliance",
+        name: "Nodal Compliance",
         icon: CheckSquare,
         href: "/district/reports/district-compliance",
       },
