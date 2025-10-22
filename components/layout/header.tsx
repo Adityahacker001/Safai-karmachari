@@ -4,11 +4,13 @@ import React from 'react';
 import { Bell, ChevronDown, User } from 'lucide-react';
 
 interface HeaderProps {
-  userName: string;
+  title?: string;
+  userName?: string;
+  dashboardTitle?: string;
 }
 
 
-export default function Header({ userName }: HeaderProps) {
+export default function Header({ userName, dashboardTitle }: HeaderProps) {
   return (
   <header className="w-full px-6 py-4 bg-white border-b flex items-center justify-between" style={{ minHeight: '68px' }}>
       {/* Logo and Title */}
@@ -16,9 +18,12 @@ export default function Header({ userName }: HeaderProps) {
         <div className="bg-blue-600 text-white rounded-md w-8 h-8 flex items-center justify-center font-bold text-lg">
           N
         </div>
-        <span className="font-semibold text-lg text-gray-900">
-          Safai Karmachari Management System
-        </span>
+        <div>
+          <div className="font-semibold text-lg text-gray-900">Safai Karmachari Management System</div>
+          {dashboardTitle && (
+            <div className="text-sm text-gray-500">{dashboardTitle}</div>
+          )}
+        </div>
       </div>
 
 
@@ -29,11 +34,11 @@ export default function Header({ userName }: HeaderProps) {
           <Bell className="h-6 w-6 text-gray-500" />
           <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5">3</span>
         </div>
-        <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2">
           <div className="bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center">
             <User className="h-5 w-5 text-gray-500" />
           </div>
-          <span className="text-gray-700 text-sm">{userName}</span>
+          <span className="text-gray-700 text-sm">{dashboardTitle || userName}</span>
           <ChevronDown className="h-4 w-4 text-gray-400" />
         </div>
       </div>

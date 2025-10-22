@@ -24,6 +24,29 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { Card, CardContent, Box, Paper, Grid, List, ListItem, ListItemIcon, ListItemText, Divider, Chip } from '@mui/material';
+import { styled, keyframes } from '@mui/material/styles';
+import LocalPoliceIcon from '@mui/icons-material/LocalPolice';
+import Typography from '@mui/material/Typography';
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
+import ReportProblemIcon from '@mui/icons-material/ReportProblem';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import ConstructionIcon from '@mui/icons-material/Construction';
+
+// --- KEYFRAMES & STYLES (local to this file) ---
+const fadeIn = keyframes`from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); }`;
+
+const GradientCard = styled(Card)(({ theme }) => ({
+  color: theme.palette.common.white,
+  position: 'relative',
+  overflow: 'hidden',
+  borderRadius: (typeof theme.shape.borderRadius === 'number' ? theme.shape.borderRadius * 2 : Number(theme.shape.borderRadius) || 16),
+  animation: `${fadeIn} 0.5s ease-out`,
+  transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
+  '&:hover': { transform: 'translateY(-5px)', boxShadow: theme.shadows[10] },
+}));
+
+const CardIcon = styled(Box)({ position: 'absolute', top: '50%', right: '16px', transform: 'translateY(-50%)', opacity: 0.2, fontSize: '4rem' });
 import {
   ChartContainer,
   ChartLegend,
@@ -116,11 +139,20 @@ export default function NodalDashboard() {
             <p className="text-4xl font-bold">12</p>
             <p className="text-sm text-white/80 mt-1">Nominations to review</p>
           </div>
-          <div className={cn(contractorTheme.kpiCard.base, contractorTheme.kpiCard.workers)}>
-            <Building className={cn(contractorTheme.kpiCard.icon)} strokeWidth={1} />
-            <p className="text-base font-medium text-white/80">Contractors Monitored</p>
-            <p className="text-4xl font-bold">28</p>
-            <p className="text-sm text-white/80 mt-1">Active contractors</p>
+          {/* Police Case Tracker card (replaces Contractors Monitored) */}
+          <div>
+            <GradientCard sx={{ background: 'linear-gradient(135deg, #d32f2f 0%, #ff7043 100%)' }}>
+              <CardContent>
+                <CardIcon>
+                  <LocalPoliceIcon sx={{ fontSize: 'inherit' }} />
+                </CardIcon>
+                <Typography variant="h4" component="div" fontWeight="bold">
+                  15
+                </Typography>
+                <Typography>Total Cases</Typography>
+                <Typography variant="caption">FIR Lodged: 12 | Pending: 3</Typography>
+              </CardContent>
+            </GradientCard>
           </div>
         </div>
 
@@ -169,29 +201,59 @@ export default function NodalDashboard() {
           </div>
         </div>
 
-        {/* Quick Actions */}
-        <div className={cn(contractorTheme.card.container, 'bg-white')}>
-          <div className={cn(contractorTheme.card.content, 'p-6')}>
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Priority Actions</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <button className="p-4 border border-red-200 bg-red-50 rounded-lg hover:bg-red-100 transition-colors text-left">
-                <AlertTriangle className="h-6 w-6 text-red-600 mb-2" />
-                <p className="font-medium text-red-900">Verify Critical Incident</p>
-                <p className="text-sm text-red-700">3 incidents awaiting verification</p>
-              </button>
-              <button className="p-4 border border-orange-200 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors text-left">
-                <FileSearch className="h-6 w-6 text-orange-600 mb-2" />
-                <p className="font-medium text-orange-900">Review Compliance</p>
-                <p className="text-sm text-orange-700">5 zones due for inspection</p>
-              </button>
-              <button className="p-4 border border-purple-200 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors text-left">
-                <Award className="h-6 w-6 text-purple-600 mb-2" />
-                <p className="font-medium text-purple-900">Process Recognition</p>
-                <p className="text-sm text-purple-700">12 nominations pending</p>
-              </button>
-            </div>
-          </div>
-        </div>
+        {/* NEW OPERATIONAL STATUS WIDGET */}
+        <Paper sx={{ p: 3, borderRadius: 2, animation: `${fadeIn} 0.8s ease-out`, background: 'white' }}>
+          <Typography variant="h6" fontWeight="bold" gutterBottom color="text.primary">
+            Operational Status
+          </Typography>
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 3, mt: 1 }}>
+            {/* Left Side: Pending Certifications (colorful) */}
+            <Box sx={{ p: 3, borderRadius: 2, background: 'linear-gradient(135deg,#0ea5e9 0%, #3b82f6 100%)', color: 'common.white' }}>
+              <Typography variant="subtitle1" fontWeight={700} gutterBottom sx={{ color: 'common.white' }}>
+                Pending Certifications
+              </Typography>
+              <List dense>
+                <ListItem disablePadding sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                    <TaskAltIcon sx={{ color: 'rgba(255,255,255,0.9)' }} />
+                    <Typography sx={{ color: 'rgba(255,255,255,0.95)' }}>Total Requests</Typography>
+                  </Box>
+                  <Chip label="8" color="secondary" sx={{ background: 'rgba(255,255,255,0.15)', color: 'common.white', fontWeight: 700, fontSize: '1rem' }} />
+                </ListItem>
+                <ListItem disablePadding sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                    <ReportProblemIcon sx={{ color: 'rgba(255,255,255,0.9)' }} />
+                    <Typography sx={{ color: 'rgba(255,255,255,0.95)' }}>Overdue (&gt;48h)</Typography>
+                  </Box>
+                  <Chip label="2" sx={{ background: '#ef4444', color: 'common.white', fontWeight: 800, fontSize: '1rem' }} />
+                </ListItem>
+              </List>
+            </Box>
+
+            {/* Right Side: Alerts from Organizations (colorful) */}
+            <Box sx={{ p: 3, borderRadius: 2, background: 'linear-gradient(135deg,#f97316 0%, #ef4444 100%)', color: 'common.white' }}>
+              <Typography variant="subtitle1" fontWeight={700} gutterBottom sx={{ color: 'common.white' }}>
+                Alerts from Organizations
+              </Typography>
+              <List dense>
+                <ListItem disablePadding sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                    <WarningAmberIcon sx={{ color: 'rgba(255,255,255,0.9)' }} />
+                    <Typography sx={{ color: 'rgba(255,255,255,0.95)' }}>Safety Violations</Typography>
+                  </Box>
+                  <Chip label="3" sx={{ background: 'rgba(255,255,255,0.15)', color: 'common.white', fontWeight: 700, fontSize: '1rem' }} />
+                </ListItem>
+                <ListItem disablePadding sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                    <ConstructionIcon sx={{ color: 'rgba(255,255,255,0.9)' }} />
+                    <Typography sx={{ color: 'rgba(255,255,255,0.95)' }}>Resource Shortage</Typography>
+                  </Box>
+                  <Chip label="1" sx={{ background: 'rgba(255,255,255,0.15)', color: 'common.white', fontWeight: 700, fontSize: '1rem' }} />
+                </ListItem>
+              </List>
+            </Box>
+          </Box>
+        </Paper>
       </div>
     </div>
   );

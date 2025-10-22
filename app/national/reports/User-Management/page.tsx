@@ -67,8 +67,9 @@ const RoleBreakdownCard = ({ stats }: { stats: RoleBreakdownStats }) => (
 
 
 export default function UserManagement() {
-    const [showCreateModal, setShowCreateModal] = useState(false);
+    const [showCreateForm, setShowCreateForm] = useState(false);
     const [newUser, setNewUser] = useState({ name: '', email: '', role: 'District', state: '', district: '' });
+    const [addUserSuccess, setAddUserSuccess] = useState(false);
 
     const userData = [
         { id: 'USR-001', name: 'Abishek Kumar', email: 'Abishek.kumar@up.gov.in', role: 'State', state: 'Uttar Pradesh', district: 'All', status: 'Active', lastLogin: '2024-01-15 10:30', created: '2023-08-15' },
@@ -78,9 +79,11 @@ export default function UserManagement() {
         { id: 'USR-005', name: 'Vikram Joshi', email: 'vikram.joshi@nodal.gov.in', role: 'Nodal', state: 'All', district: 'All', status: 'Active', lastLogin: '2024-01-15 09:15', created: '2023-07-20' },
     ];
 
-    const handleCreateUser = () => {
-        console.log('Creating user:', newUser);
-        setShowCreateModal(false);
+    const handleCreateUser = (e?: React.FormEvent) => {
+        if (e) e.preventDefault();
+        setAddUserSuccess(true);
+        setTimeout(() => setAddUserSuccess(false), 2000);
+        setShowCreateForm(false);
         setNewUser({ name: '', email: '', role: 'District', state: '', district: '' });
     };
 
@@ -106,7 +109,7 @@ export default function UserManagement() {
                     <p className="mt-1 text-md text-slate-500">Manage all system users and their roles.</p>
                 </div>
                 <button
-                    onClick={() => setShowCreateModal(true)}
+                    onClick={() => setShowCreateForm(v => !v)}
                     className="mt-4 sm:mt-0 px-5 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 flex items-center space-x-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                 >
                     <Plus className="w-5 h-5" />
@@ -114,7 +117,57 @@ export default function UserManagement() {
                 </button>
             </div>
 
-            {/* User Statistics */}
+            {/* Add User Form as Modal Overlay */}
+            {showCreateForm && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
+                    <div className="w-full max-w-2xl rounded-2xl shadow-2xl border-0 bg-gradient-to-br from-blue-100 via-cyan-100 to-purple-100 p-1 relative">
+                        <div className="bg-gradient-to-r from-blue-500 via-cyan-500 to-purple-500 rounded-t-2xl p-6 shadow-md flex items-center justify-between">
+                            <div>
+                                <h3 className="text-2xl text-white font-extrabold drop-shadow">Add New User</h3>
+                                <p className="text-white/90 font-medium">Fill in the details to create a new user account.</p>
+                            </div>
+                            <button type="button" className="text-white/80 hover:text-white ml-4" onClick={() => setShowCreateForm(false)}><X className="w-7 h-7" /></button>
+                        </div>
+                        <form className="p-8 space-y-6" onSubmit={handleCreateUser}>
+                            <div>
+                                <label className="block text-base font-semibold mb-2 text-blue-900">Full Name</label>
+                                <input type="text" value={newUser.name} onChange={(e) => setNewUser({ ...newUser, name: e.target.value })} className="w-full px-4 py-2 bg-white/80 border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-lg text-lg" placeholder="e.g., Anjali Verma" required />
+                            </div>
+                            <div>
+                                <label className="block text-base font-semibold mb-2 text-blue-900">Email</label>
+                                <input type="email" value={newUser.email} onChange={(e) => setNewUser({ ...newUser, email: e.target.value })} className="w-full px-4 py-2 bg-white/80 border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-lg text-lg" placeholder="e.g., anjali.verma@gov.in" required />
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label className="block text-base font-semibold mb-2 text-blue-900">Role</label>
+                                    <select value={newUser.role} onChange={(e) => setNewUser({ ...newUser, role: e.target.value })} className="w-full px-4 py-2 bg-white/80 border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-lg text-lg">
+                                        <option value="District">District Officer</option>
+                                        <option value="State">State Officer</option>
+                                        <option value="Nodal">Nodal Officer</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="block text-base font-semibold mb-2 text-blue-900">State</label>
+                                    <input type="text" value={newUser.state} onChange={(e) => setNewUser({ ...newUser, state: e.target.value })} className="w-full px-4 py-2 bg-white/80 border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-lg text-lg" placeholder="e.g., Maharashtra" />
+                                </div>
+                            </div>
+                            <div>
+                                <label className="block text-base font-semibold mb-2 text-blue-900">District</label>
+                                <input type="text" value={newUser.district} onChange={(e) => setNewUser({ ...newUser, district: e.target.value })} className="w-full px-4 py-2 bg-white/80 border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-lg text-lg" placeholder="e.g., Mumbai" />
+                            </div>
+                            <div className="flex justify-end gap-3 pt-4">
+                                <button type="button" className="px-6 py-2 text-lg rounded-lg border border-blue-300 bg-white/80 text-blue-700 font-semibold hover:bg-blue-50" onClick={() => setShowCreateForm(false)}>
+                                    Cancel
+                                </button>
+                                <button type="submit" className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-bold px-6 py-2 text-lg rounded-lg shadow-lg">
+                                    <UserPlus className="w-5 h-5 inline-block mr-2" />Create User
+                                </button>
+                            </div>
+                            {addUserSuccess && <div className="text-green-600 font-semibold text-center mt-2">User added successfully!</div>}
+                        </form>
+                    </div>
+                </div>
+            )}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <StatCard title="Total Users" value={roleStats.total} icon={Users} gradient="from-blue-500 to-indigo-600" />
                 <StatCard title="Active Users" value={roleStats.active} icon={Check} gradient="from-green-500 to-teal-600" />
@@ -175,47 +228,7 @@ export default function UserManagement() {
                 </div>
             </div>
 
-            {/* Create User Modal */}
-            {showCreateModal && (
-                <div className="fixed inset-0 bg-slate-900 bg-opacity-60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl transform transition-all">
-                        <div className="p-6 border-b border-gray-200 bg-slate-50 rounded-t-2xl">
-                            <div className="flex items-center justify-between">
-                                <h3 className="text-2xl font-bold text-slate-800">Add New User</h3>
-                                <button onClick={() => setShowCreateModal(false)} className="text-gray-400 hover:text-gray-600"><X className="w-6 h-6" /></button>
-                            </div>
-                            <p className="text-sm text-slate-500 mt-1">Enter the details for the new system user.</p>
-                        </div>
-                        <div className="p-6 space-y-4">
-                            {/* Form fields... */}
-                            <div>
-                               <label className="block text-sm font-semibold text-slate-600 mb-1">Full Name</label>
-                               <input type="text" value={newUser.name} onChange={(e) => setNewUser({ ...newUser, name: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="e.g., Anjali Verma" />
-                            </div>
-                             <div>
-                               <label className="block text-sm font-semibold text-slate-600 mb-1">Email</label>
-                               <input type="email" value={newUser.email} onChange={(e) => setNewUser({ ...newUser, email: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="e.g., anjali.verma@gov.in" />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-semibold text-slate-600 mb-1">Role</label>
-                                <select value={newUser.role} onChange={(e) => setNewUser({ ...newUser, role: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400">
-                                    <option value="District">District Officer</option>
-                                    <option value="State">State Officer</option>
-                                    <option value="Nodal">Nodal Officer</option>
-                                </select>
-                            </div>
-                             {/* Other fields */}
-                        </div>
-                        <div className="flex justify-end space-x-4 p-6 bg-slate-50 rounded-b-2xl">
-                            <button onClick={() => setShowCreateModal(false)} className="px-5 py-2 text-slate-700 bg-slate-200 rounded-lg hover:bg-slate-300 transition-colors font-semibold">Cancel</button>
-                            <button onClick={handleCreateUser} className="px-5 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all flex items-center space-x-2 shadow-md">
-                                <UserPlus className="w-4 h-4" />
-                                <span>Create User</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
+            {/* Removed obsolete Create User Modal (showCreateModal) */}
         </div>
     );
 };

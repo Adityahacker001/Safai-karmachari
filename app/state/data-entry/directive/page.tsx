@@ -4,48 +4,20 @@ import DataTable from '@/components/ui/data-table';
 import { FileText, Plus } from 'lucide-react';
 
 const Directives = () => {
-  const directivesData = [
-    {
-      id: 'DIR001',
-      from: 'NCSK',
-      to: 'All Districts',
-      date: '2024-01-15',
-      status: 'Active',
-      title: 'Safety Protocol Update'
-    },
-    {
-      id: 'DIR002',
-      from: 'State Office',
-      to: 'Mumbai District',
-      date: '2024-01-14',
-      status: 'Pending',
-      title: 'PPE Distribution Guidelines'
-    },
-    {
-      id: 'DIR003',
-      from: 'NCSK',
-      to: 'Nodal Officers',
-      date: '2024-01-12',
-      status: 'Completed',
-      title: 'Monthly Reporting Format'
-    },
-    {
-      id: 'DIR004',
-      from: 'State Office',
-      to: 'Pune District',
-      date: '2024-01-10',
-      status: 'Active',
-      title: 'Training Schedule Update'
-    },
-    {
-      id: 'DIR005',
-      from: 'NCSK',
-      to: 'All Districts',
-      date: '2024-01-08',
-      status: 'Active',
-      title: 'Worker Welfare Scheme Enhancement'
-    },
+
+  // Tab state
+  const [activeTab, setActiveTab] = useState<'received' | 'sent'>('received');
+
+  // Data for each tab
+  const receivedDirectives = [
+    { directiveId: 'DIR-2024-001', from: 'State Government', to: 'All Nodal Officers', title: 'PPE Distribution Guidelines', date: '2024-01-20', status: 'Active', responses: '18/24' },
+    { directiveId: 'DIR-2024-002', from: 'District Office', to: 'Zone A Officers', title: 'Training Schedule Update', date: '2024-01-18', status: 'Pending', responses: '2/8' },
   ];
+  const sentDirectives = [
+    { directiveId: 'DIR-2024-003', from: 'District Office', to: 'All Contractors', title: 'Attendance Reporting Changes', date: '2024-01-15', status: 'Completed', responses: '15/15' }
+  ];
+
+  // Columns for both tables
 
   const columns = [
     { key: 'id', header: 'Directive ID', sortable: true },
@@ -263,58 +235,73 @@ const Directives = () => {
         </div>
       </div>
 
-      {/* Directives Table */}
-      <div>
-        <div className="overflow-x-auto rounded-xl shadow border border-blue-100">
-          <table className="min-w-full text-sm">
+      {/* Tabs for Received and Sent Directives */}
+      <div className="flex space-x-2 mb-4 mt-8">
+        <button
+          className={`px-5 py-2 rounded-t-xl font-semibold transition-all border-b-4 ${activeTab === 'received' ? 'bg-white border-blue-500 text-blue-700 shadow' : 'bg-slate-100 border-transparent text-gray-500'}`}
+          onClick={() => setActiveTab('received')}
+        >
+          Received Directives
+        </button>
+        <button
+          className={`px-5 py-2 rounded-t-xl font-semibold transition-all border-b-4 ${activeTab === 'sent' ? 'bg-white border-purple-500 text-purple-700 shadow' : 'bg-slate-100 border-transparent text-gray-500'}`}
+          onClick={() => setActiveTab('sent')}
+        >
+          Sent Directives
+        </button>
+      </div>
+
+      {/* Tab Content: Received Directives */}
+      {activeTab === 'received' && (
+        <div className="bg-white rounded-2xl shadow-lg p-4 overflow-x-auto">
+          <table className="min-w-full table-auto border-collapse text-gray-800">
             <thead>
-              <tr className="bg-gradient-to-r from-blue-500 via-purple-400 to-pink-400 text-white">
-                <th className="px-4 py-3 font-bold text-left">Directive ID</th>
-                <th className="px-4 py-3 font-bold text-left">Title</th>
-                <th className="px-4 py-3 font-bold text-left">From</th>
-                <th className="px-4 py-3 font-bold text-left">To</th>
-                <th className="px-4 py-3 font-bold text-left">Date</th>
-                <th className="px-4 py-3 font-bold text-left">Status</th>
-                <th className="px-4 py-3 font-bold text-left">Action</th>
+              <tr className="bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 text-gray-900">
+                {columns.map((col, idx) => (
+                  <th key={idx} className="px-4 py-2 border border-gray-300 text-left">{col.header}</th>
+                ))}
               </tr>
             </thead>
             <tbody>
-              {directivesData.map((row) => (
-                <tr
-                  key={row.id}
-                  className="bg-white"
-                >
-                  <td className="px-4 py-3 border-b border-blue-100 font-semibold">{row.id}</td>
-                  <td className="px-4 py-3 border-b border-blue-100">{row.title}</td>
-                  <td className="px-4 py-3 border-b border-blue-100">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${row.from === 'NCSK' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}`}>{row.from}</span>
-                  </td>
-                  <td className="px-4 py-3 border-b border-blue-100">{row.to}</td>
-                  <td className="px-4 py-3 border-b border-blue-100">{row.date}</td>
-                  <td className="px-4 py-3 border-b border-blue-100">
-                    {(() => {
-                      const colors = {
-                        'Active': 'bg-green-100 text-green-800',
-                        'Pending': 'bg-yellow-100 text-yellow-800',
-                        'Completed': 'bg-blue-100 text-blue-800',
-                      };
-                      return (
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[row.status as keyof typeof colors]}`}>{row.status}</span>
-                      );
-                    })()}
-                  </td>
-                  <td className="px-4 py-3 border-b border-blue-100">
-                    <div className="flex space-x-2">
-                      <button className="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors font-semibold shadow-sm">View</button>
-                      <button className="px-3 py-1 bg-gray-50 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors font-semibold shadow-sm">Edit</button>
-                    </div>
-                  </td>
+              {receivedDirectives.map((row, idx) => (
+                <tr key={idx} className="bg-white hover:bg-pink-50 transition-colors">
+                  {columns.map((col, cIdx) => (
+                    <td key={cIdx} className="px-4 py-2 border border-gray-300">
+                      {col.render ? col.render((row as any)[col.key]) : (row as any)[col.key]}
+                    </td>
+                  ))}
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-      </div>
+      )}
+
+      {/* Tab Content: Sent Directives */}
+      {activeTab === 'sent' && (
+        <div className="bg-white rounded-2xl shadow-lg p-4 overflow-x-auto">
+          <table className="min-w-full table-auto border-collapse text-gray-800">
+            <thead>
+              <tr className="bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 text-gray-900">
+                {columns.map((col, idx) => (
+                  <th key={idx} className="px-4 py-2 border border-gray-300 text-left">{col.header}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {sentDirectives.map((row, idx) => (
+                <tr key={idx} className="bg-white hover:bg-pink-50 transition-colors">
+                  {columns.map((col, cIdx) => (
+                    <td key={cIdx} className="px-4 py-2 border border-gray-300">
+                      {col.render ? col.render((row as any)[col.key]) : (row as any)[col.key]}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };

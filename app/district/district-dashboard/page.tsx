@@ -132,9 +132,9 @@ export default function DistrictDashboard() {
           color="orange"
         />
         <DashboardCard
-          title="Training Completion %"
-          value="86.7%"
-          icon={GraduationCap}
+          title="Total Workers"
+          value="3,200"
+          icon={HardHat}
           color="purple"
         />
       </div>

@@ -140,6 +140,14 @@ export default function DistrictGrievanceForm() {
               <XCircle className="w-5 h-5 mr-2" />
               Reject
             </Button>
+            <Button
+              type="button"
+              className="bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 px-6 py-3 text-base font-semibold shadow-lg flex items-center"
+              onClick={() => alert('Escalated to State!')}
+            >
+              <Shield className="w-5 h-5 mr-2" />
+              Escalate to State
+            </Button>
             <Button type="submit" className="bg-gradient-to-r from-green-600 to-emerald-700 text-white hover:from-green-700 hover:to-emerald-800 px-6 py-3 text-base font-semibold shadow-lg">
               <CheckCircle className="w-5 h-5 mr-2" />
               Approve & Close

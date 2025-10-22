@@ -4,11 +4,16 @@ import DataTable from '@/components/ui/data-table';
 import { Plus, FileText, Send, Clock, CheckCircle } from 'lucide-react';
 
 const Directives: React.FC = () => {
-  const [showModal, setShowModal] = useState(false);
 
-  const directiveData = [
+  const [showModal, setShowModal] = useState(false);
+  const [activeTab, setActiveTab] = useState<'received' | 'sent'>('received');
+
+  // Mock data for demonstration
+  const receivedDirectives = [
     { directiveId: 'DIR-2024-001', from: 'State Government', to: 'All Nodal Officers', title: 'PPE Distribution Guidelines', date: '2024-01-20', status: 'Active', responses: '18/24' },
     { directiveId: 'DIR-2024-002', from: 'District Office', to: 'Zone A Officers', title: 'Training Schedule Update', date: '2024-01-18', status: 'Pending', responses: '2/8' },
+  ];
+  const sentDirectives = [
     { directiveId: 'DIR-2024-003', from: 'District Office', to: 'All Contractors', title: 'Attendance Reporting Changes', date: '2024-01-15', status: 'Completed', responses: '15/15' }
   ];
 
@@ -69,7 +74,22 @@ const Directives: React.FC = () => {
         ))}
       </div>
 
-      {/* Data Table */}
+      {/* Tabs for Received and Sent Directives */}
+      <div className="flex space-x-2 mb-4">
+        <button
+          className={`px-5 py-2 rounded-t-xl font-semibold transition-all border-b-4 ${activeTab === 'received' ? 'bg-white border-blue-500 text-blue-700 shadow' : 'bg-slate-100 border-transparent text-gray-500'}`}
+          onClick={() => setActiveTab('received')}
+        >
+          Received Directives
+        </button>
+        <button
+          className={`px-5 py-2 rounded-t-xl font-semibold transition-all border-b-4 ${activeTab === 'sent' ? 'bg-white border-purple-500 text-purple-700 shadow' : 'bg-slate-100 border-transparent text-gray-500'}`}
+          onClick={() => setActiveTab('sent')}
+        >
+          Sent Directives
+        </button>
+      </div>
+
       <div className="bg-white rounded-2xl shadow-lg p-4 overflow-x-auto">
         <table className="min-w-full table-auto border-collapse text-gray-800">
           <thead>
@@ -80,7 +100,7 @@ const Directives: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {directiveData.map((row, idx) => (
+            {(activeTab === 'received' ? receivedDirectives : sentDirectives).map((row, idx) => (
               <tr key={idx} className="bg-white hover:bg-pink-50 transition-colors">
                 {columns.map((col, cIdx) => (
                   <td key={cIdx} className="px-4 py-2 border border-gray-300">

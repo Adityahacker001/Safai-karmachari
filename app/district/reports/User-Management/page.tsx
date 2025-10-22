@@ -13,7 +13,7 @@ import {
   Search,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -39,6 +39,14 @@ export default function DistrictUserManagement() {
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All");
+  const [showAddUserForm, setShowAddUserForm] = useState(false);
+  const [newUser, setNewUser] = useState({
+    name: "",
+    role: "Contractor",
+    zone: "North Zone",
+    status: "Active"
+  });
+  const [addUserSuccess, setAddUserSuccess] = useState(false);
 
   // Mock Users
   const users = [
@@ -76,8 +84,11 @@ export default function DistrictUserManagement() {
           </h1>
           <p className="text-gray-600 mt-1">Oversee, manage, and audit all user accounts under district jurisdiction.</p>
         </div>
-        <div className="flex gap-3 mt-4 md:mt-0">
-          <Button className="bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-blue-500/50 transform transition-transform duration-300 hover:scale-105">
+        <div className="flex gap-3 mt-4 md:mt-0 flex-col md:flex-row">
+          <Button
+            className="bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-blue-500/50 transform transition-transform duration-300 hover:scale-105"
+            onClick={() => setShowAddUserForm((v) => !v)}
+          >
             <PlusCircle className="w-4 h-4 mr-2" />
             Add User
           </Button>
@@ -86,6 +97,88 @@ export default function DistrictUserManagement() {
             Import CSV
           </Button>
         </div>
+
+        {/* Add User Form */}
+        {showAddUserForm && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+            <Card className="w-full max-w-2xl shadow-2xl border-0 bg-gradient-to-br from-blue-100 via-cyan-100 to-purple-100 p-1 rounded-2xl animate-fadeIn">
+              <CardHeader className="bg-gradient-to-r from-blue-500 via-cyan-500 to-purple-500 rounded-t-2xl p-6 shadow-md">
+                <CardTitle className="text-2xl text-white font-extrabold drop-shadow">Add New User</CardTitle>
+                <CardDescription className="text-white/90 font-medium">Fill in the details to create a new user account.</CardDescription>
+              </CardHeader>
+              <CardContent className="p-8">
+                <form
+                  className="space-y-6"
+                  onSubmit={e => {
+                    e.preventDefault();
+                    setAddUserSuccess(true);
+                    setTimeout(() => setAddUserSuccess(false), 2000);
+                    setShowAddUserForm(false);
+                    setNewUser({ name: "", role: "Contractor", zone: "North Zone", status: "Active" });
+                  }}
+                >
+                  <div>
+                    <label className="block text-base font-semibold mb-2 text-blue-900">Name</label>
+                    <Input
+                      required
+                      value={newUser.name}
+                      onChange={e => setNewUser({ ...newUser, name: e.target.value })}
+                      placeholder="Enter user name"
+                      className="bg-white/80 border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-lg px-4 py-2 text-lg"
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-base font-semibold mb-2 text-blue-900">Role</label>
+                      <Select value={newUser.role} onValueChange={val => setNewUser({ ...newUser, role: val })}>
+                        <SelectTrigger className="bg-white/80 border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-lg px-4 py-2 text-lg"><SelectValue placeholder="Select role" /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Contractor">Contractor</SelectItem>
+                          <SelectItem value="Nodal Officer">Nodal Officer</SelectItem>
+                          <SelectItem value="Supervisor">Supervisor</SelectItem>
+                          <SelectItem value="Worker">Worker</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <label className="block text-base font-semibold mb-2 text-blue-900">Zone</label>
+                      <Select value={newUser.zone} onValueChange={val => setNewUser({ ...newUser, zone: val })}>
+                        <SelectTrigger className="bg-white/80 border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-lg px-4 py-2 text-lg"><SelectValue placeholder="Select zone" /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="North Zone">North Zone</SelectItem>
+                          <SelectItem value="South Zone">South Zone</SelectItem>
+                          <SelectItem value="East Zone">East Zone</SelectItem>
+                          <SelectItem value="West Zone">West Zone</SelectItem>
+                          <SelectItem value="Central Zone">Central Zone</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-base font-semibold mb-2 text-blue-900">Status</label>
+                    <Select value={newUser.status} onValueChange={val => setNewUser({ ...newUser, status: val })}>
+                      <SelectTrigger className="bg-white/80 border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-lg px-4 py-2 text-lg"><SelectValue placeholder="Select status" /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Active">Active</SelectItem>
+                        <SelectItem value="Pending Approval">Pending Approval</SelectItem>
+                        <SelectItem value="Suspended">Suspended</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="flex justify-end gap-3 pt-4">
+                    <Button type="button" variant="outline" className="px-6 py-2 text-lg" onClick={() => setShowAddUserForm(false)}>
+                      Cancel
+                    </Button>
+                    <Button type="submit" className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-bold px-6 py-2 text-lg shadow-lg">
+                      Create User
+                    </Button>
+                  </div>
+                  {addUserSuccess && <div className="text-green-600 font-semibold text-center mt-2">User added successfully!</div>}
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </div>
 
       {/* Stats Overview */}

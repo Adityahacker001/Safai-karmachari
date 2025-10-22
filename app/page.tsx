@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
 	NavigationMenu,
@@ -151,8 +151,14 @@ export default function Home() {
 	const [userId, setUserId] = useState("");
 	const [password, setPassword] = useState("");
 	const [role, setRole] = useState("");
+	const [spcpType, setSpcpType] = useState("");
 	const [error, setError] = useState("");
 	const [mobileOpen, setMobileOpen] = useState(false);
+
+	// clear sub-type when role changes away from sp-cp
+	useEffect(() => {
+		if (role !== "sp-cp") setSpcpType("");
+	}, [role]);
 
 	const handleLogin = () => {
 		if (!userId || !password || !role) {
@@ -177,9 +183,20 @@ export default function Home() {
 			case "national":
 				dashboardPath = "/national/national-dashboard";
 				break;
+			case "sp-cp":
+				// require the subtype selection (sp or cp)
+				if (!spcpType) {
+					setError("Please choose SP or CP before logging in.");
+					return;
+				}
+				dashboardPath = `/sp-cp/sp-cp-dashboard?role=${spcpType}`;
+				break;
 			default:
 				dashboardPath = "/dashboard";
 		}
+
+		// clear any error and navigate
+		setError("");
 		window.location.href = dashboardPath;
 	};
 
@@ -309,6 +326,7 @@ export default function Home() {
 							{ icon: Building, title: "District Officers" },
 							{ icon: MapPin, title: "State Officers" },
 							{ icon: Globe, title: "National Dashboard" },
+							{ icon: Smartphone, title: "SP/CP", route: "sp-cp/sp-cp-dashboard" },
 						].map((s, i) => (
 							<motion.div
 								key={i}
@@ -421,7 +439,7 @@ export default function Home() {
 							<label className="block mb-2 text-sm font-medium text-gray-700">
 								Select Role
 							</label>
-							<select
+								<select
 								className="w-full border rounded px-3 py-2 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
 								value={role}
 								onChange={e => setRole(e.target.value)}
@@ -432,7 +450,24 @@ export default function Home() {
 								<option value="district">District Officer</option>
 								<option value="state">State Officer</option>
 								<option value="national">National (NCSK)</option>
+								<option value="sp-cp">SP/CP</option>
 							</select>
+
+							{/* If SP/CP is chosen, ask for SP or CP specifically */}
+							{role === "sp-cp" && (
+								<div className="mt-3">
+									<label className="block mb-2 text-sm font-medium text-gray-700">Are you SP or CP?</label>
+									<select
+										className="w-full border rounded px-3 py-2 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+										value={spcpType}
+										onChange={e => setSpcpType(e.target.value)}
+									>
+										<option value="">Choose SP or CP</option>
+										<option value="sp">SP</option>
+										<option value="cp">CP</option>
+									</select>
+								</div>
+							)}
 						</div>
 						{error && <div className="text-red-500 mb-4 text-sm">{error}</div>}
 						<Button

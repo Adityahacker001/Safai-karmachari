@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, ReactNode } from "react";
+import { useSearchParams } from "next/navigation";
 // Type for NavLink props
 interface NavLinkProps {
   href: string;
@@ -29,10 +30,20 @@ import {
   ChevronDown,
   ChevronRight,
   LogOut,
+  Smartphone,
+  FilePenLine,
+  MessageSquareWarning,
+  ClipboardList,
+  Gavel,
+  FileWarning,
+  FolderKanban,
+  FolderClock,
+  Book,
+  UserCircle, // Added Icon
 } from "lucide-react";
 
 interface SidebarProps {
-  role: "contractor" | "nodal" | "district" | "state" | "national";
+  role: "contractor" | "nodal" | "district" | "state" | "national" | "sp-cp";
 }
 
 const roleConfig = {
@@ -63,7 +74,7 @@ const roleConfig = {
         href: "/contractor/data-entry/training-assignment",
       },
       {
-         name: "Directive Issuance",
+       name: "Directive Issuance",
         icon: FileText,
         href: "/contractor/data-entry/directive",
       },
@@ -132,12 +143,23 @@ const roleConfig = {
         icon: Award,
         href: "/nodal/data-entry/recognition-nomination",
       },
+      {
+        name: "Work Certification",
+        icon: Award,
+        href: "/nodal/data-entry/Work-Certification",
+      },
     ],
+    
     reports: [
       {
         name: "Grievance Overview",
         icon: AlertTriangle,
         href: "/nodal/reports/incident-management",
+      },
+      {
+        name: "Financial Tracker",
+        icon: AlertTriangle,
+        href: "/nodal/reports/financial-tracker",
       },
       {
         name: "Contractor Performance",
@@ -333,6 +355,76 @@ const roleConfig = {
       },
     ],
   },
+  "sp-cp": {
+    title: "SP/CP Dashboard",
+    icon: Shield,
+    color: "text-red-400",
+    bgColor: "from-red-900/30 to-slate-900",
+    dataEntry: [
+      {
+        name: "Investigation Progress",
+        icon: FilePenLine,
+        href: "/sp-cp/data-entry/investigation",
+      },
+      {
+        name: "Grievance Feedback",
+        icon: MessageSquareWarning,
+        href: "/sp-cp/data-entry/grievance",
+      },
+      {
+        name: "General Feedback",
+        icon: ClipboardList,
+        href: "/sp-cp/data-entry/feedback",
+      },
+      {
+        name: "Direction Compliance",
+        icon: Gavel,
+        href: "/sp-cp/data-entry/compliance",
+      },
+    ],
+    reports: [
+      {
+        name: "Contractors Report",
+        icon: Building,
+        href: "/sp-cp/reports/contractors",
+      },
+      {
+        name: "Workers Report",
+        icon: Users,
+        href: "/sp-cp/reports/workers",
+      },
+      {
+        name: "Grievances Report",
+        icon: FileWarning,
+        href: "/sp-cp/reports/grievances",
+      },
+      {
+        name: "Direction Report",
+        icon: FileText,
+        href: "/sp-cp/reports/directions",
+      },
+      {
+        name: "Total Cases Report",
+        icon: FolderKanban,
+        href: "/sp-cp/reports/total-cases",
+      },
+      {
+        name: "Pending Cases Report",
+        icon: FolderClock,
+        href: "/sp-cp/reports/pending-cases",
+      },
+      {
+        name: "Compensation Report",
+        icon: DollarSign,
+        href: "/sp-cp/reports/compensation",
+      },
+      {
+        name: "Annual Report",
+        icon: Book,
+        href: "/sp-cp/reports/annual-report",
+      },
+    ],
+  },
 };
 
 export default function Sidebar({ role = "national" }: SidebarProps) {
@@ -348,8 +440,20 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
   const [isDataEntryOpen, setIsDataEntryOpen] = useState(true);
   const [isReportsOpen, setIsReportsOpen] = useState(true);
 
+  // read query param (used for sp-cp to decide SP vs CP)
+  const searchParams = useSearchParams();
+  const spcpQuery = searchParams ? searchParams.get("role") : null;
+
   // Determine header text color: force white for national dashboard
   const headerTextColor = role === "national" ? "text-white" : config.color;
+
+  // Determine display title: if sp-cp role and query param present, show SP or CP
+  let displayTitle = config.title;
+  if (role === "sp-cp") {
+    if (spcpQuery === "sp") displayTitle = "SP Dashboard";
+    else if (spcpQuery === "cp") displayTitle = "CP Dashboard";
+    else displayTitle = config.title; // fallback
+  }
 
   // Helper component for navigation links to keep the main return clean
   const NavLink = ({
@@ -398,7 +502,7 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
           <RoleIcon className={cn("h-6 w-6", config.color)} />
         </div>
         <h3 className={cn("text-md font-bold drop-shadow-lg", headerTextColor)}>
-          {config.title}
+          {displayTitle}
         </h3>
       </div>
 
@@ -406,11 +510,20 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
       <div className="flex-1 overflow-y-auto relative z-10">
         <nav className="p-4 space-y-4">
           <NavLink
+            href={`/${role}/profile`}
+            icon={UserCircle}
+            activeClass="bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg scale-[1.03] border border-cyan-400/50"
+            inactiveClass="text-white/80 hover:text-white hover:scale-[1.02]"
+          >
+            Profile
+          </NavLink>
+
+          <NavLink
             href={`/${role}/${role}-dashboard`}
             icon={BarChart3}
             isDashboard={true}
             activeClass="bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-xl scale-[1.03] border border-indigo-400/50"
-            inactiveClass="text-gray-300 hover:text-white hover:scale-[1.02]"
+            inactiveClass="text-white/80 hover:text-white hover:scale-[1.02]"
           >
             Dashboard
           </NavLink>
@@ -420,7 +533,7 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
               href="/nodal/directives"
               icon={FileText}
               activeClass="bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg scale-[1.03] border border-cyan-400/50"
-              inactiveClass="text-gray-300 hover:text-white hover:scale-[1.02]"
+              inactiveClass="text-white/80 hover:text-white hover:scale-[1.02]"
             >
               Directives
             </NavLink>
@@ -430,7 +543,7 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
           <div className="space-y-2">
             <button
               onClick={() => setIsDataEntryOpen(!isDataEntryOpen)}
-              className="w-full flex items-center justify-between px-4 py-2 text-sm font-bold text-gray-200 bg-white/5 rounded-lg hover:bg-white/10 transition-all"
+              className="w-full flex items-center justify-between px-4 py-2 text-sm font-bold text-white/90 bg-white/5 rounded-lg hover:bg-white/10 transition-all"
             >
               <span>Data Entry</span>
               {isDataEntryOpen ? (
@@ -447,7 +560,7 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
                     href={item.href}
                     icon={item.icon}
                     activeClass="bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg scale-[1.03] border border-cyan-400/50"
-                    inactiveClass="text-gray-300 hover:text-white hover:scale-[1.02]"
+                    inactiveClass="text-white/80 hover:text-white hover:scale-[1.02]"
                   >
                     {item.name}
                   </NavLink>
@@ -456,11 +569,25 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
             )}
           </div>
 
+          {/* SHG Management - top-level item for nodal role, placed between Data Entry and Reports */}
+          {role === "nodal" && (
+            <div>
+              <NavLink
+                href="/nodal/shg-management"
+                icon={Users}
+                activeClass="bg-gradient-to-r from-emerald-500 to-emerald-700 text-white shadow-lg scale-[1.03] border border-emerald-400/50"
+                inactiveClass="text-white/80 hover:text-white hover:scale-[1.02]"
+              >
+                <span className="font-bold">SHG Management</span>
+              </NavLink>
+            </div>
+          )}
+
           {/* Reports Section */}
           <div className="space-y-2">
             <button
               onClick={() => setIsReportsOpen(!isReportsOpen)}
-              className="w-full flex items-center justify-between px-4 py-2 text-sm font-bold text-gray-200 bg-white/5 rounded-lg hover:bg-white/10 transition-all"
+              className="w-full flex items-center justify-between px-4 py-2 text-sm font-bold text-white/90 bg-white/5 rounded-lg hover:bg-white/10 transition-all"
             >
               <span>Reports & Analytics</span>
               {isReportsOpen ? (
@@ -477,7 +604,7 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
                     href={item.href}
                     icon={item.icon}
                     activeClass="bg-gradient-to-r from-pink-500 to-red-600 text-white shadow-lg scale-[1.03] border border-pink-400/50"
-                    inactiveClass="text-gray-300 hover:text-white hover:scale-[1.02]"
+                    inactiveClass="text-white/80 hover:text-white hover:scale-[1.02]"
                   >
                     {item.name}
                   </NavLink>

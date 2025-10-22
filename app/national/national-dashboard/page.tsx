@@ -110,24 +110,6 @@ export default function NationalDashboard() {
             description="All states combined"
           />
         </div>
-        <div className="rounded-xl shadow-md bg-gradient-to-r from-indigo-200 via-blue-100 to-purple-100 p-1">
-          <DashboardCard
-            title="States Monitored"
-            value="28"
-            icon={MapPin}
-            color="indigo"
-            description="Plus 8 UTs"
-          />
-        </div>
-        <div className="rounded-xl shadow-md bg-gradient-to-r from-purple-200 via-pink-100 to-yellow-100 p-1">
-          <DashboardCard
-            title="Recognition Programs"
-            value="347"
-            icon={Award}
-            color="purple"
-            description="Awards distributed"
-          />
-        </div>
       </div>
 
       {/* Grievance Analytics (Charts) */}

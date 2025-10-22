@@ -138,6 +138,10 @@ const PerformerCard = (props: PerformerCardProps) => {
     const detailLabel = projects ? "Projects" : (tasksCompleted ? "Tasks Done" : "Reports");
     const detailValue = projects || tasksCompleted || reportsFiled;
 
+    // Determine if this is a contractor or nodal card for conditional rendering
+    const isContractor = !!props.projects && !props.team && !props.initiativesLed;
+    const isNodal = !!props.initiativesLed;
+
     return (
         <Card className={cn(
             "border-l-4 shadow-md transition-all hover:shadow-lg hover:scale-[1.01]",
@@ -166,12 +170,13 @@ const PerformerCard = (props: PerformerCardProps) => {
 
                     {/* Worker Details */}
                     {team && <DetailRow icon={<Building2 size={16}/>} label="Contractor" value={team} />}
-                    {specialCommendations && <DetailRow icon={<Award size={16}/>} label="Commendations" value={specialCommendations} className="text-amber-600 dark:text-amber-400" />}
+                    {/* Commendations removed for workers as requested */}
                     {disciplinaryActions && <DetailRow icon={<FileWarning size={16}/>} label="Disciplinary Actions" value={disciplinaryActions} className="text-red-600 dark:text-red-400" />}
                     
                     {/* Nodal Officer Details */}
                     {initiativesLed && <DetailRow icon={<Lightbulb size={16}/>} label="Initiatives Led" value={initiativesLed} />}
-                    {districtRatingChange && <DetailRow icon={<BarChart size={16}/>} label="District Rating Change" value={districtRatingChange} className={districtRatingChange.startsWith('+') ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'} />}
+                    {/* District Rating Change removed for nodal officers as requested */}
+                    {/* Compliance Record removed for contractors as requested */}
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3 pt-3 border-t border-slate-200 dark:border-gray-700">

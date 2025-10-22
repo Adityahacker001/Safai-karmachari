@@ -249,7 +249,24 @@ const PerformanceTabContent = ({ goodData, badData, type }: PerformanceTabConten
 
             {sortedData.length > 0 ? (
                 <div className="space-y-4">
-                    {sortedData.map(item => <PerformerCard key={item.id} {...item} isGood={activeTab === 'good'} />)}
+                    {sortedData.map(item => {
+                        // Remove commendations for workers
+                        if (type === 'Worker') {
+                            const { specialCommendations, ...rest } = item;
+                            return <PerformerCard key={item.id} {...rest} isGood={activeTab === 'good'} />;
+                        }
+                        // Remove complianceRecord for contractors
+                        if (type === 'Contractor') {
+                            const { complianceRecord, ...rest } = item;
+                            return <PerformerCard key={item.id} {...rest} isGood={activeTab === 'good'} />;
+                        }
+                        // Remove districtRatingChange for nodal officers
+                        if (type === 'Nodal Officer') {
+                            const { districtRatingChange, ...rest } = item;
+                            return <PerformerCard key={item.id} {...rest} isGood={activeTab === 'good'} />;
+                        }
+                        return <PerformerCard key={item.id} {...item} isGood={activeTab === 'good'} />;
+                    })}
                 </div>
             ) : (
                 <div className="text-center py-12 bg-slate-50 dark:bg-gray-800/50 rounded-lg">

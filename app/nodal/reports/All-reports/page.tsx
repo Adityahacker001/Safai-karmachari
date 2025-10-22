@@ -151,7 +151,7 @@ const PerformerCard = (props: PerformerCardProps) => {
 
                     {/* Worker Details */}
                     {team && <DetailRow icon={<Building2 size={16}/>} label="Contractor" value={team} />}
-                    {specialCommendations && <DetailRow icon={<Award size={16}/>} label="Commendations" value={specialCommendations} className="text-amber-600 dark:text-amber-400" />}
+                    {/* Removed Commendations for workers as per request */}
                     {disciplinaryActions && <DetailRow icon={<FileWarning size={16}/>} label="Disciplinary Actions" value={disciplinaryActions} className="text-red-600 dark:text-red-400" />}
                     {/* Nodal Officer Details */}
                     {initiativesLed && <DetailRow icon={<Lightbulb size={16}/>} label="Initiatives Led" value={initiativesLed} />}
