@@ -6,7 +6,7 @@ import Header from './header';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
-  role: 'contractor' | 'nodal' | 'district' | 'state' | 'national' | 'sp-cp';
+  role: 'contractor' | 'nodal' | 'district' | 'state' | 'national' | 'sp-cp' | 'organizational-nodal' | 'nskfdc' | 'dgp' | 'shg'; // Added 'shg'
   name: string; // added
 }
 
@@ -16,7 +16,10 @@ const roleTitles = {
   district: 'District Monitoring System',
   state: 'State Command Centre',
   national: 'National Dashboard (NCSK)',
-  // sp-cp intentionally omitted so layout-provided `name` is used for SP/CP
+  'organizational-nodal': 'Organizational Nodal Dashboard', // Added title
+  nskfdc: 'NSKFDC Dashboard', // Added title
+  dgp: 'DGP Dashboard', // Added title
+  shg: 'SHG Dashboard', // Added title
 };
 
 export default function DashboardLayout({ children, role, name }: DashboardLayoutProps) {

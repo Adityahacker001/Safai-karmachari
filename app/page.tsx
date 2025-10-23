@@ -191,6 +191,18 @@ export default function Home() {
 				}
 				dashboardPath = `/sp-cp/sp-cp-dashboard?role=${spcpType}`;
 				break;
+			case "organizational-nodal":
+				dashboardPath = "/organizational-nodal/organizational-nodal-dashboard";
+				break;
+			case "nskfdc":
+				dashboardPath = "/nskfdc/nskfdc-dashboard";
+				break;
+			case "DGP":
+				dashboardPath = "/dgp/dgp-dashboard";
+				break;
+			case "SHG":
+				dashboardPath = "/shg/shg-dashboard";
+				break;
 			default:
 				dashboardPath = "/dashboard";
 		}
@@ -327,6 +339,11 @@ export default function Home() {
 							{ icon: MapPin, title: "State Officers" },
 							{ icon: Globe, title: "National Dashboard" },
 							{ icon: Smartphone, title: "SP/CP", route: "sp-cp/sp-cp-dashboard" },
+							{ icon: Building, title: "Contractors", route: "contractor/contractor-dashboard" },
+							{ icon: Users, title: "Organizational Nodal", route: "organizational-nodal/organizational-nodal-dashboard" },
+							{ icon: Globe, title: "NSKFDC", route: "nskfdc/nskfdc-dashboard" },
+							{ icon: Shield, title: "DGP", route: "dgp/dgp-dashboard" },
+							{ icon: Building, title: "SHG", route: "shg/shg-dashboard" },
 						].map((s, i) => (
 							<motion.div
 								key={i}
@@ -451,6 +468,10 @@ export default function Home() {
 								<option value="state">State Officer</option>
 								<option value="national">National (NCSK)</option>
 								<option value="sp-cp">SP/CP</option>
+								<option value="organizational-nodal">Organizational Nodal</option>
+								<option value="nskfdc">NSKFDC</option>
+								<option value="DGP">DGP</option>
+								<option value="SHG">SHG</option>
 							</select>
 
 							{/* If SP/CP is chosen, ask for SP or CP specifically */}

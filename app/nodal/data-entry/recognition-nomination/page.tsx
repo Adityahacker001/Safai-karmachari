@@ -64,7 +64,7 @@ export default function RecognitionNominationPage() {
                 <div>
                   <Label htmlFor="worker-select" className={cn(contractorTheme.form.label)}>Select Worker</Label>
                   <Select required>
-                    <SelectTrigger id="worker-select" className={cn(contractorTheme.form.select)}><SelectValue placeholder="Choose a worker..." /></SelectTrigger>
+                    <SelectTrigger id="worker-select" className={cn(contractorTheme.form.select)}><SelectValue placeholder="Choose a worker " /></SelectTrigger>
                     <SelectContent>
                       {workers.map(w => <SelectItem key={w.id} value={w.id}>{w.name}</SelectItem>)}
                     </SelectContent>

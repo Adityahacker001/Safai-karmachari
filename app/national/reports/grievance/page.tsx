@@ -57,7 +57,7 @@ export default function Grievances() {
     { title: 'Total Grievances', value: 2486, icon: MessageCircle, color: 'blue' },
     { title: 'Verified', value: 2362, icon: CheckCircle, color: 'green' },
     { title: 'Pending', value: 173, icon: Clock, color: 'yellow' },
-    { title: 'Escalated', value: 124, icon: AlertTriangle, color: 'purple' }, // Changed to purple for the new design
+    { title: 'Escalated (this month)', value: 124, icon: AlertTriangle, color: 'purple' }, // Changed to purple for the new design
   ];
 
   const grievanceData = [

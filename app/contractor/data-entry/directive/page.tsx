@@ -86,13 +86,13 @@ const Directives = () => {
           <p className="text-gray-700 mt-2">Track directives received from Nodal Officers</p>
         </div>
         <div className="flex flex-col gap-4">
-          <button
+          {/* <button
             className="flex items-center gap-2 px-6 py-2 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold shadow-lg hover:scale-105 transition-all"
             onClick={() => setShowModal(true)}
           >
             <Plus className="w-5 h-5" />
             Issue New Directive
-          </button>
+          </button> */}
           {showModal && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
               <div className="w-full max-w-xl bg-white rounded-2xl shadow-xl p-8 relative">

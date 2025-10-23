@@ -164,9 +164,9 @@ const Directives = () => {
                   <div>
                     <label className="block text-gray-700 font-medium mb-1">Recipients</label>
                     <select className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200">
-                      <option>All Nodal Officers</option>
-                      <option>District Admin</option>
-                      <option>State Health Department</option>
+                      <option>All contractors</option>
+                      <option>contractor 1</option>
+                      <option>contractor 2</option>
                     </select>
                   </div>
                   <div>
@@ -250,7 +250,7 @@ const Directives = () => {
                   : 'border-transparent text-gray-600 hover:text-indigo-600 hover:bg-indigo-50'
               }`}
             >
-              Directives Received from District Admin
+              Directives Received from higher Authorities
             </button>
             <button
               onClick={() => setActiveTab('issued')}

@@ -3,11 +3,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DivideIcon as LucideIcon, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { SvgIconComponent } from "@mui/icons-material";
 
 interface DashboardCardProps {
   title: string;
   value: string | number;
-  icon: typeof LucideIcon;
+  icon: typeof LucideIcon | SvgIconComponent; // Allow Material-UI icons
   change?: string;
   changeType?: 'increase' | 'decrease' | 'neutral';
   color?: 'blue' | 'green' | 'orange' | 'red' | 'purple' | 'indigo';

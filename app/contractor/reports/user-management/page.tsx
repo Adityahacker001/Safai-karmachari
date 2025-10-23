@@ -36,7 +36,7 @@ const UserManagement: React.FC = () => {
     const userData: User[] = [
         { id: 'WK001', name: 'Abishek Kumar', status: 'Active', lastAttendance: '2025-09-16', role: 'Sanitation Worker', shift: 'Morning' },
         { id: 'WK002', name: 'Priya Sharma', status: 'Active', lastAttendance: '2025-09-16', role: 'Sanitation Worker', shift: 'Evening' },
-        { id: 'WK003', name: 'Suresh Yadav', status: 'Inactive', lastAttendance: '2025-08-10', role: 'Sanitation Worker', shift: 'Morning' },
+        { id: 'WK003', name: 'Abishek Yadav', status: 'Inactive', lastAttendance: '2025-08-10', role: 'Sanitation Worker', shift: 'Morning' },
         { id: 'WK004', name: 'Anita Devi', status: 'Active', lastAttendance: '2025-09-15', role: 'Sanitation Worker', shift: 'Morning' },
         { id: 'WK005', name: 'Mohan Lal', status: 'Active', lastAttendance: '2025-09-16', role: 'Sanitation Worker', shift: 'Evening' },
         { id: 'SUP001', name: 'Vikram Singh', status: 'Active', lastAttendance: '2025-09-16', role: 'Supervisor', shift: 'Full Day' }

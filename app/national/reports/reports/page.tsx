@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { Download, FileText, Calendar, BarChart3, ChevronRight } from 'lucide-react';
+import { Download, FileText, Calendar, BarChart3, ChevronRight, Eye, FileSpreadsheet } from 'lucide-react';
 
 // --- Re-defining components within the file for a self-contained structure ---
 
@@ -93,7 +93,7 @@ export default function Reports() {
 
       {/* Pre-Built Reports */}
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold text-slate-700">Pre-Built Reports</h2>
+        <h2 className="text-2xl font-bold text-slate-700">Reports</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {preBuiltReports.map((report, index) => {
             const style = categoryStyles[report.category] || categoryStyles['Audit'];
@@ -116,13 +116,29 @@ export default function Reports() {
                 </div>
                 <div className="px-5 pb-5 mt-auto">
                     <p className="text-xs text-slate-400 mb-3">Last generated: {report.lastGenerated}</p>
-                    <button
-                        onClick={() => handleDownload(report.title)}
-                        className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:from-blue-600 hover:to-indigo-600 transition-all transform hover:scale-105 duration-300"
-                    >
-                        <Download className="w-4 h-4" />
-                        <span className="font-semibold text-sm">Download</span>
-                    </button>
+                    <div className="flex items-center justify-between gap-2">
+                        <button
+                            onClick={() => handleDownload(report.title)}
+                            className="flex-1 flex items-center justify-center space-x-2 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all duration-300"
+                        >
+                            <Eye className="w-4 h-4" />
+                            <span className="font-semibold text-sm">View</span>
+                        </button>
+                        <button
+                            onClick={() => handleDownload(report.title)}
+                            className="flex-1 flex items-center justify-center space-x-2 px-3 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-all duration-300"
+                        >
+                            <FileText className="w-4 h-4" />
+                            <span className="font-semibold text-sm">PDF</span>
+                        </button>
+                        <button
+                            onClick={() => handleDownload(report.title)}
+                            className="flex-1 flex items-center justify-center space-x-2 px-3 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-all duration-300"
+                        >
+                            <FileSpreadsheet className="w-4 h-4" />
+                            <span className="font-semibold text-sm">Excel</span>
+                        </button>
+                    </div>
                 </div>
               </div>
             );

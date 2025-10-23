@@ -82,7 +82,7 @@ export default function WorkerManagementReportPage() {
       identificationMark: "Mole on right hand",
       profilePhoto: "/placeholder-user.jpg",
       emergencyContact: {
-        name: "Suresh Kumar",
+        name: "Abishek Kumar",
         relation: "Brother",
         phone: "+91 9123456789",
       },
@@ -653,7 +653,6 @@ export default function WorkerManagementReportPage() {
                                 </div>
                               </CardContent>
                             </Card>
-                            {/* ...existing code... */}
                             {/* Tabs for Compliance, Training, Grievances (existing) */}
                             <Tabs defaultValue="compliance" className="w-full">
                               <TabsList className="grid w-full grid-cols-3 h-12 p-1 bg-slate-200 rounded-xl shadow-inner">
@@ -863,24 +862,46 @@ export default function WorkerManagementReportPage() {
           <h3 className="text-3xl font-extrabold mb-1">Zone Assignment</h3>
           <p className="text-lg opacity-90">Manage worker's assigned zone.</p>
         </div>
-        <div className="mt-8 mb-4">
-          <div className="text-lg font-semibold">Current Zone</div>
-          <div className="text-2xl font-extrabold mt-1 mb-6">Zone 1</div>
-          <div className="text-lg font-semibold mb-2">Change Zone</div>
-          <div className="flex flex-col sm:flex-row items-center gap-4">
-            <select className="flex-grow bg-cyan-300/60 border-2 border-white rounded-xl px-6 py-4 text-lg text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-white transition-all" defaultValue="">
-              <option value="" disabled>Select a new zone</option>
-              <option value="Zone 1">Zone 1</option>
-              <option value="Zone 2">Zone 2</option>
-              <option value="Zone 3">Zone 3</option>
-              <option value="Zone 4">Zone 4</option>
-            </select>
-            <button className="bg-white text-teal-600 font-bold text-lg px-8 py-4 rounded-xl shadow-lg flex items-center gap-2 hover:bg-gray-100 transition-all">
-              <Save className="h-6 w-6" />
-              Update Zone
-            </button>
-          </div>
+        {/* Worker selection dropdown */}
+        <div className="mb-6">
+          <label htmlFor="zone-worker-select" className="block text-lg font-semibold mb-2">Select Worker</label>
+          <select
+            id="zone-worker-select"
+            className="w-full bg-cyan-300/60 border-2 border-white rounded-xl px-6 py-4 text-lg text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-white transition-all"
+            value={selectedWorker ? selectedWorker.id : ''}
+            onChange={e => {
+              const worker = workers.find(w => w.id === e.target.value);
+              setSelectedWorker(worker || null);
+            }}
+          >
+            <option value="" disabled>Select a worker</option>
+            {workers.map(worker => (
+              <option key={worker.id} value={worker.id}>
+                {worker.name} ({worker.id})
+              </option>
+            ))}
+          </select>
         </div>
+        {selectedWorker && (
+          <div className="mt-8 mb-4">
+            <div className="text-lg font-semibold">Current Zone</div>
+            <div className="text-2xl font-extrabold mt-1 mb-6">{selectedWorker.zone}</div>
+            <div className="text-lg font-semibold mb-2">Change Zone</div>
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              <select className="flex-grow bg-cyan-300/60 border-2 border-white rounded-xl px-6 py-4 text-lg text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-white transition-all" defaultValue="">
+                <option value="" disabled>Select a new zone</option>
+                <option value="Zone 1">Zone 1</option>
+                <option value="Zone 2">Zone 2</option>
+                <option value="Zone 3">Zone 3</option>
+                <option value="Zone 4">Zone 4</option>
+              </select>
+              <button className="bg-white text-teal-600 font-bold text-lg px-8 py-4 rounded-xl shadow-lg flex items-center gap-2 hover:bg-gray-100 transition-all">
+                <Save className="h-6 w-6" />
+                Update Zone
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

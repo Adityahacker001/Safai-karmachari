@@ -73,11 +73,11 @@ const Reports: React.FC = () => {
                     <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
                         Reports & Analytics
                     </h1>
-                    <button className="relative group flex items-center space-x-2 bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-6 py-3 rounded-lg hover:shadow-2xl hover:shadow-indigo-500/40 transition-all duration-300 shadow-xl">
+                    {/* <button className="relative group flex items-center space-x-2 bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-6 py-3 rounded-lg hover:shadow-2xl hover:shadow-indigo-500/40 transition-all duration-300 shadow-xl">
                         <span className="absolute top-0 left-0 w-full h-full rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),rgba(255,255,255,0))]"></span>
                         <PlusCircle className="w-5 h-5" />
                         <span className="font-semibold">Create Custom Report</span>
-                    </button>
+                    </button> */}
                 </div>
 
                 {/* --- VIBRANT GLOWING STATS --- */}
@@ -118,8 +118,23 @@ const Reports: React.FC = () => {
                                             </div>
                                         </div>
                                         <div className="flex items-center space-x-3 self-end sm:self-center">
-                                            {report.format.includes('PDF') && <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-lg hover:shadow-lg hover:shadow-red-500/30 transition-all duration-300 text-sm font-semibold"><FileText className="w-4 h-4" /><span>PDF</span></button>}
-                                            {report.format.includes('Excel') && <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-emerald-500 to-green-500 text-white rounded-lg hover:shadow-lg hover:shadow-emerald-500/30 transition-all duration-300 text-sm font-semibold"><FileSpreadsheet className="w-4 h-4" /><span>Excel</span></button>}
+                                            {report.format.includes('PDF') && (
+                                                <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-lg hover:shadow-lg hover:shadow-red-500/30 transition-all duration-300 text-sm font-semibold">
+                                                    <FileText className="w-4 h-4" />
+                                                    <span>PDF</span>
+                                                </button>
+                                            )}
+                                            {report.format.includes('Excel') && (
+                                                <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-emerald-500 to-green-500 text-white rounded-lg hover:shadow-lg hover:shadow-emerald-500/30 transition-all duration-300 text-sm font-semibold">
+                                                    <FileSpreadsheet className="w-4 h-4" />
+                                                    <span>Excel</span>
+                                                </button>
+                                            )}
+                                            {/* View button */}
+                                            <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300 text-sm font-semibold">
+                                                <FileText className="w-4 h-4" />
+                                                <span>View</span>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

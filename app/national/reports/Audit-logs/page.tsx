@@ -61,13 +61,13 @@ export default function AuditLogs() {
         type RoleType = 'National Admin' | 'State Officer' | 'District Officer' | 'Nodal Officer' | 'N/A';
         const RolePill = ({ role }: { role: RoleType }) => {
             const styles: Record<RoleType, string> = {
-                'National Admin': 'from-indigo-500 to-purple-600',
-                'State Officer': 'from-blue-500 to-cyan-600',
-                'District Officer': 'from-emerald-500 to-green-600',
-                'Nodal Officer': 'from-sky-500 to-blue-500',
-                'N/A': 'from-slate-400 to-slate-500',
+                'National Admin': 'text-indigo-700',
+                'State Officer': 'text-blue-700',
+                'District Officer': 'text-emerald-700',
+                'Nodal Officer': 'text-sky-700',
+                'N/A': 'text-slate-500',
             };
-            return <span className={`px-3 py-1 rounded-full text-xs font-bold text-white shadow-sm bg-gradient-to-r ${styles[role] || 'from-slate-400 to-slate-500'}`}>{role}</span>;
+            return <span className={`font-medium ${styles[role] || 'text-slate-500'}`}>{role}</span>;
         };
 
     return (
