@@ -1,121 +1,60 @@
-// app/reports/training/page.tsx
+// app/reports/safety-compliance/page.tsx
 'use client';
 
 import React, { useState, useMemo } from 'react';
 import {
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend,
-  CartesianGrid,
-} from 'recharts';
-import {
-  FiClipboard,
+  FiShield,
   FiFilter,
   FiSearch,
   FiChevronLeft,
   FiChevronRight,
   FiCheckCircle,
   FiAlertTriangle,
-  FiBarChart2,
-  FiBookOpen,
+  FiAlertOctagon,
+  FiDownload,
   FiTrendingUp,
   FiTrendingDown,
-  FiPlusCircle,
-  FiAlertOctagon, // For overdue
 } from 'react-icons/fi';
 
-// --- 1. TYPE DEFINITIONS ---
-
-// For Main Training Report (Report 4)
-type MainTrainingRecord = {
+// --- 1. TYPE DEFINITION ---
+// Based on the 6 columns you provided
+type SafetyRecord = {
   id: number;
   workerName: string;
-  module: string;
-  completionDate: string | null;
-  trainer: string;
-  status: 'Completed' | 'Pending';
-  contractor: string; // For filtering
-  workerCategory: 'Hazardous' | 'Ordinary SK' | 'Ragpicker'; // For filtering
-};
-
-// For Pending Training Report (Exception Report 1)
-type PendingTrainingRecord = {
-  id: number;
-  workerName: string;
-  assignedModule: string;
-  dueDate: string;
-  status: 'Pending' | 'Overdue';
-  trainer: string;
-};
-
-// For Worker Performance Snapshot
-type WorkerPerformance = {
-  id: number;
-  workerName: string;
-  // Based on your text, one shows a score, the other just the status
-  trainingStatus: string; 
+  ppeChecklist: 'Completed' | 'Pending' | 'Failed';
+  lastViolation: string | null;
+  complianceScore: number;
+  supervisorRemarks: string;
 };
 
 // --- 2. MOCK DATA ---
-// Data sourced from "Training Completion Input" forms
-const DUMMY_MAIN_RECORDS: MainTrainingRecord[] = [
-  { id: 1, workerName: 'Ramesh Kumar', module: 'Sewer Safety', completionDate: '2025-10-15', trainer: 'A. Gupta', status: 'Completed', contractor: 'CleanCo Ltd.', workerCategory: 'Hazardous' },
-  { id: 2, workerName: 'Sita Devi', module: 'PPE Usage', completionDate: '2025-10-12', trainer: 'R. Sharma', status: 'Completed', contractor: 'EnviroClean', workerCategory: 'Ragpicker' },
-  { id: 3, workerName: 'Anil Singh', module: 'Sewer Safety', completionDate: null, trainer: 'A. Gupta', status: 'Pending', contractor: 'CleanCo Ltd.', workerCategory: 'Hazardous' },
-  { id: 4, workerName: 'Mohammed Ali', module: 'Mechanized Cleaning', completionDate: '2025-09-30', trainer: 'S. Iyer', status: 'Completed', contractor: 'Urban Solutions', workerCategory: 'Ordinary SK' },
-  { id: 5, workerName: 'Priya Murugan', module: 'PPE Usage', completionDate: null, trainer: 'R. Sharma', status: 'Pending', contractor: 'EnviroClean', workerCategory: 'Ragpicker' },
-  { id: 6, workerName: 'Kavita', module: 'Mechanized Cleaning', completionDate: '2025-10-01', trainer: 'S. Iyer', status: 'Completed', contractor: 'CleanCo Ltd.', workerCategory: 'Ordinary SK' },
-  { id: 7, workerName: 'John P.', module: 'First Aid', completionDate: '2025-10-20', trainer: 'Dr. B. Das', status: 'Completed', contractor: 'EnviroClean', workerCategory: 'Hazardous' },
-  { id: 8, workerName: 'Ramesh Kumar', module: 'PPE Usage', completionDate: '2025-10-15', trainer: 'R. Sharma', status: 'Completed', contractor: 'CleanCo Ltd.', workerCategory: 'Hazardous' },
-  { id: 9, workerName: 'Sita Devi', module: 'First Aid', completionDate: null, trainer: 'Dr. B. Das', status: 'Pending', contractor: 'EnviroClean', workerCategory: 'Ragpicker' },
-  { id: 10, workerName: 'David L.', module: 'Sewer Safety', completionDate: null, trainer: 'A. Gupta', status: 'Pending', contractor: 'Urban Solutions', workerCategory: 'Hazardous' },
+// Data sourced from the "Safai Karmachari App" daily checklist
+const DUMMY_RECORDS: SafetyRecord[] = [
+  { id: 1, workerName: 'Ramesh Kumar', ppeChecklist: 'Completed', lastViolation: null, complianceScore: 95, supervisorRemarks: 'Excellent adherence to protocols.' },
+  { id: 2, workerName: 'Sita Devi', ppeChecklist: 'Completed', lastViolation: '2025-10-15 (Damaged Boots)', complianceScore: 72, supervisorRemarks: 'Needs to report damaged PPE faster.' },
+  { id: 3, workerName: 'Anil Singh', ppeChecklist: 'Failed', lastViolation: '2025-10-24 (No Mask)', complianceScore: 30, supervisorRemarks: 'Repeated non-compliance. Alert triggered.' },
+  { id: 4, workerName: 'Mohammed Ali', ppeChecklist: 'Completed', lastViolation: null, complianceScore: 88, supervisorRemarks: 'Good, consistent performer.' },
+  { id: 5, workerName: 'Priya Murugan', ppeChecklist: 'Pending', lastViolation: '2025-10-20 (Late start)', complianceScore: 65, supervisorRemarks: 'Checklist submitted late.' },
+  { id: 6, workerName: 'Kavita', ppeChecklist: 'Completed', lastViolation: null, complianceScore: 92, supervisorRemarks: 'Very reliable.' },
+  { id: 7, workerName: 'John P.', ppeChecklist: 'Failed', lastViolation: '2025-10-25 (No Gas Detector)', complianceScore: 20, supervisorRemarks: 'High-risk violation. Immediate follow-up.' },
+  { id: 8, workerName: 'David L.', ppeChecklist: 'Completed', lastViolation: '2025-09-10 (Improper gloves)', complianceScore: 81, supervisorRemarks: 'Improved since last month.' },
 ];
-
-// Data for Exception Report (Report 1)
-const DUMMY_PENDING_RECORDS: PendingTrainingRecord[] = [
-  { id: 3, workerName: 'Anil Singh', assignedModule: 'Sewer Safety', dueDate: '2025-10-20', status: 'Pending', trainer: 'A. Gupta' },
-  { id: 5, workerName: 'Priya Murugan', assignedModule: 'PPE Usage', dueDate: '2025-10-18', status: 'Pending', trainer: 'R. Sharma' },
-  { id: 9, workerName: 'Sita Devi', assignedModule: 'First Aid', dueDate: '2025-10-25', status: 'Pending', trainer: 'Dr. B. Das' },
-  { id: 10, workerName: 'David L.', assignedModule: 'Sewer Safety', dueDate: '2025-10-01', status: 'Overdue', trainer: 'A. Gupta' },
-];
-
-// Data for Performance Snapshot
-const DUMMY_TOP_WORKERS: WorkerPerformance[] = [
-  { id: 1, workerName: 'Ramesh Kumar', trainingStatus: '100% (20/20)' },
-  { id: 7, workerName: 'John P.', trainingStatus: '100% (20/20)' },
-  { id: 4, workerName: 'Mohammed Ali', trainingStatus: '100% (20/20)' },
-  { id: 6, workerName: 'Kavita', trainingStatus: '100% (20/20)' },
-  { id: 2, workerName: 'Sita Devi', trainingStatus: '95% (19/20)' },
-];
-
-const DUMMY_BOTTOM_WORKERS: WorkerPerformance[] = [
-  { id: 10, workerName: 'David L.', trainingStatus: '1 Module Overdue' },
-  { id: 3, workerName: 'Anil Singh', trainingStatus: '1 Module Pending' },
-  { id: 5, workerName: 'Priya Murugan', trainingStatus: '1 Module Pending' },
-  { id: 9, workerName: 'Sita Devi (Mock)', trainingStatus: '1 Module Pending' },
-  { id: 11, workerName: 'Test Worker', trainingStatus: '1 Module Pending' },
-];
-
 
 // --- 3. HELPER COMPONENTS ---
 
-// StatCard Component (for RHS Metrics)
+// StatCard Component
 const StatCard = ({
   title,
   value,
   icon,
-  className, // We will pass 'iconGreen', 'iconYellow', etc.
+  className,
 }: {
   title: string;
   value: string | number;
   icon: React.ReactNode;
   className: string;
 }) => (
-  <div className={`statCard ${className}`}> {/* Apply className to the card itself for the border */}
+  <div className={`statCard ${className}`}>
     <div className={`statIcon ${className}`}>{icon}</div>
     <div className="statInfo">
       <span className="statValue">{value}</span>
@@ -124,85 +63,75 @@ const StatCard = ({
   </div>
 );
 
+// Helper function to get color based on score
+const getScoreColor = (score: number) => {
+  if (score >= 80) return 'statusHigh';
+  if (score >= 50) return 'statusMedium';
+  return 'statusLow';
+};
+
+// Helper function for PPE Checklist pill
+const getPillForPPE = (status: 'Completed' | 'Pending' | 'Failed') => {
+  switch (status) {
+    case 'Completed':
+      return <span className="statusPill statusHigh"><FiCheckCircle /> Completed</span>;
+    case 'Pending':
+      return <span className="statusPill statusMedium"><FiAlertTriangle /> Pending</span>;
+    case 'Failed':
+      return <span className="statusPill statusLow"><FiAlertOctagon /> Failed</span>;
+    default:
+      return <span className="statusPill">{status}</span>;
+  }
+};
+
 // --- 4. MAIN PAGE COMPONENT ---
 
-export default function TrainingDashboardPage() {
+export default function SafetyComplianceReportPage() {
   // --- STATE MANAGEMENT ---
-  const [filterContractor, setFilterContractor] = useState('All');
-  const [filterCategory, setFilterCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const ITEMS_PER_PAGE = 5;
+  const ITEMS_PER_PAGE = 10;
 
   // --- DERIVED STATE & MEMOIZATION ---
 
-  // Get unique values for filters
-  const uniqueContractors = useMemo(
-    () => [...new Set(DUMMY_MAIN_RECORDS.map((r) => r.contractor))],
-    []
-  );
-  const uniqueCategories = useMemo(
-    () => [...new Set(DUMMY_MAIN_RECORDS.map((r) => r.workerCategory))],
-    []
-  );
+  // Memoized calculation for filtered records
+  const filteredRecords = useMemo(() => {
+    return DUMMY_RECORDS.filter((record) =>
+      record.workerName.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [searchTerm]);
 
-  // Memoized data for Stat Cards (RHS Metrics Button)
+  // Memoized calculation for paginated records
+  const paginatedRecords = useMemo(() => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    return filteredRecords.slice(startIndex, endIndex);
+  }, [filteredRecords, currentPage]);
+
+  // Memoized stats for the dashboard cards
   const stats = useMemo(() => {
-    const totalRecords = DUMMY_MAIN_RECORDS.length;
-    const completed = DUMMY_MAIN_RECORDS.filter(
-      (r) => r.status === 'Completed'
-    ).length;
-    const pending = totalRecords - completed;
-    const overdue = DUMMY_PENDING_RECORDS.filter(
-      (r) => r.status === 'Overdue'
-    ).length;
-    return {
-      trained: completed, // "total number of workers trained"
-      pending: pending, // "pending training modules"
-      overdue: overdue,
-    };
+    const total = DUMMY_RECORDS.length;
+    const totalScore = DUMMY_RECORDS.reduce((acc, r) => acc + r.complianceScore, 0);
+    const averageScore = total > 0 ? (totalScore / total).toFixed(0) : 0;
+    const activeViolations = DUMMY_RECORDS.filter(r => r.lastViolation !== null).length;
+    const highRisk = DUMMY_RECORDS.filter(r => r.complianceScore < 50).length;
+    
+    return { averageScore, activeViolations, highRisk };
   }, []);
 
-  // Memoized & Filtered data for the Bar Chart (Chart 6)
-  const barChartData = useMemo(() => {
-    const filtered = DUMMY_MAIN_RECORDS.filter((r) =>
-      (filterContractor === 'All' || r.contractor === filterContractor) &&
-      (filterCategory === 'All' || r.workerCategory === filterCategory)
-    );
-
-    const modules = [...new Set(filtered.map((r) => r.module))];
-    
-    return modules.map(moduleName => {
-      return {
-        name: moduleName, // X-axis: Training Modules
-        Completed: filtered.filter(r => r.module === moduleName && r.status === 'Completed').length,
-        Pending: filtered.filter(r => r.module === moduleName && r.status === 'Pending').length,
-      };
-    }); // Y-axis: Number of Workers (count)
-  }, [filterContractor, filterCategory]);
-
-
-  // Memoized & Filtered data for Main Training Report Table (Report 4)
-  const paginatedMainReport = useMemo(() => {
-    const filtered = DUMMY_MAIN_RECORDS.filter(r => 
-      r.workerName.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    return filtered.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-  }, [searchTerm, currentPage]);
-
-  const totalPages = Math.ceil(
-    DUMMY_MAIN_RECORDS.filter(r => 
-      r.workerName.toLowerCase().includes(searchTerm.toLowerCase())
-    ).length / ITEMS_PER_PAGE
-  );
+  const totalPages = Math.ceil(filteredRecords.length / ITEMS_PER_PAGE);
 
   // --- HANDLERS ---
   const handleNextPage = () => {
-    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
   };
+
   const handlePrevPage = () => {
-    if (currentPage > 1) setCurrentPage(currentPage - 1);
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
   };
 
   // --- RENDER ---
@@ -212,214 +141,44 @@ export default function TrainingDashboardPage() {
         {/* --- HEADER --- */}
         <header className="header">
           <div className="headerTitle">
-            <FiClipboard />
-            <h1>Training & Compliance Dashboard</h1>
+            <FiShield />
+            <h1>Safety Compliance Report</h1>
           </div>
-          {/* This button represents the action from "Source of Data" */}
           <button className="actionButton">
-            <FiPlusCircle />
-            Log Training Completion
+            <FiDownload />
+            Export Report
           </button>
         </header>
 
-        {/* --- 1. RHS METRICS BUTTONS (STATS ROW) --- */}
+        {/* --- STATS GRID --- */}
         <section className="statsGrid">
           <StatCard
-            title="Total Workers Trained"
-            value={stats.trained}
-            icon={<FiCheckCircle />}
-            className="iconGreen" // This class controls the color
+            title="Overall Compliance Score"
+            value={`${stats.averageScore}%`}
+            icon={<FiTrendingUp />}
+            className="iconBlue"
           />
           <StatCard
-            title="Pending Training Modules"
-            value={stats.pending}
+            title="Active Violations"
+            value={stats.activeViolations}
             icon={<FiAlertTriangle />}
-            className="iconYellow" // This class controls the color
+            className="iconYellow"
           />
           <StatCard
-            title="Modules Overdue"
-            value={stats.overdue}
-            icon={<FiAlertOctagon />}
-            className="iconRed" // This class controls the color
-          />
-          <StatCard
-            title="Completion Rate"
-            value={`${((stats.trained / (stats.trained + stats.pending)) * 100).toFixed(0)}%`}
-            icon={<FiBarChart2 />}
-            className="iconBlue" // This class controls the color
+            title="High-Risk Workers"
+            value={stats.highRisk}
+            icon={<FiTrendingDown />}
+            className="iconRed"
           />
         </section>
 
-        {/* --- 2. MAIN CONTENT GRID --- */}
-        <section className="mainContentGrid">
-          
-          {/* --- LEFT COLUMN --- */}
-          <div className="leftColumn">
-
-            {/* --- 2. TRAINING COMPLETION CHART (CHART 6) --- */}
-            <div className="card">
-              <div className="cardHeader">
-                <div className="cardTitle">
-                  <FiBarChart2 />
-                  <h3>Training Completion Chart</h3>
-                </div>
-                {/* Chart Filters */}
-                <div className="filters">
-                  <div className="filterSelect">
-                    <FiFilter />
-                    <select
-                      value={filterContractor}
-                      onChange={(e) => setFilterContractor(e.target.value)}
-                    >
-                      <option value="All">All Contractors</option>
-                      {uniqueContractors.map((c) => (
-                        <option key={c} value={c}>{c}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="filterSelect">
-                    <FiFilter />
-                    <select
-                      value={filterCategory}
-                      onChange={(e) => setFilterCategory(e.target.value)}
-                    >
-                      <option value="All">All Worker Categories</option>
-                      {uniqueCategories.map((c) => (
-                        <option key={c} value={c}>{c}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div className="chartWrapper">
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={barChartData}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                    {/* X-axis: Training Modules */}
-                    <XAxis dataKey="name" fontSize={12} /> 
-                    {/* Y-axis: Number of Workers */}
-                    <YAxis fontSize={12} /> 
-                    <Tooltip />
-                    <Legend />
-                    {/* Bars/Segments: Completed and Pending */}
-                    <Bar dataKey="Completed" stackId="a" fill="#008a2e" /> {/* green-dark */}
-                    <Bar dataKey="Pending" stackId="a" fill="#f39c12" /> {/* yellow-dark */}
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-
-            {/* --- 4. PENDING TRAINING REPORT (EXCEPTION REPORT 1) --- */}
-            <div className="card">
-              <div className="cardHeader">
-                <div className="cardTitle textRed">
-                  <FiAlertTriangle />
-                  <h3>Pending Training (Exception Report)</h3>
-                </div>
-              </div>
-              <div className="tableWrapper">
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th>Sl. No.</th>
-                      <th>Worker Name</th>
-                      <th>Assigned Module</th>
-                      <th>Due Date</th>
-                      <th>Trainer Name</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {DUMMY_PENDING_RECORDS.map((record, index) => (
-                      <tr key={record.id}>
-                        <td>{index + 1}</td>
-                        <td className="workerName">{record.workerName}</td>
-                        <td>{record.assignedModule}</td>
-                        <td>{record.dueDate}</td>
-                        <td>{record.trainer}</td>
-                        <td>
-                          <span
-                            className={`statusPill status${record.status}`}
-                          >
-                            {record.status}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-          </div>
-
-          {/* --- RIGHT COLUMN --- */}
-          <div className="rightColumn">
-
-            {/* --- 5. WORKER PERFORMANCE SNAPSHOT --- */}
-            <div className="card">
-              <div className="cardHeader">
-                <div className="cardTitle textGreen">
-                  <FiTrendingUp />
-                  <h3>Top 5 Workers</h3>
-                </div>
-              </div>
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>Rank</th>
-                    <th>Worker Name</th>
-                    <th>Training Completion Score</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {DUMMY_TOP_WORKERS.map((worker, index) => (
-                    <tr key={worker.id}>
-                      <td>{index + 1}</td>
-                      <td className="workerName">{worker.workerName}</td>
-                      <td>{worker.trainingStatus}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-
-              <hr className="divider" />
-
-              <div className="cardHeader">
-                <div className="cardTitle textYellow">
-                  <FiTrendingDown />
-                  <h3>Bottom 5 Workers</h3>
-                </div>
-              </div>
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>Rank</th>
-                    <th>Worker Name</th>
-                    <th>Pending Training</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {DUMMY_BOTTOM_WORKERS.map((worker, index) => (
-                    <tr key={worker.id}>
-                      <td>{index + 1}</td>
-                      <td className="workerName">{worker.workerName}</td>
-                      <td>{worker.trainingStatus}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        {/* --- 1. MAIN TRAINING REPORT (REPORT 4) --- */}
-        <section className="card" style={{ marginTop: '1.5rem' }}>
+        {/* --- MAIN REPORT TABLE (Report 8) --- */}
+        <div className="card">
           <div className="cardHeader">
             <div className="cardTitle">
-              <FiBookOpen />
-              <h3>Main Training Report (All Records)</h3>
+              <h2>Compliance Details</h2>
             </div>
+            {/* --- FILTERS --- */}
             <div className="filters">
               <div className="filterInput">
                 <FiSearch />
@@ -429,83 +188,105 @@ export default function TrainingDashboardPage() {
                   value={searchTerm}
                   onChange={(e) => {
                     setSearchTerm(e.target.value);
-                    setCurrentPage(1);
+                    setCurrentPage(1); // Reset page on search
                   }}
                 />
               </div>
             </div>
           </div>
+
+          {/* --- DATA TABLE --- */}
           <div className="tableWrapper">
             <table className="table">
               <thead>
                 <tr>
                   <th>Sl. No.</th>
                   <th>Worker Name</th>
-                  <th>Training Module</th>
-                  <th>Completion Date</th>
-                  <th>Trainer Name</th>
-                  <th>Status</th>
+                  <th>PPE Checklist</th>
+                  <th>Last Violation</th>
+                  <th>Compliance Score</th>
+                  <th>Supervisor Remarks</th>
                 </tr>
               </thead>
               <tbody>
-                {paginatedMainReport.length > 0 ? (
-                  paginatedMainReport.map((record, index) => (
+                {paginatedRecords.length > 0 ? (
+                  paginatedRecords.map((record, index) => (
                     <tr key={record.id}>
+                      {/* 1. Sl. No. */}
                       <td>{(currentPage - 1) * ITEMS_PER_PAGE + index + 1}</td>
+                      
+                      {/* 2. Worker Name */}
                       <td className="workerName">{record.workerName}</td>
-                      <td>{record.module}</td>
-                      <td>{record.completionDate || 'N/A'}</td>
-                      <td>{record.trainer}</td>
-                      <td>
-                        <span
-                          className={`statusPill status${record.status}`}
-                        >
-                          {record.status}
+                      
+                      {/* 3. PPE Checklist */}
+                      <td className="ppeCell">
+                        {getPillForPPE(record.ppeChecklist)}
+                      </td>
+                      
+                      {/* 4. Last Violation */}
+                      <td className={record.lastViolation ? 'violationCell' : ''}>
+                        {record.lastViolation || 'N/A'}
+                      </td>
+                      
+                      {/* 5. Compliance Score */}
+                      <td className="scoreCell">
+                        <div className="scoreBarWrapper">
+                          <div
+                            className={`scoreBar ${getScoreColor(record.complianceScore)}`}
+                            style={{ width: `${record.complianceScore}%` }}
+                          ></div>
+                        </div>
+                        <span className={`scoreText ${getScoreColor(record.complianceScore)}`}>
+                          {record.complianceScore}%
                         </span>
+                      </td>
+                      
+                      {/* 6. Supervisor Remarks */}
+                      <td className="remarksCell">
+                        {record.supervisorRemarks}
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
                     <td colSpan={6} className="noResults">
-                      No records found.
+                      No safety records found matching your criteria.
                     </td>
                   </tr>
                 )}
               </tbody>
             </table>
           </div>
-          {/* Pagination for Main Report */}
+
+          {/* --- PAGINATION --- */}
           <div className="pagination">
             <span className="paginationInfo">
-              Page <strong>{currentPage}</strong> of <strong>{totalPages}</strong>
+              Showing{' '}
+              <strong>
+                {paginatedRecords.length > 0 ? (currentPage - 1) * ITEMS_PER_PAGE + 1 : 0}
+              </strong>
+              -
+              <strong>
+                {(currentPage - 1) * ITEMS_PER_PAGE + paginatedRecords.length}
+              </strong>{' '}
+              of <strong>{filteredRecords.length}</strong>
             </span>
             <div className="paginationControls">
               <button onClick={handlePrevPage} disabled={currentPage === 1}>
                 <FiChevronLeft /> Prev
               </button>
-              <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+              <button
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+              >
                 Next <FiChevronRight />
               </button>
             </div>
           </div>
-        </section>
+        </div>
       </div>
 
       {/* --- STYLES (CSS-in-JS using styled-jsx) --- */}
-      <style jsx global>{`
-        /* Global styles for Recharts Tooltip */
-        .recharts-default-tooltip {
-          border-radius: 6px !important;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
-          border: 1px solid #e_a_eb_e_c !important;
-          background-color: #ffffff !important;
-        }
-        .recharts-tooltip-label {
-          font-weight: 600 !important;
-          color: #2c3e50 !important;
-        }
-      `}</style>
       <style jsx>{`
         /* --- Root Variables --- */
         :root {
@@ -560,7 +341,7 @@ export default function TrainingDashboardPage() {
         .headerTitle :global(svg) {
           font-size: 1.75rem;
           stroke-width: 2.5;
-          color: #007bff; /* --primary-color */
+          color: #008a2e; /* --green-dark */
         }
 
         .actionButton {
@@ -584,10 +365,10 @@ export default function TrainingDashboardPage() {
           background-color: #0056b3; /* --primary-hover */
         }
 
-        /* --- Stats Grid (RHS Metrics) --- */
+        /* --- Stats Grid --- */
         .statsGrid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
           gap: 1.5rem;
           margin-bottom: 1.5rem;
         }
@@ -602,11 +383,9 @@ export default function TrainingDashboardPage() {
           gap: 1rem;
           border-left: 5px solid #007bff; /* --primary-color */
         }
-        /* Color Overrides for Stat Cards */
-        .statCard.iconGreen { border-color: #008a2e; /* --green-dark */ }
+        .statCard.iconBlue { border-color: #007bff; /* --blue-dark */ }
         .statCard.iconYellow { border-color: #f39c12; /* --yellow-dark */ }
         .statCard.iconRed { border-color: #d90429; /* --red-dark */ }
-        .statCard.iconBlue { border-color: #007bff; /* --blue-dark */ }
 
         .statIcon {
           font-size: 1.5rem;
@@ -616,11 +395,9 @@ export default function TrainingDashboardPage() {
           align-items: center;
           justify-content: center;
         }
-        /* Icon Background/Color */
-        .statIcon.iconGreen { background-color: #e6f7ec; color: #008a2e; }
+        .statIcon.iconBlue { background-color: #e7f3ff; color: #007bff; }
         .statIcon.iconYellow { background-color: #fffbea; color: #f39c12; }
         .statIcon.iconRed { background-color: #fdeaea; color: #d90429; }
-        .statIcon.iconBlue { background-color: #e7f3ff; color: #007bff; }
 
         .statInfo {
           display: flex;
@@ -634,18 +411,6 @@ export default function TrainingDashboardPage() {
         .statTitle {
           font-size: 0.9rem;
           color: #7f8c8d; /* --text-light */
-        }
-
-        /* --- Main Content Layout --- */
-        .mainContentGrid {
-          display: grid;
-          grid-template-columns: 2fr 1fr;
-          gap: 1.5rem;
-        }
-        .leftColumn, .rightColumn {
-          display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
         }
 
         /* --- Card --- */
@@ -671,23 +436,11 @@ export default function TrainingDashboardPage() {
           align-items: center;
           gap: 0.5rem;
           color: #2c3e50; /* --text-dark */
-          font-size: 1.1rem;
-          font-weight: 600;
         }
-        .cardTitle h3 {
+        .cardTitle h2 {
           margin: 0;
-        }
-        .cardTitle :global(svg) {
-          color: #007bff; /* --primary-color */
           font-size: 1.25rem;
         }
-        .textGreen { color: #008a2e; /* --green-dark */ }
-        .textGreen :global(svg) { color: #008a2e; }
-        .textYellow { color: #f39c12; /* --yellow-dark */ }
-        .textYellow :global(svg) { color: #f39c12; }
-        .textRed { color: #d90429; /* --red-dark */ }
-        .textRed :global(svg) { color: #d90429; }
-
 
         /* --- Filters --- */
         .filters {
@@ -695,9 +448,7 @@ export default function TrainingDashboardPage() {
           flex-wrap: wrap;
           gap: 1rem;
         }
-
-        .filterInput,
-        .filterSelect {
+        .filterInput {
           display: flex;
           align-items: center;
           gap: 0.5rem;
@@ -706,31 +457,16 @@ export default function TrainingDashboardPage() {
           padding: 0.5rem 0.75rem;
           border-radius: 6px;
         }
-        .filterInput :global(svg),
-        .filterSelect :global(svg) {
+        .filterInput :global(svg) {
           color: #7f8c8d; /* --text-light */
         }
-        .filterInput input,
-        .filterSelect select {
+        .filterInput input {
           border: none;
           background-color: transparent;
           outline: none;
           font-size: 0.9rem;
           width: 100%;
-        }
-        .filterSelect {
-          min-width: 180px;
-        }
-        .filterInput {
-          flex-grow: 1;
-        }
-
-        /* --- Charts --- */
-        .chartWrapper {
-          width: 100%;
-          height: 300px;
-          padding: 1.5rem;
-          padding-left: 0.5rem;
+          min-width: 200px;
         }
 
         /* --- Tables --- */
@@ -744,7 +480,7 @@ export default function TrainingDashboardPage() {
 
         .table th,
         .table td {
-          padding: 0.9rem 1.5rem;
+          padding: 1rem 1.5rem;
           text-align: left;
           white-space: nowrap;
           border-bottom: 1px solid #e_a_eb_e_c; /* --border-color */
@@ -778,34 +514,70 @@ export default function TrainingDashboardPage() {
           color: #7f8c8d; /* --text-light */
           font-size: 1rem;
         }
+        
+        .remarksCell {
+          white-space: normal;
+          min-width: 250px;
+        }
+        
+        .violationCell {
+          color: #d90429; /* --red-dark */
+          font-weight: 500;
+        }
 
         /* --- Status Pills --- */
         .statusPill {
-          padding: 0.25rem 0.75rem;
+          padding: 0.3rem 0.75rem;
           border-radius: 12px;
           font-size: 0.8rem;
           font-weight: 600;
-          display: inline-block;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.4rem;
           text-transform: uppercase;
         }
-        .statusCompleted {
+        .statusPill :global(svg) {
+          font-size: 0.9rem;
+        }
+        
+        .statusHigh {
           background-color: #e6f7ec; /* --green-light */
           color: #008a2e; /* --green-dark */
         }
-        .statusPending {
+        .statusMedium {
           background-color: #fffbea; /* --yellow-light */
           color: #f39c12; /* --yellow-dark */
         }
-        .statusOverdue {
+        .statusLow {
           background-color: #fdeaea; /* --red-light */
           color: #d90429; /* --red-dark */
         }
-
-        /* --- Divider --- */
-        .divider {
-          border: none;
-          border-top: 1px solid #e_a_eb_e_c; /* --border-color */
-          margin: 0.5rem 0;
+        
+        /* --- Compliance Score Bar --- */
+        .scoreCell {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          min-width: 150px;
+        }
+        .scoreBarWrapper {
+          width: 100px;
+          height: 8px;
+          background-color: #e_a_eb_e_c; /* --border-color */
+          border-radius: 4px;
+          overflow: hidden;
+        }
+        .scoreBar {
+          height: 100%;
+          border-radius: 4px;
+        }
+        .scoreBar.statusHigh { background-color: #008a2e; }
+        .scoreBar.statusMedium { background-color: #f39c12; }
+        .scoreBar.statusLow { background-color: #d90429; }
+        
+        .scoreText {
+          font-weight: 600;
+          font-size: 0.9rem;
         }
 
         /* --- Pagination --- */
@@ -845,12 +617,6 @@ export default function TrainingDashboardPage() {
         }
 
         /* --- Responsive Design --- */
-        @media (max-width: 1200px) {
-          .mainContentGrid {
-            grid-template-columns: 1fr;
-          }
-        }
-
         @media (max-width: 768px) {
           .pageContainer {
             padding: 1rem;
@@ -870,7 +636,7 @@ export default function TrainingDashboardPage() {
           .filters {
             width: 100%;
           }
-          .filterSelect {
+          .filterInput {
             width: 100%;
           }
           .pagination {
