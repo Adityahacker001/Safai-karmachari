@@ -1,7 +1,12 @@
 import React from 'react';
+import DashboardLayout from '@/components/layout/dashboard-layout';
 
-const TotalCasesLayout = ({ children }: { children: React.ReactNode }) => {
-  return <div>{children}</div>;
+const ContractorsLayout = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <DashboardLayout role="dgp" name="total-cases">
+      {children}
+    </DashboardLayout>
+  );
 };
 
-export default TotalCasesLayout;
+export default ContractorsLayout;

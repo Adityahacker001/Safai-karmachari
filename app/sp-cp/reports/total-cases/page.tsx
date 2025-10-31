@@ -237,10 +237,15 @@ export default function TotalCasesReportPage() {
 
                 {/* Quick Summary Cards */}
                 <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-                    {summaryMetrics.map((item) => (
+                    {summaryMetrics.map((item, index) => (
                         <div
                             key={item.title}
-                            className="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border border-slate-200 dark:border-slate-700 transition-transform duration-200 hover:scale-[1.03] hover:shadow-xl"
+                            className={`rounded-xl shadow-lg p-6 border border-slate-200 dark:border-slate-700 transition-transform duration-200 hover:scale-[1.03] hover:shadow-xl ${
+                                index % 4 === 0 ? 'bg-red-100 dark:bg-red-900' :
+                                index % 4 === 1 ? 'bg-green-100 dark:bg-green-900' :
+                                index % 4 === 2 ? 'bg-blue-100 dark:bg-blue-900' :
+                                'bg-yellow-100 dark:bg-yellow-900'
+                            }`}
                         >
                             <div className="flex items-center space-x-4">
                                 <div

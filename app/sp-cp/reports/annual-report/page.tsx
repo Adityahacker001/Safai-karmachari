@@ -1,5 +1,3 @@
-// app/dashboard/sp-cp/annual-report/page.tsx
-
 'use client';
 
 import {
@@ -41,25 +39,29 @@ const caseStatsData = [
     title: 'Total Cases',
     metric: '245',
     icon: ClipboardList,
-    color: 'text-blue-500',
+    color: 'text-white',
+    bgColor: 'bg-gradient-to-r from-blue-400 to-blue-600',
   },
   {
     title: 'Total FIRs Filed',
     metric: '230',
     icon: FileText,
-    color: 'text-indigo-500',
+    color: 'text-white',
+    bgColor: 'bg-gradient-to-r from-indigo-400 to-indigo-600',
   },
   {
     title: 'Charge Sheets Filed',
     metric: '198',
     icon: CheckSquare,
-    color: 'text-green-500',
+    color: 'text-white',
+    bgColor: 'bg-gradient-to-r from-green-400 to-green-600',
   },
   {
     title: 'Compensation Paid',
     metric: '185',
     icon: CheckCircle2,
-    color: 'text-emerald-500',
+    color: 'text-white',
+    bgColor: 'bg-gradient-to-r from-emerald-400 to-emerald-600',
   },
 ];
 
@@ -88,19 +90,22 @@ const compensationStatsData = [
     title: 'Total Sanctioned',
     metric: '₹1,25,00,000',
     icon: CircleDollarSign,
-    color: 'text-blue-500',
+    color: 'text-white',
+    bgColor: 'bg-gradient-to-r from-blue-400 to-blue-600',
   },
   {
     title: 'Total Paid',
     metric: '₹1,18,50,000',
     icon: CheckCircle2,
-    color: 'text-green-500',
+    color: 'text-white',
+    bgColor: 'bg-gradient-to-r from-green-400 to-green-600',
   },
   {
     title: 'Total Pending',
     metric: '₹6,50,000',
     icon: AlertTriangle,
-    color: 'text-red-500',
+    color: 'text-white',
+    bgColor: 'bg-gradient-to-r from-red-400 to-red-600',
   },
 ];
 
@@ -245,19 +250,19 @@ export default function AnnualReportPage() {
             {caseStatsData.map((item) => (
               <div
                 key={item.title}
-                className="bg-slate-50 dark:bg-slate-700 rounded-lg shadow-sm p-5 border border-slate-200 dark:border-slate-600"
+                className={`${item.bgColor} rounded-lg shadow-md p-5 border-transparent transition-transform duration-200 hover:scale-[1.03] hover:shadow-lg`}
               >
                 <div className="flex items-center space-x-4">
                   <div
-                    className={`flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full ${item.color} bg-opacity-10`}
+                    className={`flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-white/20 border border-white/30`}
                   >
                     <item.icon size={24} className={item.color} />
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-slate-500 dark:text-slate-400">
+                    <div className="text-sm font-medium text-white/90">
                       {item.title}
                     </div>
-                    <div className="text-3xl font-bold">{item.metric}</div>
+                    <div className="text-3xl font-bold text-white">{item.metric}</div>
                   </div>
                 </div>
               </div>
@@ -349,19 +354,19 @@ export default function AnnualReportPage() {
             {compensationStatsData.map((item) => (
               <div
                 key={item.title}
-                className="bg-slate-50 dark:bg-slate-700 rounded-lg shadow-sm p-5 border border-slate-200 dark:border-slate-600"
+                className={`${item.bgColor} rounded-lg shadow-md p-5 border-transparent transition-transform duration-200 hover:scale-[1.03] hover:shadow-lg`}
               >
                 <div className="flex items-center space-x-4">
                   <div
-                    className={`flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full ${item.color} bg-opacity-10`}
+                    className={`flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-white/20 border border-white/30`}
                   >
                     <item.icon size={24} className={item.color} />
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-slate-500 dark:text-slate-400">
+                    <div className="text-sm font-medium text-white/90">
                       {item.title}
                     </div>
-                    <div className="text-2xl font-bold">{item.metric}</div>
+                    <div className="text-2xl font-bold text-white">{item.metric}</div>
                   </div>
                 </div>
               </div>
@@ -473,3 +478,4 @@ export default function AnnualReportPage() {
     </div>
   );
 }
+

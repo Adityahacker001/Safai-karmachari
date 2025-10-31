@@ -295,7 +295,7 @@ function ProfileHeader({ info }: { info: ProfileInfo }) {
 function StateStatistics({ stats }: { stats: StateStats }) {
   const items = [
     { icon: MapPin, label: "Total Districts", value: stats.totalDistricts.toString(), color: "from-blue-500 to-blue-600", bgColor: "bg-blue-50", textColor: "text-blue-700" },
-    { icon: Users, label: "SP/CP Units Onboarded", value: stats.spCpUnitsOnboarded, color: "from-indigo-500 to-indigo-600", bgColor: "bg-indigo-50", textColor: "text-indigo-700" },
+    { icon: Users, label: "SP/CP  Onboarded", value: stats.spCpUnitsOnboarded, color: "from-indigo-500 to-indigo-600", bgColor: "bg-indigo-50", textColor: "text-indigo-700" },
     { icon: AlertTriangle, label: "Total Incidents", value: stats.totalIncidents.toString(), color: "from-orange-500 to-orange-600", bgColor: "bg-orange-50", textColor: "text-orange-700" },
     { icon: Activity, label: "Active Cases", value: stats.activeCases.toString(), color: "from-purple-500 to-purple-600", bgColor: "bg-purple-50", textColor: "text-purple-700" },
     { icon: CheckCircle, label: "Completed Investigations", value: stats.completedInvestigations.toString(), color: "from-green-500 to-green-600", bgColor: "bg-green-50", textColor: "text-green-700" },

@@ -1,7 +1,12 @@
 import React from 'react';
+import DashboardLayout from '@/components/layout/dashboard-layout';
 
-const GrievancesLayout = ({ children }: { children: React.ReactNode }) => {
-  return <div>{children}</div>;
+const ContractorsLayout = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <DashboardLayout role="dgp" name="grievances">
+      {children}
+    </DashboardLayout>
+  );
 };
 
-export default GrievancesLayout;
+export default ContractorsLayout;

@@ -282,6 +282,16 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
         </h3>
       </div>
 
+          <NavLink
+            href={config.dashboard}
+            icon={BarChart3}
+            isDashboard={true}
+            activeClass="bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-xl scale-[1.03] border border-indigo-400/50"
+            inactiveClass="text-white/80 hover:text-white hover:scale-[1.02]"
+          >
+            Dashboard
+          </NavLink>
+
       <div className="flex-1 overflow-y-auto relative z-10">
         <nav className="p-4 space-y-4">
           {/* Conditionally render Profile Link */}
@@ -295,16 +305,6 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
               Profile
             </NavLink>
           )}
-
-          <NavLink
-            href={config.dashboard}
-            icon={BarChart3}
-            isDashboard={true}
-            activeClass="bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-xl scale-[1.03] border border-indigo-400/50"
-            inactiveClass="text-white/80 hover:text-white hover:scale-[1.02]"
-          >
-            Dashboard
-          </NavLink>
 
           {role === "nodal" && (
             <NavLink

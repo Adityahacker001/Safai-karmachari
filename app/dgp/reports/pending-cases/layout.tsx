@@ -1,7 +1,12 @@
 import React from 'react';
+import DashboardLayout from '@/components/layout/dashboard-layout';
 
-const PendingCasesLayout = ({ children }: { children: React.ReactNode }) => {
-  return <div>{children}</div>;
+const ContractorsLayout = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <DashboardLayout role="dgp" name="pending-cases">
+      {children}
+    </DashboardLayout>
+  );
 };
 
-export default PendingCasesLayout;
+export default ContractorsLayout;

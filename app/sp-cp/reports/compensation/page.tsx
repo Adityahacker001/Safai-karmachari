@@ -1,5 +1,3 @@
-// app/dashboard/sp-cp/compensation-report/page.tsx
-
 'use client';
 
 import React from 'react'; // Import React
@@ -72,10 +70,10 @@ interface ChartDataEntry {
 
 
 const summaryMetrics: SummaryMetric[] = [
-  { title: 'Total Sanctioned', metric: '₹1,25,00,000', icon: CircleDollarSign, color: 'text-blue-600', bgColor: 'bg-blue-100 dark:bg-blue-900/30' },
-  { title: 'Total Paid', metric: '₹98,50,000', icon: CheckCircle2, color: 'text-green-600', bgColor: 'bg-green-100 dark:bg-green-900/30' },
-  { title: 'Total Pending', metric: '₹26,50,000', icon: FileWarning, color: 'text-red-600', bgColor: 'bg-red-100 dark:bg-red-900/30' },
-  { title: 'Cases Awaiting Payment', metric: '14', icon: Clock, color: 'text-yellow-600', bgColor: 'bg-yellow-100 dark:bg-yellow-900/30' },
+  { title: 'Total Sanctioned', metric: '₹1,25,00,000', icon: CircleDollarSign, color: 'text-white', bgColor: 'bg-gradient-to-r from-blue-400 to-blue-600' },
+  { title: 'Total Paid', metric: '₹98,50,000', icon: CheckCircle2, color: 'text-white', bgColor: 'bg-gradient-to-r from-green-400 to-green-600' },
+  { title: 'Total Pending', metric: '₹26,50,000', icon: FileWarning, color: 'text-white', bgColor: 'bg-gradient-to-r from-red-400 to-red-600' },
+  { title: 'Cases Awaiting Payment', metric: '14', icon: Clock, color: 'text-white', bgColor: 'bg-gradient-to-r from-yellow-400 to-yellow-600' },
 ];
 
 const mockAlertData: CompensationAlert[] = [
@@ -181,7 +179,7 @@ export default function CompensationReportPage() {
                     />
                 </div>
                 <div>
-                     <label htmlFor="filter-station" className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Police Station</label>
+                       <label htmlFor="filter-station" className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Police Station</label>
                     <select id="filter-station" className="w-full px-4 py-2.5 rounded-lg bg-slate-50 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
                         <option>All Stations</option>
                         {/* Add station options here */}
@@ -218,19 +216,19 @@ export default function CompensationReportPage() {
           {summaryMetrics.map((item) => (
             <div
               key={item.title}
-              className="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border border-slate-200 dark:border-slate-700 transition-transform duration-200 hover:scale-[1.03] hover:shadow-xl"
+              className={`${item.bgColor} rounded-xl shadow-lg p-6 border-transparent transition-transform duration-200 hover:scale-[1.03] hover:shadow-xl`}
             >
               <div className="flex items-center space-x-4">
                 <div
-                  className={`flex-shrink-0 flex items-center justify-center h-14 w-14 rounded-full ${item.bgColor} border border-slate-200 dark:border-slate-700`}
+                  className={`flex-shrink-0 flex items-center justify-center h-14 w-14 rounded-full bg-white/20 border border-white/30`}
                 >
                   <item.icon size={28} className={item.color} />
                 </div>
                 <div className="overflow-hidden">
-                  <div className="text-sm font-medium text-slate-500 dark:text-slate-400 truncate">
+                  <div className="text-sm font-medium text-white/90 truncate">
                     {item.title}
                   </div>
-                  <div className="text-3xl font-bold text-slate-800 dark:text-slate-100">{item.metric}</div>
+                  <div className="text-3xl font-bold text-white">{item.metric}</div>
                 </div>
               </div>
             </div>
@@ -290,13 +288,13 @@ export default function CompensationReportPage() {
                   </td>
                 </tr>
               ))}
-               {mockAlertData.length === 0 && (
-                 <tr>
-                    <td colSpan={6} className="text-center py-6 text-slate-500 dark:text-slate-400">
-                        No alerts for compensation pending over 60 days.
-                    </td>
-                 </tr>
-               )}
+                {mockAlertData.length === 0 && (
+                   <tr>
+                     <td colSpan={6} className="text-center py-6 text-slate-500 dark:text-slate-400">
+                         No alerts for compensation pending over 60 days.
+                     </td>
+                   </tr>
+                )}
             </tbody>
           </table>
         </div>
@@ -339,8 +337,8 @@ export default function CompensationReportPage() {
                   borderRadius: "0.75rem", // Larger radius
                   boxShadow: "0 8px 16px rgba(0,0,0,0.1)", // More shadow
                 }}
-                 labelStyle={{ fontWeight: 'bold', color: '#1e293b' }} // slate-800
-                 itemStyle={{ fontSize: '12px' }}
+                  labelStyle={{ fontWeight: 'bold', color: '#1e293b' }} // slate-800
+                  itemStyle={{ fontSize: '12px' }}
               />
               <Legend iconType="circle" wrapperStyle={{ fontSize: '12px' }} />
               {/* Using explicit <></> for clarity */}
@@ -367,7 +365,7 @@ export default function CompensationReportPage() {
                   stroke="#EF4444" // red-500
                   strokeWidth={3}
                   dot={{ r: 4, fill: '#EF4444' }}
-                   activeDot={{ r: 6 }}
+                    activeDot={{ r: 6 }}
                 />
               </>
             </LineChart>
@@ -453,11 +451,11 @@ export default function CompensationReportPage() {
                 </tr>
               ))}
                 {mockTableData.length === 0 && (
-                     <tr>
-                        <td colSpan={9} className="text-center py-10 text-slate-500 dark:text-slate-400">
-                            No compensation records found.
-                        </td>
-                     </tr>
+                       <tr>
+                         <td colSpan={9} className="text-center py-10 text-slate-500 dark:text-slate-400">
+                             No compensation records found.
+                         </td>
+                       </tr>
                 )}
             </tbody>
           </table>
@@ -480,3 +478,4 @@ export default function CompensationReportPage() {
     </div>
   );
 }
+

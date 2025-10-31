@@ -1,6 +1,4 @@
-// app/dashboard/sp-cp/pending-cases/page.tsx
-
-"use client";
+'use client';
 
 import React, { useState } from 'react'; // Removed useEffect as it's not used
 import {
@@ -64,10 +62,10 @@ interface PieChartEntry {
 }
 
 const initialSummaryMetrics: SummaryMetric[] = [
-  { title: 'Total Pending Cases', metric: '52', icon: Clock, color: 'text-yellow-600', bgColor: 'bg-yellow-100 dark:bg-yellow-900/30' },
-  { title: 'Awaiting Charge Sheet', metric: '18', icon: FileWarning, color: 'text-orange-600', bgColor: 'bg-orange-100 dark:bg-orange-900/30' },
-  { title: 'Total Escalated', metric: '9', icon: AlertTriangle, color: 'text-red-600', bgColor: 'bg-red-100 dark:bg-red-900/30' },
-  { title: 'Avg. Pending Days', metric: '46', icon: Clock, color: 'text-blue-600', bgColor: 'bg-blue-100 dark:bg-blue-900/30' },
+  { title: 'Total Pending Cases', metric: '52', icon: Clock, color: 'text-white', bgColor: 'bg-gradient-to-r from-yellow-400 to-yellow-600' },
+  { title: 'Awaiting Charge Sheet', metric: '18', icon: FileWarning, color: 'text-white', bgColor: 'bg-gradient-to-r from-orange-400 to-orange-600' },
+  { title: 'Total Escalated', metric: '9', icon: AlertTriangle, color: 'text-white', bgColor: 'bg-gradient-to-r from-red-400 to-red-600' },
+  { title: 'Avg. Pending Days', metric: '46', icon: Clock, color: 'text-white', bgColor: 'bg-gradient-to-r from-blue-400 to-blue-600' },
 ];
 
 const allPoliceStations = [
@@ -211,13 +209,13 @@ export default function PendingCasesReportPage() {
             ⏳ Pending Cases Report
           </h1>
           <div className="flex items-center space-x-2">
-            <button 
+            <button
               onClick={handleExport}
               className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-colors text-sm font-medium">
               <Download size={16} />
               Export (CSV/PDF)
             </button>
-            <button 
+            <button
               onClick={handleRefresh}
               className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors text-sm font-medium">
               <RefreshCw size={16} />
@@ -231,19 +229,19 @@ export default function PendingCasesReportPage() {
           {summaryMetrics.map((item) => (
             <div
               key={item.title}
-              className={`bg-white dark:bg-slate-800 rounded-xl shadow-lg p-5 border border-slate-200 dark:border-slate-700 transition-transform duration-200 hover:scale-[1.03] hover:shadow-xl`}
+              className={`${item.bgColor} rounded-xl shadow-lg p-5 border-transparent transition-transform duration-200 hover:scale-[1.03] hover:shadow-xl`}
             >
               <div className="flex items-center space-x-4">
                 <div
-                  className={`flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full ${item.bgColor} border border-slate-200 dark:border-slate-700`}
+                  className={`flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-white/20 border border-white/30`}
                 >
                   <item.icon size={24} className={item.color} />
                 </div>
                 <div className="overflow-hidden">
-                  <div className="text-sm font-medium text-slate-500 dark:text-slate-400 truncate">
+                  <div className="text-sm font-medium text-white/90 truncate">
                     {item.title}
                   </div>
-                  <div className="text-3xl font-bold text-slate-800 dark:text-slate-100">{item.metric}</div>
+                  <div className="text-3xl font-bold text-white">{item.metric}</div>
                 </div>
               </div>
             </div>
@@ -268,21 +266,21 @@ export default function PendingCasesReportPage() {
               className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-white dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          <select 
+          <select
             value={stationFilter}
             onChange={(e) => setStationFilter(e.target.value)}
             className="px-4 py-2.5 rounded-lg bg-white dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
             <option value="">All Police Stations</option>
             {allPoliceStations.map(s => <option key={s} value={s}>{s}</option>)}
           </select>
-          <select 
+          <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
             className="px-4 py-2.5 rounded-lg bg-white dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
             <option value="">All Statuses</option>
             {allStatuses.map(s => <option key={s} value={s}>{s}</option>)}
           </select>
-          <select 
+          <select
             value={pendingDaysFilter}
             onChange={(e) => setPendingDaysFilter(e.target.value)}
             className="px-4 py-2.5 rounded-lg bg-white dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
@@ -292,7 +290,7 @@ export default function PendingCasesReportPage() {
             <option value="61-90">61-90 Days</option>
             <option value=">90">Over 90 Days</option>
           </select>
-          <select 
+          <select
             value={escalatedFilter}
             onChange={(e) => setEscalatedFilter(e.target.value)}
             className="px-4 py-2.5 rounded-lg bg-white dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
@@ -300,13 +298,13 @@ export default function PendingCasesReportPage() {
             <option value="Yes">Escalated: Yes</option>
             <option value="No">Escalated: No</option>
           </select>
-          <button 
+          <button
             onClick={handleApplyFilters}
             className="flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-colors text-sm font-medium">
             <Filter size={16} />
             Apply Filters
           </button>
-          <button 
+          <button
             onClick={resetFilters}
             className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors text-sm font-medium">
             <XCircle size={16} />
@@ -351,7 +349,7 @@ export default function PendingCasesReportPage() {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">
                     {row.slNo}
                   </td>
-                  <td 
+                  <td
                     onClick={() => handleViewDetails(row.caseId)}
                     className="px-6 py-4 whitespace-nowrap text-sm font-medium text-indigo-700 dark:text-indigo-400 hover:underline cursor-pointer"
                   >
@@ -588,3 +586,4 @@ export default function PendingCasesReportPage() {
     </div>
   );
 }
+

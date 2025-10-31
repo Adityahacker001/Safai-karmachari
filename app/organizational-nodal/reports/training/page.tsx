@@ -247,7 +247,7 @@ export default function TrainingReportPage() {
                 <CardTitle className="text-base font-semibold text-gray-700">Summary (Filtered)</CardTitle>
                 <Users className="w-4 h-4 text-indigo-500" />
             </CardHeader>
-            <CardContent className="grid grid-cols-2 gap-4 pt-6">
+            <CardContent className="grid grid-cols-2 gap-4 pt-6 items-center justify-center h-full">
                 <SummaryStat label="Workers Trained" value={totalTrained} className="text-green-600" />
                 <SummaryStat label="Training Pending" value={totalPending} className="text-yellow-600" />
             </CardContent>

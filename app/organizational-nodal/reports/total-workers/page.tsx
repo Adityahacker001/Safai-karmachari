@@ -261,7 +261,7 @@ export default function TotalWorkersReportPage() {
                 <CardTitle className="text-base font-semibold text-gray-700">Filtered Summary</CardTitle>
                 <BarChart className="w-4 h-4 text-indigo-500" />
             </CardHeader>
-            <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6">
+            <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6 justify-center items-center h-full">
                 <SummaryStat label="Total Workers" value={filteredWorkers.length} />
                 <SummaryStat label="Manual Scavenging" value={filteredWorkers.filter(w => w.category === 'Manual Scavenging').length} className="text-red-600" />
                 <SummaryStat label="Hazardous" value={filteredWorkers.filter(w => w.category === 'Hazardous').length} className="text-orange-600" />
