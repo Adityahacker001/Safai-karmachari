@@ -311,7 +311,7 @@ function StateStatistics({ stats }: { stats: StateStats }) {
           style={{ animationDelay: `${0.2 + i * 0.05}s` }}
         >
           <Card className={cn(
-            "overflow-hidden border border-gray-100/50 backdrop-blur-sm group relative shadow-md hover:shadow-xl transition-all duration-500",
+            "overflow-hidden border border-gray-100/50 backdrop-blur-sm group relative shadow-md hover:shadow-xl transition-all duration-500 h-40",
             item.bgColor
           )}>
             <div className="absolute inset-0 bg-gradient-to-br from-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />

@@ -1,17 +1,13 @@
 import DashboardLayout from '@/components/layout/dashboard-layout';
 
-export default function SPCPDashboardLayout({
-  children,
-  searchParams,
-}: {
+interface LayoutProps {
   children: React.ReactNode;
-  searchParams?: { role?: string };
-}) {
-  const roleParam = searchParams?.role;
-  const name = roleParam === 'sp' ? 'SP Dashboard' : roleParam === 'cp' ? 'CP Dashboard' : 'SP/CP Dashboard';
+  params?: any;
+}
 
+export default function SPCPDashboardLayout({ children }: LayoutProps) {
   return (
-    <DashboardLayout role="sp-cp" name={name}>
+    <DashboardLayout role="sp-cp" name="SP/CP Dashboard">
       {children}
     </DashboardLayout>
   );

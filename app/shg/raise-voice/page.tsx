@@ -13,7 +13,7 @@ import {
 } from 'recharts';
 import {
   LayoutDashboard, ChevronRight, MessageSquare, Search, FileDown, RefreshCcw, Filter, X, Calendar,
-  ChevronDown, ChevronUp, CheckCircle, Hourglass, AlertTriangle, ChevronLeft, ChevronRight as ChevronRightIcon,
+  ChevronDown, ChevronUp, CheckCircle, Hourglass, AlertTriangle, ChevronLeft,
   Users, Building, List, DollarSign, BarChart3, Info, TrendingUp, Package, SlidersHorizontal, ListFilter,
   Eye, Printer, Link as LinkIcon, BadgeCheck, BadgeHelp, BadgeAlert, Clock, MapPin, Target, WalletCards, Briefcase, FileClock, AlertOctagon, Timer,
   ClipboardList, Megaphone, ShieldCheck, FileCheck, Upload, FileWarning, AlertCircle as AlertCircleIcon, Send, Loader2, BookOpen, HandHeart, CheckSquare, ListTodo, FileQuestion, HelpCircle, FileDigit, ShieldQuestion, HeartHandshake, Sparkles,
@@ -396,7 +396,7 @@ const RaiseAVoicePage = () => {
              {tableTotalPages > 1 && (
                  <div className="flex justify-between items-center p-3 border-t border-slate-200/50">
                    <span className="text-xs text-slate-600">Total: {filteredTableData.length}</span>
-                   <div className="flex items-center gap-2"> <span className="text-xs text-slate-600">Page {currentPage} of {tableTotalPages}</span> <button onClick={()=>setCurrentPage(p=>Math.max(p-1,1))} disabled={currentPage===1} className="p-1.5 rounded-md disabled:opacity-50 hover:bg-indigo-100"><ChevronLeft className="w-4 h-4"/></button> <button onClick={()=>setCurrentPage(p=>Math.min(p+1,tableTotalPages))} disabled={currentPage===tableTotalPages} className="p-1.5 rounded-md disabled:opacity-50 hover:bg-indigo-100"><ChevronRightIcon className="w-4 h-4"/></button> </div>
+                   <div className="flex items-center gap-2"> <span className="text-xs text-slate-600">Page {currentPage} of {tableTotalPages}</span> <button onClick={()=>setCurrentPage(p=>Math.max(p-1,1))} disabled={currentPage===1} className="p-1.5 rounded-md disabled:opacity-50 hover:bg-indigo-100"><ChevronLeft className="w-4 h-4"/></button> <button onClick={()=>setCurrentPage(p=>Math.min(p+1,tableTotalPages))} disabled={currentPage===tableTotalPages} className="p-1.5 rounded-md disabled:opacity-50 hover:bg-indigo-100"><ChevronRight className="w-4 h-4"/></button> </div>
                  </div>
              )}
         </GlassCard>
