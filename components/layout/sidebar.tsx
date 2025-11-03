@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, ReactNode } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 // Type for NavLink props
 interface NavLinkProps {
   href: string;
@@ -30,6 +30,8 @@ import {
   ChevronDown,
   ChevronRight,
   LogOut,
+  Menu,              // Added for mobile hamburger menu
+  X,                 // Added for close button
   Smartphone,
   FilePenLine,        // Used for Direction Input / Investigation Progress
   MessageSquareWarning,// Used for Grievance Feedback / Grievance Report
@@ -193,12 +195,45 @@ const roleConfig = {
 };
 
 export default function Sidebar({ role = "national" }: SidebarProps) {
-  const [pathname, setPathname] = useState("");
+  const pathname = usePathname();
+  const router = useRouter();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Close mobile menu when clicking outside
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      setPathname(window.location.pathname);
+    const handleClickOutside = (event: MouseEvent) => {
+      const sidebar = document.getElementById('mobile-sidebar');
+      const menuButton = document.getElementById('mobile-menu-button');
+      
+      if (isMobileMenuOpen && sidebar && menuButton) {
+        if (!sidebar.contains(event.target as Node) && !menuButton.contains(event.target as Node)) {
+          setIsMobileMenuOpen(false);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isMobileMenuOpen]);
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
+  // Prevent body scrolling when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
     }
-  }, []);
+    
+    // Cleanup function to reset overflow when component unmounts
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen]);
 
   const config = roleConfig[role] || roleConfig.national;
   const RoleIcon = config.icon;
@@ -233,19 +268,30 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
       "flex items-center space-x-3 rounded-lg text-sm font-medium relative group transition-all duration-300";
     const padding = isDashboard ? "px-4 py-3" : "px-4 py-2";
 
+    const handleClick = (e: React.MouseEvent) => {
+      e.preventDefault();
+      
+      // Close mobile menu before navigation
+      setIsMobileMenuOpen(false);
+      
+      // Navigate using router
+      router.push(href);
+    };
+
     return (
-      <a
-        href={href}
+      <button
+        onClick={handleClick}
         className={cn(
           baseClass,
           padding,
-          isActive ? activeClass : inactiveClass
+          isActive ? activeClass : inactiveClass,
+          "w-full text-left"
         )}
       >
         <span className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-xl blur-sm transition-all duration-500" />
         <Icon className="h-4 w-4 relative z-10" />
         <span className="relative z-10">{children}</span>
-      </a>
+      </button>
     );
   };
 
@@ -265,8 +311,40 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
 
 
   return (
-    <div className="fixed top-0 left-0 flex flex-col w-64 h-screen bg-gradient-to-b from-blue-900 to-indigo-950 text-white shadow-2xl border-r border-blue-800 z-50">
-      <div className="absolute inset-0 backdrop-blur-xl bg-white/5" />
+    <>
+      {/* Mobile Menu Button - Only visible on mobile and tablet */}
+      <button
+        id="mobile-menu-button"
+        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        className="fixed top-4 left-4 z-[60] p-2 bg-blue-900/90 backdrop-blur-md rounded-lg border border-blue-700 lg:hidden shadow-lg hover:bg-blue-800/90 transition-colors duration-200"
+        aria-label={isMobileMenuOpen ? "Close mobile menu" : "Open mobile menu"}
+      >
+        {isMobileMenuOpen ? (
+          <X className="h-6 w-6 text-white" />
+        ) : (
+          <Menu className="h-6 w-6 text-white" />
+        )}
+      </button>
+
+      {/* Mobile Overlay - Only visible when mobile menu is open */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <div 
+        id="mobile-sidebar"
+        className={cn(
+          "fixed top-0 left-0 flex flex-col w-64 h-screen bg-gradient-to-b from-blue-900 to-indigo-950 text-white shadow-2xl border-r border-blue-800 z-50 transition-transform duration-300 ease-in-out",
+          // Mobile and tablet: slide in/out from left
+          "lg:translate-x-0", // Always visible on desktop
+          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0" // Slide behavior for mobile/tablet
+        )}
+      >
+        <div className="absolute inset-0 backdrop-blur-xl bg-white/5" />
 
       <div
         className={cn(
@@ -405,15 +483,20 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
         <NavLink href={`/${role}/help-support`} icon={HelpCircle} activeClass="" inactiveClass="text-white/60 hover:text-white text-xs">Help & Support</NavLink>
         <NavLink href={`/${role}/settings`} icon={Settings} activeClass="" inactiveClass="text-white/60 hover:text-white text-xs">Settings</NavLink>
 
-        <a
-          href="/"
-          className="flex items-center space-x-3 px-4 py-2 rounded-xl text-sm font-medium text-red-400 hover:text-red-200 hover:bg-red-500/10 transition-all relative group mt-2"
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            setIsMobileMenuOpen(false);
+            router.push("/");
+          }}
+          className="w-full text-left flex items-center space-x-3 px-4 py-2 rounded-xl text-sm font-medium text-red-400 hover:text-red-200 hover:bg-red-500/10 transition-all relative group mt-2"
         >
           <span className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-r from-red-500 via-pink-600 to-purple-600 rounded-xl blur-md transition-all duration-500" />
           <LogOut className="h-4 w-4 relative z-10" />
           <span className="relative z-10">Log Out</span>
-        </a>
+        </button>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

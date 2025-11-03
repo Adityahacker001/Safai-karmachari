@@ -39,13 +39,14 @@ export default function DashboardLayout({ children, role, name }: DashboardLayou
   const title = dynamicName || (roleTitles as any)[role] || 'Dashboard';
 
   return (
-    <div className="flex h-screen">
-      <aside className="w-72 flex-shrink-0">
-        <Sidebar role={role} />
-      </aside>
-      <div className="flex flex-col flex-1 min-w-0">
-  <Header dashboardTitle={title} userName={title} />
-        <main className="flex-1 bg-gray-50 p-8 overflow-y-auto">
+    <div className="flex h-screen relative">
+      {/* Single Sidebar instance - handles both desktop and mobile */}
+      <Sidebar role={role} />
+      
+      {/* Main Content Area */}
+      <div className="flex flex-col flex-1 min-w-0 lg:ml-64">
+        <Header dashboardTitle={title} userName={title} />
+        <main className="flex-1 bg-gray-50 p-4 sm:p-6 lg:p-8 overflow-y-auto">
           {children}
         </main>
       </div>

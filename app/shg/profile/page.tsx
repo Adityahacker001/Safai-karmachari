@@ -80,15 +80,6 @@ interface Project {
   disbursedAmount: number;
 }
 
-interface Application {
-  id: string;
-  schemeName: string;
-  appliedDate: string;
-  status: string;
-  eligibilityScore: number;
-  remarks: string;
-}
-
 interface FinancialSummary {
   totalLoans: number;
   totalDisbursed: number;
@@ -237,25 +228,6 @@ export default function SHGProfilePage() {
     },
   ]);
 
-  const [applications, setApplications] = useState<Application[]>([
-    {
-      id: "APP001",
-      schemeName: "Skill Development Training",
-      appliedDate: "10 Nov 2024",
-      status: "Under Review",
-      eligibilityScore: 85,
-      remarks: "Pending district approval",
-    },
-    {
-      id: "APP002",
-      schemeName: "NSFDC Term Loan",
-      appliedDate: "05 Oct 2024",
-      status: "Approved",
-      eligibilityScore: 92,
-      remarks: "Disbursement pending",
-    },
-  ]);
-
   const [financials, setFinancials] = useState<FinancialSummary>({
     totalLoans: 800000,
     totalDisbursed: 800000,
@@ -296,11 +268,12 @@ export default function SHGProfilePage() {
   ]);
 
   const [activityLogs, setActivityLogs] = useState<ActivityLog[]>([
-    { label: "Last Login", value: "23 Nov 2024, 05:30 PM" },
     { label: "Total Projects", value: "2" },
     { label: "Applications Submitted", value: "2" },
     { label: "Documents Uploaded", value: "4" },
   ]);
+
+  const [lastLogin, setLastLogin] = useState<string>("23 Nov 2024, 05:30 PM");
 
   // --- Placeholder Event Handlers ---
   const handleAddMember = () => console.log("Add Member clicked");
@@ -325,13 +298,7 @@ export default function SHGProfilePage() {
       minute: "2-digit",
       hour12: true,
     });
-    setActivityLogs((prevLogs) =>
-      prevLogs.map((log) =>
-        log.label === "Last Login"
-          ? { ...log, value: `${formattedDate}, ${formattedTime}` }
-          : log
-      )
-    );
+    setLastLogin(`${formattedDate}, ${formattedTime}`);
   }, []);
 
   return (
@@ -347,18 +314,15 @@ export default function SHGProfilePage() {
       </div>
 
       {/* SHG Identity Card */}
-      <SHGIdentityCard info={shgInfo} />
+      <SHGIdentityCard info={shgInfo} lastLogin={lastLogin} />
 
       {/* Financial Summary */}
       <FinancialSummaryCard financials={financials} />
 
       {/* Members section removed as requested */}
 
-      {/* Projects and Applications Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <ProjectsCard projects={projects} />
-        <ApplicationsCard applications={applications} />
-      </div>
+      {/* Projects Section */}
+      <ProjectsCard projects={projects} />
 
       {/* Activity and Admin Controls */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -383,7 +347,7 @@ export default function SHGProfilePage() {
 
 // --- Child Components ---
 
-function SHGIdentityCard({ info }: { info: SHGInfo }) {
+function SHGIdentityCard({ info, lastLogin }: { info: SHGInfo; lastLogin: string }) {
   return (
     <Card className="p-6 shadow-lg border-none bg-gradient-to-r from-indigo-700 to-purple-800 text-white rounded-xl">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -440,6 +404,13 @@ function SHGIdentityCard({ info }: { info: SHGInfo }) {
             <div>
               <p className="text-xs text-indigo-200 uppercase tracking-wider">Phone</p>
               <p className="font-semibold">{info.phone}</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <Activity className="w-5 h-5 text-indigo-200" />
+            <div>
+              <p className="text-xs text-indigo-200 uppercase tracking-wider">Last Login</p>
+              <p className="font-semibold">{lastLogin}</p>
             </div>
           </div>
           <div className="pt-2">
@@ -620,69 +591,7 @@ function ProjectsCard({ projects }: { projects: Project[] }) {
   );
 }
 
-function ApplicationsCard({ applications }: { applications: Application[] }) {
-  return (
-    <Card className="shadow-md border border-gray-100 rounded-lg bg-white">
-      <CardHeader>
-        <CardTitle className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-          <ClipboardList className="w-5 h-5 text-indigo-600" />
-          Recent Applications ({applications.length})
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {applications.map((app) => (
-          <div
-            key={app.id}
-            className="p-4 border border-gray-200 rounded-lg hover:border-indigo-300 transition-colors"
-          >
-            <div className="flex justify-between items-start mb-2">
-              <h3 className="font-semibold text-gray-800">{app.schemeName}</h3>
-              <Badge
-                variant={
-                  app.status === "Approved"
-                    ? "default"
-                    : app.status === "Under Review"
-                    ? "secondary"
-                    : "destructive"
-                }
-                className={
-                  app.status === "Approved"
-                    ? "bg-green-500"
-                    : app.status === "Under Review"
-                    ? "bg-orange-500"
-                    : "bg-red-500"
-                }
-              >
-                {app.status}
-              </Badge>
-            </div>
-            <p className="text-sm text-gray-600 mb-3">
-              <span className="font-medium">Applied:</span> {app.appliedDate}
-            </p>
-            <div className="mb-3">
-              <div className="flex justify-between text-sm mb-1.5">
-                <span className="text-gray-600">Eligibility Score</span>
-                <span className="font-semibold text-indigo-700">
-                  {app.eligibilityScore}%
-                </span>
-              </div>
-              <Progress
-                value={app.eligibilityScore}
-                className="h-2 [&>div]:bg-gradient-to-r [&>div]:from-indigo-500 [&>div]:to-purple-500"
-              />
-            </div>
-            <p className="text-xs text-gray-500 italic">{app.remarks}</p>
-          </div>
-        ))}
-        {applications.length === 0 && (
-          <p className="text-center text-gray-500 py-4">
-            No applications submitted yet.
-          </p>
-        )}
-      </CardContent>
-    </Card>
-  );
-}
+
 
 function ActivityLogCard({ logs }: { logs: ActivityLog[] }) {
   return (

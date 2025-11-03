@@ -57,7 +57,7 @@ interface Worker {
 
 // --- Initial Mock Data ---
 const initialWorkersData: Worker[] = [
-    { id: 1, name: "Rajesh Kumar", category: "Manual Scavenging Death", contractor: "CleanForce Pvt Ltd", gender: "Male", caste: "SC", religion: "Hindu", age: 38, incidentLinked: "Yes", firFiled: "Yes", investigationStatus: "Completed", compensationStatus: "Paid", remarks: "FIR filed, compensation processed.", },
+    { id: 1, name: "Aditya Kumar", category: "Manual Scavenging Death", contractor: "CleanForce Pvt Ltd", gender: "Male", caste: "SC", religion: "Hindu", age: 38, incidentLinked: "Yes", firFiled: "Yes", investigationStatus: "Completed", compensationStatus: "Paid", remarks: "FIR filed, compensation processed.", },
     { id: 2, name: "Suresh Yadav", category: "Sewer Injury", contractor: "UrbanClean Services", gender: "Male", caste: "OBC", religion: "Hindu", age: 41, incidentLinked: "Yes", firFiled: "No", investigationStatus: "In Progress", compensationStatus: "Pending", remarks: "Awaiting FIR update.", },
     { id: 3, name: "Anita Devi", category: "Ordinary Worker", contractor: "CleanForce Pvt Ltd", gender: "Female", caste: "SC", religion: "Hindu", age: 29, incidentLinked: "No", firFiled: "No", investigationStatus: "N/A", compensationStatus: "N/A", remarks: "Regular cleaning duties.", },
     { id: 4, name: "Mohammad Irfan", category: "Hazardous Cleaning", contractor: "EcoSan Solutions", gender: "Male", caste: "General", religion: "Muslim", age: 45, incidentLinked: "Yes", firFiled: "Yes", investigationStatus: "Charge Sheet Filed", compensationStatus: "Under Process", remarks: "Charge sheet submitted.", },

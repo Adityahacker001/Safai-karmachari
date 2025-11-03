@@ -92,16 +92,15 @@ interface WorkerIssues {
 
 // --- Mock Data ---
 const mockSummaryData: SummaryCardData[] = [
-    { title: "Total Workers", value: "350", subtext: "15 Hazardous, 20 MS, 45 RP", icon: Users, color: "bg-gradient-to-r from-blue-400 to-blue-600" },
-    { title: "Total Contractors", value: "4", subtext: "NSKC Verified", icon: Building, color: "bg-gradient-to-r from-gray-400 to-gray-600" },
-    { title: "Training", value: "85%", subtext: "52 Workers Pending", icon: GraduationCap, color: "bg-gradient-to-r from-cyan-400 to-cyan-600" },
-    { title: "Incidents", value: "3", subtext: "1 Death, 2 Injuries, 1 FIR", icon: AlertTriangle, color: "bg-gradient-to-r from-red-400 to-red-600" },
-    { title: "Grievances", value: "8", subtext: "2 Pending, 1 Escalated", icon: MessageSquareWarning, color: "bg-gradient-to-r from-orange-400 to-orange-600" },
-    { title: "Directions", value: "5", subtext: "1 Pending (Aging > 3 days)", icon: ClipboardCheck, color: "bg-gradient-to-r from-purple-400 to-purple-600" },
-    { title: "Feedback", value: "12", subtext: "3 Pending (from Public)", icon: MessageSquareHeart, color: "bg-gradient-to-r from-pink-400 to-pink-600" },
-    { title: "Payment Status", value: "92%", subtext: "28 Pending, 2 Contractors Delayed", icon: Banknote, color: "bg-gradient-to-r from-green-500 to-green-700" },
-    { title: "Medical Exams", value: "78%", subtext: "4 Follow-up, 12 Overdue", icon: HeartPulse, color: "bg-gradient-to-r from-red-500 to-red-700" },
-    { title: "Casual Worker Alerts", value: "6", subtext: "High Absenteeism/Non-compliance", icon: UserX, color: "bg-gradient-to-r from-yellow-500 to-yellow-700" },
+  { title: "Total Workers", value: "350", subtext: "15 Hazardous, 20 MS, 45 RP", icon: Users, color: "bg-gradient-to-br from-blue-500 via-cyan-400 to-green-300" },
+  { title: "Total Contractors", value: "4", subtext: "NSKC Verified", icon: Building, color: "bg-gradient-to-br from-gray-400 via-gray-500 to-gray-700" },
+  { title: "Training", value: "85%", subtext: "52 Workers Pending", icon: GraduationCap, color: "bg-gradient-to-br from-cyan-400 via-blue-400 to-indigo-400" },
+  { title: "Incidents", value: "3", subtext: "1 Death, 2 Injuries, 1 FIR", icon: AlertTriangle, color: "bg-gradient-to-br from-red-500 via-pink-500 to-orange-400" },
+  { title: "Grievances", value: "8", subtext: "2 Pending, 1 Escalated", icon: MessageSquareWarning, color: "bg-gradient-to-br from-orange-400 via-yellow-400 to-pink-400" },
+  { title: "Directions", value: "5", subtext: "1 Pending (Aging > 3 days)", icon: ClipboardCheck, color: "bg-gradient-to-br from-purple-500 via-fuchsia-400 to-blue-400" },
+  { title: "Feedback", value: "12", subtext: "3 Pending (from Public)", icon: MessageSquareHeart, color: "bg-gradient-to-br from-pink-500 via-rose-400 to-yellow-200" },
+  { title: "Payment Status", value: "92%", subtext: "28 Pending, 2 Contractors Delayed", icon: Banknote, color: "bg-gradient-to-br from-green-400 via-lime-300 to-yellow-200" },
+  { title: "Medical Exams", value: "78%", subtext: "4 Follow-up, 12 Overdue", icon: HeartPulse, color: "bg-gradient-to-br from-teal-400 via-emerald-400 to-green-400" },
 ];
 
 const mockTopWorkers: WorkerPerformance[] = [
@@ -155,24 +154,37 @@ export default function OrganizationalNodalDashboardPage() {
 // --- Child Components ---
 
 function SummaryCards({ data }: { data: SummaryCardData[] }) {
+  // Arrange cards in 3 rows of 3
+  const rows = [
+    data.slice(0, 3),
+    data.slice(3, 6),
+    data.slice(6, 9),
+  ];
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
-      {data.map((item) => (
-        <Card
-          key={item.title}
-          className={`relative overflow-hidden ${item.color} text-white shadow-lg rounded-xl hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300`}
-        >
-          <div className={`absolute top-4 right-4 p-2 rounded-lg bg-white/20 border border-white/30`}>
-            <item.icon className="h-6 w-6" strokeWidth={1.5} />
-          </div>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-semibold text-white/90">{item.title}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold text-white">{item.value}</p>
-            <p className="text-xs text-white/90 mt-1 truncate" title={item.subtext}>{item.subtext}</p>
-          </CardContent>
-        </Card>
+    <div className="space-y-5">
+      {rows.map((row, idx) => (
+        <div key={idx} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+          {row.map((item) => (
+            <Card
+              key={item.title}
+              className={`relative overflow-hidden ${item.color} text-white shadow-lg rounded-xl hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 ring-2 ring-white/60 hover:ring-4 hover:ring-white/80`}
+              style={{ boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.18), 0 1.5px 8px 0 rgba(0,0,0,0.10)' }}
+            >
+              {/* Glow overlay */}
+              <div className="absolute inset-0 pointer-events-none" style={{background: 'radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.01) 70%)'}} />
+              <div className={`absolute top-4 right-4 p-2 rounded-lg bg-white/20 border border-white/30`}>
+                <item.icon className="h-6 w-6" strokeWidth={1.5} />
+              </div>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-semibold text-white/90">{item.title}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-3xl font-bold text-white drop-shadow-lg">{item.value}</p>
+                <p className="text-xs text-white/90 mt-1 truncate" title={item.subtext}>{item.subtext}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       ))}
     </div>
   );

@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import StatCard from "@/components/ui/stat-card";
 // UPDATED: Added new icons
 import { MessageSquare, Download, Clock, ThumbsUp, Eye, Search, Hourglass, CheckCircle2, ShieldAlert } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -121,106 +122,88 @@ export default function GrievanceTrackingReportPage() {
     };
 
     return (
-        // Main container with a vibrant, modern background gradient
-        <div className="min-h-screen p-6 md:p-12 bg-gradient-to-br from-blue-100 via-purple-100 via-pink-100 via-rose-100 to-yellow-100 space-y-10">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                    <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Grievance Tracking Report</h1>
-                    <p className="text-gray-600 mt-3 text-xl">A historical log and analytical overview of all worker grievances.</p>
+        <div className="min-h-screen w-full max-w-full sm:max-w-full md:max-w-7xl mx-auto p-4 sm:p-6 md:p-12 space-y-6 sm:space-y-8 md:space-y-10">
+            <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
+                <div className="text-center sm:text-left">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Grievance Tracking Report</h1>
+                    <p className="text-gray-600 mt-2 sm:mt-3 text-base sm:text-lg md:text-xl">A historical log and analytical overview of all worker grievances.</p>
                 </div>
-                <div className="flex items-center space-x-4 mt-6 sm:mt-0">
+                <div className="flex items-center space-x-4">
                     <Button
                         variant="outline"
-                        className="text-gray-700 border-gray-300 hover:bg-gray-100 px-6 py-3 rounded-xl transition-all duration-200"
+                        className="text-gray-700 border-gray-300 hover:bg-gray-100 px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl transition-all duration-200 text-sm sm:text-base"
                     >
-                        <Download className="h-5 w-5 mr-2" />Export History (CSV)
+                        <Download className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" />
+                        <span className="hidden sm:inline">Export History (CSV)</span>
+                        <span className="sm:hidden">Export</span>
                     </Button>
                 </div>
             </div>
 
             {/* Grievance Analytics KPIs */}
-            {/* UPDATED: Changed grid to lg:grid-cols-3 md:grid-cols-2 to better accommodate 6 cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <Card className="border-0 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-xl transform transition-all duration-300 hover:scale-105">
-                    <CardHeader className="pb-2 flex flex-row items-center justify-between">
-                        <CardTitle className="text-base font-medium text-blue-100">Total Grievances</CardTitle>
-                        <MessageSquare className="h-6 w-6 text-blue-200" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-4xl font-bold">{totalGrievances}</div>
-                        <p className="text-sm text-blue-200 mt-1">Total grievances filed</p>
-                    </CardContent>
-                </Card>
-                <Card className="border-0 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-600 text-white shadow-xl transform transition-all duration-300 hover:scale-105">
-                    <CardHeader className="pb-2 flex flex-row items-center justify-between">
-                        <CardTitle className="text-base font-medium text-orange-100">Submitted Today</CardTitle>
-                        <Clock className="h-6 w-6 text-orange-200" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-4xl font-bold">{grievancesToday}</div>
-                        <p className="text-sm text-orange-100 mt-1">New grievances filed today</p>
-                    </CardContent>
-                </Card>
-                 <Card className="border-0 rounded-2xl bg-gradient-to-br from-pink-500 to-yellow-400 text-white shadow-xl transform transition-all duration-300 hover:scale-105">
-                    <CardHeader className="pb-2 flex flex-row items-center justify-between">
-                        <CardTitle className="text-base font-medium text-yellow-100">Top Grievance Category</CardTitle>
-                        <ThumbsUp className="h-6 w-6 text-yellow-200" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-4xl font-bold">{topCategory}</div>
-                        <p className="text-sm text-yellow-100 mt-1">Most common complaint type</p>
-                    </CardContent>
-                </Card>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                <StatCard
+                    title="Total Grievances"
+                    value={totalGrievances}
+                    subtitle="Total grievances filed"
+                    icon={MessageSquare}
+                    color="blue"
+                />
+                
+                <StatCard
+                    title="Submitted Today"
+                    value={grievancesToday}
+                    subtitle="New grievances filed today"
+                    icon={Clock}
+                    color="orange"
+                />
+                
+                <StatCard
+                    title="Top Grievance Category"
+                    value={topCategory}
+                    subtitle="Most common complaint type"
+                    icon={ThumbsUp}
+                    color="pink"
+                />
 
-                {/* --- NEW CARDS START HERE --- */}
-                <Card className="border-0 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-500 text-white shadow-xl transform transition-all duration-300 hover:scale-105">
-                    <CardHeader className="pb-2 flex flex-row items-center justify-between">
-                        <CardTitle className="text-base font-medium text-blue-100">Pending Grievances</CardTitle>
-                        <Hourglass className="h-6 w-6 text-blue-200" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-4xl font-bold">{pendingGrievances}</div>
-                        <p className="text-sm text-blue-200 mt-1">Cases awaiting action</p>
-                    </CardContent>
-                </Card>
+                <StatCard
+                    title="Pending Grievances"
+                    value={pendingGrievances}
+                    subtitle="Cases awaiting action"
+                    icon={Hourglass}
+                    color="indigo"
+                />
 
-                <Card className="border-0 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-xl transform transition-all duration-300 hover:scale-105">
-                    <CardHeader className="pb-2 flex flex-row items-center justify-between">
-                        <CardTitle className="text-base font-medium text-green-100">Resolved Grievances</CardTitle>
-                        <CheckCircle2 className="h-6 w-6 text-green-200" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-4xl font-bold">{resolvedGrievances}</div>
-                        <p className="text-sm text-green-100 mt-1">Successfully closed cases</p>
-                    </CardContent>
-                </Card>
+                <StatCard
+                    title="Resolved Grievances"
+                    value={resolvedGrievances}
+                    subtitle="Successfully closed cases"
+                    icon={CheckCircle2}
+                    color="green"
+                />
 
-                <Card className="border-0 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 text-white shadow-xl transform transition-all duration-300 hover:scale-105">
-                    <CardHeader className="pb-2 flex flex-row items-center justify-between">
-                        <CardTitle className="text-base font-medium text-purple-100">Escalated Grievances</CardTitle>
-                        <ShieldAlert className="h-6 w-6 text-purple-200" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-4xl font-bold">{escalatedGrievances}</div>
-                        <p className="text-sm text-purple-200 mt-1">Cases needing higher review</p>
-                    </CardContent>
-                </Card>
-                 {/* --- NEW CARDS END HERE --- */}
+                <StatCard
+                    title="Escalated Grievances"
+                    value={escalatedGrievances}
+                    subtitle="Cases needing higher review"
+                    icon={ShieldAlert}
+                    color="purple"
+                />
             </div>
 
-            <Card className="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-100 shadow-2xl border border-gray-100 rounded-3xl overflow-hidden transform transition-all duration-300 hover:scale-[1.005]">
-                <CardHeader className="p-8 md:p-10 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-700 text-white shadow-lg">
-                    <CardTitle className="text-3xl md:text-4xl font-bold">Grievance History Log</CardTitle>
-                    <CardDescription className="text-blue-100 mt-2 text-lg">
+            <Card className="w-full max-w-full sm:max-w-full md:max-w-6xl mx-auto bg-white/95 backdrop-blur-sm shadow-2xl border border-gray-100 rounded-2xl sm:rounded-3xl overflow-hidden transform transition-all duration-300 hover:scale-[1.005]">
+                <CardHeader className="p-4 sm:p-6 md:p-8 lg:p-10 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-700 text-white shadow-lg">
+                    <CardTitle className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold">Grievance History Log</CardTitle>
+                    <CardDescription className="text-blue-100 mt-2 text-sm sm:text-base md:text-lg">
                         Browse and manage all registered grievances.
                     </CardDescription>
-                    <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 pt-6">
-                        <div className="relative flex-grow">
-                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                            <Input placeholder="Search by worker, ID, or category..." className="pl-12 pr-4 py-2.5 w-full sm:max-w-xs bg-white/90 text-gray-800 border-gray-300 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200 rounded-xl placeholder:text-gray-500" />
+                    <div className="flex flex-col lg:flex-row items-start lg:items-center space-y-4 lg:space-y-0 lg:space-x-4 pt-4 sm:pt-6">
+                        <div className="relative flex-grow w-full lg:max-w-md">
+                            <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
+                            <Input placeholder="Search by worker, ID, or category..." className="pl-10 sm:pl-12 pr-4 py-2 sm:py-2.5 w-full bg-white/90 text-gray-800 border-gray-300 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200 rounded-lg sm:rounded-xl placeholder:text-gray-500 text-sm sm:text-base" />
                         </div>
                         <Select value={statusFilter} onValueChange={setStatusFilter}>
-                            <SelectTrigger className="w-full sm:w-[180px] bg-white/90 text-gray-800 border-gray-300 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200 rounded-xl px-4 py-2.5">
+                            <SelectTrigger className="w-full lg:w-[180px] bg-white/90 text-gray-800 border-gray-300 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200 rounded-lg sm:rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base">
                                 <SelectValue placeholder="Filter by status..." />
                             </SelectTrigger>
                             <SelectContent className="shadow-xl rounded-lg border-gray-200">
@@ -233,33 +216,33 @@ export default function GrievanceTrackingReportPage() {
                         </Select>
                     </div>
                 </CardHeader>
-                <CardContent className="p-0">
-                    <Table className="w-full">
+                <CardContent className="p-0 overflow-x-auto">
+                    <Table className="w-full min-w-[700px]">
                         <TableHeader className="bg-gray-50">
                             <TableRow className="border-b border-gray-200">
-                                <TableHead className="py-4 px-6 text-left text-gray-700 font-bold text-base">Case ID</TableHead>
-                                <TableHead className="py-4 px-6 text-left text-gray-700 font-bold text-base">Worker</TableHead>
-                                <TableHead className="py-4 px-6 text-left text-gray-700 font-bold text-base">Category</TableHead>
-                                <TableHead className="py-4 px-6 text-left text-gray-700 font-bold text-base">Submitted</TableHead>
-                                <TableHead className="py-4 px-6 text-left text-gray-700 font-bold text-base">Resolved</TableHead>
-                                <TableHead className="py-4 px-6 text-left text-gray-700 font-bold text-base">Status</TableHead>
-                                <TableHead className="text-right py-4 px-6 text-gray-700 font-bold text-base">Actions</TableHead>
+                                <TableHead className="py-3 sm:py-4 px-3 sm:px-6 text-left text-gray-700 font-bold text-sm sm:text-base">Case ID</TableHead>
+                                <TableHead className="py-3 sm:py-4 px-3 sm:px-6 text-left text-gray-700 font-bold text-sm sm:text-base">Worker</TableHead>
+                                <TableHead className="py-3 sm:py-4 px-3 sm:px-6 text-left text-gray-700 font-bold text-sm sm:text-base">Category</TableHead>
+                                <TableHead className="py-3 sm:py-4 px-3 sm:px-6 text-left text-gray-700 font-bold text-sm sm:text-base">Submitted</TableHead>
+                                <TableHead className="py-3 sm:py-4 px-3 sm:px-6 text-left text-gray-700 font-bold text-sm sm:text-base">Resolved</TableHead>
+                                <TableHead className="py-3 sm:py-4 px-3 sm:px-6 text-left text-gray-700 font-bold text-sm sm:text-base">Status</TableHead>
+                                <TableHead className="text-right py-3 sm:py-4 px-3 sm:px-6 text-gray-700 font-bold text-sm sm:text-base">Actions</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {grievanceHistory.map((g) => (
                                 <TableRow key={g.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-150">
-                                    <TableCell className="py-4 px-6 font-medium text-gray-800 text-base">{g.id}</TableCell>
-                                    <TableCell className="py-4 px-6 text-gray-700 text-base">{g.worker}</TableCell>
-                                    <TableCell className="py-4 px-6 text-gray-700 text-base">{g.category}</TableCell>
-                                    <TableCell className="py-4 px-6 text-gray-700 text-base">{g.submitted}</TableCell>
-                                    <TableCell className="py-4 px-6 text-gray-700 text-base">{g.resolved}</TableCell>
-                                    <TableCell className="py-4 px-6">
-                                        <span className={`px-3 py-1 text-sm rounded-full inline-block whitespace-nowrap min-w-[120px] text-center ${getStatusBadgeClass(g.status)}`}>
+                                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6 font-medium text-gray-800 text-sm sm:text-base">{g.id}</TableCell>
+                                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6 text-gray-700 text-sm sm:text-base">{g.worker}</TableCell>
+                                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6 text-gray-700 text-sm sm:text-base">{g.category}</TableCell>
+                                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6 text-gray-700 text-sm sm:text-base">{g.submitted}</TableCell>
+                                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6 text-gray-700 text-sm sm:text-base">{g.resolved}</TableCell>
+                                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6">
+                                        <span className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-full inline-block whitespace-nowrap min-w-[100px] sm:min-w-[120px] text-center ${getStatusBadgeClass(g.status)}`}>
                                             {g.status}
                                         </span>
                                     </TableCell>
-                                    <TableCell className="text-right py-4 px-6">
+                                    <TableCell className="text-right py-3 sm:py-4 px-3 sm:px-6">
                                         <Dialog onOpenChange={(isOpen) => {
                                             if (!isOpen) {
                                                 setSelectedGrievance(null);
@@ -270,13 +253,15 @@ export default function GrievanceTrackingReportPage() {
                                                 <Button
                                                     variant="outline"
                                                     size="sm"
-                                                    className="text-blue-600 border-blue-300 hover:bg-blue-50 px-4 py-2 rounded-lg transition-all duration-200"
+                                                    className="text-blue-600 border-blue-300 hover:bg-blue-50 px-2 sm:px-4 py-1 sm:py-2 rounded-lg transition-all duration-200 text-xs sm:text-sm"
                                                     onClick={() => {
                                                         setSelectedGrievance(g);
                                                         setModalStatus(g.status);
                                                     }}
                                                 >
-                                                    <Eye className="h-4 w-4 mr-2" />View Details
+                                                    <Eye className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                                                    <span className="hidden sm:inline">View Details</span>
+                                                    <span className="sm:hidden">View</span>
                                                 </Button>
                                             </DialogTrigger>
                                             {selectedGrievance && selectedGrievance.id === g.id && (

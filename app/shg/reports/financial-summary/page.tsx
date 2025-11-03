@@ -4,7 +4,7 @@
 
 'use client'; // For Next.js App Router
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   ResponsiveContainer,
   PieChart,
@@ -47,7 +47,8 @@ import {
   Sparkles,
   Calendar,
 } from 'lucide-react';
-import { motion, AnimatePresence, useSpring, useTransform } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import StatCard from '@/components/ui/stat-card';
 
 // --- MOCK DATA & TYPES ---
 
@@ -170,55 +171,9 @@ const GlassCard: React.FC<{ children: React.ReactNode; className?: string }> = (
   </div>
 );
 
-/**
- * Animated Counter for KPI Cards
- */
-const AnimatedCounter: React.FC<{ value: number; format: (val: number) => string }> = ({ value, format }) => {
-  const spring = useSpring(0, {
-    mass: 0.8,
-    stiffness: 75,
-    damping: 15,
-  });
-  const display = useTransform(spring, (current) => format(current));
 
-  useEffect(() => {
-    spring.set(value);
-  }, [spring, value]);
 
-  return <motion.span>{display}</motion.span>;
-};
 
-/**
- * KPI Summary Card
- */
-type SummaryCardProps = {
-  title: string;
-  value: number;
-  icon: React.ElementType;
-  color: string;
-  format?: 'currency' | 'number';
-};
-
-const SummaryCard: React.FC<SummaryCardProps> = ({ title, value, icon: Icon, color, format = 'currency' }) => {
-  const formatter = format === 'currency' ? formatCurrency : (val: number) => val.toLocaleString();
-  return (
-    <motion.div whileHover={{ y: -5, scale: 1.03 }} transition={{ type: 'spring', stiffness: 300 }}>
-      <GlassCard className="p-5">
-        <div className="flex items-center justify-between">
-          <div className={`p-3 rounded-full bg-gradient-to-br ${color}`}>
-            <Icon className="w-6 h-6 text-white" />
-          </div>
-          <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">{title}</span>
-        </div>
-        <div className="mt-4 text-right">
-          <h3 className="text-3xl font-bold text-slate-800 dark:text-slate-100">
-            <AnimatedCounter value={value} format={formatter} />
-          </h3>
-        </div>
-      </GlassCard>
-    </motion.div>
-  );
-};
 
 /**
  * Status Badge Component
@@ -445,10 +400,17 @@ const FinancialSummaryPage: React.FC = () => {
   // --- Handlers ---
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFilters(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    setCurrentPage(1); // Reset to first page when filters change
   };
 
   const resetFilters = () => {
     setFilters({ fy: '', scheme: '', district: '', shg: 'Navchetana Mahila Bachat Gat', search: '' });
+    setCurrentPage(1);
+  };
+
+  const applyFilters = () => {
+    // Force re-calculation of filtered data
+    setCurrentPage(1);
   };
 
   const handleSort = (key: keyof FinancialRecord) => {
@@ -473,16 +435,30 @@ const FinancialSummaryPage: React.FC = () => {
     let data = [...processedTableData];
 
     // Apply search
-    if (filters.search) {
+    if (filters.search.trim()) {
+      const searchTerm = filters.search.toLowerCase().trim();
       data = data.filter(item =>
-        item.schemeName.toLowerCase().includes(filters.search.toLowerCase())
+        item.schemeName.toLowerCase().includes(searchTerm) ||
+        item.id.toLowerCase().includes(searchTerm)
       );
     }
-    // Apply filters (example for scheme)
+
+    // Apply scheme filter
     if (filters.scheme) {
       data = data.filter(item => item.schemeName === filters.scheme);
     }
-    // Note: Add other filters (fy, district) here if needed
+
+    // Apply financial year filter (mock implementation)
+    if (filters.fy) {
+      // In a real app, you'd have year data in your records
+      // For now, we'll just show all data for any selected year
+    }
+
+    // Apply district filter (mock implementation)
+    if (filters.district) {
+      // In a real app, you'd filter by district
+      // For now, we'll just show all data for any selected district
+    }
 
     // Apply sorting
     if (sortConfig !== null) {
@@ -492,6 +468,12 @@ const FinancialSummaryPage: React.FC = () => {
 
         if (valA === null || valA === undefined) return 1;
         if (valB === null || valB === undefined) return -1;
+
+        if (typeof valA === 'string' && typeof valB === 'string') {
+          return sortConfig.direction === 'asc' 
+            ? valA.localeCompare(valB)
+            : valB.localeCompare(valA);
+        }
 
         if (valA < valB) {
           return sortConfig.direction === 'asc' ? -1 : 1;
@@ -632,32 +614,55 @@ const FinancialSummaryPage: React.FC = () => {
 
           {/* 3. KPI Summary Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <SummaryCard title="Total Sanctioned" value={kpiData.totalSanctioned} icon={Package} color="from-violet-500 to-purple-600" />
-            <SummaryCard title="Total Funds Released" value={kpiData.totalDisbursed} icon={HandCoins} color="from-sky-500 to-blue-600" />
-            <SummaryCard title="Total Utilized" value={kpiData.totalUtilized} icon={PiggyBank} color="from-emerald-500 to-green-600" />
-            <SummaryCard title="Remaining Balance" value={kpiData.totalRemaining} icon={Banknote} color="from-amber-500 to-orange-600" />
-            <SummaryCard title="Loan Amount" value={kpiData.totalLoan} icon={Landmark} color="from-purple-500 to-indigo-600" />
-            <SummaryCard title="Loan Repaid" value={kpiData.totalRepaid} icon={CheckCircle} color="from-green-500 to-emerald-600" />
-            <SummaryCard title="Loan Outstanding" value={kpiData.totalOutstanding} icon={AlertTriangle} color="from-orange-500 to-red-600" />
-            
-            {/* Special KPI for Status */}
-            <motion.div whileHover={{ y: -5, scale: 1.03 }} transition={{ type: 'spring', stiffness: 300 }}>
-              <GlassCard className="p-5 flex flex-col justify-center h-full">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">Repayment Status</span>
-                </div>
-                <div className="mt-4 text-right">
-                  <StatusBadge status={kpiData.overallStatus} />
-                </div>
-              </GlassCard>
-            </motion.div>
+            <StatCard 
+              title="Total Sanctioned" 
+              value={formatCurrency(kpiData.totalSanctioned)} 
+              icon={Package} 
+              color="purple" 
+            />
+            <StatCard 
+              title="Total Funds Released" 
+              value={formatCurrency(kpiData.totalDisbursed)} 
+              icon={HandCoins} 
+              color="sky" 
+            />
+            <StatCard 
+              title="Total Utilized" 
+              value={formatCurrency(kpiData.totalUtilized)} 
+              icon={PiggyBank} 
+              color="green" 
+            />
+            <StatCard 
+              title="Remaining Balance" 
+              value={formatCurrency(kpiData.totalRemaining)} 
+              icon={Banknote} 
+              color="amber" 
+            />
+            <StatCard 
+              title="Loan Amount" 
+              value={formatCurrency(kpiData.totalLoan)} 
+              icon={Landmark} 
+              color="indigo" 
+            />
+            <StatCard 
+              title="Loan Repaid" 
+              value={formatCurrency(kpiData.totalRepaid)} 
+              icon={CheckCircle} 
+              color="emerald" 
+            />
+            <StatCard 
+              title="Loan Outstanding" 
+              value={formatCurrency(kpiData.totalOutstanding)} 
+              icon={AlertTriangle} 
+              color="red" 
+            />
           </div>
 
           {/* 4. Charts Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 gap-6">
             
-            {/* Line Chart - Fund Flow (Larger) */}
-            <motion.div className="lg:col-span-3" whileHover={{ scale: 1.02 }} transition={{ type: 'spring', stiffness: 300 }}>
+            {/* Line Chart - Fund Flow (Full Width) */}
+            <motion.div whileHover={{ scale: 1.02 }} transition={{ type: 'spring', stiffness: 300 }}>
               <GlassCard className="p-6">
                 <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-4">Fund Flow (in Lakhs)</h3>
                 <div className="h-[300px]">
@@ -679,65 +684,6 @@ const FinancialSummaryPage: React.FC = () => {
                 </div>
               </GlassCard>
             </motion.div>
-
-            {/* Bar + Pie (Smaller) */}
-            <div className="lg:col-span-2 space-y-6">
-              {/* Bar Chart - Loan Repayment */}
-              <motion.div whileHover={{ scale: 1.02 }} transition={{ type: 'spring', stiffness: 300 }}>
-                <GlassCard className="p-6">
-                  <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-4">Loan Repayment</h3>
-                  <div className="h-[120px]">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={loanRepaymentData} layout="vertical" margin={{ top: 0, right: 30, left: 20, bottom: 0 }}>
-                        <XAxis type="number" hide />
-                        <YAxis type="category" dataKey="name" hide />
-                        <RechartsTooltip formatter={(value) => [formatCurrency(value as number), null]} />
-                        <Bar dataKey="value" barSize={20} radius={[0, 10, 10, 0]}>
-                          <Cell fill={CHART_COLORS.Loan} />
-                          <Cell fill={CHART_COLORS.Repaid} />
-                          <Cell fill={CHART_COLORS.Outstanding} />
-                        </Bar>
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
-                  {/* Custom Legend */}
-                  <div className="flex justify-around mt-4 text-xs">
-                    <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full" style={{backgroundColor: CHART_COLORS.Loan}}></span>Loan</span>
-                    <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full" style={{backgroundColor: CHART_COLORS.Repaid}}></span>Repaid</span>
-                    <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full" style={{backgroundColor: CHART_COLORS.Outstanding}}></span>Outstanding</span>
-                  </div>
-                </GlassCard>
-              </motion.div>
-              
-              {/* Pie Chart - Category Utilization */}
-              <motion.div whileHover={{ scale: 1.02 }} transition={{ type: 'spring', stiffness: 300 }}>
-                <GlassCard className="p-6">
-                  <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-4">Category-wise Utilization</h3>
-                  <div className="h-[180px]">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={categoryData}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={50}
-                          outerRadius={80}
-                          fill="#8884d8"
-                          paddingAngle={3}
-                          dataKey="value"
-                        >
-                          {categoryData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
-                          ))}
-                        </Pie>
-                        <RechartsTooltip formatter={(value) => [`${value}%`, null]} />
-                        <Legend iconType="circle" layout="vertical" align="right" verticalAlign="middle" wrapperStyle={{fontSize: "12px", lineHeight: "1.5"}}/>
-                      </PieChart>
-                    </ResponsiveContainer>
-                  </div>
-                </GlassCard>
-              </motion.div>
-            </div>
           </div>
 
           {/* 5. Financial Summary Data Table */}

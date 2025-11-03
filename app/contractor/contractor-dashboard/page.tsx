@@ -51,13 +51,21 @@ const ChangeIndicator = ({ type, text }: ChangeIndicatorProps) => {
 
 export default function ContractorDashboard() {
   return (
-    <div className="min-h-screen bg-slate-50 p-4 sm:p-6 lg:p-8">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/40">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10 space-y-6 sm:space-y-8">
         
-        <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Contractor Overview</h1>
+        {/* Header Section */}
+        <div className="text-center sm:text-left">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent mb-2">
+            Contractor Overview
+          </h1>
+          <p className="text-sm sm:text-base text-slate-600 font-medium">
+            Monitor and manage your workforce efficiently
+          </p>
+        </div>
 
         {/* KPI Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           <DashboardCard
             title="Total Workers"
             value="60"
@@ -104,13 +112,13 @@ export default function ContractorDashboard() {
         {/* Graphs Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Attendance Trend Graph */}
-          <div className="bg-white rounded-2xl shadow-lg border border-slate-200/80 p-6 flex flex-col">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-slate-800">Attendance Trend</h2>
-              <span className="text-sm text-slate-500">Last 6 Months</span>
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/50 p-4 sm:p-6 flex flex-col hover:shadow-2xl transition-all duration-300 hover:scale-[1.02]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6">
+              <h2 className="text-lg sm:text-xl font-bold text-slate-800 mb-1 sm:mb-0">Attendance Trend</h2>
+              <span className="text-xs sm:text-sm text-slate-500 font-medium bg-slate-100 px-3 py-1 rounded-full">Last 6 Months</span>
             </div>
-            <div className="flex-1 flex items-center justify-center min-h-[240px] p-4">
-              <svg width="320" height="180" viewBox="0 0 320 180" className="w-full h-full">
+            <div className="flex-1 flex items-center justify-center min-h-[200px] sm:min-h-[240px] lg:min-h-[280px] p-2 sm:p-4">
+              <svg width="320" height="180" viewBox="0 0 320 180" className="w-full h-full max-w-md mx-auto sm:max-w-none drop-shadow-sm">
                 {/* Gradient definition */}
                 <defs>
                   <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -179,14 +187,14 @@ export default function ContractorDashboard() {
           </div>
           
           {/* Grievance Status Graph */}
-          <div className="bg-white rounded-2xl shadow-lg border border-slate-200/80 p-6 flex flex-col">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-slate-800">Grievance Status</h2>
-              <span className="text-sm text-slate-500">Current Month</span>
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/50 p-4 sm:p-6 flex flex-col hover:shadow-2xl transition-all duration-300 hover:scale-[1.02]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6">
+              <h2 className="text-lg sm:text-xl font-bold text-slate-800 mb-1 sm:mb-0">Grievance Status</h2>
+              <span className="text-xs sm:text-sm text-slate-500 font-medium bg-slate-100 px-3 py-1 rounded-full">Current Month</span>
             </div>
-            <div className="flex-1 flex items-center justify-center min-h-[240px]">
-              <div className="flex items-center space-x-8">
-                <svg width="160" height="160" viewBox="0 0 42 42" className="drop-shadow-lg">
+            <div className="flex-1 flex items-center justify-center min-h-[200px] sm:min-h-[240px] lg:min-h-[280px]">
+              <div className="flex flex-col sm:flex-row items-center space-y-6 sm:space-y-0 sm:space-x-6 lg:space-x-8">
+                <svg width="120" height="120" viewBox="0 0 42 42" className="drop-shadow-lg sm:w-32 sm:h-32 lg:w-40 lg:h-40">
                   <defs>
                     <linearGradient id="resolvedGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" stopColor="#10b981"/>
@@ -235,19 +243,19 @@ export default function ContractorDashboard() {
                   <text x="21" y="25" textAnchor="middle" fontSize="3.5" fill="#6b7280">Total</text>
                 </svg>
                 
-                <div className="flex flex-col space-y-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-4 h-4 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-sm"></div>
+                <div className="flex flex-col space-y-4 sm:space-y-6">
+                  <div className="flex items-center space-x-3 sm:space-x-4">
+                    <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-md"></div>
                     <div>
-                      <div className="text-sm font-semibold text-slate-800">Resolved</div>
-                      <div className="text-xs text-slate-500">10 cases (67%)</div>
+                      <div className="text-sm sm:text-base font-bold text-slate-800">Resolved</div>
+                      <div className="text-xs sm:text-sm text-slate-500 font-medium">10 cases (67%)</div>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <div className="w-4 h-4 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 shadow-sm"></div>
+                  <div className="flex items-center space-x-3 sm:space-x-4">
+                    <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 shadow-md"></div>
                     <div>
-                      <div className="text-sm font-semibold text-slate-800">Pending</div>
-                      <div className="text-xs text-slate-500">5 cases (33%)</div>
+                      <div className="text-sm sm:text-base font-bold text-slate-800">Pending</div>
+                      <div className="text-xs sm:text-sm text-slate-500 font-medium">5 cases (33%)</div>
                     </div>
                   </div>
                 </div>
@@ -257,43 +265,46 @@ export default function ContractorDashboard() {
         </div>
 
         {/* Quick Actions */}
-        <div className="bg-white p-6 rounded-2xl shadow-xl border border-slate-200/80">
-          <h3 className="text-xl font-semibold text-slate-900 mb-5">Quick Actions</h3>
+        <div className="bg-white/90 backdrop-blur-sm p-4 sm:p-6 lg:p-8 rounded-2xl shadow-2xl border border-slate-200/60 hover:shadow-3xl transition-all duration-500">
+          <div className="text-center sm:text-left mb-6 sm:mb-8">
+            <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-900 mb-2">Quick Actions</h3>
+            <p className="text-sm sm:text-base text-slate-600">Streamline your daily operations</p>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Action 1 */}
-            <button className="group text-left p-4 bg-slate-50 hover:bg-white rounded-xl border border-slate-200 hover:border-blue-400 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-              <div className="p-3 bg-blue-100 rounded-lg inline-block group-hover:bg-blue-500 transition-colors duration-300">
-                <Users className="h-6 w-6 text-blue-600 group-hover:text-white transition-colors duration-300" />
+            <button className="group text-left p-4 sm:p-5 lg:p-6 bg-gradient-to-br from-slate-50 to-blue-50/30 hover:from-white hover:to-blue-50 rounded-2xl border border-slate-200/80 hover:border-blue-400/60 hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 active:scale-95">
+              <div className="p-3 sm:p-4 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl inline-block group-hover:from-blue-500 group-hover:to-blue-600 transition-all duration-500 shadow-lg group-hover:shadow-xl">
+                <Users className="h-6 w-6 sm:h-7 sm:w-7 text-blue-600 group-hover:text-white transition-colors duration-300" />
               </div>
-              <p className="font-semibold text-slate-800 mt-3">Register Worker</p>
-              <p className="text-sm text-slate-500">Add new worker to system</p>
+              <p className="font-bold text-slate-800 mt-3 sm:mt-4 text-sm sm:text-base">Register Worker</p>
+              <p className="text-xs sm:text-sm text-slate-500 mt-1">Add new worker to system</p>
             </button>
             
             {/* Action 2 */}
-            <button className="group text-left p-4 bg-slate-50 hover:bg-white rounded-xl border border-slate-200 hover:border-green-400 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-              <div className="p-3 bg-green-100 rounded-lg inline-block group-hover:bg-green-500 transition-colors duration-300">
-                <Clock className="h-6 w-6 text-green-600 group-hover:text-white transition-colors duration-300" />
+            <button className="group text-left p-4 sm:p-5 lg:p-6 bg-gradient-to-br from-slate-50 to-green-50/30 hover:from-white hover:to-green-50 rounded-2xl border border-slate-200/80 hover:border-green-400/60 hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 active:scale-95">
+              <div className="p-3 sm:p-4 bg-gradient-to-br from-green-100 to-green-200 rounded-xl inline-block group-hover:from-green-500 group-hover:to-green-600 transition-all duration-500 shadow-lg group-hover:shadow-xl">
+                <Clock className="h-6 w-6 sm:h-7 sm:w-7 text-green-600 group-hover:text-white transition-colors duration-300" />
               </div>
-              <p className="font-semibold text-slate-800 mt-3">Mark Attendance</p>
-              <p className="text-sm text-slate-500">Record daily attendance</p>
+              <p className="font-bold text-slate-800 mt-3 sm:mt-4 text-sm sm:text-base">Mark Attendance</p>
+              <p className="text-xs sm:text-sm text-slate-500 mt-1">Record daily attendance</p>
             </button>
             
             {/* Action 3 */}
-            <button className="group text-left p-4 bg-slate-50 hover:bg-white rounded-xl border border-slate-200 hover:border-orange-400 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-              <div className="p-3 bg-orange-100 rounded-lg inline-block group-hover:bg-orange-500 transition-colors duration-300">
-                <AlertTriangle className="h-6 w-6 text-orange-600 group-hover:text-white transition-colors duration-300" />
+            <button className="group text-left p-4 sm:p-5 lg:p-6 bg-gradient-to-br from-slate-50 to-orange-50/30 hover:from-white hover:to-orange-50 rounded-2xl border border-slate-200/80 hover:border-orange-400/60 hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 active:scale-95">
+              <div className="p-3 sm:p-4 bg-gradient-to-br from-orange-100 to-orange-200 rounded-xl inline-block group-hover:from-orange-500 group-hover:to-orange-600 transition-all duration-500 shadow-lg group-hover:shadow-xl">
+                <AlertTriangle className="h-6 w-6 sm:h-7 sm:w-7 text-orange-600 group-hover:text-white transition-colors duration-300" />
               </div>
-              <p className="font-semibold text-slate-800 mt-3">Report Issue</p>
-              <p className="text-sm text-slate-500">Log grievance or incident</p>
+              <p className="font-bold text-slate-800 mt-3 sm:mt-4 text-sm sm:text-base">Report Issue</p>
+              <p className="text-xs sm:text-sm text-slate-500 mt-1">Log grievance or incident</p>
             </button>
             
             {/* Action 4 */}
-            <button className="group text-left p-4 bg-slate-50 hover:bg-white rounded-xl border border-slate-200 hover:border-purple-400 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-              <div className="p-3 bg-purple-100 rounded-lg inline-block group-hover:bg-purple-500 transition-colors duration-300">
-                <Shield className="h-6 w-6 text-purple-600 group-hover:text-white transition-colors duration-300" />
+            <button className="group text-left p-4 sm:p-5 lg:p-6 bg-gradient-to-br from-slate-50 to-purple-50/30 hover:from-white hover:to-purple-50 rounded-2xl border border-slate-200/80 hover:border-purple-400/60 hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 active:scale-95">
+              <div className="p-3 sm:p-4 bg-gradient-to-br from-purple-100 to-purple-200 rounded-xl inline-block group-hover:from-purple-500 group-hover:to-purple-600 transition-all duration-500 shadow-lg group-hover:shadow-xl">
+                <Shield className="h-6 w-6 sm:h-7 sm:w-7 text-purple-600 group-hover:text-white transition-colors duration-300" />
               </div>
-              <p className="font-semibold text-slate-800 mt-3">Safety Check</p>
-              <p className="text-sm text-slate-500">PPE compliance audit</p>
+              <p className="font-bold text-slate-800 mt-3 sm:mt-4 text-sm sm:text-base">Safety Check</p>
+              <p className="text-xs sm:text-sm text-slate-500 mt-1">PPE compliance audit</p>
             </button>
           </div>
         </div>

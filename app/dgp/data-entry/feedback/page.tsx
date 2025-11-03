@@ -87,17 +87,25 @@ const mockRecentActivity = [
 
 /**
  * 1. GlassCard Component
- * Reusable card with glassmorphism, border, and hover-lift animation.
+ * Enhanced reusable card with modern glassmorphism, gradient borders, and advanced animations.
  */
 const GlassCard = ({ children, className = "", noHover = false }: { children: React.ReactNode; className?: string; noHover?: boolean }) => (
   <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
-    whileHover={noHover ? {} : { y: -6, transition: { duration: 0.2 } }}
-    className={`bg-white/80 backdrop-blur-lg rounded-2xl shadow-lg border border-sky-100 ${className}`}
+    initial={{ opacity: 0, y: 30, scale: 0.95 }}
+    animate={{ opacity: 1, y: 0, scale: 1 }}
+    transition={{ duration: 0.6, ease: [0.25, 1, 0.5, 1] }}
+    whileHover={noHover ? {} : { 
+      y: -8, 
+      scale: 1.02,
+      transition: { duration: 0.3, ease: "easeOut" },
+      boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+    }}
+    className={`relative bg-gradient-to-br from-white/95 via-white/90 to-blue-50/80 backdrop-blur-xl rounded-3xl shadow-xl border border-gradient-to-r from-blue-200/50 via-purple-200/30 to-pink-200/50 overflow-hidden ${className}`}
   >
-    {children}
+    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5 pointer-events-none" />
+    <div className="relative z-10">
+      {children}
+    </div>
   </motion.div>
 );
 
@@ -246,7 +254,7 @@ const Toast = ({ isVisible, onClose, message, type = "success" }: {
 
 /**
  * 7. CardHeader Component
- * A standardized header for GlassCards.
+ * Enhanced header with gradient backgrounds and modern styling.
  */
 const CardHeader = ({ icon, title, badgeText, children }: {
   icon: React.ReactNode;
@@ -254,15 +262,21 @@ const CardHeader = ({ icon, title, badgeText, children }: {
   badgeText?: string; // FIX: Made optional
   children?: React.ReactNode; // FIX: Made optional
 }) => (
-  <div className="flex items-center justify-between px-6 py-4 border-b border-sky-100 bg-white/50 rounded-t-2xl">
-    <div className="flex items-center gap-3">
-      <span className="text-sky-600">{icon}</span>
-      <h3 className="text-base font-semibold text-navy-800">{title}</h3>
-      {badgeText && (
-        <span className="px-3 py-0.5 rounded-full bg-sky-100 text-sky-700 text-xs font-bold border border-sky-200">
-          {badgeText}
-        </span>
-      )}
+  <div className="flex items-center justify-between px-6 py-5 border-b border-gradient-to-r from-blue-200/30 via-purple-200/20 to-pink-200/30 bg-gradient-to-r from-blue-50/80 via-white/90 to-purple-50/80 rounded-t-3xl backdrop-blur-sm">
+    <div className="flex items-center gap-4">
+      <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25">
+        {icon}
+      </div>
+      <div>
+        <h3 className="text-lg font-bold bg-gradient-to-r from-blue-700 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+          {title}
+        </h3>
+        {badgeText && (
+          <span className="inline-block mt-1 px-3 py-1 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-bold shadow-md">
+            {badgeText}
+          </span>
+        )}
+      </div>
     </div>
     <div className="flex items-center gap-3">
       {children}
@@ -297,9 +311,9 @@ const LiveDateTimeChip = () => {
   };
 
   return (
-    <div className="info-chip">
-      <Clock size={14} className="text-sky-700" />
-      <span>{formatDate(dateTime)}</span>
+    <div className="enhanced-info-chip bg-gradient-to-r from-orange-500 to-red-500 text-white border-0 shadow-lg shadow-orange-500/25">
+      <Clock size={16} className="text-white animate-pulse" />
+      <span className="font-semibold">{formatDate(dateTime)}</span>
     </div>
   );
 };
@@ -374,53 +388,85 @@ export default function GeneralFeedbackEntry() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="min-h-screen p-6 lg:p-10 bg-gradient-to-br from-white via-sky-50 to-slate-100"
+      transition={{ duration: 0.8 }}
+      className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-3 sm:p-4 md:p-6 lg:p-8"
     >
-      {/* --- Sticky Header --- */}
-      <header className="relative bg-white border-b border-slate-200 shadow-sm px-6 lg:px-10">
-        <div className="mx-auto max-w-7xl py-4">
+      {/* --- Enhanced Sticky Header --- */}
+      <header className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 border-b-4 border-gradient-to-r from-yellow-400 to-orange-500 shadow-2xl px-3 sm:px-4 md:px-6 lg:px-10 overflow-hidden">
+        <div className="absolute inset-0 bg-black/10"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-purple-500/20"></div>
+        <div className="relative z-10 mx-auto max-w-7xl py-4 sm:py-6">
           {/* Breadcrumb */}
-          <nav className="flex items-center text-sm font-medium text-slate-500" aria-label="Breadcrumb">
-            <a href="#" className="hover:text-slate-700">DGP Dashboard</a>
-            <ChevronRight size={16} className="mx-1.5" />
-            <a href="#" className="hover:text-slate-700">Data Entry</a>
-            <ChevronRight size={16} className="mx-1.5" />
-            <span className="text-slate-800 font-semibold">General Feedback</span>
+          <nav className="flex items-center text-xs sm:text-sm font-medium text-white/90 overflow-x-auto" aria-label="Breadcrumb">
+            <a href="#" className="hover:text-white transition-colors whitespace-nowrap flex items-center gap-1">
+              <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
+              DGP Dashboard
+            </a>
+            <ChevronRight size={12} className="mx-1.5 sm:hidden text-white/70" />
+            <ChevronRight size={16} className="hidden sm:block mx-2 text-white/70" />
+            <a href="#" className="hover:text-white transition-colors whitespace-nowrap flex items-center gap-1">
+              <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
+              Data Entry
+            </a>
+            <ChevronRight size={12} className="mx-1.5 sm:hidden text-white/70" />
+            <ChevronRight size={16} className="hidden sm:block mx-2 text-white/70" />
+            <span className="text-white font-bold whitespace-nowrap flex items-center gap-1">
+              <div className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse"></div>
+              General Feedback
+            </span>
           </nav>
           {/* Title */}
-          <div className="flex items-center justify-between mt-3">
-            <div className="flex items-center gap-3">
-              <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-navy-700 text-white shadow-lg shadow-navy-500/30">
-                <Shield size={24} />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-navy-900">General Feedback Entry</h1>
-                <p className="text-sm text-slate-600">Record and monitor feedback received from law-enforcement agencies & public.</p>
-              </div>
+          <div className="flex items-start gap-4 mt-4">
+            <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 text-white shadow-2xl shadow-orange-500/40">
+              <Shield size={24} className="sm:hidden" />
+              <Shield size={32} className="hidden sm:block" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h1 className="text-xl sm:text-2xl lg:text-4xl font-black text-white break-words leading-tight">
+                General Feedback Entry
+              </h1>
+              <p className="text-sm sm:text-base text-white/90 mt-2 leading-relaxed font-medium">
+                🎯 Record and monitor feedback received from law-enforcement agencies & public
+              </p>
             </div>
           </div>
         </div>
       </header>
 
-      {/* --- Filter / Info Tag Row --- */}
-      <div className="max-w-7xl mx-auto mt-6 flex flex-wrap gap-3">
-        <div className="info-chip bg-navy-100 text-navy-800 border-navy-200">
-          <UserCheck size={14} className="text-navy-600" />
-          <span>Role: DGP – State Level</span>
-        </div>
-        <div className="info-chip bg-sky-100 text-sky-800 border-sky-200">
-          <Flag size={14} className="text-sky-700" />
-          <span>State: Haryana</span>
-        </div>
-        <LiveDateTimeChip />
+      {/* --- Enhanced Info Tag Row --- */}
+      <div className="max-w-7xl mx-auto mt-6 sm:mt-8 px-3 sm:px-4 md:px-6 lg:px-8 flex flex-wrap gap-3 sm:gap-4">
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.2 }}
+          className="enhanced-info-chip bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0 shadow-lg shadow-blue-500/25"
+        >
+          <UserCheck size={16} className="text-white" />
+          <span className="font-semibold">Role: DGP – State Level</span>
+        </motion.div>
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.3 }}
+          className="enhanced-info-chip bg-gradient-to-r from-green-500 to-emerald-600 text-white border-0 shadow-lg shadow-green-500/25"
+        >
+          <Flag size={16} className="text-white" />
+          <span className="font-semibold">State: Haryana</span>
+        </motion.div>
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.4 }}
+        >
+          <LiveDateTimeChip />
+        </motion.div>
       </div>
 
       {/* --- Main Content Area --- */}
-      <main className="max-w-7xl mx-auto mt-6 pt-[4rem]">
+      <main className="max-w-7xl mx-auto mt-4 sm:mt-6 px-3 sm:px-4 md:px-6 lg:px-8">
         <form onSubmit={handleSubmit}>
           {/* --- Main Form Card --- */}
-          <GlassCard>
+          <GlassCard noHover>
             <CardHeader
               icon={<ClipboardList size={20} />}
               title="Feedback Entry Form"
@@ -429,8 +475,8 @@ export default function GeneralFeedbackEntry() {
               {/* Add any content or leave empty if no children are needed */}
               <div></div>
             </CardHeader>
-            <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
+            <div className="p-4 sm:p-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-6 gap-y-4 sm:gap-y-5">
                 
                 {/* --- Column 1 --- */}
                 <FormInputGroup 
@@ -457,7 +503,7 @@ export default function GeneralFeedbackEntry() {
                   </select>
                 </FormInputGroup>
 
-                <div className="md:col-span-2">
+                <div className="sm:col-span-2">
                   <FormInputGroup 
                     label="Description" 
                     htmlFor="description" 
@@ -465,7 +511,7 @@ export default function GeneralFeedbackEntry() {
                     icon={<FileText size={16} className="text-slate-400" />}
                     helpText="Provide a detailed summary of the feedback."
                   >
-                    <textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} className="form-textarea" rows={5} placeholder="Enter detailed description..."></textarea>
+                    <textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} className="form-textarea" rows={4} placeholder="Enter detailed description..."></textarea>
                   </FormInputGroup>
                 </div>
 
@@ -489,7 +535,7 @@ export default function GeneralFeedbackEntry() {
                   </select>
                 </FormInputGroup>
                 
-                <div className="md:col-span-2 border-t border-sky-100 pt-5">
+                <div className="sm:col-span-2 border-t border-sky-100 pt-4 sm:pt-5">
                   <FormInputGroup 
                     label="Action Taken" 
                     htmlFor="actionTaken"
@@ -500,7 +546,7 @@ export default function GeneralFeedbackEntry() {
                   </FormInputGroup>
                 </div>
                 
-                <div className="md:col-span-2">
+                <div className="sm:col-span-2">
                   <FormInputGroup 
                     label="Response / Reply" 
                     htmlFor="response"
@@ -538,31 +584,47 @@ export default function GeneralFeedbackEntry() {
               </div>
             </div>
 
-            {/* --- Form Button Bar --- */}
-            <div className="p-4 bg-slate-50/50 border-t border-sky-100 rounded-b-2xl flex justify-end items-center gap-3">
+            {/* --- Enhanced Form Button Bar --- */}
+            <div className="p-4 sm:p-6 bg-gradient-to-r from-blue-50/80 via-purple-50/60 to-pink-50/80 border-t border-gradient-to-r from-blue-200/30 via-purple-200/20 to-pink-200/30 rounded-b-3xl flex flex-col sm:flex-row sm:justify-end items-stretch sm:items-center gap-3 sm:gap-4">
               <button
                 type="button"
                 onClick={handleClearForm}
-                className="form-button-secondary"
+                className="enhanced-button-secondary flex items-center justify-center gap-2"
               >
-                <RotateCcw size={16} />
-                Clear
+                <RotateCcw size={14} className="sm:hidden" />
+                <RotateCcw size={16} className="hidden sm:block" />
+                <span className="hidden sm:inline">Clear Form</span>
+                <span className="sm:hidden">Clear</span>
               </button>
               <button
                 type="button"
                 onClick={handleSaveDraft}
-                className="form-button-secondary"
+                className="enhanced-button-tertiary flex items-center justify-center gap-2"
               >
-                <Save size={16} />
-                Save Draft
+                <Save size={14} className="sm:hidden" />
+                <Save size={16} className="hidden sm:block" />
+                <span className="hidden sm:inline">Save Draft</span>
+                <span className="sm:hidden">Save</span>
               </button>
               <button
                 type="submit"
                 disabled={isLoading}
-                className="form-button-primary"
+                className="enhanced-button-primary w-full sm:w-auto"
               >
-                {isLoading ? <Loader2 size={18} className="animate-spin" /> : <Send size={16} />}
-                {isLoading ? "Submitting..." : "Submit Feedback"}
+                {isLoading ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin sm:hidden" />
+                    <Loader2 size={18} className="hidden sm:block animate-spin" />
+                    <span>Submitting...</span>
+                  </>
+                ) : (
+                  <>
+                    <Send size={14} className="sm:hidden" />
+                    <Send size={16} className="hidden sm:block" />
+                    <span className="hidden sm:inline">Submit Feedback</span>
+                    <span className="sm:hidden">Submit</span>
+                  </>
+                )}
               </button>
             </div>
           </GlassCard>
@@ -574,7 +636,7 @@ export default function GeneralFeedbackEntry() {
         
 
           {/* 🕓 Recent Activity Table */}
-          <div className="mt-12">
+          <div className="mt-8 sm:mt-12">
             <GlassCard noHover>
               <CardHeader
                 icon={<BookOpen size={20} />}
@@ -583,16 +645,16 @@ export default function GeneralFeedbackEntry() {
                 {/* Export buttons moved to footer */}
               </CardHeader>
               <div className="overflow-x-auto">
-                <table className="table-auto w-full">
+                <table className="table-auto w-full min-w-max">
                   <thead className="sticky top-0 bg-slate-100/80 backdrop-blur-sm z-10">
                     <tr>
-                      <th className="th-cell">Feedback ID</th>
-                      <th className="th-cell">Department / Unit</th>
-                      <th className="th-cell">Source</th>
-                      <th className="th-cell">Type</th>
-                      <th className="th-cell">Status</th>
-                      <th className="th-cell">Last Update</th>
-                      <th className="th-cell">Action</th>
+                      <th className="th-cell text-xs sm:text-sm px-2 sm:px-4 py-2 sm:py-3">ID</th>
+                      <th className="th-cell text-xs sm:text-sm px-2 sm:px-4 py-2 sm:py-3 hidden sm:table-cell">Department</th>
+                      <th className="th-cell text-xs sm:text-sm px-2 sm:px-4 py-2 sm:py-3 hidden md:table-cell">Source</th>
+                      <th className="th-cell text-xs sm:text-sm px-2 sm:px-4 py-2 sm:py-3">Type</th>
+                      <th className="th-cell text-xs sm:text-sm px-2 sm:px-4 py-2 sm:py-3">Status</th>
+                      <th className="th-cell text-xs sm:text-sm px-2 sm:px-4 py-2 sm:py-3 hidden lg:table-cell">Last Update</th>
+                      <th className="th-cell text-xs sm:text-sm px-2 sm:px-4 py-2 sm:py-3">Action</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-slate-100">
@@ -603,17 +665,18 @@ export default function GeneralFeedbackEntry() {
                         animate={{ opacity: 1 }}
                         className="hover:bg-sky-50/50 transition-colors"
                       >
-                        <td className="td-cell font-medium text-navy-800">{item.id}</td>
-                        <td className="td-cell">{item.unit}</td>
-                        <td className="td-cell">{item.source}</td>
-                        <td className="td-cell">{item.type}</td>
-                        <td className="td-cell">
+                        <td className="td-cell font-medium text-navy-800 text-xs sm:text-sm px-2 sm:px-4 py-3 sm:py-4">{item.id}</td>
+                        <td className="td-cell text-xs sm:text-sm px-2 sm:px-4 py-3 sm:py-4 hidden sm:table-cell">{item.unit}</td>
+                        <td className="td-cell text-xs sm:text-sm px-2 sm:px-4 py-3 sm:py-4 hidden md:table-cell">{item.source}</td>
+                        <td className="td-cell text-xs sm:text-sm px-2 sm:px-4 py-3 sm:py-4">{item.type}</td>
+                        <td className="td-cell px-2 sm:px-4 py-3 sm:py-4">
                           <StatusBadge status={item.status as "Pending" | "Resolved"} />
                         </td>
-                        <td className="td-cell">{item.lastUpdate}</td>
-                        <td className="td-cell">
-                          <button className="p-1.5 rounded-md text-sky-600 hover:bg-sky-100 transition-colors">
-                            <Eye size={16} />
+                        <td className="td-cell text-xs sm:text-sm px-2 sm:px-4 py-3 sm:py-4 hidden lg:table-cell">{item.lastUpdate}</td>
+                        <td className="td-cell px-2 sm:px-4 py-3 sm:py-4">
+                          <button className="p-1 sm:p-1.5 rounded-md text-sky-600 hover:bg-sky-100 transition-colors">
+                            <Eye size={14} className="sm:hidden" />
+                            <Eye size={16} className="hidden sm:block" />
                           </button>
                         </td>
                       </motion.tr>
@@ -626,14 +689,20 @@ export default function GeneralFeedbackEntry() {
         </section>
 
         {/* --- Footer --- */}
-        <footer className="text-center text-slate-500 text-sm mt-12 pb-6">
-          <p>Ensuring accountability and timely grievance resolution.</p>
-          <div className="flex items-center justify-center gap-4 mt-2">
+        <footer className="text-center text-slate-500 text-xs sm:text-sm mt-8 sm:mt-12 pb-4 sm:pb-6">
+          <p className="px-4">Ensuring accountability and timely feedback resolution.</p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mt-2 px-4">
             <a href="#" className="footer-link">
-              <FileBarChart size={14} /> Generate PDF Report
+              <FileBarChart size={12} className="sm:hidden" />
+              <FileBarChart size={14} className="hidden sm:block" />
+              <span className="hidden sm:inline">Generate PDF Report</span>
+              <span className="sm:hidden">PDF Report</span>
             </a>
             <a href="#" className="footer-link">
-              <FileSpreadsheet size={14} /> Export CSV
+              <FileSpreadsheet size={12} className="sm:hidden" />
+              <FileSpreadsheet size={14} className="hidden sm:block" />
+              <span className="hidden sm:inline">Export CSV</span>
+              <span className="sm:hidden">Export CSV</span>
             </a>
           </div>
         </footer>
@@ -649,7 +718,7 @@ export default function GeneralFeedbackEntry() {
       
       {/* --- Global Styles for Form Inputs --- */}
       <style>{`
-        /* Define custom colors */
+        /* Enhanced Custom Colors & Gradients */
         .bg-navy-700 { background-color: #1e3a8a; }
         .hover\\:bg-navy-800:hover { background-color: #1c357a; }
         .text-navy-700 { color: #1e3a8a; }
@@ -673,28 +742,49 @@ export default function GeneralFeedbackEntry() {
         .to-green-400 { --tw-gradient-to: #4ade80; }
         .text-gold-400 { color: #facc15; }
         
-        /* Form Input Styling */
+        /* Enhanced Info Chips */
+        .enhanced-info-chip {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.5rem 1rem;
+          border-radius: 999px;
+          font-size: 0.875rem;
+          font-weight: 600;
+          border: 1px solid transparent;
+          backdrop-filter: blur(8px);
+          transform: translateZ(0);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .enhanced-info-chip:hover {
+          transform: translateY(-2px) scale(1.05);
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Enhanced Form Input Styling */
         .form-input-wrapper {
           position: relative;
         }
         .form-input, .form-select, .form-textarea {
           width: 100%;
-          padding: 0.75rem 1rem; /* 12px 16px */
-          font-size: 0.9rem;
+          padding: 1rem 1.25rem; /* Enhanced padding */
+          font-size: 0.95rem;
           font-family: 'Inter', sans-serif;
-          border-radius: 0.75rem; /* rounded-xl */
-          border: 1px solid #cbd5e1; /* slate-300 */
-          background-color: #ffffff;
-          box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-          transition: border-color 0.2s, box-shadow 0.2s;
+          border-radius: 1rem; /* More rounded */
+          border: 2px solid transparent;
+          background: linear-gradient(white, white) padding-box,
+                      linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899) border-box;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .form-input-wrapper:focus-within .form-input,
         .form-input-wrapper:focus-within .form-select,
         .form-input-wrapper:focus-within .form-textarea {
           outline: none;
-          border-color: #2563eb; /* royal-blue-600 */
-          box-shadow: 0 0 0 3px rgb(37 99 235 / 0.2);
+          background: linear-gradient(white, white) padding-box,
+                      linear-gradient(135deg, #06b6d4, #3b82f6, #8b5cf6) border-box;
+          box-shadow: 0 8px 25px rgba(59, 130, 246, 0.25);
         }
 
         .form-input::placeholder, .form-textarea::placeholder {
@@ -732,67 +822,107 @@ export default function GeneralFeedbackEntry() {
         .form-file-upload-btn {
           display: flex;
           align-items: center;
-          gap: 0.5rem;
+          gap: 0.75rem;
           width: 100%;
-          padding: 0.75rem 1rem;
-          font-size: 0.9rem;
-          border-radius: 0.75rem;
-          border: 1px solid #cbd5e1;
-          background-color: #ffffff;
-          box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-          transition: border-color 0.2s, box-shadow 0.2s;
+          padding: 1rem 1.25rem;
+          font-size: 0.95rem;
+          border-radius: 1rem;
+          border: 2px dashed #cbd5e1;
+          background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           cursor: pointer;
-          color: #475569; /* slate-600 */
+          color: #475569;
+          font-weight: 600;
         }
         .form-file-upload-btn:hover {
-          border-color: #2563eb;
+          border-color: #3b82f6;
+          background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+          box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
         }
         .form-file-upload-btn :global(svg) {
-          color: #2563eb;
+          color: #3b82f6;
         }
         
-        .form-button-primary {
+        /* Enhanced Button Styles */
+        .enhanced-button-primary {
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 0.5rem;
+          gap: 0.75rem;
           width: auto;
-          min-width: 150px;
-          padding: 0.7rem 1.25rem;
-          border-radius: 0.5rem; /* rounded-lg */
-          font-size: 0.9rem;
-          font-weight: 600;
-          background-color: #1e3a8a; /* navy-700 */
+          min-width: 170px;
+          padding: 1rem 2rem;
+          border-radius: 1rem;
+          font-size: 1rem;
+          font-weight: 700;
+          background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
           color: white;
-          transition: all 0.2s ease-in-out;
-          box-shadow: 0 4px 14px 0 rgb(30 58 138 / 0.3);
+          border: none;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+          position: relative;
+          overflow: hidden;
         }
-        .form-button-primary:hover:not(:disabled) {
-          background-color: #172554; /* navy-900 */
-          box-shadow: 0 6px 16px 0 rgb(30 58 138 / 0.4);
-          transform: translateY(-1px);
+        .enhanced-button-primary:before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+          transition: left 0.5s;
         }
-        .form-button-primary:disabled {
-          opacity: 0.7;
+        .enhanced-button-primary:hover:before {
+          left: 100%;
+        }
+        .enhanced-button-primary:hover:not(:disabled) {
+          background: linear-gradient(135deg, #2563eb, #7c3aed, #db2777);
+          box-shadow: 0 12px 35px rgba(59, 130, 246, 0.6);
+        }
+        .enhanced-button-primary:disabled {
+          opacity: 0.6;
           cursor: not-allowed;
         }
         
-        .form-button-secondary {
+        .enhanced-button-secondary {
           display: flex;
           align-items: center;
           gap: 0.5rem;
-          padding: 0.65rem 1rem;
-          border-radius: 0.5rem;
-          font-size: 0.9rem;
-          font-weight: 500;
-          background-color: #f1f5f9; /* slate-100 */
-          color: #334155; /* slate-700 */
-          border: 1px solid #e2e8f0; /* slate-200 */
-          transition: all 0.2s ease-in-out;
+          padding: 0.875rem 1.5rem;
+          border-radius: 0.875rem;
+          font-size: 0.95rem;
+          font-weight: 600;
+          background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+          color: #475569;
+          border: 2px solid #cbd5e1;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
         }
-        .form-button-secondary:hover {
-          background-color: #e2e8f0; /* slate-200 */
-          border-color: #cbd5e1; /* slate-300 */
+        .enhanced-button-secondary:hover {
+          background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+          border-color: #94a3b8;
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .enhanced-button-tertiary {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.875rem 1.5rem;
+          border-radius: 0.875rem;
+          font-size: 0.95rem;
+          font-weight: 600;
+          background: linear-gradient(135deg, #fbbf24, #f59e0b);
+          color: white;
+          border: none;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
+        }
+        .enhanced-button-tertiary:hover {
+          background: linear-gradient(135deg, #f59e0b, #d97706);
+          box-shadow: 0 8px 25px rgba(251, 191, 36, 0.6);
         }
         
         /* Table Styles */

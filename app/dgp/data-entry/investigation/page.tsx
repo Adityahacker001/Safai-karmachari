@@ -102,13 +102,15 @@ interface GlassCardProps {
 }
 const GlassCard: React.FC<GlassCardProps> = ({ children, className = "", noHover = false }) => (
   <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5, ease: "easeInOut" }}
-    whileHover={noHover ? {} : { y: -6, transition: { duration: 0.2 } }}
-    className={`bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-slate-200 ${className}`}
+    initial={{ opacity: 0, y: 30, scale: 0.95 }}
+    animate={{ opacity: 1, y: 0, scale: 1 }}
+    transition={{ duration: 0.6, ease: [0.25, 1, 0.5, 1] }}
+    className={`relative bg-gradient-to-br from-white/95 via-white/90 to-blue-50/80 backdrop-blur-xl rounded-3xl shadow-xl border border-gradient-to-r from-blue-200/50 via-purple-200/30 to-pink-200/50 overflow-hidden ${className}`}
   >
-    {children}
+    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5 pointer-events-none" />
+    <div className="relative z-10">
+      {children}
+    </div>
   </motion.div>
 );
 
@@ -415,41 +417,55 @@ export default function InvestigationProgressEntry() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      // Use the requested background gradient
-      className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-slate-100"
+      transition={{ duration: 0.8 }}
+      className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50"
     >
-      {/* --- Sticky Header --- */}
-      <header className="relative bg-white border-b border-slate-200 shadow-sm px-6 lg:px-10">
-        <div className="mx-auto max-w-7xl py-4">
+      {/* --- Enhanced Sticky Header --- */}
+      <header className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 border-b-4 border-gradient-to-r from-yellow-400 to-orange-500 shadow-2xl px-3 sm:px-4 md:px-6 lg:px-10 overflow-hidden">
+        <div className="absolute inset-0 bg-black/10"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-purple-500/20"></div>
+        <div className="relative z-10 mx-auto max-w-7xl py-4 sm:py-6">
           {/* Breadcrumb */}
-          <nav className="flex items-center text-sm font-medium text-slate-500" aria-label="Breadcrumb">
-            <a href="#" className="hover:text-slate-700">DGP Dashboard</a>
-            <ChevronRight size={16} className="mx-1.5" />
-            <a href="#" className="hover:text-slate-700">Data Entry</a>
-            <ChevronRight size={16} className="mx-1.5" />
-            <span className="text-slate-800 font-semibold">Investigation Feedback</span>
+          <nav className="flex items-center text-xs sm:text-sm font-medium text-white/90 overflow-x-auto" aria-label="Breadcrumb">
+            <a href="#" className="hover:text-white transition-colors whitespace-nowrap flex items-center gap-1">
+              <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
+              DGP Dashboard
+            </a>
+            <ChevronRight size={12} className="mx-1.5 sm:hidden text-white/70" />
+            <ChevronRight size={16} className="hidden sm:block mx-2 text-white/70" />
+            <a href="#" className="hover:text-white transition-colors whitespace-nowrap flex items-center gap-1">
+              <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
+              Data Entry
+            </a>
+            <ChevronRight size={12} className="mx-1.5 sm:hidden text-white/70" />
+            <ChevronRight size={16} className="hidden sm:block mx-2 text-white/70" />
+            <span className="text-white font-bold whitespace-nowrap flex items-center gap-1">
+              <div className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse"></div>
+              Investigation Feedback
+            </span>
           </nav>
           {/* Title */}
-          <div className="flex items-center justify-between mt-3">
-            <div className="flex items-center gap-3">
-              <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-navy-700 text-white shadow-lg shadow-navy-500/30">
-                {/* Use requested Police/Shield icon */}
-                <ShieldCheck size={24} />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-navy-900">Investigation Feedback Entry</h1>
-                <p className="text-sm text-slate-600">Log and update investigation details for SKs, SHGs, and Public.</p>
-              </div>
+          <div className="flex items-start gap-4 mt-4">
+            <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 text-white shadow-2xl shadow-orange-500/40">
+              <ShieldCheck size={24} className="sm:hidden" />
+              <ShieldCheck size={32} className="hidden sm:block" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h1 className="text-xl sm:text-2xl lg:text-4xl font-black text-white break-words leading-tight">
+                Investigation Feedback Entry
+              </h1>
+              <p className="text-sm sm:text-base text-white/90 mt-2 leading-relaxed font-medium">
+                🎯 Log and update investigation details for SKs, SHGs, and Public
+              </p>
             </div>
           </div>
         </div>
       </header>
 
       {/* --- Main Content Area --- */}
-      <main className="max-w-7xl mx-auto p-6 lg:p-10">
+      <main className="max-w-7xl mx-auto p-3 sm:p-4 md:p-6 lg:p-8">
         <form onSubmit={(e) => { e.preventDefault(); setIsModalOpen(true); }}>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
 
             {/* --- Left Column (Main Form) --- */}
             <div className="lg:col-span-2 flex flex-col gap-6 lg:gap-8">
@@ -457,7 +473,7 @@ export default function InvestigationProgressEntry() {
               {/* 1. Case Jurisdiction Block */}
               <GlassCard>
                 <CardHeader icon={<Landmark size={20} />} title="Case Jurisdiction" />
-                <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                   <FormInputGroup label="District" htmlFor="district" required>
                     <select id="district" value={district} onChange={(e) => setDistrict(e.target.value)} className="form-select">
                       {districtOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
@@ -481,7 +497,7 @@ export default function InvestigationProgressEntry() {
               {/* 2. Incident & Case Linking */}
               <GlassCard noHover>
                 <CardHeader icon={<Link size={20} />} title="Incident & Case Linking (Read-Only)" />
-                <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-5 bg-slate-50/50">
+                <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 bg-slate-50/50">
                   <InfoItem icon={<FileText size={16} />} label="Incident ID" value={mockCaseData.incidentId} />
                   <InfoItem icon={<FileBadge size={16} />} label="Case ID" value={mockCaseData.caseId} />
                   <InfoItem icon={<Calendar size={16} />} label="Incident Date" value={mockCaseData.incidentDate} />
@@ -494,8 +510,8 @@ export default function InvestigationProgressEntry() {
               {/* 3. Investigation Update Form */}
               <GlassCard>
                 <CardHeader icon={<ClipboardList size={20} />} title="Investigation Update" />
-                <div className="p-6 flex flex-col gap-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="p-4 sm:p-6 flex flex-col gap-4 sm:gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                     <FormInputGroup label="Incident Category" htmlFor="incidentCategory" required>
                       <select id="incidentCategory" value={incidentCategory} onChange={(e) => setIncidentCategory(e.target.value)} className="form-select">
                         {incidentCategoryOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
@@ -508,9 +524,9 @@ export default function InvestigationProgressEntry() {
                     </FormInputGroup>
                   </div>
                   
-                  <div className="border-t border-slate-200 -mx-6"></div>
+                  <div className="border-t border-slate-200 -mx-4 sm:-mx-6"></div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 items-center">
                     <ToggleSwitch enabled={isFirRegistered} setEnabled={setIsFirRegistered} label="FIR Registered?" />
                     <AnimatePresence>
                       {isFirRegistered && (

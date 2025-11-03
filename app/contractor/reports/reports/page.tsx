@@ -12,7 +12,8 @@ import {
     FileSpreadsheet, 
     Clock
 } from 'lucide-react';
-import DashboardLayout from '@/components/layout/dashboard-layout';
+import StatCard from '@/components/ui/stat-card';
+
 
 // --- Type Definitions ---
 type Report = {
@@ -64,75 +65,65 @@ const Reports: React.FC = () => {
     const solidCardStyle = "bg-white/95 border border-slate-200/80 shadow-2xl rounded-2xl";
 
     return (
-        <DashboardLayout role="contractor" name="Rohan Builders">
-            <div className="relative bg-slate-100 min-h-full p-4 md:p-6 space-y-8 overflow-hidden">
-                <AuroraBackground />
+       
+            <div className="min-h-screen w-full max-w-full sm:max-w-full md:max-w-7xl mx-auto p-4 sm:p-6 md:p-12 space-y-6 sm:space-y-8 md:space-y-10 overflow-hidden">
 
                 {/* --- HEADER WITH GRADIENT TEXT --- */}
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between">
-                    <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent text-center sm:text-left">
                         Reports & Analytics
                     </h1>
-                    {/* <button className="relative group flex items-center space-x-2 bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-6 py-3 rounded-lg hover:shadow-2xl hover:shadow-indigo-500/40 transition-all duration-300 shadow-xl">
-                        <span className="absolute top-0 left-0 w-full h-full rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),rgba(255,255,255,0))]"></span>
-                        <PlusCircle className="w-5 h-5" />
-                        <span className="font-semibold">Create Custom Report</span>
-                    </button> */}
                 </div>
 
                 {/* --- VIBRANT GLOWING STATS --- */}
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                        {quickStats.map((stat) => {
-                                                // Make 'Active Report Types' card more visible
-                                                const isActiveReports = stat.label === 'Active Report Types';
-                                                const cardClass = isActiveReports
-                                                    ? 'text-white p-6 rounded-2xl transition-transform hover:-translate-y-2 duration-300 bg-gradient-to-br from-violet-600 to-purple-700 shadow-2xl shadow-violet-500/40 border-2 border-violet-400'
-                                                    : `text-white p-6 rounded-2xl transition-transform hover:-translate-y-2 duration-300 bg-gradient-to-br from-${stat.color}-500 to-${stat.color}-600 shadow-2xl shadow-${stat.color}-500/40`;
-                                                return (
-                                                    <div key={stat.label} className={cardClass}>
-                                                        <div className="flex items-center justify-between"><p className="font-semibold">{stat.label}</p><stat.icon className="w-8 h-8 opacity-70" /></div>
-                                                        <p className="text-5xl font-bold mt-2">{stat.value}</p>
-                                                    </div>
-                                                );
-                                        })}
-                                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                    {quickStats.map((stat) => (
+                        <StatCard 
+                            key={stat.label}
+                            title={stat.label} 
+                            value={stat.value} 
+                            icon={stat.icon} 
+                            color={stat.label === 'Active Report Types' ? 'purple' : stat.color as any} 
+                        />
+                    ))}
+                </div>
 
                 {/* --- AVAILABLE REPORTS (SOLID CARD) --- */}
-                <div className={`${solidCardStyle}`}>
-                    <div className="p-5 border-b border-slate-200">
-                        <h2 className="text-2xl font-bold text-slate-800">Available Reports</h2>
-                        <p className="text-sm text-slate-500 mt-1">Generate and download standard reports in your preferred format.</p>
+                <div className="w-full max-w-full sm:max-w-full md:max-w-6xl mx-auto bg-white/95 backdrop-blur-sm border border-slate-200/80 shadow-2xl rounded-xl sm:rounded-2xl">
+                    <div className="p-4 sm:p-5 border-b border-slate-200">
+                        <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-slate-800">Available Reports</h2>
+                        <p className="text-xs sm:text-sm text-slate-500 mt-1">Generate and download standard reports in your preferred format.</p>
                     </div>
                     <div className="divide-y divide-slate-200/70">
                         {reports.map((report, index) => {
                             const { icon, borderColor } = getReportStyle(report.title);
                             return (
-                                <div key={index} className={`p-5 hover:bg-slate-50/70 transition-colors duration-200 border-l-4 ${borderColor}`}>
-                                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between">
-                                        <div className="flex items-center mb-4 sm:mb-0">
-                                            <div className="flex-shrink-0 mr-5 hidden sm:block">{icon}</div>
-                                            <div className="flex-1">
-                                                <h3 className="text-lg font-bold bg-gradient-to-r from-slate-700 to-slate-800 text-transparent bg-clip-text">{report.title}</h3>
-                                                <p className="text-sm text-slate-600 mt-1">{report.description}</p>
+                                <div key={index} className={`p-4 sm:p-5 hover:bg-slate-50/70 transition-colors duration-200 border-l-4 ${borderColor}`}>
+                                    <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between space-y-4 lg:space-y-0">
+                                        <div className="flex items-start sm:items-center w-full lg:w-auto">
+                                            <div className="flex-shrink-0 mr-3 sm:mr-5 hidden sm:block">{icon}</div>
+                                            <div className="flex-1 min-w-0">
+                                                <h3 className="text-base sm:text-lg font-bold bg-gradient-to-r from-slate-700 to-slate-800 text-transparent bg-clip-text break-words">{report.title}</h3>
+                                                <p className="text-xs sm:text-sm text-slate-600 mt-1">{report.description}</p>
                                                 <p className="text-xs text-slate-500 mt-2 font-medium">Last generated: {report.lastGenerated}</p>
                                             </div>
                                         </div>
-                                        <div className="flex items-center space-x-3 self-end sm:self-center">
+                                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 lg:space-x-3 w-full sm:w-auto">
                                             {report.format.includes('PDF') && (
-                                                <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-lg hover:shadow-lg hover:shadow-red-500/30 transition-all duration-300 text-sm font-semibold">
-                                                    <FileText className="w-4 h-4" />
+                                                <button className="flex items-center justify-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-lg hover:shadow-lg hover:shadow-red-500/30 transition-all duration-300 text-xs sm:text-sm font-semibold">
+                                                    <FileText className="w-3 h-3 sm:w-4 sm:h-4" />
                                                     <span>PDF</span>
                                                 </button>
                                             )}
                                             {report.format.includes('Excel') && (
-                                                <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-emerald-500 to-green-500 text-white rounded-lg hover:shadow-lg hover:shadow-emerald-500/30 transition-all duration-300 text-sm font-semibold">
-                                                    <FileSpreadsheet className="w-4 h-4" />
+                                                <button className="flex items-center justify-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-emerald-500 to-green-500 text-white rounded-lg hover:shadow-lg hover:shadow-emerald-500/30 transition-all duration-300 text-xs sm:text-sm font-semibold">
+                                                    <FileSpreadsheet className="w-3 h-3 sm:w-4 sm:h-4" />
                                                     <span>Excel</span>
                                                 </button>
                                             )}
                                             {/* View button */}
-                                            <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300 text-sm font-semibold">
-                                                <FileText className="w-4 h-4" />
+                                            <button className="flex items-center justify-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300 text-xs sm:text-sm font-semibold">
+                                                <FileText className="w-3 h-3 sm:w-4 sm:h-4" />
                                                 <span>View</span>
                                             </button>
                                         </div>
@@ -144,43 +135,43 @@ const Reports: React.FC = () => {
                 </div>
 
                 {/* --- FILTERS & DOWNLOADS (SOLID CARDS) --- */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div className={`${solidCardStyle} p-6`}>
-                        <h3 className="text-2xl font-bold text-slate-800 mb-4">Report Filters</h3>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
+                    <div className="w-full max-w-full bg-white/95 backdrop-blur-sm border border-slate-200/80 shadow-2xl rounded-xl sm:rounded-2xl p-4 sm:p-6">
+                        <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-slate-800 mb-4">Report Filters</h3>
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-1">Date Range</label>
-                                <div className="flex space-x-2">
-                                    <div className="relative flex-1"><Calendar className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"/><input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} className="w-full pl-9 pr-3 py-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" /></div>
-                                    <div className="relative flex-1"><Calendar className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"/><input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} className="w-full pl-9 pr-3 py-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" /></div>
+                                <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1">Date Range</label>
+                                <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+                                    <div className="relative flex-1"><Calendar className="w-3 h-3 sm:w-4 sm:h-4 absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 text-slate-400"/><input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} className="w-full pl-7 sm:pl-9 pr-3 py-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm" /></div>
+                                    <div className="relative flex-1"><Calendar className="w-3 h-3 sm:w-4 sm:h-4 absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 text-slate-400"/><input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} className="w-full pl-7 sm:pl-9 pr-3 py-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm" /></div>
                                 </div>
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-1">Worker Group</label>
-                                <select value={workerGroup} onChange={e => setWorkerGroup(e.target.value)} className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"><option>All Workers</option><option>Morning Shift</option><option>Evening Shift</option><option>Zone A</option><option>Zone B</option></select>
+                                <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1">Worker Group</label>
+                                <select value={workerGroup} onChange={e => setWorkerGroup(e.target.value)} className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"><option>All Workers</option><option>Morning Shift</option><option>Evening Shift</option><option>Zone A</option><option>Zone B</option></select>
                             </div>
-                            <button className="w-full mt-2 flex items-center justify-center space-x-2 bg-slate-800 text-white py-2.5 rounded-lg hover:bg-slate-900 transition-colors font-semibold shadow-lg shadow-slate-800/20">
-                                <Download className="w-5 h-5"/>
+                            <button className="w-full mt-2 flex items-center justify-center space-x-2 bg-slate-800 text-white py-2.5 rounded-lg hover:bg-slate-900 transition-colors font-semibold shadow-lg shadow-slate-800/20 text-sm">
+                                <Download className="w-4 h-4 sm:w-5 sm:h-5"/>
                                 <span>Generate & Download</span>
                             </button>
                         </div>
                     </div>
-                    <div className={`${solidCardStyle} p-6`}>
-                        <h3 className="text-2xl font-bold text-slate-800 mb-4">Recent Downloads</h3>
+                    <div className="w-full max-w-full bg-white/95 backdrop-blur-sm border border-slate-200/80 shadow-2xl rounded-xl sm:rounded-2xl p-4 sm:p-6">
+                        <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-slate-800 mb-4">Recent Downloads</h3>
                         <div className="space-y-3">
                              <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200">
-                                <div className="flex items-center"><FileText className="w-5 h-5 text-red-500 mr-3"/><div><p className="text-sm font-semibold text-slate-800">Daily Attendance Report</p><p className="text-xs text-slate-500">Downloaded just now</p></div></div>
-                                <span className="text-xs font-bold bg-red-500 text-white px-2.5 py-1 rounded-full">PDF</span>
+                                <div className="flex items-center min-w-0 flex-1"><FileText className="w-4 h-4 sm:w-5 sm:h-5 text-red-500 mr-2 sm:mr-3 flex-shrink-0"/><div className="min-w-0 flex-1"><p className="text-xs sm:text-sm font-semibold text-slate-800 truncate">Daily Attendance Report</p><p className="text-xs text-slate-500">Downloaded just now</p></div></div>
+                                <span className="text-xs font-bold bg-red-500 text-white px-2.5 py-1 rounded-full flex-shrink-0">PDF</span>
                             </div>
                             <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200">
-                                <div className="flex items-center"><FileSpreadsheet className="w-5 h-5 text-green-500 mr-3"/><div><p className="text-sm font-semibold text-slate-800">Grievance Report</p><p className="text-xs text-slate-500">Downloaded 2 hours ago</p></div></div>
-                                <span className="text-xs font-bold bg-green-500 text-white px-2.5 py-1 rounded-full">Excel</span>
+                                <div className="flex items-center min-w-0 flex-1"><FileSpreadsheet className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 mr-2 sm:mr-3 flex-shrink-0"/><div className="min-w-0 flex-1"><p className="text-xs sm:text-sm font-semibold text-slate-800 truncate">Grievance Report</p><p className="text-xs text-slate-500">Downloaded 2 hours ago</p></div></div>
+                                <span className="text-xs font-bold bg-green-500 text-white px-2.5 py-1 rounded-full flex-shrink-0">Excel</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </DashboardLayout>
+        
     );
 };
 

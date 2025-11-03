@@ -14,7 +14,8 @@ import {
     Download as DownloadIcon,
     ListChecks
 } from 'lucide-react';
-import DashboardLayout from '@/components/layout/dashboard-layout';
+import StatCard from '@/components/ui/stat-card';
+
 
 // --- Type Definition for User Data ---
 type User = {
@@ -74,36 +75,44 @@ const UserManagement: React.FC = () => {
     };
 
     return (
-        <DashboardLayout role="contractor" name="Rohan Builders">
-            <div className="bg-slate-100 min-h-full p-4 md:p-6 space-y-8">
+        <div className="min-h-screen w-full max-w-full sm:max-w-full md:max-w-7xl mx-auto p-4 sm:p-6 md:p-12 space-y-6 sm:space-y-8 md:space-y-10">
 
                 {/* --- HEADER --- */}
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between">
-                    <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">User Management</h1>
-                    <button className="flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-5 py-2.5 rounded-lg hover:shadow-xl transition-all duration-300 shadow-lg">
-                        <UserPlus className="w-5 h-5" />
-                        <span className="font-semibold">Add New Worker</span>
+                <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent text-center sm:text-left">User Management</h1>
+                    <button className="flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg hover:shadow-xl transition-all duration-300 shadow-lg text-sm sm:text-base font-medium sm:font-semibold">
+                        <UserPlus className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <span className="hidden sm:inline">Add New Worker</span>
+                        <span className="sm:hidden">Add Worker</span>
                     </button>
                 </div>
 
                 {/* --- VIBRANT STATS CARDS --- */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                    <div className="bg-gradient-to-br from-emerald-400 to-green-500 text-white p-6 rounded-xl shadow-2xl shadow-green-200 transition-transform hover:-translate-y-2 duration-300">
-                        <div className="flex items-center justify-between"><p className="font-semibold">Active Workers</p><UserCheck className="w-8 h-8 opacity-70" /></div>
-                        <p className="text-4xl font-bold mt-2">45</p>
-                    </div>
-                    <div className="bg-gradient-to-br from-red-400 to-orange-500 text-white p-6 rounded-xl shadow-2xl shadow-orange-200 transition-transform hover:-translate-y-2 duration-300">
-                        <div className="flex items-center justify-between"><p className="font-semibold">Inactive Workers</p><UserX className="w-8 h-8 opacity-70" /></div>
-                        <p className="text-4xl font-bold mt-2">1</p>
-                    </div>
-                    <div className="bg-gradient-to-br from-sky-400 to-blue-500 text-white p-6 rounded-xl shadow-2xl shadow-blue-200 transition-transform hover:-translate-y-2 duration-300">
-                        <div className="flex items-center justify-between"><p className="font-semibold">Supervisors</p><UserCog className="w-8 h-8 opacity-70" /></div>
-                        <p className="text-4xl font-bold mt-2">1</p>
-                    </div>
-                    <div className="bg-gradient-to-br from-violet-400 to-purple-500 text-white p-6 rounded-xl shadow-2xl shadow-purple-200 transition-transform hover:-translate-y-2 duration-300">
-                        <div className="flex items-center justify-between"><p className="font-semibold">Total Users</p><Users className="w-8 h-8 opacity-70" /></div>
-                        <p className="text-4xl font-bold mt-2">46</p>
-                    </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                    <StatCard 
+                        title="Active Workers" 
+                        value="45" 
+                        icon={UserCheck} 
+                        color="green" 
+                    />
+                    <StatCard 
+                        title="Inactive Workers" 
+                        value="1" 
+                        icon={UserX} 
+                        color="red" 
+                    />
+                    <StatCard 
+                        title="Supervisors" 
+                        value="1" 
+                        icon={UserCog} 
+                        color="blue" 
+                    />
+                    <StatCard 
+                        title="Total Users" 
+                        value="46" 
+                        icon={Users} 
+                        color="purple" 
+                    />
                 </div>
 
                 {/* --- USER LIST TABLE --- */}
@@ -182,8 +191,7 @@ const UserManagement: React.FC = () => {
                         </div>
                     </div>
                 </div>
-            </div>
-        </DashboardLayout>
+        </div>
     );
 };
 

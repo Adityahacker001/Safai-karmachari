@@ -20,6 +20,7 @@ import { CheckCheck } from 'lucide-react';
 import { Button as GradientButton } from '@/components/ui/button';
 import { Select as FormSelect } from '@/components/ui/select';
 import { Input as FormInput } from '@/components/ui/input';
+import StatCard from '@/components/ui/stat-card';
 // If using Framer Motion (optional, install it: npm install framer-motion)
 // import { motion, AnimatePresence } from 'framer-motion';
 
@@ -154,14 +155,7 @@ const DetailItem: React.FC<{ label: string; value: React.ReactNode; className?: 
   </div>
 );
 
-// 6. Summary Card
-type SummaryCardProps = { title: string; value: string | number; icon: React.ElementType; color: string; };
-const SummaryCard: React.FC<SummaryCardProps> = ({ title, value, icon: Icon, color }) => (
-    <div className={`p-4 rounded-xl bg-gradient-to-br from-${color}-50 to-white border border-${color}-200 shadow-sm flex items-center gap-3`}>
-        <div className={`p-2 rounded-lg bg-${color}-100 text-${color}-600`}> <Icon className="w-6 h-6"/> </div>
-        <div> <p className="text-2xl font-bold text-slate-800">{value}</p> <p className="text-xs font-medium text-slate-500">{title}</p> </div>
-    </div>
-);
+
 
 
 // --- Main Page Component ---
@@ -286,10 +280,30 @@ const TrackMyVoicePage = () => {
          </GlassCard>
         {/* Summary Cards */}
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            <SummaryCard title="Total Submissions" value={summary.total} icon={ListTodo} color="blue" />
-            <SummaryCard title="Active / Pending" value={summary.pending} icon={Hourglass} color="yellow" />
-            <SummaryCard title="Resolved Issues" value={summary.resolved} icon={CheckCheck} color="green" />
-            <SummaryCard title="Avg. Resolution" value={summary.avgTime} icon={Clock} color="purple" />
+            <StatCard 
+                title="Total Submissions" 
+                value={summary.total.toString()} 
+                icon={ListTodo} 
+                color="blue" 
+            />
+            <StatCard 
+                title="Active / Pending" 
+                value={summary.pending.toString()} 
+                icon={Hourglass} 
+                color="amber" 
+            />
+            <StatCard 
+                title="Resolved Issues" 
+                value={summary.resolved.toString()} 
+                icon={CheckCheck} 
+                color="green" 
+            />
+            <StatCard 
+                title="Avg. Resolution" 
+                value={summary.avgTime} 
+                icon={Clock} 
+                color="purple" 
+            />
         </section>
         {/* Table */}
         <GlassCard>

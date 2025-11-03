@@ -70,7 +70,6 @@ const SchemeCard: React.FC<{ scheme: any; onApply: (scheme: any) => void; onView
       
       <div className="space-y-2 text-sm text-slate-700 mb-5">
          <p><strong className="text-green-600">Max Amount:</strong> {scheme.maxAmount}</p>
-         <p><strong className="text-blue-600">Interest/Terms:</strong> {scheme.rate}</p>
          <p><strong className="text-purple-600">Eligibility:</strong> <span className="text-slate-600 text-xs">{scheme.eligibility}</span></p>
          <p><strong className="text-amber-600">Docs:</strong> <span className="text-slate-600 text-xs">{scheme.docs}</span></p>
       </div>

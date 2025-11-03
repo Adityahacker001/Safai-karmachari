@@ -12,6 +12,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import StatCard from "@/components/ui/stat-card";
 import { UserCheck, UserX, Clock, Edit, Eye, Trash2, MessageCircle, Search } from "lucide-react"; // Added Search Icon
 import React, { useState, useMemo } from "react"; // Added useState and useMemo
 
@@ -91,109 +92,81 @@ export default function WorkerAttendance() {
     }, [searchQuery]);
 
     return (
-        <div className="space-y-6 p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-blue-100 via-purple-100 via-pink-100 via-rose-100 to-yellow-100 min-h-screen">
-            <div className="flex items-center justify-between">
-                <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Worker Attendance</h1>
-                <Button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+        <div className="min-h-screen w-full max-w-full sm:max-w-full md:max-w-7xl mx-auto p-4 sm:p-6 md:p-12 space-y-6 sm:space-y-8 md:space-y-10">
+            <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent text-center sm:text-left">Worker Attendance</h1>
+                <Button className="bg-blue-600 text-white px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg sm:rounded-xl hover:bg-blue-700 transition-colors text-sm sm:text-base font-medium">
                     Mark Attendance
                 </Button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <Card className="rounded-2xl shadow-lg bg-gradient-to-br from-green-500 via-green-400 to-emerald-400 text-white">
-                    <CardHeader className="pb-2 flex flex-row items-center justify-between">
-                        <CardTitle className="text-base font-medium text-white">
-                            Workers Present Today
-                        </CardTitle>
-                        <div className="p-2 bg-green-500/30 rounded-lg">
-                            <UserCheck className="w-6 h-6 text-white" />
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-4xl font-bold">
-                            38{" "}
-                            <span className="text-lg font-normal text-green-100">/ 43</span>
-                        </div>
-                    </CardContent>
-                </Card>
-                <Card className="rounded-2xl shadow-lg bg-gradient-to-br from-red-500 via-red-400 to-rose-400 text-white">
-                    <CardHeader className="pb-2 flex flex-row items-center justify-between">
-                        <CardTitle className="text-base font-medium text-white">
-                            Absent Workers
-                        </CardTitle>
-                        <div className="p-2 bg-red-500/30 rounded-lg">
-                            <UserX className="w-6 h-6 text-white" />
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-4xl font-bold">5</div>
-                    </CardContent>
-                </Card>
-                <Card className="rounded-2xl shadow-lg bg-gradient-to-br from-yellow-500 via-yellow-400 to-amber-400 text-white">
-                    <CardHeader className="pb-2 flex flex-row items-center justify-between">
-                        <CardTitle className="text-base font-medium text-white">
-                            Late Check-ins
-                        </CardTitle>
-                        <div className="p-2 bg-yellow-500/30 rounded-lg">
-                            <Clock className="w-6 h-6 text-white" />
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-4xl font-bold">2</div>
-                    </CardContent>
-                </Card>
-                <Card className="rounded-2xl shadow-lg bg-gradient-to-br from-blue-500 via-blue-400 to-sky-400 text-white">
-                    <CardHeader className="pb-2 flex flex-row items-center justify-between">
-                        <CardTitle className="text-base font-medium text-white">
-                            Attendance Rate
-                        </CardTitle>
-                        <div className="p-2 bg-blue-500/30 rounded-lg">
-                            <UserCheck className="w-6 h-6 text-white" />
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-4xl font-bold">89%</div>
-                        <p className="text-sm text-blue-100 mt-1">+2% from yesterday</p>
-                    </CardContent>
-                </Card>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                <StatCard
+                    title="Workers Present Today"
+                    value="38 / 43"
+                    icon={UserCheck}
+                    color="green"
+                />
+                
+                <StatCard
+                    title="Absent Workers"
+                    value={5}
+                    icon={UserX}
+                    color="red"
+                />
+                
+                <StatCard
+                    title="Late Check-ins"
+                    value={2}
+                    icon={Clock}
+                    color="amber"
+                />
+                
+                <StatCard
+                    title="Attendance Rate"
+                    value="89%"
+                    subtitle="+2% from yesterday"
+                    icon={UserCheck}
+                    color="blue"
+                />
             </div>
 
             <div>
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-900 mb-4 sm:mb-6">
                     Worker-wise Attendance
                 </h2>
-                <Card className="bg-gradient-to-br from-cyan-50 via-blue-50 to-emerald-100 shadow-2xl border border-gray-100 rounded-3xl overflow-hidden">
-                    <CardHeader className="p-4 sm:p-6 bg-blue-800 rounded-t-3xl">
-                        <div className="relative">
-                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-300" />
+                <Card className="w-full max-w-full sm:max-w-full md:max-w-6xl mx-auto bg-white/95 backdrop-blur-sm shadow-2xl border border-gray-100 rounded-2xl sm:rounded-3xl overflow-hidden">
+                    <CardHeader className="p-4 sm:p-6 md:p-8 bg-blue-800 rounded-t-2xl sm:rounded-t-3xl">
+                        <div className="relative w-full">
+                            <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-300" />
                             <Input
                                 placeholder="Search by name or ID..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full max-w-md pl-12 pr-4 py-2.5 text-gray-900 placeholder:text-gray-400 border-blue-600 focus:border-blue-400 focus:ring-2 focus:ring-blue-300/50 rounded-xl bg-white"
+                                className="w-full sm:max-w-md pl-10 sm:pl-12 pr-4 py-2 sm:py-2.5 text-sm sm:text-base text-gray-900 placeholder:text-gray-400 border-blue-600 focus:border-blue-400 focus:ring-2 focus:ring-blue-300/50 rounded-lg sm:rounded-xl bg-white"
                             />
                         </div>
                     </CardHeader>
-                    <CardContent className="p-0">
-                        <Table className="w-full">
+                    <CardContent className="p-0 overflow-x-auto">
+                        <Table className="w-full min-w-[600px]">
                             <TableHeader className="bg-slate-50">
                                 <TableRow className="border-b border-gray-200">
-                                    <TableHead className="py-4 px-6 text-slate-600 font-bold text-base">
+                                    <TableHead className="py-3 sm:py-4 px-3 sm:px-6 text-slate-600 font-bold text-sm sm:text-base">
                                         Worker Name
                                     </TableHead>
-                                    <TableHead className="py-4 px-6 text-slate-600 font-bold text-base">
+                                    <TableHead className="py-3 sm:py-4 px-3 sm:px-6 text-slate-600 font-bold text-sm sm:text-base">
                                         Worker ID
                                     </TableHead>
-                                    <TableHead className="py-4 px-6 text-slate-600 font-bold text-base">
-                                        Attendance Status
+                                    <TableHead className="py-3 sm:py-4 px-3 sm:px-6 text-slate-600 font-bold text-sm sm:text-base">
+                                        Status
                                     </TableHead>
-                                    <TableHead className="py-4 px-6 text-slate-600 font-bold text-base">
-                                        Check-in Time
+                                    <TableHead className="py-3 sm:py-4 px-3 sm:px-6 text-slate-600 font-bold text-sm sm:text-base">
+                                        Check-in
                                     </TableHead>
-                                    <TableHead className="py-4 px-6 text-slate-600 font-bold text-base">
-                                        Check-out Time
+                                    <TableHead className="py-3 sm:py-4 px-3 sm:px-6 text-slate-600 font-bold text-sm sm:text-base">
+                                        Check-out
                                     </TableHead>
-                                    <TableHead className="text-right py-4 px-6 text-slate-600 font-bold text-base">
+                                    <TableHead className="text-right py-3 sm:py-4 px-3 sm:px-6 text-slate-600 font-bold text-sm sm:text-base">
                                         Actions
                                     </TableHead>
                                 </TableRow>
@@ -204,46 +177,46 @@ export default function WorkerAttendance() {
                                         key={row.id}
                                         className="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-150"
                                     >
-                                        <TableCell className="py-4 px-6 font-semibold text-gray-800 text-base">
+                                        <TableCell className="py-3 sm:py-4 px-3 sm:px-6 font-semibold text-gray-800 text-sm sm:text-base">
                                             {row.name}
                                         </TableCell>
-                                        <TableCell className="py-4 px-6 text-gray-700 text-base">
+                                        <TableCell className="py-3 sm:py-4 px-3 sm:px-6 text-gray-700 text-sm sm:text-base">
                                             {row.id}
                                         </TableCell>
-                                        <TableCell className="py-4 px-6">
+                                        <TableCell className="py-3 sm:py-4 px-3 sm:px-6">
                                             {statusBadge(row.status)}
                                         </TableCell>
-                                        <TableCell className="py-4 px-6 text-gray-700">
+                                        <TableCell className="py-3 sm:py-4 px-3 sm:px-6 text-gray-700 text-sm sm:text-base">
                                             {row.checkin}
                                         </TableCell>
-                                        <TableCell className="py-4 px-6 text-gray-700">
+                                        <TableCell className="py-3 sm:py-4 px-3 sm:px-6 text-gray-700 text-sm sm:text-base">
                                             {row.checkout}
                                         </TableCell>
-                                        <TableCell className="text-right py-4 px-6">
-                                            <div className="flex space-x-2 justify-end">
+                                        <TableCell className="text-right py-3 sm:py-4 px-3 sm:px-6">
+                                            <div className="flex space-x-1 sm:space-x-2 justify-end">
                                                 <button
-                                                    className="text-blue-600 hover:text-blue-800"
+                                                    className="text-blue-600 hover:text-blue-800 p-1"
                                                     title="Edit Attendance"
                                                 >
-                                                    <Edit className="w-4 h-4" />
+                                                    <Edit className="w-3 h-3 sm:w-4 sm:h-4" />
                                                 </button>
                                                 <button
-                                                    className="text-gray-600 hover:text-gray-900"
+                                                    className="text-gray-600 hover:text-gray-900 p-1"
                                                     title="View Details"
                                                 >
-                                                    <Eye className="w-4 h-4" />
+                                                    <Eye className="w-3 h-3 sm:w-4 sm:h-4" />
                                                 </button>
                                                 <button
-                                                    className="text-red-600 hover:text-red-800"
+                                                    className="text-red-600 hover:text-red-800 p-1"
                                                     title="Delete Record"
                                                 >
-                                                    <Trash2 className="w-4 h-4" />
+                                                    <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
                                                 </button>
                                                 <button
-                                                    className="text-yellow-600 hover:text-yellow-800"
+                                                    className="text-yellow-600 hover:text-yellow-800 p-1"
                                                     title="Add Note"
                                                 >
-                                                    <MessageCircle className="w-4 h-4" />
+                                                    <MessageCircle className="w-3 h-3 sm:w-4 sm:h-4" />
                                                 </button>
                                             </div>
                                         </TableCell>

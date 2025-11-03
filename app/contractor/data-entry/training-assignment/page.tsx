@@ -47,86 +47,90 @@ export default function TrainingAssignmentPage() {
     };
 
     return (
-        <div className="min-h-screen p-6 md:p-12 bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 space-y-10">
-            <h2 className="text-5xl font-extrabold text-blue-700">Assign Training</h2>
-            <p className="text-gray-600 mb-8 text-xl">Browse modules and assign to workers.</p>
+        <div className="min-h-screen w-full max-w-full sm:max-w-full md:max-w-7xl mx-auto p-4 sm:p-6 md:p-12 space-y-6 sm:space-y-8 md:space-y-10">
+            <div className="text-center sm:text-left">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Assign Training</h2>
+                <p className="text-gray-600 mt-2 sm:mt-3 text-base sm:text-lg md:text-xl">Browse modules and assign to workers.</p>
+            </div>
 
             {step === "list" && (
-                <Card className="bg-white shadow-2xl border border-gray-100 rounded-3xl overflow-hidden">
-                    <CardHeader className="p-8 bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg">
-                        <CardTitle className="flex items-center space-x-4 text-3xl font-bold">
-                            <BookOpenText className="h-9 w-9 text-white" />
-                            <span>Available Training Modules</span>
+                <Card className="w-full max-w-full sm:max-w-full md:max-w-6xl mx-auto bg-white/95 backdrop-blur-sm shadow-2xl border border-gray-100 rounded-2xl sm:rounded-3xl overflow-hidden transform transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1">
+                    <CardHeader className="p-4 sm:p-6 md:p-8 bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg">
+                        <CardTitle className="text-xl sm:text-2xl md:text-3xl font-bold">
+                            <span className="break-words">Available Training Modules</span>
                         </CardTitle>
-                        <CardDescription className="text-blue-100 mt-3 text-lg">
+                        <CardDescription className="text-blue-100 mt-2 sm:mt-3 text-sm sm:text-base md:text-lg">
                             Click a module to assign it to workers.
                         </CardDescription>
                     </CardHeader>
-                    <CardContent className="p-8">
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>Module</TableHead>
-                                    <TableHead>Description</TableHead>
-                                    <TableHead>Duration</TableHead>
-                                    <TableHead></TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {trainingModules.map(module => (
-                                    <TableRow key={module.id}>
-                                        <TableCell className="font-bold">{module.name}</TableCell>
-                                        <TableCell>{module.description}</TableCell>
-                                        <TableCell>
-                                            <Badge className="bg-blue-500 text-white">
-                                                <CalendarCheck className="h-4 w-4 mr-2" /> {module.duration}
-                                            </Badge>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Button
-                                                className="bg-gradient-to-r from-green-500 to-teal-600 text-white font-bold px-6 py-2 rounded-xl"
-                                                onClick={() => { setSelectedModuleId(module.id); setStep("assign"); setSelectedCount(0); }}
-                                            >
-                                                Assign
-                                            </Button>
-                                        </TableCell>
+                    <CardContent className="p-4 sm:p-6 md:p-8">
+                        <div className="overflow-x-auto">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead className="text-xs sm:text-sm">Module</TableHead>
+                                        <TableHead className="hidden md:table-cell text-xs sm:text-sm">Description</TableHead>
+                                        <TableHead className="text-xs sm:text-sm">Duration</TableHead>
+                                        <TableHead className="text-xs sm:text-sm"></TableHead>
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
+                                </TableHeader>
+                                <TableBody>
+                                    {trainingModules.map(module => (
+                                        <TableRow key={module.id}>
+                                            <TableCell className="font-bold text-xs sm:text-sm">{module.name}</TableCell>
+                                            <TableCell className="hidden md:table-cell text-xs sm:text-sm">{module.description}</TableCell>
+                                            <TableCell>
+                                                <Badge className="bg-blue-500 text-white text-xs">
+                                                    <CalendarCheck className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" /> {module.duration}
+                                                </Badge>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Button
+                                                    className="bg-gradient-to-r from-green-500 to-teal-600 text-white font-bold px-3 sm:px-6 py-1.5 sm:py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm"
+                                                    onClick={() => { setSelectedModuleId(module.id); setStep("assign"); setSelectedCount(0); }}
+                                                >
+                                                    Assign
+                                                </Button>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </div>
                     </CardContent>
                 </Card>
             )}
 
             {step === "assign" && selectedModule && (
-                <Card className="bg-white shadow-2xl border border-gray-100 rounded-3xl overflow-hidden">
-                    <CardHeader className="p-8 bg-gradient-to-r from-purple-600 to-pink-700 text-white shadow-lg flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                <Card className="w-full max-w-full sm:max-w-full md:max-w-6xl mx-auto bg-white/95 backdrop-blur-sm shadow-2xl border border-gray-100 rounded-2xl sm:rounded-3xl overflow-hidden transform transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1">
+                    <CardHeader className="p-4 sm:p-6 md:p-8 bg-gradient-to-r from-purple-600 to-pink-700 text-white shadow-lg flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between">
                         <div>
-                            <CardTitle className="flex items-center space-x-4 text-3xl font-bold">
-                                <Users className="h-9 w-9 text-white" />
-                                <span>Assign: {selectedModule.name}</span>
+                            <CardTitle className="text-xl sm:text-2xl md:text-3xl font-bold">
+                                <span className="break-words">Assign: {selectedModule.name}</span>
                             </CardTitle>
-                            <CardDescription className="text-purple-100 mt-3 text-lg">
+                            <CardDescription className="text-purple-100 mt-2 sm:mt-3 text-sm sm:text-base md:text-lg">
                                 Select workers for this training.
                             </CardDescription>
                         </div>
-                        <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-6 sm:mt-0">
-                            <Button variant="outline" onClick={() => setStep("list")} className="text-gray-700 hover:bg-gray-100 px-6 py-3 rounded-xl border-gray-300">
-                                <ArrowLeft className="h-5 w-5 mr-2" />
-                                Back to Modules
+                        <div className="flex flex-col space-y-3 sm:space-y-0 sm:flex-row sm:items-center sm:space-x-4">
+                            <Button variant="outline" onClick={() => setStep("list")} className="text-gray-700 hover:bg-gray-100 px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl border-gray-300 text-sm sm:text-base">
+                                <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
+                                <span className="hidden sm:inline">Back to Modules</span>
+                                <span className="sm:hidden">Back</span>
                             </Button>
                             <Button
-                                className="bg-gradient-to-r from-green-500 to-blue-600 text-white font-bold text-xl py-3.5 px-8 rounded-xl shadow-lg"
+                                className="bg-gradient-to-r from-green-500 to-blue-600 text-white font-bold text-base sm:text-xl py-2.5 sm:py-3.5 px-6 sm:px-8 rounded-lg sm:rounded-xl shadow-lg"
                                 disabled={selectedCount === 0}
                             >
-                                <GraduationCap className="h-6 w-6 mr-3" />
-                                Confirm & Assign Training
+                                <GraduationCap className="h-5 w-5 sm:h-6 sm:w-6 mr-2 sm:mr-3" />
+                                <span className="hidden sm:inline">Confirm & Assign Training</span>
+                                <span className="sm:hidden">Assign Training</span>
                             </Button>
                         </div>
                     </CardHeader>
-                    <CardContent className="p-8">
-                        <div className="mb-6 flex flex-col md:flex-row gap-6">
-                            <div className="flex-1 p-6 border border-blue-200 rounded-2xl bg-gradient-to-br from-white to-blue-50 shadow-lg">
+                    <CardContent className="p-4 sm:p-6 md:p-8">
+                        <div className="mb-4 sm:mb-6 flex flex-col lg:flex-row gap-4 sm:gap-6">
+                            <div className="flex-1 p-4 sm:p-6 border border-gray-200 rounded-xl sm:rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:border-blue-300">
                                 <Label className="text-gray-700 font-semibold mb-2 block">Completion Deadline</Label>
                                 <Input type="date" className="border-gray-300 focus:border-blue-600 rounded-xl px-4 py-2.5" />
                                 <div className="mt-6">

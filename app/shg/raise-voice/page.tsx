@@ -19,6 +19,7 @@ import {
   ClipboardList, Megaphone, ShieldCheck, FileCheck, Upload, FileWarning, AlertCircle as AlertCircleIcon, Send, Loader2, BookOpen, HandHeart, CheckSquare, ListTodo, FileQuestion, HelpCircle, FileDigit, ShieldQuestion, HeartHandshake, Sparkles,
   UploadCloud, PlusCircle, ListChecks, CaseSensitive, Mail, CheckCheck, Clock10
 } from 'lucide-react';
+import StatCard from '@/components/ui/stat-card';
 
 // --- Mock Data ---
 
@@ -328,27 +329,25 @@ const RaiseAVoicePage = () => {
         </GlassCard>
         
         {/* --- 4. Complaint Status Summary --- */}
-        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-             <GlassCard className="text-center group hover:bg-white/80 transition-colors">
-                <ListTodo className="w-10 h-10 text-indigo-500 mx-auto mb-2 group-hover:scale-110 transition-transform"/>
-                <p className="text-3xl font-bold text-slate-800">{summary.total}</p>
-                <p className="text-sm font-medium text-slate-500">Total Filed</p>
-             </GlassCard>
-              <GlassCard className="text-center group hover:bg-white/80 transition-colors">
-                <Hourglass className="w-10 h-10 text-yellow-500 mx-auto mb-2 group-hover:scale-110 transition-transform"/>
-                <p className="text-3xl font-bold text-slate-800">{summary.pending}</p>
-                <p className="text-sm font-medium text-slate-500">Pending / Review</p>
-             </GlassCard>
-              <GlassCard className="text-center group hover:bg-white/80 transition-colors">
-                <CheckCheck className="w-10 h-10 text-green-500 mx-auto mb-2 group-hover:scale-110 transition-transform"/>
-                <p className="text-3xl font-bold text-slate-800">{summary.resolved}</p>
-                <p className="text-sm font-medium text-slate-500">Resolved</p>
-             </GlassCard>
-              <GlassCard className="text-center group hover:bg-white/80 transition-colors">
-                <Clock10 className="w-10 h-10 text-blue-500 mx-auto mb-2 group-hover:scale-110 transition-transform"/>
-                <p className="text-3xl font-bold text-slate-800">{summary.avgTime} Days</p>
-                <p className="text-sm font-medium text-slate-500">Avg. Resolution Time</p>
-             </GlassCard>
+        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+             <StatCard 
+                title="Total Filed"
+                value={summary.total.toString()}
+                icon={ListTodo}
+                color="indigo"
+             />
+             <StatCard 
+                title="Pending / Review"
+                value={summary.pending.toString()}
+                icon={Hourglass}
+                color="amber"
+             />
+             <StatCard 
+                title="Resolved"
+                value={summary.resolved.toString()}
+                icon={CheckCheck}
+                color="green"
+             />
         </section>
 
         {/* --- 5. Complaint Tracking Table --- */}

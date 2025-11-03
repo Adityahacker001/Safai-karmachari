@@ -88,7 +88,7 @@ type SchemeRow = {
 const schemeData: SchemeRow[] = [
   { worker: 'Anil Singh', scheme: 'Skill Loan', status: 'Approved', amount: '₹50,000', date: '2025-08-20', remarks: 'For mechanization training' },
   { worker: 'Sunita Bai', scheme: 'Rehab Grant', status: 'Pending', amount: 'N/A', date: 'N/A', remarks: 'Document verification ongoing' },
-  { worker: 'Rajesh Kumar', scheme: 'Skill Loan', status: 'Rejected', amount: 'N/A', date: 'N/A', remarks: 'Ineligible criteria' },
+  { worker: 'Aditya Kumar', scheme: 'Skill Loan', status: 'Rejected', amount: 'N/A', date: 'N/A', remarks: 'Ineligible criteria' },
 ];
 
 // --- Helper for chips ---

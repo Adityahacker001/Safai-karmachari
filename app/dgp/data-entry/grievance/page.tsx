@@ -93,13 +93,15 @@ interface GlassCardProps {
 }
 const GlassCard: React.FC<GlassCardProps> = ({ children, className = "", noHover = false }) => (
   <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
-    whileHover={noHover ? {} : { y: -6, transition: { duration: 0.2 } }}
-    className={`bg-white/90 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200 ${className}`}
+    initial={{ opacity: 0, y: 30, scale: 0.95 }}
+    animate={{ opacity: 1, y: 0, scale: 1 }}
+    transition={{ duration: 0.6, ease: [0.25, 1, 0.5, 1] }}
+    className={`relative bg-gradient-to-br from-white/95 via-white/90 to-blue-50/80 backdrop-blur-xl rounded-3xl shadow-xl border border-gradient-to-r from-blue-200/50 via-purple-200/30 to-pink-200/50 overflow-hidden ${className}`}
   >
-    {children}
+    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5 pointer-events-none" />
+    <div className="relative z-10">
+      {children}
+    </div>
   </motion.div>
 );
 
@@ -347,37 +349,53 @@ export default function GrievanceFeedbackEntry() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="min-h-screen p-6 lg:p-10 bg-gradient-to-br from-white via-blue-50 to-slate-100"
+      transition={{ duration: 0.8 }}
+      className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-3 sm:p-4 md:p-6 lg:p-8"
     >
-      {/* --- Sticky Header --- */}
-      <header className="relative bg-white border-b border-slate-200 shadow-sm px-6 lg:px-10">
-        <div className="mx-auto max-w-7xl py-4">
+      {/* --- Enhanced Sticky Header --- */}
+      <header className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 border-b-4 border-gradient-to-r from-yellow-400 to-orange-500 shadow-2xl px-3 sm:px-4 md:px-6 lg:px-10 overflow-hidden">
+        <div className="absolute inset-0 bg-black/10"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-purple-500/20"></div>
+        <div className="relative z-10 mx-auto max-w-7xl py-4 sm:py-6">
           {/* Breadcrumb */}
-          <nav className="flex items-center text-sm font-medium text-slate-500" aria-label="Breadcrumb">
-            <a href="#" className="hover:text-slate-700">DGP Dashboard</a>
-            <ChevronRight size={16} className="mx-1.5" />
-            <a href="#" className="hover:text-slate-700">Data Entry</a>
-            <ChevronRight size={16} className="mx-1.5" />
-            <span className="text-slate-800 font-semibold">Grievance Feedback</span>
+          <nav className="flex items-center text-xs sm:text-sm font-medium text-white/90 overflow-x-auto" aria-label="Breadcrumb">
+            <a href="#" className="hover:text-white transition-colors whitespace-nowrap flex items-center gap-1">
+              <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
+              DGP Dashboard
+            </a>
+            <ChevronRight size={12} className="mx-1.5 sm:hidden text-white/70" />
+            <ChevronRight size={16} className="hidden sm:block mx-2 text-white/70" />
+            <a href="#" className="hover:text-white transition-colors whitespace-nowrap flex items-center gap-1">
+              <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
+              Data Entry
+            </a>
+            <ChevronRight size={12} className="mx-1.5 sm:hidden text-white/70" />
+            <ChevronRight size={16} className="hidden sm:block mx-2 text-white/70" />
+            <span className="text-white font-bold whitespace-nowrap flex items-center gap-1">
+              <div className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse"></div>
+              Grievance Feedback
+            </span>
           </nav>
           {/* Title */}
-          <div className="flex items-center justify-between mt-3">
-            <div className="flex items-center gap-3">
-              <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-navy-700 text-white shadow-lg shadow-navy-500/30">
-                <ShieldCheck size={24} />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-navy-900">Grievance Feedback Entry</h1>
-                <p className="text-sm text-slate-600">Log and update police grievance resolutions for SKs, SHGs, and Public.</p>
-              </div>
+          <div className="flex items-start gap-4 mt-4">
+            <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 text-white shadow-2xl shadow-orange-500/40">
+              <ShieldCheck size={24} className="sm:hidden" />
+              <ShieldCheck size={32} className="hidden sm:block" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h1 className="text-xl sm:text-2xl lg:text-4xl font-black text-white break-words leading-tight">
+                Grievance Feedback Entry
+              </h1>
+              <p className="text-sm sm:text-base text-white/90 mt-2 leading-relaxed font-medium">
+                🎯 Log and update police grievance resolutions for SKs, SHGs, and Public
+              </p>
             </div>
           </div>
         </div>
       </header>
 
       {/* --- Main Content Area --- */}
-      <main className="max-w-7xl mx-auto mt-8">
+      <main className="max-w-7xl mx-auto mt-4 sm:mt-6 lg:mt-8 px-3 sm:px-4 md:px-6 lg:px-8">
         <form onSubmit={handleSubmit}>
           {/* --- Main Form Card --- */}
           <GlassCard>
@@ -389,8 +407,8 @@ export default function GrievanceFeedbackEntry() {
               {/* Add any children content here, or leave empty if not needed */}
               <div></div>
             </CardHeader>
-            <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
+            <div className="p-4 sm:p-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-6 gap-y-4 sm:gap-y-5">
                 
                 {/* --- Column 1 --- */}
                 <FormInputGroup label="District" htmlFor="district" required>
@@ -415,15 +433,15 @@ export default function GrievanceFeedbackEntry() {
                   <DatePicker id="dateReceived" value={dateReceived} onChange={(e) => setDateReceived(e.target.value)} />
                 </FormInputGroup>
 
-                <div className="md:col-span-2">
+                <div className="sm:col-span-2">
                   <FormInputGroup label="Description" htmlFor="description" required>
-                    <textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} className="form-textarea" rows={4} placeholder="Enter detailed description of the grievance..."></textarea>
+                    <textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} className="form-textarea" rows={3} placeholder="Enter detailed description of the grievance..."></textarea>
                   </FormInputGroup>
                 </div>
                 
-                <div className="md:col-span-2 border-t border-slate-200 pt-5">
+                <div className="sm:col-span-2 border-t border-slate-200 pt-4 sm:pt-5">
                   <FormInputGroup label="Action Taken" htmlFor="actionTaken" required>
-                    <textarea id="actionTaken" value={actionTaken} onChange={(e) => setActionTaken(e.target.value)} className="form-textarea" rows={4} placeholder="Describe the action taken by the department..."></textarea>
+                    <textarea id="actionTaken" value={actionTaken} onChange={(e) => setActionTaken(e.target.value)} className="form-textarea" rows={3} placeholder="Describe the action taken by the department..."></textarea>
                   </FormInputGroup>
                 </div>
                 
@@ -455,30 +473,40 @@ export default function GrievanceFeedbackEntry() {
             </div>
 
             {/* --- Form Button Bar --- */}
-            <div className="p-4 bg-slate-50/50 border-t border-slate-200 rounded-b-2xl flex justify-end items-center gap-3">
+            <div className="p-3 sm:p-4 bg-slate-50/50 border-t border-slate-200 rounded-b-2xl flex flex-col sm:flex-row sm:justify-end items-stretch sm:items-center gap-2 sm:gap-3">
               <button
                 type="button"
                 onClick={handleClearForm}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors"
+                className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs sm:text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors"
               >
-                <RotateCcw size={16} />
-                Clear
+                <RotateCcw size={14} className="sm:hidden" />
+                <RotateCcw size={16} className="hidden sm:block" />
+                <span className="hidden sm:inline">Clear</span>
+                <span className="sm:hidden">Clear Form</span>
               </button>
               <button
                 type="button"
                 onClick={handleSaveDraft}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium bg-white text-navy-700 border border-slate-300 hover:bg-slate-50 transition-colors"
+                className="flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 rounded-lg text-xs sm:text-sm font-medium bg-white text-navy-700 border border-slate-300 hover:bg-slate-50 transition-colors"
               >
-                <Save size={16} />
-                Save Draft
+                <Save size={14} className="sm:hidden" />
+                <Save size={16} className="hidden sm:block" />
+                <span className="hidden sm:inline">Save Draft</span>
+                <span className="sm:hidden">Save</span>
               </button>
               <button
                 type="submit"
                 disabled={isLoading}
-                className="flex items-center justify-center gap-2 w-36 px-5 py-2.5 rounded-lg text-sm font-semibold bg-navy-700 text-white hover:bg-navy-800 transition-all shadow-lg shadow-blue-500/30 hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed"
+                className="flex items-center justify-center gap-2 w-full sm:w-36 px-4 sm:px-5 py-2.5 rounded-lg text-xs sm:text-sm font-semibold bg-navy-700 text-white hover:bg-navy-800 transition-all shadow-lg shadow-blue-500/30 hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                {isLoading ? <Loader2 size={18} className="animate-spin" /> : <Send size={16} />}
-                {isLoading ? "Submitting..." : "Submit Update"}
+                {isLoading ? <Loader2 size={16} className="animate-spin sm:hidden" /> : <Send size={14} className="sm:hidden" />}
+                {isLoading ? <Loader2 size={18} className="hidden sm:block animate-spin" /> : <Send size={16} className="hidden sm:block" />}
+                {isLoading ? "Submitting..." : (
+                  <>
+                    <span className="hidden sm:inline">Submit Update</span>
+                    <span className="sm:hidden">Submit</span>
+                  </>
+                )}
               </button>
             </div>
           </GlassCard>
@@ -487,7 +515,7 @@ export default function GrievanceFeedbackEntry() {
         {/* --- Dashboard Enhancements --- */}
         <section className="mt-12">
           {/* 📊 Summary Mini-Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             <SummaryCard
               title="Pending Grievances"
               count={mockSummaryData.pending.count}
@@ -512,33 +540,39 @@ export default function GrievanceFeedbackEntry() {
           </div>
 
           {/* 🕓 Recent Activity Table */}
-          <div className="mt-12">
+          <div className="mt-8 sm:mt-12">
             <GlassCard noHover>
               <CardHeader
                 icon={<BookOpen size={20} />}
                 title="Recent Grievance Activity"
                 badgeText=""
               >
-                <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors">
-                  <FileSpreadsheet size={14} />
-                  Export CSV
-                </button>
-                <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors">
-                  <FileBarChart size={14} />
-                  Generate PDF
-                </button>
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                  <button className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors">
+                    <FileSpreadsheet size={12} className="sm:hidden" />
+                    <FileSpreadsheet size={14} className="hidden sm:block" />
+                    <span className="hidden sm:inline">Export CSV</span>
+                    <span className="sm:hidden">CSV</span>
+                  </button>
+                  <button className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors">
+                    <FileBarChart size={12} className="sm:hidden" />
+                    <FileBarChart size={14} className="hidden sm:block" />
+                    <span className="hidden sm:inline">Generate PDF</span>
+                    <span className="sm:hidden">PDF</span>
+                  </button>
+                </div>
               </CardHeader>
               <div className="overflow-x-auto">
-                <table className="table-auto w-full">
+                <table className="table-auto w-full min-w-max">
                   <thead className="sticky top-0 bg-slate-100/80 backdrop-blur-sm z-10">
                     <tr>
-                      <th className="px-5 py-3 text-left text-xs text-slate-600 font-medium uppercase tracking-wider">Grievance ID</th>
-                      <th className="px-5 py-3 text-left text-xs text-slate-600 font-medium uppercase tracking-wider">District</th>
-                      <th className="px-5 py-3 text-left text-xs text-slate-600 font-medium uppercase tracking-wider">Source</th>
-                      <th className="px-5 py-3 text-left text-xs text-slate-600 font-medium uppercase tracking-wider">Type</th>
-                      <th className="px-5 py-3 text-left text-xs text-slate-600 font-medium uppercase tracking-wider">Status</th>
-                      <th className="px-5 py-3 text-left text-xs text-slate-600 font-medium uppercase tracking-wider">Last Update</th>
-                      <th className="px-5 py-3 text-left text-xs text-slate-600 font-medium uppercase tracking-wider">Action</th>
+                      <th className="px-2 sm:px-5 py-2 sm:py-3 text-left text-xs text-slate-600 font-medium uppercase tracking-wider">ID</th>
+                      <th className="px-2 sm:px-5 py-2 sm:py-3 text-left text-xs text-slate-600 font-medium uppercase tracking-wider hidden sm:table-cell">District</th>
+                      <th className="px-2 sm:px-5 py-2 sm:py-3 text-left text-xs text-slate-600 font-medium uppercase tracking-wider hidden md:table-cell">Source</th>
+                      <th className="px-2 sm:px-5 py-2 sm:py-3 text-left text-xs text-slate-600 font-medium uppercase tracking-wider">Type</th>
+                      <th className="px-2 sm:px-5 py-2 sm:py-3 text-left text-xs text-slate-600 font-medium uppercase tracking-wider">Status</th>
+                      <th className="px-2 sm:px-5 py-2 sm:py-3 text-left text-xs text-slate-600 font-medium uppercase tracking-wider hidden lg:table-cell">Last Update</th>
+                      <th className="px-2 sm:px-5 py-2 sm:py-3 text-left text-xs text-slate-600 font-medium uppercase tracking-wider">Action</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-slate-100">
@@ -549,17 +583,18 @@ export default function GrievanceFeedbackEntry() {
                         animate={{ opacity: 1 }}
                         className="hover:bg-blue-50/50 transition-colors"
                       >
-                        <td className="px-5 py-4 whitespace-nowrap text-sm font-medium text-navy-800">{item.id}</td>
-                        <td className="px-5 py-4 whitespace-nowrap text-sm text-slate-700">{item.district}</td>
-                        <td className="px-5 py-4 whitespace-nowrap text-sm text-slate-700">{item.source}</td>
-                        <td className="px-5 py-4 whitespace-nowrap text-sm text-slate-700">{item.type}</td>
-                        <td className="px-5 py-4 whitespace-nowrap">
+                        <td className="px-2 sm:px-5 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-navy-800">{item.id}</td>
+                        <td className="px-2 sm:px-5 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-slate-700 hidden sm:table-cell">{item.district}</td>
+                        <td className="px-2 sm:px-5 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-slate-700 hidden md:table-cell">{item.source}</td>
+                        <td className="px-2 sm:px-5 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-slate-700">{item.type}</td>
+                        <td className="px-2 sm:px-5 py-3 sm:py-4 whitespace-nowrap">
                           <StatusBadge status={item.status as "Pending" | "Resolved" | "Escalated"} />
                         </td>
-                        <td className="px-5 py-4 whitespace-nowrap text-sm text-slate-700">{item.lastUpdate}</td>
-                        <td className="px-5 py-4 whitespace-nowrap">
-                          <button className="p-1.5 rounded-md text-royal-blue-600 hover:bg-blue-100 transition-colors">
-                            <Eye size={16} />
+                        <td className="px-2 sm:px-5 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-slate-700 hidden lg:table-cell">{item.lastUpdate}</td>
+                        <td className="px-2 sm:px-5 py-3 sm:py-4 whitespace-nowrap">
+                          <button className="p-1 sm:p-1.5 rounded-md text-royal-blue-600 hover:bg-blue-100 transition-colors">
+                            <Eye size={14} className="sm:hidden" />
+                            <Eye size={16} className="hidden sm:block" />
                           </button>
                         </td>
                       </motion.tr>
@@ -572,14 +607,20 @@ export default function GrievanceFeedbackEntry() {
         </section>
 
         {/* --- Footer --- */}
-        <footer className="text-center text-slate-500 text-sm mt-12 pb-6">
-          <p>Ensuring accountability and timely grievance resolution.</p>
-          <div className="flex items-center justify-center gap-4 mt-2">
+        <footer className="text-center text-slate-500 text-xs sm:text-sm mt-8 sm:mt-12 pb-4 sm:pb-6">
+          <p className="px-4">Ensuring accountability and timely grievance resolution.</p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mt-2 px-4">
             <a href="#" className="flex items-center gap-1.5 text-xs text-slate-600 hover:text-navy-700 transition-colors">
-              <FileBarChart size={14} /> Generate PDF Report
+              <FileBarChart size={12} className="sm:hidden" />
+              <FileBarChart size={14} className="hidden sm:block" />
+              <span className="hidden sm:inline">Generate PDF Report</span>
+              <span className="sm:hidden">PDF Report</span>
             </a>
             <a href="#" className="flex items-center gap-1.5 text-xs text-slate-600 hover:text-navy-700 transition-colors">
-              <FileSpreadsheet size={14} /> Export CSV
+              <FileSpreadsheet size={12} className="sm:hidden" />
+              <FileSpreadsheet size={14} className="hidden sm:block" />
+              <span className="hidden sm:inline">Export CSV</span>
+              <span className="sm:hidden">Export CSV</span>
             </a>
           </div>
         </footer>

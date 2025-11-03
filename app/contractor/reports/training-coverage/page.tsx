@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Download, GraduationCap, Target, AlertTriangle, CheckCircle, Loader, Clock, XCircle } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
+import StatCard from "@/components/ui/stat-card";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip, Legend, ChartData, ScriptableContext } from "chart.js";
 
@@ -157,65 +158,57 @@ export default function TrainingCoverageReportPage() {
     };
 
     return (
-        // Main container with a vibrant, modern background gradient
-        <div className="min-h-screen p-6 md:p-12 bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 space-y-10">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                    <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Training Coverage Report</h1>
-                    <p className="text-gray-600 mt-3 text-xl">Analyze workforce skill development and certification status by module.</p>
+        <div className="min-h-screen w-full max-w-full sm:max-w-full md:max-w-7xl mx-auto p-4 sm:p-6 md:p-12 space-y-6 sm:space-y-8 md:space-y-10">
+            <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
+                <div className="text-center sm:text-left">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Training Coverage Report</h1>
+                    <p className="text-gray-600 mt-2 sm:mt-3 text-base sm:text-lg md:text-xl">Analyze workforce skill development and certification status by module.</p>
                 </div>
-                <div className="flex items-center space-x-4 mt-6 sm:mt-0">
+                <div className="flex items-center space-x-4">
                     <Button
                         variant="outline"
-                        className="text-gray-700 border-gray-300 hover:bg-gray-100 px-6 py-3 rounded-xl transition-all duration-200"
+                        className="text-gray-700 border-gray-300 hover:bg-gray-100 px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl transition-all duration-200 text-sm sm:text-base"
                     >
-                        <Download className="h-5 w-5 mr-2" />Export Report (CSV)
+                        <Download className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" />
+                        <span className="hidden sm:inline">Export Report (CSV)</span>
+                        <span className="sm:hidden">Export</span>
                     </Button>
                 </div>
             </div>
 
             {/* Training Coverage KPIs */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <Card className="border-0 rounded-2xl bg-gradient-to-br from-purple-500 to-violet-600 text-white shadow-xl transform transition-all duration-300 hover:scale-105">
-                    <CardHeader className="pb-2 flex flex-row items-center justify-between">
-                        <CardTitle className="text-base font-medium text-purple-100">Total Training</CardTitle>
-                        <Target className="h-6 w-6 text-purple-200" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-4xl font-bold">{totalTrainings}</div>
-                        <p className="text-sm text-purple-100 mt-1">Total training assigned</p>
-                    </CardContent>
-                </Card>
-                <Card className="border-0 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-xl transform transition-all duration-300 hover:scale-105">
-                    <CardHeader className="pb-2 flex flex-row items-center justify-between">
-                        <CardTitle className="text-base font-medium text-green-100">Complete training</CardTitle>
-                        <CheckCircle className="h-6 w-6 text-green-200" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-4xl font-bold">{totalCompleted}</div>
-                        <p className="text-sm text-green-100 mt-1">Trainings successfully completed</p>
-                    </CardContent>
-                </Card>
-                <Card className="border-0 rounded-2xl bg-gradient-to-br from-orange-400 to-amber-500 text-white shadow-xl transform transition-all duration-300 hover:scale-105">
-                    <CardHeader className="pb-2 flex flex-row items-center justify-between">
-                        <CardTitle className="text-base font-medium text-amber-100">Overdue</CardTitle>
-                        <AlertTriangle className="h-6 w-6 text-amber-200" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-4xl font-bold">{totalOverdue}</div>
-                        <p className="text-sm text-amber-100 mt-1">Require immediate follow-up</p>
-                    </CardContent>
-                </Card>
-                <Card className="border-0 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-xl transform transition-all duration-300 hover:scale-105">
-                    <CardHeader className="pb-2 flex flex-row items-center justify-between">
-                        <CardTitle className="text-base font-medium text-blue-100">In Progress</CardTitle>
-                        <Loader className="h-6 w-6 text-blue-200" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-4xl font-bold">{totalInProgress}</div>
-                        <p className="text-sm text-blue-100 mt-1">Currently in progress</p>
-                    </CardContent>
-                </Card>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                <StatCard
+                    title="Total Training"
+                    value={totalTrainings}
+                    subtitle="Total training assigned"
+                    icon={Target}
+                    color="purple"
+                />
+                
+                <StatCard
+                    title="Complete training"
+                    value={totalCompleted}
+                    subtitle="Trainings successfully completed"
+                    icon={CheckCircle}
+                    color="green"
+                />
+                
+                <StatCard
+                    title="Overdue"
+                    value={totalOverdue}
+                    subtitle="Require immediate follow-up"
+                    icon={AlertTriangle}
+                    color="amber"
+                />
+                
+                <StatCard
+                    title="In Progress"
+                    value={totalInProgress}
+                    subtitle="Currently in progress"
+                    icon={Loader}
+                    color="blue"
+                />
             </div>
 
             {/* <Card className="bg-white shadow-2xl border border-gray-100 rounded-3xl overflow-hidden transform transition-all duration-300 hover:scale-[1.005]">

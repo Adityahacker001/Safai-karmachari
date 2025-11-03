@@ -481,7 +481,6 @@ const FundAllotmentPage = () => {
               icon={Calendar}
             />
           </FormCard>
-
           {/* Card 2: Sanction & Fund Details */}
           <FormCard title="Sanction & Fund Details" icon={DollarSign}>
             <FormInput

@@ -31,40 +31,36 @@ export default function GrievanceEntryPage() {
   ];
 
   return (
-    // Main container with a professional and clean background gradient
-    <div className="min-h-screen p-6 md:p-12 bg-gradient-to-br from-slate-50 to-blue-100 space-y-10">
-      <div className="max-w-full">
-        <h3
-          className="text-4xl md:text-5xl font-extrabold leading-tight whitespace-normal break-words bg-gradient-to-r from-blue-600 to-purple-500 text-transparent bg-clip-text"
-          style={{ WebkitTextFillColor: 'unset', lineHeight: '1.1', paddingBottom: '0.15em', marginBottom: 0 }}
-        >
+    // Main container
+    <div className="min-h-screen w-full max-w-full sm:max-w-full md:max-w-7xl mx-auto p-4 sm:p-6 md:p-12 space-y-6 sm:space-y-8 md:space-y-10">
+      <div className="text-center sm:text-left">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
           Log a New Grievance
-        </h3>
-        <p className="text-gray-600 mt-3 text-xl">Submit a new grievance on behalf of a worker.</p>
+        </h2>
+        <p className="text-gray-600 mt-2 sm:mt-3 text-base sm:text-lg md:text-xl">Submit a new grievance on behalf of a worker.</p>
       </div>
 
-      <Card className="bg-white shadow-2xl border border-gray-100 rounded-3xl overflow-hidden transform transition-all duration-300 hover:scale-[1.005]">
-        <CardHeader className="p-8 md:p-10 bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg">
-          <CardTitle className="flex items-center space-x-4 text-3xl md:text-4xl font-bold">
-            <MessageSquarePlus className="h-9 w-9 text-white" />
-            <span>New Grievance Form</span>
+      <Card className="w-full max-w-full sm:max-w-full md:max-w-6xl mx-auto bg-white/95 backdrop-blur-sm shadow-2xl border border-gray-100 rounded-2xl sm:rounded-3xl overflow-hidden transform transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1">
+        <CardHeader className="p-4 sm:p-6 md:p-8 lg:p-10 bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg">
+          <CardTitle className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold">
+            <span className="break-words">New Grievance Form</span>
           </CardTitle>
-          <CardDescription className="text-blue-100 mt-3 text-lg">
+          <CardDescription className="text-indigo-100 mt-2 sm:mt-3 text-sm sm:text-base md:text-lg">
             Fill in the details below to formally record a worker's grievance. This will generate a new Case ID.
           </CardDescription>
         </CardHeader>
-        <CardContent className="p-8 md:p-10">
-          <form className="max-w-3xl mx-auto space-y-8">
-            <div className="p-8 border border-gray-200 rounded-2xl bg-gradient-to-br from-white to-blue-50 shadow-lg">
-              <div className="flex items-center space-x-4 mb-8 pb-5 border-b border-blue-200">
-                <FileText className="h-7 w-7 text-indigo-700"/>
-                <h3 className="text-2xl font-bold text-gray-800">Grievance Details</h3>
+        <CardContent className="p-4 sm:p-6 md:p-8 lg:p-10">
+          <form className="space-y-6 sm:space-y-8">
+            <div className="p-4 sm:p-6 md:p-8 border border-gray-200 rounded-xl sm:rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:border-blue-300">
+              <div className="flex items-center space-x-3 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-gray-200">
+                <FileText className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600"/>
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-800">Grievance Details</h3>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-7">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-6 md:gap-x-8 gap-y-4 sm:gap-y-6 md:gap-y-7">
                 <div>
-                  <Label htmlFor="worker-select" className="text-gray-700 font-semibold mb-2 block">Select Worker</Label>
+                  <Label htmlFor="worker-select" className="text-gray-700 font-semibold mb-2 block text-sm sm:text-base">Select Worker</Label>
                   <Select required>
-                    <SelectTrigger id="worker-select" className="border-gray-300 focus:border-indigo-600 focus:ring-3 focus:ring-indigo-200 transition-all duration-300 rounded-xl px-4 py-2.5">
+                    <SelectTrigger id="worker-select" className="border-gray-300 focus:border-blue-600 focus:ring-3 focus:ring-blue-200 transition-all duration-300 rounded-lg sm:rounded-xl px-3 sm:px-4 py-2 sm:py-2.5">
                       <SelectValue placeholder="Choose the worker..." />
                     </SelectTrigger>
                     <SelectContent className="bg-white shadow-xl rounded-lg border-gray-200">
@@ -75,9 +71,9 @@ export default function GrievanceEntryPage() {
                   </Select>
                 </div>
                 <div>
-                  <Label htmlFor="grievance-category" className="text-gray-700 font-semibold mb-2 block">Grievance Category</Label>
+                  <Label htmlFor="grievance-category" className="text-gray-700 font-semibold mb-2 block text-sm sm:text-base">Grievance Category</Label>
                   <Select required>
-                    <SelectTrigger id="grievance-category" className="border-gray-300 focus:border-indigo-600 focus:ring-3 focus:ring-indigo-200 transition-all duration-300 rounded-xl px-4 py-2.5">
+                    <SelectTrigger id="grievance-category" className="border-gray-300 focus:border-blue-600 focus:ring-3 focus:ring-blue-200 transition-all duration-300 rounded-lg sm:rounded-xl px-3 sm:px-4 py-2 sm:py-2.5">
                       <SelectValue placeholder="Select a category..." />
                     </SelectTrigger>
                     <SelectContent className="bg-white shadow-xl rounded-lg border-gray-200">
@@ -119,9 +115,9 @@ export default function GrievanceEntryPage() {
             </div>
           </form>
         </CardContent>
-        <CardFooter className="flex justify-end p-8 md:p-10 pt-6 border-t border-gray-200">
-          <Button type="submit" className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold text-xl py-3.5 px-10 rounded-xl shadow-xl transition-all duration-400 ease-in-out transform hover:scale-105 hover:shadow-2xl">
-            <MessageSquarePlus className="h-6 w-6 mr-3" />
+        <CardFooter className="flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4 p-4 sm:p-6 md:p-8 lg:p-10 pt-4 sm:pt-6 border-t border-gray-200">
+          <Button type="submit" className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold text-lg sm:text-xl py-2.5 sm:py-3.5 px-8 sm:px-10 rounded-lg sm:rounded-xl shadow-xl transition-all duration-400 ease-in-out transform hover:scale-105 hover:shadow-2xl order-1">
+            <MessageSquarePlus className="h-5 w-5 sm:h-6 sm:w-6 mr-2 sm:mr-3" />
             Submit Grievance
           </Button>
         </CardFooter>

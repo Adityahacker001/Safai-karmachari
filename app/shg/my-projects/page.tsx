@@ -10,6 +10,7 @@ import {
   DollarSign, BarChart3, ListFilter, Search, X, Eye, Edit, Trash2, FileText,
   Users, Calendar, TrendingUp, Download, ArrowRight, Activity, Zap, FileUp, Filter, FolderKanban, ActivitySquare
 } from 'lucide-react';
+import StatCard from '@/components/ui/stat-card';
 
 // --- Reusable Components ---
 
@@ -36,39 +37,7 @@ const GradientButton: React.FC<GradientButtonProps> = ({
   </button>
 );
 
-// 2. Metric Card
-type MetricCardProps = {
-  title: string;
-  value: string;
-  icon: React.ElementType;
-  color: string; // e.g., 'blue', 'green', 'purple'
-};
-const MetricCard: React.FC<MetricCardProps> = ({ title, value, icon: Icon, color }) => {
-  const colorClasses = {
-    bg: `bg-${color}-100/50`, // Softer background
-    text: `text-${color}-600`,
-    border: `border-${color}-200`,
-    iconBg: `bg-${color}-100`,
-  };
 
-  return (
-    <div className={`relative p-5 bg-white/70 backdrop-blur-md rounded-2xl shadow-xl border ${colorClasses.border} 
-                   transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 transform-gpu overflow-hidden`}>
-       {/* Subtle background pattern */}
-       <div className={`absolute top-0 right-0 -mt-4 -mr-4 w-20 h-20 rounded-full ${colorClasses.bg} opacity-50`}></div>
-       
-       <div className="relative z-10 flex justify-between items-start">
-        <div className="flex-1">
-          <p className="text-sm font-medium text-slate-500 truncate">{title}</p>
-          <p className="text-3xl font-bold text-slate-800 mt-1">{value}</p>
-        </div>
-        <div className={`p-3 rounded-xl ${colorClasses.iconBg}`}>
-          <Icon className={`w-6 h-6 ${colorClasses.text}`} />
-        </div>
-      </div>
-    </div>
-  );
-};
 
 // 3. Project Status Badge
 type Status = 'Active' | 'Completed' | 'Pending Approval' | 'On Hold';
@@ -88,18 +57,7 @@ const ProjectStatusBadge: React.FC<{ status: Status }> = ({ status }) => {
   );
 };
 
-// 4. Progress Bar
-const ProgressBar: React.FC<{ progress: number }> = ({ progress }) => {
-    const clampedProgress = Math.max(0, Math.min(100, progress));
-    return (
-        <div className="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden">
-            <div 
-                className="bg-gradient-to-r from-sky-400 to-blue-500 h-2.5 rounded-full transition-all duration-500 ease-out" 
-                style={{ width: `${clampedProgress}%` }}
-            ></div>
-        </div>
-    );
-};
+
 
 // 5. Project Card
 type ProjectCardProps = {
@@ -123,34 +81,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onView, onEdit, onDe
     {/* Details */}
     <div className="text-sm text-slate-600 space-y-2">
       <div className="flex items-center gap-2">
-        <DollarSign className="w-4 h-4 text-green-500" />
-        <span>Loan Amount: <span className="font-semibold text-slate-700">{project.loanAmount}</span></span>
-      </div>
-      <div className="flex items-center gap-2">
         <Calendar className="w-4 h-4 text-blue-500" />
         <span>Start Date: <span className="font-semibold text-slate-700">{project.startDate}</span></span>
       </div>
-    </div>
-
-    {/* Progress */}
-    <div>
-        <div className="flex justify-between text-xs font-medium text-slate-500 mb-1">
-            <span>Progress</span>
-            <span>{project.progress}%</span>
-        </div>
-        <ProgressBar progress={project.progress} />
-    </div>
-    
-    {/* Team/Members (Placeholder) */}
-    <div className="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-200/80">
-        <div className="flex -space-x-2 overflow-hidden">
-            {/* Placeholder Avatars */}
-            <img className="inline-block h-6 w-6 rounded-full ring-2 ring-white" src="https://via.placeholder.com/24/DB1A56/FFFFFF?text=A" alt="Member A"/>
-            <img className="inline-block h-6 w-6 rounded-full ring-2 ring-white" src="https://via.placeholder.com/24/38BDF8/FFFFFF?text=B" alt="Member B"/>
-            <img className="inline-block h-6 w-6 rounded-full ring-2 ring-white" src="https://via.placeholder.com/24/16A34A/FFFFFF?text=C" alt="Member C"/>
-             <span className="flex items-center justify-center h-6 w-6 rounded-full ring-2 ring-white bg-slate-200 text-slate-600 font-semibold text-[10px]">+{project.members}</span>
-        </div>
-        <span>{project.members + 3} Members</span> {/* Example: +3 more */}
     </div>
 
 
@@ -166,12 +99,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onView, onEdit, onDe
 // --- Mock Data ---
 
 const MOCK_PROJECT_DATA = [
-  { id: 1, title: 'Tailoring Unit Setup', scheme: 'Self Employment Scheme', loanAmount: '₹1,50,000', status: 'Active', progress: 75, startDate: '15 Aug 2025', members: 5 },
-  { id: 2, title: 'Sanitary Napkin Production', scheme: 'Sanitary Mart Loan', loanAmount: '₹5,00,000', status: 'Completed', progress: 100, startDate: '01 Mar 2025', members: 8 },
-  { id: 3, title: 'Mechanized Cleaning Service', scheme: 'Mechanized Cleaning Grant', loanAmount: '₹10,00,000 (Grant)', status: 'Pending Approval', progress: 10, startDate: '01 Oct 2025', members: 12 },
-  { id: 4, title: 'E-Rickshaw Operation', scheme: 'E-Rickshaw Loan', loanAmount: '₹1,20,000', status: 'Active', progress: 90, startDate: '10 Jun 2025', members: 3 },
-  { id: 5, title: 'Catering Service Expansion', scheme: 'Self Employment Scheme', loanAmount: '₹2,00,000', status: 'On Hold', progress: 40, startDate: '01 Sep 2025', members: 6 },
-  { id: 6, title: 'Computer Training Center', scheme: 'Skill Development Program', loanAmount: '₹3,00,000 (Grant)', status: 'Active', progress: 60, startDate: '01 Jul 2025', members: 10 },
+  { id: 1, title: 'Tailoring Unit Setup', scheme: 'Self Employment Scheme', status: 'Active', startDate: '15 Aug 2025' },
+  { id: 2, title: 'Sanitary Napkin Production', scheme: 'Sanitary Mart Loan', status: 'Completed', startDate: '01 Mar 2025' },
+  { id: 3, title: 'Mechanized Cleaning Service', scheme: 'Mechanized Cleaning Grant', status: 'Pending Approval', startDate: '01 Oct 2025' },
+  { id: 4, title: 'E-Rickshaw Operation', scheme: 'E-Rickshaw Loan', status: 'Active', startDate: '10 Jun 2025' },
+  { id: 5, title: 'Catering Service Expansion', scheme: 'Self Employment Scheme', status: 'On Hold', startDate: '01 Sep 2025' },
+  { id: 6, title: 'Computer Training Center', scheme: 'Skill Development Program', status: 'Active', startDate: '01 Jul 2025' },
 ];
 
 const mockStatusOptions = ['All', 'Active', 'Completed', 'Pending Approval', 'On Hold'];
@@ -228,11 +161,7 @@ const MyProjectsPage = () => {
     total: MOCK_PROJECT_DATA.length,
     active: MOCK_PROJECT_DATA.filter(p => p.status === 'Active').length,
     completed: MOCK_PROJECT_DATA.filter(p => p.status === 'Completed').length,
-    // Basic fund calculation (assuming loanAmount is parseable, replace with actual data if available)
-    fundsUtilized: MOCK_PROJECT_DATA.reduce((sum, p) => {
-        const amount = parseFloat(p.loanAmount.replace(/[^0-9.-]+/g,""));
-        return sum + (isNaN(amount) ? 0 : amount * (p.progress / 100));
-    }, 0).toLocaleString('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0, maximumFractionDigits: 0 }),
+    pending: MOCK_PROJECT_DATA.filter(p => p.status === 'Pending Approval').length,
   }), []);
 
 
@@ -274,10 +203,10 @@ const MyProjectsPage = () => {
 
         {/* --- 2. Summary Metrics --- */}
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <MetricCard title="Total Projects" value={summary.total.toString()} icon={Briefcase} color="blue" />
-            <MetricCard title="Active Projects" value={summary.active.toString()} icon={ActivitySquare} color="green" />
-            <MetricCard title="Completed Projects" value={summary.completed.toString()} icon={CheckCircle} color="purple" />
-            <MetricCard title="Est. Funds Utilized" value={summary.fundsUtilized} icon={DollarSign} color="sky" />
+            <StatCard title="Total Projects" value={summary.total.toString()} icon={Briefcase} color="blue" />
+            <StatCard title="Active Projects" value={summary.active.toString()} icon={ActivitySquare} color="green" />
+            <StatCard title="Completed Projects" value={summary.completed.toString()} icon={CheckCircle} color="purple" />
+            <StatCard title="Pending Projects" value={summary.pending.toString()} icon={Clock} color="sky" />
         </section>
 
         {/* --- 3. Filters Section --- */}

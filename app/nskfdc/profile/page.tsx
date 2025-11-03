@@ -428,7 +428,6 @@ const NskfdcProfilePage = () => {
             </div>
           </Card>
         </section>
-
       </div>
     </div>
   );

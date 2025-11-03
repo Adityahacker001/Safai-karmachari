@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Download, Shield, CheckCircle, AlertTriangle, Star } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import StatCard from "@/components/ui/stat-card";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip, Legend, ChartData, ScriptableContext } from "chart.js";
 
@@ -133,56 +134,50 @@ export default function SafetyComplianceReportPage() {
     };
 
     return (
-        // Main container with a vibrant, modern background gradient
-        <div className="min-h-screen p-6 md:p-12 bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 space-y-10">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                    <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Safety Compliance Report</h1>
-                    <p className="text-gray-600 mt-3 text-xl">Analyze daily PPE checklist submissions and track worker safety scores.</p>
+        <div className="min-h-screen w-full max-w-full sm:max-w-full md:max-w-7xl mx-auto p-4 sm:p-6 md:p-12 space-y-6 sm:space-y-8 md:space-y-10">
+            <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
+                <div className="text-center sm:text-left">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Safety Compliance Report</h1>
+                    <p className="text-gray-600 mt-2 sm:mt-3 text-base sm:text-lg md:text-xl">Analyze daily PPE checklist submissions and track worker safety scores.</p>
                 </div>
-                <div className="flex items-center space-x-4 mt-6 sm:mt-0">
+                <div className="flex items-center space-x-4">
                     <Button
                         variant="outline"
-                        className="text-gray-700 border-gray-300 hover:bg-gray-100 px-6 py-3 rounded-xl transition-all duration-200"
+                        className="text-gray-700 border-gray-300 hover:bg-gray-100 px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl transition-all duration-200 text-sm sm:text-base"
                     >
-                        <Download className="h-5 w-5 mr-2" />Export Report (PDF)
+                        <Download className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" />
+                        <span className="hidden sm:inline">Export Report (PDF)</span>
+                        <span className="sm:hidden">Export</span>
                     </Button>
                 </div>
             </div>
 
             {/* Safety Compliance KPIs */}
-            {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <Card className="border-0 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-xl transform transition-all duration-300 hover:scale-105">
-                    <CardHeader className="pb-2 flex flex-row items-center justify-between">
-                        <CardTitle className="text-base font-medium text-green-100">Monthly Compliance Rate</CardTitle>
-                        <Shield className="h-6 w-6 text-green-200" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-4xl font-bold">94.2%</div>
-                        <p className="text-sm text-green-100 mt-1">Average across all workers</p>
-                    </CardContent>
-                </Card>
-                <Card className="border-0 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-xl transform transition-all duration-300 hover:scale-105">
-                    <CardHeader className="pb-2 flex flex-row items-center justify-between">
-                        <CardTitle className="text-base font-medium text-blue-100">Checklists Submitted Today</CardTitle>
-                        <CheckCircle className="h-6 w-6 text-blue-200" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-4xl font-bold">140 / 142</div>
-                        <p className="text-sm text-blue-100 mt-1">From active workforce</p>
-                    </CardContent>
-                </Card>
-                <Card className="border-0 rounded-2xl bg-gradient-to-br from-red-500 to-rose-600 text-white shadow-xl transform transition-all duration-300 hover:scale-105">
-                    <CardHeader className="pb-2 flex flex-row items-center justify-between">
-                        <CardTitle className="text-base font-medium text-red-100">Non-Compliant Today</CardTitle>
-                        <AlertTriangle className="h-6 w-6 text-red-200" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-4xl font-bold">{complianceLogs.filter(l => l.status === 'Non-Compliant').length}</div>
-                        <p className="text-sm text-red-100 mt-1">Workers with missing PPE</p>
-                    </CardContent>
-                </Card>
-            </div> */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <StatCard
+                    title="Monthly Compliance Rate"
+                    value="94.2%"
+                    subtitle="Average across all workers"
+                    icon={Shield}
+                    color="green"
+                />
+                
+                <StatCard
+                    title="Checklists Submitted Today"
+                    value="140 / 142"
+                    subtitle="From active workforce"
+                    icon={CheckCircle}
+                    color="blue"
+                />
+                
+                <StatCard
+                    title="Non-Compliant Today"
+                    value={complianceLogs.filter(l => l.status === 'Non-Compliant').length}
+                    subtitle="Workers with missing PPE"
+                    icon={AlertTriangle}
+                    color="red"
+                />
+            </div>
 
             {/* Compliance Trend Chart and Worker Leaderboard */}
             {/* <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
@@ -221,21 +216,21 @@ export default function SafetyComplianceReportPage() {
                 </Card>
             </div> */}
 
-            <Card className="bg-white shadow-2xl border border-gray-100 rounded-3xl overflow-hidden transform transition-all duration-300 hover:scale-[1.005]">
-                <CardHeader className="p-8 md:p-10 bg-gradient-to-r from-blue-600 via-purple-500 via-pink-500 via-rose-400 to-yellow-400 text-white shadow-lg">
-                    <CardTitle className="text-3xl md:text-4xl font-bold">Daily Compliance Log</CardTitle>
-                    <CardDescription className="text-white-300 mt-2 text-lg">
+            <Card className="w-full max-w-full sm:max-w-full md:max-w-6xl mx-auto bg-white/95 backdrop-blur-sm shadow-2xl border border-gray-100 rounded-2xl sm:rounded-3xl overflow-hidden transform transition-all duration-300 hover:scale-[1.005]">
+                <CardHeader className="p-4 sm:p-6 md:p-8 lg:p-10 bg-gradient-to-r from-blue-600 via-purple-500 via-pink-500 via-rose-400 to-yellow-400 text-white shadow-lg">
+                    <CardTitle className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold">Daily Compliance Log</CardTitle>
+                    <CardDescription className="text-white-300 mt-2 text-sm sm:text-base md:text-lg">
                         Detailed log of today's checklist submissions. Non-compliant entries are highlighted.
                     </CardDescription>
                 </CardHeader>
-                <CardContent className="p-8 md:p-10 bg-gradient-to-br from-white via-blue-50 via-pink-50 to-yellow-50">
-                    <Table>
+                <CardContent className="p-0 overflow-x-auto">
+                    <Table className="w-full min-w-[600px]">
                         <TableHeader className="bg-gray-50 rounded-t-xl">
                             <TableRow className="border-b border-gray-200">
-                                <TableHead className="py-4 px-6 text-gray-700 font-bold text-base">Worker</TableHead>
-                                <TableHead className="py-4 px-6 text-gray-700 font-bold text-base">Submission Time</TableHead>
-                                <TableHead className="py-4 px-6 text-gray-700 font-bold text-base">Provided Items</TableHead>
-                                <TableHead className="py-4 px-6 text-gray-700 font-bold text-base">Remarks</TableHead>
+                                <TableHead className="py-3 sm:py-4 px-3 sm:px-6 text-gray-700 font-bold text-sm sm:text-base">Worker</TableHead>
+                                <TableHead className="py-3 sm:py-4 px-3 sm:px-6 text-gray-700 font-bold text-sm sm:text-base">Submission Time</TableHead>
+                                <TableHead className="py-3 sm:py-4 px-3 sm:px-6 text-gray-700 font-bold text-sm sm:text-base">Provided Items</TableHead>
+                                <TableHead className="py-3 sm:py-4 px-3 sm:px-6 text-gray-700 font-bold text-sm sm:text-base">Remarks</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -246,12 +241,14 @@ export default function SafetyComplianceReportPage() {
 
                                 return (
                                 <TableRow key={log.worker} className={`border-b border-gray-100 transition-colors duration-150 ${log.status!== 'Compliant'? 'bg-red-50 hover:bg-red-100' : 'hover:bg-gray-50'}`}>
-                                    <TableCell className="py-4 px-6 font-semibold text-gray-800 text-base">{log.worker}</TableCell>
-                                    <TableCell className="py-4 px-6 text-gray-700 text-base">{log.time}</TableCell>
-                                    <TableCell className="py-4 px-6 text-gray-700 text-base">
-                                        {log.status === 'Not Submitted' ? 'N/A' : providedItems.join(', ')}
+                                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6 font-semibold text-gray-800 text-sm sm:text-base">{log.worker}</TableCell>
+                                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6 text-gray-700 text-sm sm:text-base">{log.time}</TableCell>
+                                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6 text-gray-700 text-sm sm:text-base">
+                                        <div className="max-w-xs truncate" title={log.status === 'Not Submitted' ? 'N/A' : providedItems.join(', ')}>
+                                            {log.status === 'Not Submitted' ? 'N/A' : providedItems.join(', ')}
+                                        </div>
                                     </TableCell>
-                                    <TableCell className="py-4 px-6 text-gray-700 text-base">{log.remarks}</TableCell>
+                                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6 text-gray-700 text-sm sm:text-base">{log.remarks}</TableCell>
                                 </TableRow>
                             )})}
                         </TableBody>

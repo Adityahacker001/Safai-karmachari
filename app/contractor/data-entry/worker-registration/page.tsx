@@ -12,39 +12,42 @@ import { Textarea } from "@/components/ui/textarea";
 
 export default function WorkerRegistrationPage() {
   return (
-    // Main container with a vibrant, modern background gradient
-  <div className="min-h-screen p-6 md:p-12 bg-gradient-to-br from-blue-100 via-purple-100 to-blue-50 space-y-10">
-      <div>
-        <h2 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Worker Registration</h2>
-        <p className="text-gray-600 mt-3 text-xl">Enter the new worker's details to add them to the system roster.</p>
+    // Main container
+    <div className="min-h-screen w-full max-w-full sm:max-w-full md:max-w-7xl mx-auto p-4 sm:p-6 md:p-12 space-y-6 sm:space-y-8 md:space-y-10">
+      <div className="text-center sm:text-left">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+          Worker Registration
+        </h2>
+        <p className="text-gray-600 mt-2 sm:mt-3 text-base sm:text-lg md:text-xl">
+          Enter the new worker's details to add them to the system roster.
+        </p>
       </div>
 
-      <Card className="bg-white shadow-2xl border border-gray-100 rounded-3xl overflow-hidden transform transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1">
-  <CardHeader className="p-8 md:p-10 bg-gradient-to-r from-blue-600 to-purple-700 text-white shadow-lg rounded-2xl">
-          <CardTitle className="flex items-center space-x-4 text-3xl md:text-4xl font-bold">
-            <UserPlus className="h-9 w-9 text-white" />
-            <span>New Safai Karmachari Registration Form</span>
+      <Card className="w-full max-w-full sm:max-w-full md:max-w-6xl mx-auto bg-white/95 backdrop-blur-sm shadow-2xl border border-gray-100 rounded-2xl sm:rounded-3xl overflow-hidden transform transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1">
+        <CardHeader className="p-4 sm:p-6 md:p-8 lg:p-10 bg-gradient-to-r from-blue-600 to-purple-700 text-white shadow-lg">
+          <CardTitle className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold">
+            <span className="break-words">New Safai Karmachari Registration Form</span>
           </CardTitle>
-          <CardDescription className="text-indigo-100 mt-3 text-lg">
+          <CardDescription className="text-indigo-100 mt-2 sm:mt-3 text-sm sm:text-base md:text-lg">
             This will create their digital ID and enroll them in the monitoring and welfare ecosystem.
           </CardDescription>
         </CardHeader>
-        <CardContent className="p-8 md:p-10">
-          <form className="space-y-12">
+        <CardContent className="p-4 sm:p-6 md:p-8 lg:p-10">
+          <form className="space-y-8 sm:space-y-10 md:space-y-12">
             {/* Section 1: Personal & Identity Information */}
-            <div className="p-6 border-2 border-blue-200 rounded-2xl bg-gradient-to-br from-blue-100 via-purple-100 to-blue-50 shadow-2xl transition-all duration-300 hover:scale-[1.02] hover:-translate-y-2">
-              <div className="flex items-center space-x-3 mb-6 pb-4 border-b border-gray-200">
-                <User className="h-6 w-6 text-blue-600"/>
-                <h3 className="text-xl font-semibold text-gray-800">Personal & Identity Information</h3>
+            <div className="p-4 sm:p-6 border border-gray-200 rounded-xl sm:rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:border-blue-300">
+              <div className="flex items-center space-x-3 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-gray-200">
+                <User className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600"/>
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-800">Personal &amp; Identity Information</h3>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-x-4 sm:gap-x-6 gap-y-4 sm:gap-y-5">
                 <div>
-                  <Label htmlFor="fullName" className="text-gray-700 font-semibold mb-2 block">Full Name</Label>
-                  <Input id="fullName" placeholder="As per Aadhaar card" required className="border-gray-300 focus:border-blue-600 focus:ring-3 focus:ring-blue-200 transition-all duration-300 rounded-xl px-4 py-2.5" />
+                  <Label htmlFor="fullName" className="text-gray-700 font-semibold mb-2 block text-sm sm:text-base">Full Name</Label>
+                  <Input id="fullName" placeholder="As per Aadhaar card" required className="border-gray-300 focus:border-blue-600 focus:ring-3 focus:ring-blue-200 transition-all duration-300 rounded-lg sm:rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base" />
                 </div>
-                 <div>
-                  <Label htmlFor="fatherSpouseName" className="text-gray-700 font-semibold mb-2 block">Father's/Spouse's Name</Label>
-                  <Input id="fatherSpouseName" placeholder="Enter name" required className="border-gray-300 focus:border-blue-600 focus:ring-3 focus:ring-blue-200 transition-all duration-300 rounded-xl px-4 py-2.5" />
+                <div>
+                  <Label htmlFor="fatherSpouseName" className="text-gray-700 font-semibold mb-2 block text-sm sm:text-base">Father's/Spouse's Name</Label>
+                  <Input id="fatherSpouseName" placeholder="Enter name" required className="border-gray-300 focus:border-blue-600 focus:ring-3 focus:ring-blue-200 transition-all duration-300 rounded-lg sm:rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base" />
                 </div>
                 <div>
                   <Label htmlFor="dob" className="text-gray-700 font-semibold mb-2 block">Date of Birth</Label>
@@ -61,9 +64,9 @@ export default function WorkerRegistrationPage() {
                     </SelectContent>
                   </Select>
                 </div>
-                 <div className="lg:col-span-2">
-                  <Label htmlFor="address" className="text-gray-700 font-semibold mb-2 block">Residential Address</Label>
-                  <Input id="address" placeholder="Enter full current address" className="border-gray-300 focus:border-blue-600 focus:ring-3 focus:ring-blue-200 transition-all duration-300 rounded-xl px-4 py-2.5" />
+                <div className="sm:col-span-2 lg:col-span-2">
+                  <Label htmlFor="address" className="text-gray-700 font-semibold mb-2 block text-sm sm:text-base">Residential Address</Label>
+                  <Input id="address" placeholder="Enter full current address" className="border-gray-300 focus:border-blue-600 focus:ring-3 focus:ring-blue-200 transition-all duration-300 rounded-lg sm:rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base" />
                 </div>
                  <div>
                   <Label htmlFor="phone" className="text-gray-700 font-semibold mb-2 block">Phone Number</Label>
@@ -146,15 +149,15 @@ export default function WorkerRegistrationPage() {
             </div>
 
             {/* --- NEW SECTION: Emergency Contact Information --- */}
-            <div className="p-6 border-2 border-purple-200 rounded-2xl bg-gradient-to-br from-purple-100 via-white to-blue-50 shadow-2xl transition-all duration-300 hover:scale-[1.02] hover:-translate-y-2">
-                <div className="flex items-center space-x-3 mb-6 pb-4 border-b border-gray-200">
-                    <Shield className="h-6 w-6 text-red-600"/>
-                    <h3 className="text-xl font-semibold text-gray-800">Emergency Contact Information</h3>
+            <div className="p-4 sm:p-6 border border-gray-200 rounded-xl sm:rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:border-purple-300">
+                <div className="flex items-center space-x-3 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-gray-200">
+                    <Shield className="h-5 w-5 sm:h-6 sm:w-6 text-red-600"/>
+                    <h3 className="text-lg sm:text-xl font-semibold text-gray-800">Emergency Contact Information</h3>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 sm:gap-x-6 gap-y-4 sm:gap-y-5">
                     <div>
-                        <Label htmlFor="emergencyContactName" className="text-gray-700 font-semibold mb-2 block">Emergency Contact Name</Label>
-                        <Input id="emergencyContactName" placeholder="e.g., Abishek Kumar" className="border-gray-300 focus:border-blue-600 focus:ring-3 focus:ring-blue-200 transition-all duration-300 rounded-xl px-4 py-2.5" />
+                        <Label htmlFor="emergencyContactName" className="text-gray-700 font-semibold mb-2 block text-sm sm:text-base">Emergency Contact Name</Label>
+                        <Input id="emergencyContactName" placeholder="e.g., Abishek Kumar" className="border-gray-300 focus:border-blue-600 focus:ring-3 focus:ring-blue-200 transition-all duration-300 rounded-lg sm:rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base" />
                     </div>
                     <div>
                         <Label htmlFor="emergencyContactRelation" className="text-gray-700 font-semibold mb-2 block">Relationship</Label>
@@ -167,13 +170,13 @@ export default function WorkerRegistrationPage() {
                 </div>
             </div>
 
-            {/* Section 2: Employment & Financial Details (UNCHANGED) */}
-            <div className="p-8 border-2 border-green-200 rounded-2xl bg-gradient-to-br from-green-100 via-white to-blue-50 shadow-2xl transition-all duration-300 hover:scale-[1.02] hover:-translate-y-2">
-              <div className="flex items-center space-x-4 mb-8 pb-5 border-b border-purple-200">
-                <Briefcase className="h-7 w-7 text-purple-700"/>
-                <h3 className="text-2xl font-bold text-gray-800">Employment & Financial Details</h3>
+            {/* Section 2: Employment & Financial Details */}
+            <div className="p-4 sm:p-6 md:p-8 border border-gray-200 rounded-xl sm:rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:border-green-300">
+              <div className="flex items-center space-x-3 sm:space-x-4 mb-6 sm:mb-8 pb-4 sm:pb-5 border-b border-purple-200">
+                <Briefcase className="h-6 w-6 sm:h-7 sm:w-7 text-purple-700"/>
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800">Employment &amp; Financial Details</h3>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-7">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-x-4 sm:gap-x-6 md:gap-x-8 gap-y-5 sm:gap-y-6 md:gap-y-7">
                 <div>
                   <Label htmlFor="dateOfJoining" className="text-gray-700 font-semibold mb-2 block">Date of Joining</Label>
                   <Input id="dateOfJoining" type="date" required defaultValue={new Date().toISOString().slice(0, 10)} className="border-gray-300 focus:border-purple-600 focus:ring-3 focus:ring-purple-200 transition-all duration-300 rounded-xl px-4 py-2.5" />
@@ -232,33 +235,35 @@ export default function WorkerRegistrationPage() {
               </div>
             </div>
 
-            {/* SMS Notification with Checkbox (UNCHANGED) */}
-            <div className="p-4 bg-gradient-to-r from-yellow-50 to-orange-100 border border-yellow-200 rounded-2xl flex items-center space-x-4">
-              <Checkbox id="smsNotify" className="border-yellow-400 focus:ring-yellow-400" />
-              <label htmlFor="smsNotify" className="text-yellow-900 font-medium w-full cursor-pointer select-none">
+            {/* SMS Notification with Checkbox */}
+            <div className="p-3 sm:p-4 bg-gradient-to-r from-yellow-50 to-orange-100 border border-yellow-200 rounded-xl sm:rounded-2xl flex items-start sm:items-center space-x-3 sm:space-x-4">
+              <Checkbox id="smsNotify" className="border-yellow-400 focus:ring-yellow-400 mt-1 sm:mt-0 flex-shrink-0" />
+              <label htmlFor="smsNotify" className="text-yellow-900 font-medium w-full cursor-pointer select-none text-sm sm:text-base">
                 An SMS with login details will be sent to the registered phone number once the worker is registered.
               </label>
             </div>
             
-            {/* New Declaration Checkbox (UNCHANGED) */}
-            <div className="pt-4">
-              <div className="flex items-start space-x-3 p-4 border border-gray-200 rounded-xl bg-gray-50">
-                  <Checkbox id="declaration" required className="mt-1" />
+            {/* Declaration Checkbox */}
+            <div className="pt-3 sm:pt-4">
+              <div className="flex items-start space-x-3 p-3 sm:p-4 border border-gray-200 rounded-lg sm:rounded-xl bg-gray-50">
+                  <Checkbox id="declaration" required className="mt-1 flex-shrink-0" />
                   <div className="grid gap-1.5 leading-none">
-                      <Label htmlFor="declaration" className="text-base font-medium text-gray-800">
-                          Declaration & Consent
+                      <Label htmlFor="declaration" className="text-sm sm:text-base font-medium text-gray-800">
+                          Declaration &amp; Consent
                       </Label>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-xs sm:text-sm text-gray-600">
                           I hereby declare that all the information provided is true and correct. I consent to the use of this data for official purposes, including enrollment in welfare schemes and monitoring.
                       </p>
                   </div>
               </div>
             </div>
 
-            {/* Form Actions (UNCHANGED) */}
-            <div className="flex flex-col sm:flex-row justify-end space-y-5 sm:space-y-0 sm:space-x-6 pt-10 border-t border-gray-200">
-              <Button variant="ghost" className="text-gray-700 hover:bg-gray-100 px-8 py-3.5 rounded-xl text-lg transition-all duration-300 font-medium">Reset Form</Button>
-              <Button type="submit" className="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-bold text-xl py-3.5 px-10 rounded-xl shadow-xl transition-all duration-400 ease-in-out transform hover:scale-105 hover:shadow-2xl">
+            {/* Form Actions */}
+            <div className="flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4 md:space-x-6 pt-6 sm:pt-8 md:pt-10 border-t border-gray-200">
+              <Button variant="ghost" className="text-gray-700 hover:bg-gray-100 px-6 sm:px-8 py-2.5 sm:py-3.5 rounded-lg sm:rounded-xl text-base sm:text-lg transition-all duration-300 font-medium order-2 sm:order-1">
+                Reset Form
+              </Button>
+              <Button type="submit" className="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-bold text-lg sm:text-xl py-2.5 sm:py-3.5 px-8 sm:px-10 rounded-lg sm:rounded-xl shadow-xl transition-all duration-400 ease-in-out transform hover:scale-105 hover:shadow-2xl order-1 sm:order-2">
                 Register Worker
               </Button>
             </div>

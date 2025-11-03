@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { Trash2, HandCoins, ListChecks, Download } from 'lucide-react';
 import { Button as GradientButton } from '@/components/ui/button';
+import StatCard from '@/components/ui/stat-card';
 
 // --- Mock Data ---
 
@@ -52,12 +53,7 @@ const mockMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'Jul
 
 // --- Reusable Components ---
 
-// 1. Shiny Metric Card
-type MetricCardProps = { title: string; value: string | number; icon: React.ElementType; color: string; };
-const MetricCard: React.FC<MetricCardProps> = ({ title, value, icon: Icon, color }) => {
-  const colorClasses = { blue: { bg: 'bg-blue-100', text: 'text-blue-600', shadow: 'shadow-blue-500/30' }, green: { bg: 'bg-green-100', text: 'text-green-600', shadow: 'shadow-green-500/30' }, purple: { bg: 'bg-purple-100', text: 'text-purple-600', shadow: 'shadow-purple-500/30' }, amber: { bg: 'bg-amber-100', text: 'text-amber-600', shadow: 'shadow-amber-500/30' }, sky: { bg: 'bg-sky-100', text: 'text-sky-600', shadow: 'shadow-sky-500/30' } }[color] || { bg: 'bg-slate-100', text: 'text-slate-600', shadow: 'shadow-slate-500/30' };
-  return ( <div className={`relative p-5 bg-gradient-to-br from-white/80 to-${color}-50/50 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1.5 transform-gpu overflow-hidden ${colorClasses.shadow} hover:shadow-lg group`}> <div className={`absolute -top-8 -right-8 w-32 h-32 rounded-full ${colorClasses.bg} opacity-30 blur-xl group-hover:opacity-60 transition-opacity duration-300`}></div> <div className="relative z-10 flex items-center space-x-4"> <div className={`p-3 rounded-xl ${colorClasses.bg} shadow-sm`}> <Icon className={`w-7 h-7 ${colorClasses.text}`} /> </div> <div> <p className="text-sm font-medium text-slate-500">{title}</p> <p className="text-3xl font-bold text-slate-800">{value}</p> </div> </div> </div> );
-};
+
 
 // 2. Glass Card Wrapper
 const GlassCard: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = '' }) => ( <div className={`bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 p-6 ${className}`}> {children} </div> );
@@ -131,8 +127,8 @@ const UploadModal: React.FC<{ isOpen: boolean; onClose: () => void; month: strin
 };
 
 // 7. Insights Panel Component
-type InsightsPanelProps = { data: any[]; isOpen: boolean; onClose: () => void; };
-const InsightsPanel: React.FC<InsightsPanelProps> = ({ data, isOpen, onClose }) => {
+type InsightsPanelProps = { data: any[] };
+const InsightsPanel: React.FC<InsightsPanelProps> = ({ data }) => {
   // Chart Data Preparation (Assuming expense categories are added later)
   const expenseBreakdown = [ { name: 'Equipment', value: 400000 }, { name: 'Training', value: 150000 }, { name: 'Salary', value: 300000 }, { name: 'Admin/Misc', value: 50000 } ];
   const monthlyUtilTrend = data.map(d => ({ month: d.month.split(' ')[0], Utilized: d.utilizedAmount, Released: d.fundReleased })).reverse(); // Assuming sorted data
@@ -140,12 +136,9 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({ data, isOpen, onClose }) 
   const PIE_COLORS_EXPENSE = ['#3B82F6', '#10B981', '#8B5CF6', '#F59E0B']; // Blue, Green, Purple, Amber
 
   return (
-    <div className={`fixed inset-y-0 right-0 z-50 w-full max-w-lg bg-white shadow-xl transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-      <div className="flex justify-between items-center p-6 border-b border-slate-200 bg-slate-50">
-        <h2 className="text-xl font-semibold text-slate-800 flex items-center gap-2"><BarChart3 className="w-6 h-6 text-indigo-600" /> Utilization Insights</h2>
-        <button onClick={onClose} className="p-2 rounded-full hover:bg-slate-200 text-slate-500"><X className="w-6 h-6" /></button>
-      </div>
-      <div className="p-6 space-y-8 overflow-y-auto h-[calc(100vh-80px)]">
+    <GlassCard className="mt-8">
+      <h2 className="text-xl font-semibold text-slate-800 mb-4 flex items-center gap-2"><BarChart3 className="w-6 h-6 text-indigo-600" /> Utilization Insights</h2>
+      <div className="space-y-8">
         {/* Spending Breakdown Pie Chart */}
         <div>
           <h3 className="text-lg font-medium text-slate-700 mb-4">Monthly Spending Breakdown (Example)</h3>
@@ -174,7 +167,7 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({ data, isOpen, onClose }) 
            </div>
         </div>
       </div>
-    </div>
+    </GlassCard>
   );
 };
 
@@ -186,7 +179,6 @@ const MonthlyUtilizationReportPage = () => {
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [uploadContext, setUploadContext] = useState({ month: '', scheme: '' });
-  const [isInsightsOpen, setIsInsightsOpen] = useState(false);
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => { setFilters(prev => ({ ...prev, [e.target.name]: e.target.value })); };
   const clearFilters = () => { setFilters({ financialYear: '', month: '', schemeName: '', district: '', dateFrom: '', dateTo: '' }); setCurrentPage(1); setSortConfig(null); };
@@ -215,13 +207,13 @@ const MonthlyUtilizationReportPage = () => {
     const totalReleased = filteredData.reduce((sum, item) => sum + item.fundReleased, 0); // Cumulative released in filtered data
     const monthlyUtilized = currentMonthData?.utilizedAmount || 0;
     const overallUtilized = filteredData.reduce((sum, item) => sum + item.utilizedAmount, 0);
-    const overallUtilization = totalReleased > 0 ? (overallUtilized / totalReleased) * 100 : 0;
     const balance = totalReleased - overallUtilized;
 
-    return { totalSanctioned: formatCurrency(totalSanctioned), totalReleased: formatCurrency(totalReleased), monthlyUtilized: formatCurrency(monthlyUtilized), overallUtilization: overallUtilization.toFixed(1) + '%', balance: formatCurrency(balance) };
+    return { totalSanctioned: formatCurrency(totalSanctioned), totalReleased: formatCurrency(totalReleased), monthlyUtilized: formatCurrency(monthlyUtilized), balance: formatCurrency(balance) };
   }, [filteredData, filters.month]);
 
    // --- Modal Handlers ---
+
   const openUploadModal = (month: string, scheme: string) => { setUploadContext({ month, scheme }); setIsUploadModalOpen(true); };
   const closeUploadModal = () => setIsUploadModalOpen(false);
 
@@ -247,7 +239,7 @@ const MonthlyUtilizationReportPage = () => {
                <div> <h1 className="text-3xl font-bold text-slate-800">Monthly Utilization Report</h1> <p className="text-slate-500 mt-1">Track scheme fund usage month-wise.</p> </div>
              </div>
              <div className="flex items-center gap-2">
-               <button className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all hover:scale-[1.03] shadow-md hover:shadow-lg" onClick={() => setIsInsightsOpen(true)}> <BarChart3 className="w-4 h-4" /> View Insights </button>
+               {/* Insights button removed: InsightsPanel is now always visible below the table */}
                <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export CSV"><FileDown className="w-5 h-5 text-green-600" /></button>
                <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export PDF"><FileDown className="w-5 h-5 text-red-600" /></button>
                <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Refresh"><RefreshCcw className="w-5 h-5 text-blue-600" /></button>
@@ -276,12 +268,31 @@ const MonthlyUtilizationReportPage = () => {
            </div>
          </GlassCard>
         {/* Summary Cards */}
-        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
-            <MetricCard title="Sanctioned (Cumulative)" value={summary.totalSanctioned} icon={Package} color="blue" />
-            <MetricCard title="Released (Cumulative)" value={summary.totalReleased} icon={HandCoins} color="sky" />
-            <MetricCard title="Utilized (Selected Month)" value={summary.monthlyUtilized} icon={DollarSign} color="green" />
-            <MetricCard title="Overall Utilization %" value={summary.overallUtilization} icon={Percent} color="purple" />
-            <MetricCard title="Balance (Released - Utilized)" value={summary.balance} icon={Wallet} color="amber" />
+        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <StatCard 
+                title="Sanctioned (Cumulative)" 
+                value={summary.totalSanctioned} 
+                icon={Package} 
+                color="blue" 
+            />
+            <StatCard 
+                title="Released (Cumulative)" 
+                value={summary.totalReleased} 
+                icon={HandCoins} 
+                color="sky" 
+            />
+            <StatCard 
+                title="Utilized (Selected Month)" 
+                value={summary.monthlyUtilized} 
+                icon={DollarSign} 
+                color="green" 
+            />
+            <StatCard 
+                title="Balance (Released - Utilized)" 
+                value={summary.balance} 
+                icon={Wallet} 
+                color="amber" 
+            />
         </section>
         {/* Table */}
         <GlassCard>
@@ -296,7 +307,6 @@ const MonthlyUtilizationReportPage = () => {
                    <SortableHeader colKey="fundReleased" title="Released (₹)" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px] text-right" />
                    <SortableHeader colKey="utilizedAmount" title="Utilized (₹)" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px] text-right" />
                    <SortableHeader colKey="pendingAmount" title="Balance (₹)" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px] text-right" />
-                   <SortableHeader colKey="percent" title="Util % (Month)" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px] text-right" />
                    <th className="px-4 py-2 text-left min-w-[200px]">Remarks</th>
                    <th className="px-4 py-2 text-center">Action</th>
                  </tr>
@@ -310,7 +320,6 @@ const MonthlyUtilizationReportPage = () => {
                      <td className="px-4 py-3 text-green-700 font-bold text-right">{formatCurrency(item.fundReleased)}</td>
                      <td className="px-4 py-3 text-emerald-700 font-bold text-right">{formatCurrency(item.utilizedAmount)}</td>
                      <td className="px-4 py-3 text-orange-700 font-bold text-right">{formatCurrency(item.pendingAmount)}</td>
-                     <td className={`px-4 py-3 font-bold text-right ${item.percent < 60 ? 'text-red-600' : 'text-green-600'}`}>{item.percent}%</td>
                      <td className="px-4 py-3 text-slate-500 text-xs truncate max-w-xs">{item.remarks}</td>
                      <td className="px-4 py-3 text-center">
                          <button onClick={() => openUploadModal(item.month, item.schemeName)} className="p-1.5 rounded-full text-blue-600 group-hover:bg-blue-100 transition-colors mx-1" title="Upload Documents"> <UploadCloud className="w-5 h-5" /> </button>
@@ -319,7 +328,7 @@ const MonthlyUtilizationReportPage = () => {
                      </td>
                    </tr>
                  ))}
-                 {paginatedData.length === 0 && (<tr><td colSpan={9} className="text-center py-8 text-slate-500">No utilization data found for this period/scheme.</td></tr>)}
+                 {paginatedData.length === 0 && (<tr><td colSpan={8} className="text-center py-8 text-slate-500">No utilization data found for this period/scheme.</td></tr>)}
                </tbody>
              </table>
            </div>
@@ -332,19 +341,18 @@ const MonthlyUtilizationReportPage = () => {
            )}
         </GlassCard>
         
-        {/* Footer CTA */}
-        <div className="text-center mt-10 py-6 border-t border-dashed border-indigo-200/50">
-             <Sparkles className="w-12 h-12 text-indigo-400 mx-auto mb-3" />
-             <p className="text-md font-semibold text-slate-700">Your SHG progress matters. Keep reporting and stay funded. 💪🌼</p>
-             <GradientButton variant="default" size="default" onClick={() => alert("Downloading PDF...")} className="mt-4 inline-flex w-auto">
-               <Download className="mr-2" /> Download Full Report (PDF)
-             </GradientButton>
-        </div>
-        
-        {/* Modals & Panels */}
+        {/* Modals */}
         <UploadModal isOpen={isUploadModalOpen} onClose={closeUploadModal} month={uploadContext.month} scheme={uploadContext.scheme} />
-        <InsightsPanel data={filteredData} isOpen={isInsightsOpen} onClose={() => setIsInsightsOpen(false)} />
-        {isInsightsOpen && <div className="fixed inset-0 bg-black/30 z-40" onClick={() => setIsInsightsOpen(false)}></div>}
+        {/* Insights Panel as row section below table */}
+        <InsightsPanel data={filteredData} />
+        {/* Footer CTA - now below InsightsPanel */}
+        <div className="text-center mt-10 py-6 border-t border-dashed border-indigo-200/50">
+          <Sparkles className="w-12 h-12 text-indigo-400 mx-auto mb-3" />
+          <p className="text-md font-semibold text-slate-700">Your SHG progress matters. Keep reporting and stay funded. 💪🌼</p>
+          <GradientButton variant="default" size="default" onClick={() => alert("Downloading PDF...")} className="mt-4 inline-flex w-auto">
+            <Download className="mr-2" /> Download Full Report (PDF)
+          </GradientButton>
+        </div>
       </div>
     </div>
   );

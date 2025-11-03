@@ -16,6 +16,7 @@ import {
   CheckCheck, ListChecks, PackagePlus, ShieldHalf, Sparkles, FolderKanban,
   ChevronDown, ChevronUp, UploadCloud
 } from 'lucide-react';
+import StatCard from '@/components/ui/stat-card';
 
 // --- Mock Data ---
 
@@ -59,35 +60,7 @@ const PIE_COLORS = ['#10b981', '#f59e0b', '#8b5cf6', '#3b82f6', '#ec4899']; // E
 
 // --- Reusable Components ---
 
-// 1. Shiny Metric Card
-type MetricCardProps = { title: string; value: string | number; icon: React.ElementType; color: string; }; // color: 'blue', 'green', 'purple', 'amber', 'sky'
-const MetricCard: React.FC<MetricCardProps> = ({ title, value, icon: Icon, color }) => {
-  const colorClasses = {
-    blue: { bg: 'bg-blue-100', text: 'text-blue-600', shadow: 'shadow-blue-500/30' },
-    green: { bg: 'bg-green-100', text: 'text-green-600', shadow: 'shadow-green-500/30' },
-    purple: { bg: 'bg-purple-100', text: 'text-purple-600', shadow: 'shadow-purple-500/30' },
-    amber: { bg: 'bg-amber-100', text: 'text-amber-600', shadow: 'shadow-amber-500/30' },
-    sky: { bg: 'bg-sky-100', text: 'text-sky-600', shadow: 'shadow-sky-500/30' },
-  }[color] || { bg: 'bg-slate-100', text: 'text-slate-600', shadow: 'shadow-slate-500/30' };
-
-  return (
-    <div className={`relative p-5 bg-gradient-to-br from-white/80 to-${color}-50/50 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 
-                   transition-all duration-300 hover:shadow-2xl hover:-translate-y-1.5 transform-gpu overflow-hidden ${colorClasses.shadow} hover:shadow-lg group`}>
-      <div className={`absolute -top-8 -right-8 w-32 h-32 rounded-full ${colorClasses.bg} opacity-30 blur-xl group-hover:opacity-60 transition-opacity duration-300`}></div>
-      <div className="relative z-10 flex items-center space-x-4">
-        <div className={`p-3 rounded-xl ${colorClasses.bg} shadow-sm`}>
-          <Icon className={`w-7 h-7 ${colorClasses.text}`} />
-        </div>
-        <div>
-          <p className="text-sm font-medium text-slate-500">{title}</p>
-          <p className="text-3xl font-bold text-slate-800">{value}</p>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// 2. Glass Card Wrapper
+// 1. Glass Card Wrapper
 const GlassCard: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = '' }) => (
   <div className={`bg-white/60 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 p-6 ${className}`}>
     {children}
@@ -185,13 +158,15 @@ const BenefitsPage = () => {
         </header>
 
         {/* --- 2. Summary Metric Cards --- */}
-        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-5">
-            <MetricCard title="Total Benefits" value={MOCK_SUMMARY_STATS.totalBenefits} icon={Gift} color="blue" />
-            <MetricCard title="Financial Benefits" value={formatCurrency(MOCK_SUMMARY_STATS.totalFinancial)} icon={DollarSign} color="green" />
-            <MetricCard title="Subsidy Received" value={formatCurrency(MOCK_SUMMARY_STATS.subsidyReceived)} icon={Receipt} color="sky" />
-            <MetricCard title="Assets Issued" value={MOCK_SUMMARY_STATS.assetsIssued} icon={Wrench} color="purple" />
-            <MetricCard title="Members Trained" value={MOCK_SUMMARY_STATS.membersTrained} icon={GraduationCap} color="amber" />
-            <MetricCard title="Insurance / Safety" value={MOCK_SUMMARY_STATS.insuranceActive ? "Active" : "N/A"} icon={ShieldCheck} color="blue" />
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {/* Row 1 */}
+          <StatCard title="Total Benefits" value={MOCK_SUMMARY_STATS.totalBenefits.toString()} icon={Gift} color="blue" />
+          <StatCard title="Financial Benefits" value={formatCurrency(MOCK_SUMMARY_STATS.totalFinancial)} icon={DollarSign} color="green" />
+          <StatCard title="Subsidy Received" value={formatCurrency(MOCK_SUMMARY_STATS.subsidyReceived)} icon={Receipt} color="amber" />
+          {/* Row 2 */}
+          <StatCard title="Assets Issued" value={MOCK_SUMMARY_STATS.assetsIssued.toString()} icon={Wrench} color="purple" />
+          <StatCard title="Members Trained" value={MOCK_SUMMARY_STATS.membersTrained.toString()} icon={GraduationCap} color="pink" />
+          <StatCard title="Insurance / Safety" value={MOCK_SUMMARY_STATS.insuranceActive ? "Active" : "N/A"} icon={ShieldCheck} color="sky" />
         </section>
 
         {/* --- 3. Detailed Benefits Table --- */}
@@ -249,24 +224,8 @@ const BenefitsPage = () => {
              )}
         </GlassCard>
 
-        {/* --- 4, 5, 6. Subsidy, Assets, Training Sections --- */}
+        {/* --- 4, 5, 6. Assets, Training Sections --- */}
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Subsidy/Grant Card */}
-            <GlassCard className="lg:col-span-1">
-                <h2 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><Receipt className="text-purple-600"/> Subsidy & Grant Status</h2>
-                {/* Placeholder for Timeline/Progress */}
-                <div className="p-4 bg-slate-50 rounded-lg border border-slate-200 text-center text-sm text-slate-600 mb-4">
-                    <p>Timeline for Subsidy 'Working Capital Subsidy'</p>
-                    {/* Basic Progress: Approved -> Pending Release -> Released */}
-                    <div className="w-full bg-slate-200 rounded-full h-2.5 mt-2"><div className="bg-blue-500 h-2.5 rounded-l-full w-[33%]"></div></div> 
-                    <p className="text-xs mt-1">Status: Approved</p>
-                </div>
-                <div className="flex gap-3">
-                    <button onClick={handleUploadProof} className="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-full text-xs font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all hover:scale-105 shadow-sm"> <UploadCloud className="w-4 h-4" /> Upload Utilization </button>
-                    <button onClick={() => handleDownloadCertificate('/docs/subsidy_sanction.pdf')} className="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-full text-xs font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all hover:scale-105 shadow-sm"> <Download className="w-4 h-4" /> Download Sanction </button>
-                </div>
-            </GlassCard>
-
             {/* Assets Card */}
              <GlassCard className="lg:col-span-1">
                  <h2 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><PackagePlus className="text-sky-600"/> Assets & Equipment</h2>
@@ -284,71 +243,23 @@ const BenefitsPage = () => {
                  </div>
              </GlassCard>
              
-             {/* Training & Welfare Card */}
-             <GlassCard className="lg:col-span-2"> {/* Span across two columns */}
-                 <h2 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><GraduationCap className="text-amber-600"/> Training & Welfare</h2>
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                     {/* Training List */}
-                     <div className="space-y-3">
-                         <h3 className="font-medium text-slate-700">Completed Training</h3>
-                         {MOCK_TRAINING.map(train => (
-                            <div key={train.id} className="p-3 bg-slate-50 rounded-lg border border-slate-200 text-sm">
-                                <p className="font-semibold text-slate-800">{train.name}</p>
-                                <p className="text-xs text-slate-500">Completed: {new Date(train.date).toLocaleDateString('en-GB')}</p>
-                                <button onClick={() => handleDownloadCertificate(train.docUrl)} disabled={!train.docUrl} className="mt-1 text-xs font-medium text-indigo-600 hover:underline disabled:opacity-50 disabled:no-underline">Download Certificate</button>
+             {/* Welfare & Safety Items Card */}
+             <GlassCard className="lg:col-span-1">
+                 <h2 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><ShieldCheck className="text-purple-600"/> Welfare & Safety Items</h2>
+                 <div className="space-y-3 max-h-60 overflow-y-auto pr-2">
+                     {MOCK_WELFARE.map(item => (
+                         <div key={item.id} className="p-3 bg-slate-50 rounded-lg border border-slate-200 flex justify-between items-center text-sm">
+                            <div>
+                                <p className="font-semibold text-slate-800">{item.name}</p>
+                                <p className="text-xs text-slate-500">Received: {new Date(item.date).toLocaleDateString('en-GB')}</p>
                             </div>
-                         ))}
-                         {MOCK_TRAINING.length === 0 && <p className="text-sm text-slate-500 text-center py-4">No training completed.</p>}
-                     </div>
-                      {/* Welfare Items */}
-                     <div className="space-y-3">
-                         <h3 className="font-medium text-slate-700">Welfare & Safety Items</h3>
-                         {MOCK_WELFARE.map(item => (
-                             <div key={item.id} className="p-3 bg-slate-50 rounded-lg border border-slate-200 flex justify-between items-center text-sm">
-                                <div>
-                                    <p className="font-semibold text-slate-800">{item.name}</p>
-                                    <p className="text-xs text-slate-500">Received: {new Date(item.date).toLocaleDateString('en-GB')}</p>
-                                </div>
-                                <BenefitStatusBadge status={item.status as BenefitStatus} />
-                             </div>
-                         ))}
-                         {MOCK_WELFARE.length === 0 && <p className="text-sm text-slate-500 text-center py-4">No welfare items recorded.</p>}
-                     </div>
+                            <BenefitStatusBadge status={item.status as BenefitStatus} />
+                         </div>
+                     ))}
+                     {MOCK_WELFARE.length === 0 && <p className="text-sm text-slate-500 text-center py-4">No welfare items recorded.</p>}
                  </div>
              </GlassCard>
         </section>
-
-        {/* --- 7. Charts Section --- */}
-        <GlassCard>
-            <h2 className="text-xl font-semibold text-slate-800 mb-4 flex items-center gap-2"><BarChart3 className="text-purple-600"/> Benefit Insights</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-72">
-                 {/* Pie Chart */}
-                 <div>
-                    <h3 className="text-md font-semibold text-slate-700 mb-2 text-center">Benefit Category Distribution</h3>
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={50} outerRadius={80} paddingAngle={3}>
-                          {pieData.map((entry, index) => ( <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} className="focus:outline-none"/> ))} </Pie>
-                        <RechartsTooltip formatter={(value, name) => [`${value} Benefits`, name]} />
-                        <Legend iconType="circle" wrapperStyle={{fontSize: "12px"}}/>
-                      </PieChart>
-                    </ResponsiveContainer>
-                 </div>
-                 {/* Line Chart */}
-                 <div>
-                    <h3 className="text-md font-semibold text-slate-700 mb-2 text-center">Financial Benefits Trend (Lakhs ₹)</h3>
-                     <ResponsiveContainer width="100%" height="100%">
-                       <LineChart data={monthlyBenefitTrend} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
-                         <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" opacity={0.5}/> 
-                         <XAxis dataKey="month" fontSize={11} /> 
-                         <YAxis fontSize={11} tickFormatter={(val) => `₹${val}L`}/>
-                         <RechartsTooltip formatter={(value) => [`₹${value} Lakh`, 'Value']} />
-                         <Line type="monotone" dataKey="value" name="Benefit Value" stroke="#10b981" strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }}/>
-                       </LineChart>
-                     </ResponsiveContainer>
-                 </div>
-            </div>
-        </GlassCard>
 
         {/* --- Footer --- */}
         <footer className="text-center mt-12 text-xs text-slate-500">

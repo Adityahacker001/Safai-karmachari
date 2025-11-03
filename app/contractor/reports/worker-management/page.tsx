@@ -49,6 +49,7 @@ import {
 } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import StatCard from "@/components/ui/stat-card";
 import React, { useState } from "react"; // Import React for useMemo
 
 export default function WorkerManagementReportPage() {
@@ -302,21 +303,20 @@ export default function WorkerManagementReportPage() {
   };
 
   return (
-    // Main container with a clean, professional background
-    <div className="min-h-screen p-6 md:p-12 bg-slate-50 space-y-10">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h2 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+    <div className="min-h-screen w-full max-w-full sm:max-w-full md:max-w-7xl mx-auto p-4 sm:p-6 md:p-12 space-y-6 sm:space-y-8 md:space-y-10">
+      <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
+        <div className="text-center sm:text-left">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
             Worker Management Report
           </h2>
-          <p className="text-gray-600 mt-3 text-xl">
+          <p className="text-gray-600 mt-2 sm:mt-3 text-base sm:text-lg md:text-xl">
             A complete roster and performance overview of your workforce.
           </p>
         </div>
-        <div className="flex items-center space-x-4 mt-6 sm:mt-0">
+        <div className="flex items-center space-x-4">
           <Button
             variant="outline"
-            className="text-gray-700 border-gray-300 hover:bg-gray-100 px-6 py-3 rounded-xl transition-all duration-200"
+            className="text-gray-700 border-gray-300 hover:bg-gray-100 px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl transition-all duration-200 text-sm sm:text-base"
           >
             <Download className="h-5 w-5 mr-2" />
             Export Roster (CSV)
@@ -324,66 +324,39 @@ export default function WorkerManagementReportPage() {
         </div>
       </div>
 
-      {/* Workforce Summary KPIs with a clean, modern design */}
+      {/* Workforce Summary KPIs with StatCard components */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="rounded-2xl shadow-lg bg-gradient-to-br from-blue-600 via-blue-500 to-blue-400 text-white transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
-          <CardHeader className="pb-2 flex flex-row items-center justify-between">
-            <CardTitle className="text-base font-medium text-white">
-              Total Workers
-            </CardTitle>
-            <div className="p-2 bg-blue-500/30 rounded-lg">
-              <Users className="h-6 w-6 text-white" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-4xl font-bold">{workers.length}</div>
-            <p className="text-sm text-blue-100 mt-1">Registered workers</p>
-          </CardContent>
-        </Card>
-        <Card className="rounded-2xl shadow-lg bg-gradient-to-br from-green-500 via-green-400 to-emerald-400 text-white transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
-          <CardHeader className="pb-2 flex flex-row items-center justify-between">
-            <CardTitle className="text-base font-medium text-white">
-              Active Today
-            </CardTitle>
-            <div className="p-2 bg-green-500/30 rounded-lg">
-              <UserCheck className="h-6 w-6 text-white" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-4xl font-bold">
-              {workers.filter((w) => w.status === "Active").length}
-            </div>
-            <p className="text-sm text-green-100 mt-1">Currently active</p>
-          </CardContent>
-        </Card>
-        <Card className="rounded-2xl shadow-lg bg-gradient-to-br from-orange-500 via-orange-400 to-amber-400 text-white transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
-          <CardHeader className="pb-2 flex flex-row items-center justify-between">
-            <CardTitle className="text-base font-medium text-white">
-              Grievances Pending
-            </CardTitle>
-            <div className="p-2 bg-orange-500/30 rounded-lg">
-              <MessageSquare className="h-6 w-6 text-white" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-4xl font-bold">23</div>
-            <p className="text-sm text-orange-100 mt-1">Pending grievances</p>
-          </CardContent>
-        </Card>
-        <Card className="rounded-2xl shadow-lg bg-gradient-to-br from-purple-500 via-violet-500 to-fuchsia-500 text-white transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
-          <CardHeader className="pb-2 flex flex-row items-center justify-between">
-            <CardTitle className="text-base font-medium text-white">
-              Safety Compliance
-            </CardTitle>
-            <div className="p-2 bg-purple-500/30 rounded-lg">
-              <Shield className="h-6 w-6 text-white" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-4xl font-bold">94.2%</div>
-            <p className="text-sm text-purple-100 mt-1">This week</p>
-          </CardContent>
-        </Card>
+        <StatCard
+          title="Total Workers"
+          value={workers.length}
+          subtitle="Registered workers"
+          icon={Users}
+          color="blue"
+        />
+        
+        <StatCard
+          title="Active Today"
+          value={workers.filter((w) => w.status === "Active").length}
+          subtitle="Currently active"
+          icon={UserCheck}
+          color="green"
+        />
+        
+        <StatCard
+          title="Grievances Pending"
+          value={23}
+          subtitle="Pending grievances"
+          icon={MessageSquare}
+          color="orange"
+        />
+        
+        <StatCard
+          title="Safety Compliance"
+          value="94.2%"
+          subtitle="This week"
+          icon={Shield}
+          color="purple"
+        />
       </div>
 
       <Card className="bg-gradient-to-br from-cyan-50 via-blue-50 to-emerald-100 shadow-2xl border border-gray-100 rounded-3xl overflow-hidden">

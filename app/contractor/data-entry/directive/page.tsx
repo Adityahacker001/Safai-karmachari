@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import DataTable from '@/components/ui/data-table';
+import StatCard from '@/components/ui/stat-card';
 import { FileText, Send, Inbox, Plus } from 'lucide-react';
 
 interface Directive {
@@ -77,14 +78,15 @@ const Directives = () => {
   ];
 
   return (
-    <div className="space-y-8 p-6 bg-gradient-to-br from-indigo-50 via-pink-50 to-yellow-50 rounded-xl shadow-lg">
-      <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-            Directives Management
-          </h1>
-          <p className="text-gray-700 mt-2">Track directives received from Nodal Officers</p>
-        </div>
+    <div className="min-h-screen w-full max-w-full sm:max-w-full md:max-w-7xl mx-auto p-4 sm:p-6 md:p-12 space-y-6 sm:space-y-8 md:space-y-10">
+      <div className="text-center sm:text-left">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+          Directives Management
+        </h1>
+        <p className="text-gray-600 mt-2 sm:mt-3 text-base sm:text-lg md:text-xl">Track directives received from Nodal Officers</p>
+      </div>
+
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex flex-col gap-4">
           {/* <button
             className="flex items-center gap-2 px-6 py-2 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold shadow-lg hover:scale-105 transition-all"
@@ -136,43 +138,33 @@ const Directives = () => {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        <div className="bg-gradient-to-r from-blue-500 to-indigo-500 p-6 rounded-xl shadow-lg text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium">Received Directives</p>
-              <p className="text-3xl font-bold">{receivedDirectives.length}</p>
-              <p className="text-sm opacity-90">
-                Active: {receivedDirectives.filter(d => d.status === 'Active').length}
-              </p>
-            </div>
-            <Inbox className="w-10 h-10 opacity-90" />
-          </div>
-        </div>
+      <div className="w-full max-w-full sm:max-w-full md:max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+        <StatCard
+          title="Received Directives"
+          value={receivedDirectives.length}
+          subtitle={`Active: ${receivedDirectives.filter(d => d.status === 'Active').length}`}
+          icon={Inbox}
+          color="sky"
+        />
 
-        <div className="bg-gradient-to-r from-yellow-500 to-orange-500 p-6 rounded-xl shadow-lg text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium">High Priority Received</p>
-              <p className="text-3xl font-bold">
-                {receivedDirectives.filter(d => d.priority === 'High').length}
-              </p>
-              <p className="text-sm opacity-90">Requiring attention</p>
-            </div>
-            <FileText className="w-10 h-10 opacity-90" />
-          </div>
-        </div>
+        <StatCard
+          title="High Priority Received"
+          value={receivedDirectives.filter(d => d.priority === 'High').length}
+          subtitle="Requiring attention"
+          icon={FileText}
+          color="amber"
+        />
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl shadow-xl overflow-hidden">
-        <div className="border-b border-gray-200 bg-gradient-to-r from-indigo-100 to-pink-100">
-          <div className="py-4 px-6 text-sm font-medium text-indigo-700 bg-indigo-50">
+      <div className="w-full max-w-full sm:max-w-full md:max-w-6xl mx-auto bg-white/95 backdrop-blur-sm shadow-2xl border border-gray-100 rounded-2xl sm:rounded-3xl overflow-hidden transform transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1">
+        <div className="border-b border-gray-200 bg-gradient-to-r from-indigo-600 to-purple-700 text-white shadow-lg">
+          <div className="py-3 sm:py-4 px-4 sm:px-6 text-sm sm:text-base font-medium">
             Directives Received from Nodal Officer
           </div>
         </div>
 
-        <div className="p-4">
+        <div className="p-4 sm:p-6">
             <DataTable
               title="Received Directives"
               columns={receivedColumns}

@@ -174,24 +174,28 @@ export default function App() {
   // Glassmorphic Card Wrapper Component
   const Card = ({ children, className = "", ...props }: { children: React.ReactNode; className?: string }) => (
     <motion.div
-      whileHover={{ y: -4 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 10 }}
-      className={`bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl shadow-blue-500/5 ring-1 ring-black/5 ${className}`}
+      initial={{ opacity: 0, y: 30, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.6, ease: [0.25, 1, 0.5, 1] }}
+      className={`relative bg-gradient-to-br from-white/95 via-white/90 to-blue-50/80 backdrop-blur-xl rounded-3xl shadow-xl border border-gradient-to-r from-blue-200/50 via-purple-200/30 to-pink-200/50 overflow-hidden ${className}`}
       {...props}
     >
-      {children}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5 pointer-events-none" />
+      <div className="relative z-10">
+        {children}
+      </div>
     </motion.div>
   );
 
-  // Form Input Group Component
+  // Enhanced Form Input Group Component
   const InputGroup = ({ label, helperText, children, htmlFor }: {
     label: string;
     helperText?: string;
     children: React.ReactNode;
     htmlFor: string;
   }) => (
-    <div className="flex flex-col gap-1.5">
-      <label htmlFor={htmlFor} className="text-sm font-medium text-blue-900/80">
+    <div className="flex flex-col gap-2">
+      <label htmlFor={htmlFor} className="text-sm font-semibold bg-gradient-to-r from-blue-700 via-purple-600 to-pink-600 bg-clip-text text-transparent">
         {label}
       </label>
       {children}
@@ -262,7 +266,7 @@ export default function App() {
     </div>
   );
 
-  // Button Component
+  // Enhanced Button Component
   const AppButton = ({ children, onClick, variant = 'primary', icon: Icon, type = 'button' }: {
     children: React.ReactNode;
     onClick: () => void;
@@ -270,30 +274,28 @@ export default function App() {
     icon?: React.ElementType<{ size?: number }>;
     type?: 'button' | 'submit' | 'reset';
   }) => {
-    const baseStyle = "relative px-5 py-2.5 rounded-lg text-sm font-semibold overflow-hidden transition-all duration-300 ease-out flex items-center justify-center gap-2 group";
-    const rippleStyle = "absolute inset-0 w-full h-full bg-white opacity-0 group-hover:opacity-20 group-active:opacity-30 transition-opacity duration-300 scale-150 group-active:scale-100";
+    const baseStyle = "relative px-6 py-3 rounded-xl text-sm font-bold overflow-hidden transition-all duration-300 ease-out flex items-center justify-center gap-3 group";
+    const rippleStyle = "absolute inset-0 w-full h-full bg-white opacity-0 group-hover:opacity-30 group-active:opacity-40 transition-opacity duration-300 scale-150 group-active:scale-100";
 
     const variants: Record<string, string> = {
-      primary: 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:from-blue-700',
-      secondary: 'bg-gradient-to-r from-yellow-500 to-amber-600 text-white shadow-lg shadow-amber-500/30 hover:shadow-xl hover:from-yellow-600',
-      ghost: 'bg-transparent text-gray-600 hover:bg-gray-100',
-      link: 'bg-transparent text-blue-600 hover:underline p-0',
+      primary: 'bg-gradient-to-r from-blue-500 via-purple-600 to-pink-600 text-white shadow-xl shadow-blue-500/40 hover:shadow-2xl hover:from-blue-600',
+      secondary: 'bg-gradient-to-r from-yellow-500 to-orange-600 text-white shadow-xl shadow-yellow-500/40 hover:shadow-2xl hover:from-yellow-600',
+      ghost: 'bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 hover:from-gray-200 hover:to-gray-300 shadow-lg',
+      link: 'bg-transparent text-blue-600 hover:text-purple-600 p-0 underline-offset-4 hover:underline',
     };
 
     return (
-      <motion.button
+      <button
         type={type}
-        whileHover={{ scale: 1.03 }}
-        whileTap={{ scale: 0.98 }}
         className={`${baseStyle} ${variants[variant]}`}
         onClick={onClick}
       >
         <span className={rippleStyle}></span>
-        <span className="relative z-10 flex items-center gap-2">
-          {Icon && <Icon size={16} />}
+        <span className="relative z-10 flex items-center gap-3">
+          {Icon && <Icon size={18} />}
           {children}
         </span>
-      </motion.button>
+      </button>
     );
   };
   
@@ -322,11 +324,8 @@ export default function App() {
 
   return (
     <>
-      {/* --- Page Background --- */}
-      <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:16px_16px]"></div>
-      
       {/* --- Main Container --- */}
-      <div className="min-h-screen w-full p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-white/80 via-white/50 to-blue-50/20 text-slate-800 font-sans">
+      <div className="min-h-screen w-full bg-gradient-to-br from-blue-50 via-white to-purple-50 p-3 sm:p-4 md:p-6 lg:p-8 text-slate-800 font-sans">
         
         {/* --- Main Content with Fade-in Animation --- */}
         <motion.div
@@ -335,32 +334,25 @@ export default function App() {
           transition={{ duration: 0.5, ease: 'easeInOut' }}
           className="max-w-7xl mx-auto"
         >
-          {/* --- Header --- */}
-          <header className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-6">
-            <div className="flex items-center gap-4">
-              <div className="flex-shrink-0 p-3 bg-blue-100 rounded-full ring-8 ring-blue-50/50">
-                <ShieldCheck className="h-8 w-8 text-blue-600" />
-              </div>
-              <div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-blue-900 tracking-tight">
-                  Direction Compliance Entry
-                </h1>
-                <p className="text-sm sm:text-base text-gray-600 mt-1">
-                  Update compliance status of government & DGP directives
-                </p>
+          {/* --- Enhanced Header --- */}
+          <header className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 border-b-4 border-gradient-to-r from-yellow-400 to-orange-500 shadow-2xl px-4 sm:px-6 py-6 sm:py-8 rounded-3xl mb-6 sm:mb-8 overflow-hidden">
+            <div className="absolute inset-0 bg-black/10"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-purple-500/20"></div>
+            <div className="relative z-10">
+              <div className="flex items-start gap-4 sm:gap-6">
+                <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 text-white shadow-2xl shadow-orange-500/40">
+                  <ShieldCheck className="h-6 w-6 sm:h-8 sm:w-8" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h1 className="text-xl sm:text-2xl lg:text-4xl font-black text-white tracking-tight break-words leading-tight">
+                    Direction Compliance Entry
+                  </h1>
+                  <p className="text-sm sm:text-base text-white/90 mt-2 leading-relaxed font-medium">
+                    🎯 Update compliance status of government & DGP directives
+                  </p>
+                </div>
               </div>
             </div>
-            
-            {/* --- Breadcrumb --- */}
-            <nav className="text-xs sm:text-sm text-gray-500 mt-3 sm:mt-2" aria-label="Breadcrumb">
-              <ol className="flex items-center space-x-1.5">
-                <li><a href="#" className="hover:text-blue-600">Dashboard</a></li>
-                <li><ChevronRight size={14} /></li>
-                <li><a href="#" className="hover:text-blue-600">Data Entry</a></li>
-                <li><ChevronRight size={14} /></li>
-                <li className="font-medium text-gray-700">Direction Compliance</li>
-              </ol>
-            </nav>
           </header>
 
           {/* --- Main Form --- */}
@@ -369,62 +361,77 @@ export default function App() {
 
               {/* --- Card: Direction Information --- */}
               <Card>
-                <div className="p-5 border-b border-black/5">
-                  <h2 className="text-lg font-semibold text-blue-900 flex items-center gap-2">
-                    <FileSearch size={20} />
-                    Direction Information
-                  </h2>
+                <div className="px-6 py-5 border-b border-gradient-to-r from-blue-200/30 via-purple-200/20 to-pink-200/30 bg-gradient-to-r from-blue-50/80 via-white/90 to-purple-50/80 rounded-t-3xl backdrop-blur-sm">
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25">
+                      <FileSearch size={20} />
+                    </div>
+                    <h2 className="text-lg font-bold bg-gradient-to-r from-blue-700 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                      Direction Information
+                    </h2>
+                  </div>
                 </div>
-                <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                   {/* Read-only fields */}
-                  <InputGroup label="Direction ID" htmlFor="direction-id" helperText="Unique identifier for the directive.">
-                    <StyledInput value={directionInfo.id} icon={InfoIcon} readOnly disabled />
-                  </InputGroup>
-                  <div className="lg:col-span-2">
+                  <div className="sm:col-span-1 lg:col-span-1">
+                    <InputGroup label="Direction ID" htmlFor="direction-id" helperText="Unique identifier for the directive.">
+                      <StyledInput value={directionInfo.id} icon={InfoIcon} readOnly disabled />
+                    </InputGroup>
+                  </div>
+                  <div className="sm:col-span-2 lg:col-span-2">
                     <InputGroup label="Direction Title" htmlFor="direction-title" helperText="The official title of the directive.">
                       <StyledInput value={directionInfo.title} icon={FileTextIcon} readOnly disabled />
                     </InputGroup>
                   </div>
-                  <InputGroup label="Issued By" htmlFor="issued-by" helperText="The issuing authority or department.">
-                    <StyledInput value={directionInfo.issuedBy} icon={UserIcon} readOnly disabled />
-                  </InputGroup>
-                  <InputGroup label="Issued Date" htmlFor="issued-date" helperText="The date the directive was issued.">
-                    <StyledInput value={directionInfo.issuedDate} type="date" icon={CalendarDaysIcon} readOnly disabled />
-                  </InputGroup>
+                  <div className="sm:col-span-1 lg:col-span-1">
+                    <InputGroup label="Issued By" htmlFor="issued-by" helperText="The issuing authority or department.">
+                      <StyledInput value={directionInfo.issuedBy} icon={UserIcon} readOnly disabled />
+                    </InputGroup>
+                  </div>
+                  <div className="sm:col-span-1 lg:col-span-1">
+                    <InputGroup label="Issued Date" htmlFor="issued-date" helperText="The date the directive was issued.">
+                      <StyledInput value={directionInfo.issuedDate} type="date" icon={CalendarDaysIcon} readOnly disabled />
+                    </InputGroup>
+                  </div>
                   
                   {/* Interactive fields */}
-                  <InputGroup label="District / Unit" htmlFor="district" helperText="Select the reporting unit.">
-                    <StyledSelect 
-                      id="district"
-                      icon={BuildingIcon} 
-                      value={district} 
-                      onChange={handleDistrictChange}
-                    >
-                      <option value="">Select District/Unit</option>
-                      {Object.keys(districtSpMap).map(d => <option key={d} value={d}>{d}</option>)}
-                    </StyledSelect>
-                  </InputGroup>
-                  <InputGroup label="SP/CP Name" htmlFor="sp-cp-name" helperText="Auto-filled based on selected unit.">
-                    <StyledInput 
-                      value={spName} 
-                      icon={UserCircleIcon} 
-                      readOnly 
-                      disabled 
-                      placeholder="N/A" 
-                    />
-                  </InputGroup>
+                  <div className="sm:col-span-1 lg:col-span-1">
+                    <InputGroup label="District / Unit" htmlFor="district" helperText="Select the reporting unit.">
+                      <StyledSelect 
+                        id="district"
+                        icon={BuildingIcon} 
+                        value={district} 
+                        onChange={handleDistrictChange}
+                      >
+                        <option value="">Select District/Unit</option>
+                        {Object.keys(districtSpMap).map(d => <option key={d} value={d}>{d}</option>)}
+                      </StyledSelect>
+                    </InputGroup>
+                  </div>
+                  <div className="sm:col-span-1 lg:col-span-1">
+                    <InputGroup label="SP/CP Name" htmlFor="sp-cp-name" helperText="Auto-filled based on selected unit.">
+                      <StyledInput 
+                        value={spName} 
+                        icon={UserCircleIcon} 
+                        readOnly 
+                        disabled 
+                        placeholder="N/A" 
+                      />
+                    </InputGroup>
+                  </div>
                 </div>
               </Card>
 
               {/* --- Card: Compliance Entry Form --- */}
               <Card>
-                <div className="p-5 border-b border-black/5">
-                  <h2 className="text-lg font-semibold text-blue-900 flex items-center gap-2">
-                    <CheckCircle size={20} />
+                <div className="p-4 sm:p-5 border-b border-black/5">
+                  <h2 className="text-base sm:text-lg font-semibold text-blue-900 flex items-center gap-2">
+                    <CheckCircle size={18} className="sm:hidden" />
+                    <CheckCircle size={20} className="hidden sm:block" />
                     Compliance Entry Form
                   </h2>
                 </div>
-                <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                   <InputGroup label="Compliance Status" htmlFor="status" helperText="Select the current status.">
                     <StyledSelect 
                       id="status"
@@ -449,7 +456,7 @@ export default function App() {
                     />
                   </InputGroup>
 
-                  <div className="md:col-span-2">
+                  <div className="sm:col-span-2">
                     <InputGroup label="Action Taken" htmlFor="action-taken" helperText="Describe actions taken so far.">
                       <StyledTextarea 
                         id="action-taken"
@@ -464,7 +471,7 @@ export default function App() {
                   <AnimatePresence>
                     {complianceStatus === 'Not Complied' && (
                       <motion.div 
-                        className="md:col-span-2"
+                        className="sm:col-span-2"
                         initial={{ opacity: 0, height: 0, marginTop: 0 }}
                         animate={{ opacity: 1, height: 'auto', marginTop: '0px' }}
                         exit={{ opacity: 0, height: 0, marginTop: 0 }}
@@ -519,7 +526,7 @@ export default function App() {
                           Upload Evidence
                         </h2>
                       </div>
-                      <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                         <FileUploadCard 
                           title="Upload Report (PDF)"
                           file={reportFile}
@@ -539,54 +546,60 @@ export default function App() {
               </AnimatePresence>
               
               {/* --- Action Buttons --- */}
-              <div className="mt-4 flex flex-col-reverse sm:flex-row sm:justify-between sm:items-center gap-4">
+              <div className="mt-4 flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4">
                 <AppButton variant="link" icon={ArrowLeftIcon} onClick={() => {}}>
-                  Back to Dashboard
+                  <span className="hidden sm:inline">Back to Dashboard</span>
+                  <span className="sm:hidden">Back</span>
                 </AppButton>
-                <div className="flex flex-col-reverse sm:flex-row gap-3">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                   <AppButton variant="ghost" icon={Undo2Icon} onClick={handleClear}>
-                    Clear Form
+                    <span className="hidden sm:inline">Clear Form</span>
+                    <span className="sm:hidden">Clear</span>
                   </AppButton>
                   <AppButton variant="secondary" icon={SaveIcon} onClick={() => {}}>
-                    Save Draft
+                    <span className="hidden sm:inline">Save Draft</span>
+                    <span className="sm:hidden">Save</span>
                   </AppButton>
                   <AppButton type="submit" variant="primary" icon={CheckCircleIcon} onClick={() => {}}>
-                    Submit Compliance
+                    <span className="hidden sm:inline">Submit Compliance</span>
+                    <span className="sm:hidden">Submit</span>
                   </AppButton>
                 </div>
               </div>
 
               {/* --- Card: Recent Compliance Logs --- */}
-              <Card className="mt-8">
-                <div className="p-5 border-b border-black/5">
-                  <h2 className="text-lg font-semibold text-blue-900 flex items-center gap-2">
-                    <Database size={20} />
+              <Card className="mt-6 sm:mt-8">
+                <div className="p-4 sm:p-5 border-b border-black/5">
+                  <h2 className="text-base sm:text-lg font-semibold text-blue-900 flex items-center gap-2">
+                    <Database size={18} className="sm:hidden" />
+                    <Database size={20} className="hidden sm:block" />
                     Recent Compliance Logs
                   </h2>
                 </div>
                 <div className="overflow-x-auto">
-                  <table className="w-full min-w-max text-sm text-left">
+                  <table className="w-full min-w-max text-xs sm:text-sm text-left">
                     <thead className="bg-gray-50/50">
                       <tr>
-                        <th className="px-4 py-3 font-medium text-gray-500 uppercase tracking-wider">Direction ID</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 uppercase tracking-wider">District</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 uppercase tracking-wider">Officer</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 uppercase tracking-wider text-center">View</th>
+                        <th className="px-2 sm:px-4 py-2 sm:py-3 font-medium text-gray-500 uppercase tracking-wider text-xs sm:text-sm">Direction ID</th>
+                        <th className="px-2 sm:px-4 py-2 sm:py-3 font-medium text-gray-500 uppercase tracking-wider text-xs sm:text-sm hidden sm:table-cell">District</th>
+                        <th className="px-2 sm:px-4 py-2 sm:py-3 font-medium text-gray-500 uppercase tracking-wider text-xs sm:text-sm">Status</th>
+                        <th className="px-2 sm:px-4 py-2 sm:py-3 font-medium text-gray-500 uppercase tracking-wider text-xs sm:text-sm">Date</th>
+                        <th className="px-2 sm:px-4 py-2 sm:py-3 font-medium text-gray-500 uppercase tracking-wider text-xs sm:text-sm hidden md:table-cell">Officer</th>
+                        <th className="px-2 sm:px-4 py-2 sm:py-3 font-medium text-gray-500 uppercase tracking-wider text-center text-xs sm:text-sm">View</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200/50">
                       {mockLogs.map((log) => (
                         <tr key={log.id} className="hover:bg-white/50 transition-colors">
-                          <td className="px-4 py-3 font-mono text-xs text-gray-700">{log.id}</td>
-                          <td className="px-4 py-3 text-gray-800">{log.district}</td>
-                          <td className="px-4 py-3"><StatusChip status={log.status} /></td>
-                          <td className="px-4 py-3 text-gray-600">{log.date}</td>
-                          <td className="px-4 py-3 text-gray-800">{log.officer}</td>
-                          <td className="px-4 py-3 text-center">
-                            <button className="p-1.5 text-gray-500 hover:text-blue-600 rounded-full hover:bg-blue-100/50">
-                              <Eye size={16} />
+                          <td className="px-2 sm:px-4 py-2 sm:py-3 font-mono text-xs text-gray-700">{log.id}</td>
+                          <td className="px-2 sm:px-4 py-2 sm:py-3 text-gray-800 hidden sm:table-cell">{log.district}</td>
+                          <td className="px-2 sm:px-4 py-2 sm:py-3"><StatusChip status={log.status} /></td>
+                          <td className="px-2 sm:px-4 py-2 sm:py-3 text-gray-600 text-xs sm:text-sm">{log.date}</td>
+                          <td className="px-2 sm:px-4 py-2 sm:py-3 text-gray-800 text-xs sm:text-sm hidden md:table-cell">{log.officer}</td>
+                          <td className="px-2 sm:px-4 py-2 sm:py-3 text-center">
+                            <button className="p-1 sm:p-1.5 text-gray-500 hover:text-blue-600 rounded-full hover:bg-blue-100/50">
+                              <Eye size={14} className="sm:hidden" />
+                              <Eye size={16} className="hidden sm:block" />
                             </button>
                           </td>
                         </tr>
@@ -608,15 +621,17 @@ export default function App() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.9 }}
               transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-              className="fixed bottom-6 right-6 z-50 flex items-center gap-3 p-4 w-full max-w-sm bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl shadow-2xl shadow-blue-500/40"
+              className="fixed bottom-3 sm:bottom-6 right-3 sm:right-6 left-3 sm:left-auto z-50 flex items-center gap-2 sm:gap-3 p-3 sm:p-4 w-auto sm:max-w-sm bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg sm:rounded-xl shadow-2xl shadow-blue-500/40"
             >
-              <CheckCircle size={24} className="flex-shrink-0" />
-              <div className="flex-grow">
-                <h4 className="font-semibold">Success</h4>
-                <p className="text-sm text-blue-100">Compliance status submitted successfully.</p>
+              <CheckCircle size={20} className="sm:hidden flex-shrink-0" />
+              <CheckCircle size={24} className="hidden sm:block flex-shrink-0" />
+              <div className="flex-grow min-w-0">
+                <h4 className="font-semibold text-sm sm:text-base">Success</h4>
+                <p className="text-xs sm:text-sm text-blue-100 truncate">Compliance status submitted successfully.</p>
               </div>
-              <button onClick={() => setShowToast(false)} className="p-1 rounded-full hover:bg-white/10">
-                <X size={18} />
+              <button onClick={() => setShowToast(false)} className="p-1 rounded-full hover:bg-white/10 flex-shrink-0">
+                <X size={16} className="sm:hidden" />
+                <X size={18} className="hidden sm:block" />
               </button>
             </motion.div>
           )}

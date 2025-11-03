@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import StatCard from "@/components/ui/stat-card";
 import {
   Users,
   Briefcase,
@@ -91,14 +92,14 @@ const initialApplications: Application[] = [
 
 // --- SUMMARY CARDS DATA ---
 const summaryCards = [
-  { title: 'SHG Members', value: '12', icon: Users, color: 'from-indigo-500 to-indigo-700' },
-  { title: 'Active Projects', value: '4', icon: Briefcase, color: 'from-emerald-500 to-emerald-700' },
-  { title: 'Loan Sanctioned', value: '₹1.4L', icon: CreditCard, color: 'from-blue-500 to-cyan-600' },
-  { title: 'Loan Balance', value: '₹40k', icon: Wallet, color: 'from-amber-400 to-orange-500 text-black' },
-  { title: 'Assets', value: '8', icon: Banknote, color: 'from-lime-500 to-green-700' },
-  { title: 'Applications', value: '2', icon: FileText, color: 'from-purple-500 to-purple-700' },
-  { title: 'Benefits Available', value: '3', icon: FilePlus, color: 'from-pink-500 to-rose-600' },
-  { title: 'Bank Linked', value: 'Yes: 9', icon: Shield, color: 'from-sky-400 to-blue-600' },
+  // Row 1
+  { title: 'SHG Members', value: '12', icon: Users, color: 'blue' as const },
+  { title: 'Active Projects', value: '4', icon: Briefcase, color: 'green' as const },
+  { title: 'Loan Sanctioned', value: '₹1.4L', icon: CreditCard, color: 'amber' as const },
+  // Row 2
+  { title: 'Loan Balance', value: '₹40k', icon: Wallet, color: 'red' as const },
+  { title: 'Assets', value: '8', icon: Banknote, color: 'sky' as const },
+  { title: 'Applications', value: '2', icon: FileText, color: 'indigo' as const },
 ];
 
 export default function SHGDashboardPage() {
@@ -121,7 +122,18 @@ export default function SHGDashboardPage() {
         </p>
       </div>
 
-      <SummaryCards cards={summaryCards} />
+      {/* --- Summary Metrics --- */}
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {summaryCards.map((card, index) => (
+          <StatCard
+            key={index}
+            title={card.title}
+            value={card.value}
+            icon={card.icon}
+            color={card.color}
+          />
+        ))}
+      </section>
 
       <DashboardCharts projects={projects} />
 
@@ -286,28 +298,7 @@ export default function SHGDashboardPage() {
   );
 }
 
-function SummaryCards({ cards }: { cards: { title: string; value: string; icon: any; color: string }[] }) {
-  return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-      {cards.map((c, i) => (
-        <Card 
-          key={i} 
-          className={`relative overflow-hidden text-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br ${c.color} border-0`}
-        >
-          <div className="absolute top-2 right-2 opacity-20">
-            <c.icon className="h-10 w-10 sm:h-12 sm:w-12" />
-          </div>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs sm:text-sm text-white/90 font-medium">{c.title}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl sm:text-3xl font-bold tracking-tight">{c.value}</div>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
-  );
-}
+
 
 function DashboardCharts({ projects }: { projects: Project[] }) {
   const pieData = [ { name: 'Loans', value: 3 }, { name: 'Grants', value: 1 }, { name: 'Insurance', value: 2 } ];

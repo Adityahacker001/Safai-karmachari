@@ -9,10 +9,11 @@ import {
     Archive, 
     Bell, 
     ChevronRight,
-    Users
+    Users,
+    Shield,
+    CheckCircle
 } from 'lucide-react';
-import DashboardLayout from '@/components/layout/dashboard-layout';
-
+import StatCard from '@/components/ui/stat-card';
 // --- Type Definition for Audit Log Entry ---
 type AuditLog = {
     timestamp: string;
@@ -95,67 +96,78 @@ const AuditLogs: React.FC = () => {
 
 
     return (
-        <DashboardLayout role="contractor" name="Rohan Builders">
-            <div className="bg-slate-100 min-h-full p-4 md:p-6 space-y-8">
+        <div className="min-h-screen w-full max-w-full sm:max-w-full md:max-w-7xl mx-auto p-4 sm:p-6 md:p-12 space-y-6 sm:space-y-8 md:space-y-10">
 
                 {/* --- HEADER --- */}
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between">
-                    <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Audit & Activity Logs</h1>
-                    <button className="flex items-center space-x-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-5 py-2.5 rounded-lg hover:shadow-xl transition-all duration-300 shadow-lg">
-                        <Download className="w-5 h-5" />
-                        <span className="font-semibold">Export Logs</span>
+                <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent text-center sm:text-left">Audit & Activity Logs</h1>
+                    <button className="flex items-center space-x-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg sm:rounded-xl hover:shadow-xl transition-all duration-300 shadow-lg text-sm sm:text-base font-medium sm:font-semibold">
+                        <Download className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <span>Export Logs</span>
                     </button>
                 </div>
 
                 {/* --- VIBRANT STATS CARDS --- */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                    <div className="bg-gradient-to-br from-sky-400 to-blue-500 text-white p-6 rounded-xl shadow-2xl shadow-blue-200 transition-transform hover:-translate-y-2 duration-300">
-                        <div className="flex items-center justify-between"><p className="font-semibold">Total Activities</p><Activity className="w-6 h-6 opacity-70" /></div>
-                        <p className="text-4xl font-bold mt-2">248</p><p className="text-sm opacity-80">This month</p>
-                    </div>
-                    <div className="bg-gradient-to-br from-emerald-400 to-green-500 text-white p-6 rounded-xl shadow-2xl shadow-green-200 transition-transform hover:-translate-y-2 duration-300">
-                        <div className="flex items-center justify-between"><p className="font-semibold">Active Users</p><Users className="w-6 h-6 opacity-70" /></div>
-                        <p className="text-4xl font-bold mt-2">3</p><p className="text-sm opacity-80">Currently logged in</p>
-                    </div>
-                    <div className="bg-gradient-to-br from-violet-400 to-purple-500 text-white p-6 rounded-xl shadow-2xl shadow-purple-200 transition-transform hover:-translate-y-2 duration-300">
-                        <div className="flex items-center justify-between"><p className="font-semibold">Today's Activities</p><Calendar className="w-6 h-6 opacity-70" /></div>
-                        <p className="text-4xl font-bold mt-2">{todaysActivities}</p><p className="text-sm opacity-80">Since midnight (IST)</p>
-                    </div>
-                    <div className="bg-gradient-to-br from-amber-400 to-orange-500 text-white p-6 rounded-xl shadow-2xl shadow-orange-200 transition-transform hover:-translate-y-2 duration-300">
-                        <div className="flex items-center justify-between"><p className="font-semibold">Log Retention</p><Archive className="w-6 h-6 opacity-70" /></div>
-                        <p className="text-4xl font-bold mt-2">90</p><p className="text-sm opacity-80">Days</p>
-                    </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                    <StatCard 
+                        title="Total Activities" 
+                        value="248" 
+                        subtitle="This month"
+                        icon={Activity} 
+                        color="blue" 
+                    />
+                    <StatCard 
+                        title="Active Users" 
+                        value="3" 
+                        subtitle="Currently logged in"
+                        icon={Users} 
+                        color="green" 
+                    />
+                    <StatCard 
+                        title="Today's Activities" 
+                        value={todaysActivities.toString()} 
+                        subtitle="Since midnight (IST)"
+                        icon={Calendar} 
+                        color="purple" 
+                    />
+                    <StatCard 
+                        title="Log Retention" 
+                        value="90" 
+                        subtitle="Days"
+                        icon={Archive} 
+                        color="amber" 
+                    />
                 </div>
 
                 {/* --- SYSTEM ACTIVITY LOG TABLE --- */}
-                <div className="bg-white rounded-xl border border-gray-200 shadow-lg">
-                    <div className="p-4 border-b border-gray-200">
-                        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                            <h2 className="text-xl font-bold text-gray-800">System Activity Log</h2>
-                            <div className="flex flex-wrap items-center gap-2">
-                                <div className="relative"><Filter className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"/><select value={actionFilter} onChange={e => setActionFilter(e.target.value)} className="pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm appearance-none"><option>All Actions</option><option>User Login</option><option>Attendance Updated</option><option>Grievance Created</option><option>Grievance Resolved</option></select></div>
-                                <div className="relative"><User className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"/><select value={userFilter} onChange={e => setUserFilter(e.target.value)} className="pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm appearance-none"><option>All Users</option><option>Contractor Admin</option><option>Supervisor</option><option>System Auto</option></select></div>
-                                <div className="relative"><Calendar className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"/><input type="date" value={dateFilter} onChange={e => setDateFilter(e.target.value)} className="pl-9 pr-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm" /></div>
+                <div className="w-full max-w-full sm:max-w-full md:max-w-6xl mx-auto bg-white/95 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-gray-200 shadow-lg">
+                    <div className="p-4 sm:p-6 border-b border-gray-200">
+                        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+                            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800">System Activity Log</h2>
+                            <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-2 sm:gap-3 w-full lg:w-auto">
+                                <div className="relative w-full sm:w-auto"><Filter className="w-3 h-3 sm:w-4 sm:h-4 absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 text-gray-400"/><select value={actionFilter} onChange={e => setActionFilter(e.target.value)} className="w-full sm:w-auto pl-7 sm:pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-sm appearance-none"><option>All Actions</option><option>User Login</option><option>Attendance Updated</option><option>Grievance Created</option><option>Grievance Resolved</option></select></div>
+                                <div className="relative w-full sm:w-auto"><User className="w-3 h-3 sm:w-4 sm:h-4 absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 text-gray-400"/><select value={userFilter} onChange={e => setUserFilter(e.target.value)} className="w-full sm:w-auto pl-7 sm:pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-sm appearance-none"><option>All Users</option><option>Contractor Admin</option><option>Supervisor</option><option>System Auto</option></select></div>
+                                <div className="relative w-full sm:w-auto"><Calendar className="w-3 h-3 sm:w-4 sm:h-4 absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 text-gray-400"/><input type="date" value={dateFilter} onChange={e => setDateFilter(e.target.value)} className="w-full sm:w-auto pl-7 sm:pl-9 pr-3 py-1.5 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-sm" /></div>
                             </div>
                         </div>
                     </div>
                     <div className="overflow-x-auto">
-                        <table className="w-full">
+                        <table className="w-full min-w-[700px]">
                             <thead className="bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-500">
                                 <tr>
-                                    <th className="text-left p-4 text-sm font-semibold text-white uppercase tracking-wider">Timestamp</th>
-                                    <th className="text-left p-4 text-sm font-semibold text-white uppercase tracking-wider">Action</th>
-                                    <th className="text-left p-4 text-sm font-semibold text-white uppercase tracking-wider">Actor</th>
-                                    <th className="text-left p-4 text-sm font-semibold text-white uppercase tracking-wider">Details</th>
+                                    <th className="text-left p-3 sm:p-4 text-xs sm:text-sm font-semibold text-white uppercase tracking-wider">Timestamp</th>
+                                    <th className="text-left p-3 sm:p-4 text-xs sm:text-sm font-semibold text-white uppercase tracking-wider">Action</th>
+                                    <th className="text-left p-3 sm:p-4 text-xs sm:text-sm font-semibold text-white uppercase tracking-wider">Actor</th>
+                                    <th className="text-left p-3 sm:p-4 text-xs sm:text-sm font-semibold text-white uppercase tracking-wider">Details</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200/70">
                                 {filteredData.map((row, idx) => (
                                     <tr key={idx} className="hover:bg-sky-50 transition-colors duration-200">
-                                        <td className="p-4 text-sm text-slate-700 whitespace-nowrap font-medium">{row.timestamp}</td>
-                                        <td className="p-4">{getActionBadge(row.action)}</td>
-                                        <td className="p-4 text-sm text-slate-800 flex items-center"><div className="flex-shrink-0">{getAvatar(row.actor)}</div><span className="font-semibold">{row.actor}</span></td>
-                                        <td className="p-4 text-sm text-slate-600 max-w-sm truncate" title={row.details}>{row.details}</td>
+                                        <td className="p-3 sm:p-4 text-xs sm:text-sm text-slate-700 whitespace-nowrap font-medium">{row.timestamp}</td>
+                                        <td className="p-3 sm:p-4">{getActionBadge(row.action)}</td>
+                                        <td className="p-3 sm:p-4 text-xs sm:text-sm text-slate-800 flex items-center"><div className="flex-shrink-0">{getAvatar(row.actor)}</div><span className="font-semibold truncate">{row.actor}</span></td>
+                                        <td className="p-3 sm:p-4 text-xs sm:text-sm text-slate-600 max-w-xs sm:max-w-sm truncate" title={row.details}>{row.details}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -164,26 +176,25 @@ const AuditLogs: React.FC = () => {
                 </div>
 
                 {/* --- SUMMARY & MANAGEMENT --- */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-lg">
-                        <h3 className="text-xl font-bold text-gray-800 mb-4">Recent Activity Summary</h3>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                    <div className="w-full max-w-full bg-white/95 backdrop-blur-sm p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-gray-200 shadow-lg">
+                        <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-4">Recent Activity Summary</h3>
                         <div className="space-y-4">
                             <div><div className="flex justify-between items-center mb-1"><span className="text-sm font-semibold text-gray-600">Attendance Updates</span><span className="text-sm font-bold text-emerald-600">5</span></div><div className="w-full bg-gray-200 rounded-full h-2"><div className="bg-gradient-to-r from-emerald-400 to-green-500 h-2 rounded-full" style={{width: '75%'}}></div></div></div>
                             <div><div className="flex justify-between items-center mb-1"><span className="text-sm font-semibold text-gray-600">Grievance Actions</span><span className="text-sm font-bold text-violet-600">3</span></div><div className="w-full bg-gray-200 rounded-full h-2"><div className="bg-gradient-to-r from-violet-400 to-purple-500 h-2 rounded-full" style={{width: '45%'}}></div></div></div>
                             <div><div className="flex justify-between items-center mb-1"><span className="text-sm font-semibold text-gray-600">User Logins</span><span className="text-sm font-bold text-blue-600">2</span></div><div className="w-full bg-gray-200 rounded-full h-2"><div className="bg-gradient-to-r from-sky-400 to-blue-500 h-2 rounded-full" style={{width: '30%'}}></div></div></div>
                         </div>
                     </div>
-                    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-lg">
-                        <h3 className="text-xl font-bold text-gray-800 mb-4">Log Management</h3>
+                    <div className="w-full max-w-full bg-white/95 backdrop-blur-sm p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-gray-200 shadow-lg">
+                        <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-4">Log Management</h3>
                         <div className="space-y-3">
-                            <button className="w-full group text-left p-4 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-400 transition-colors flex items-center justify-between"><div className="flex items-center"><Download className="w-6 h-6 text-blue-500 mr-4"/><div ><div className="font-semibold text-gray-800">Download Full Log</div><div className="text-sm text-gray-500">Export complete audit trail as CSV</div></div></div><ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors"/></button>
-                            <button className="w-full group text-left p-4 border border-gray-200 rounded-lg hover:bg-orange-50 hover:border-orange-400 transition-colors flex items-center justify-between"><div className="flex items-center"><Archive className="w-6 h-6 text-orange-500 mr-4"/><div ><div className="font-semibold text-gray-800">Archive Old Logs</div><div className="text-sm text-gray-500">Move logs older than 90 days</div></div></div><ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-orange-600 transition-colors"/></button>
-                            <button className="w-full group text-left p-4 border border-gray-200 rounded-lg hover:bg-red-50 hover:border-red-400 transition-colors flex items-center justify-between"><div className="flex items-center"><Bell className="w-6 h-6 text-red-500 mr-4"/><div ><div className="font-semibold text-gray-800">Configure Alerts</div><div className="text-sm text-gray-500">Set up security notifications</div></div></div><ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-red-600 transition-colors"/></button>
+                            <button className="w-full group text-left p-3 sm:p-4 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-400 transition-colors flex items-center justify-between"><div className="flex items-center"><Download className="w-5 h-5 sm:w-6 sm:h-6 text-blue-500 mr-3 sm:mr-4 flex-shrink-0"/><div ><div className="text-sm sm:text-base font-semibold text-gray-800">Download Full Log</div><div className="text-xs sm:text-sm text-gray-500">Export complete audit trail as CSV</div></div></div><ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-hover:text-blue-600 transition-colors flex-shrink-0"/></button>
+                            <button className="w-full group text-left p-3 sm:p-4 border border-gray-200 rounded-lg hover:bg-orange-50 hover:border-orange-400 transition-colors flex items-center justify-between"><div className="flex items-center"><Archive className="w-5 h-5 sm:w-6 sm:h-6 text-orange-500 mr-3 sm:mr-4 flex-shrink-0"/><div ><div className="text-sm sm:text-base font-semibold text-gray-800">Archive Old Logs</div><div className="text-xs sm:text-sm text-gray-500">Move logs older than 90 days</div></div></div><ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-hover:text-orange-600 transition-colors flex-shrink-0"/></button>
+                            <button className="w-full group text-left p-3 sm:p-4 border border-gray-200 rounded-lg hover:bg-red-50 hover:border-red-400 transition-colors flex items-center justify-between"><div className="flex items-center"><Bell className="w-5 h-5 sm:w-6 sm:h-6 text-red-500 mr-3 sm:mr-4 flex-shrink-0"/><div ><div className="text-sm sm:text-base font-semibold text-gray-800">Configure Alerts</div><div className="text-xs sm:text-sm text-gray-500">Set up security notifications</div></div></div><ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-hover:text-red-600 transition-colors flex-shrink-0"/></button>
                         </div>
                     </div>
                 </div>
-            </div>
-        </DashboardLayout>
+        </div>
     );
 };
 
