@@ -350,8 +350,8 @@ const SchemeUtilizationPage = () => {
                    <SortableHeader colKey="amtReleased" title="Released (₹)" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px] text-right" />
                    <SortableHeader colKey="amtUtilized" title="Utilized (₹)" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px] text-right" />
                    <SortableHeader colKey="balance" title="Balance (₹)" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px] text-right" />
-                   <SortableHeader colKey="percent" title="Util %" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[100px] text-right" />
-                   <SortableHeader colKey="status" title="Status" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px]" />
+                   {/* <SortableHeader colKey="percent" title="Util %" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[100px] text-right" /> */}
+                   {/* <SortableHeader colKey="status" title="Status" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px]" /> */}
                    <SortableHeader colKey="lastUpdated" title="Last Updated" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
                    <th className="px-4 py-3 text-center">Action</th>
                  </tr>
@@ -368,13 +368,13 @@ const SchemeUtilizationPage = () => {
                      <td className="px-4 py-3 text-green-700 font-bold text-right">{formatCurrency(item.amtReleased)}</td>
                      <td className="px-4 py-3 text-emerald-700 font-bold text-right">{formatCurrency(item.amtUtilized)}</td>
                      <td className="px-4 py-3 text-orange-700 font-bold text-right">{formatCurrency(item.balance)}</td>
-                     <td className="px-4 py-3 text-slate-700 font-bold text-right">{item.percent}%</td>
-                     <td className="px-4 py-3"><UtilizationStatusBadge status={item.status} /></td>
+                     {/* <td className="px-4 py-3 text-slate-700 font-bold text-right">{item.percent}%</td> */}
+                     {/* <td className="px-4 py-3"><UtilizationStatusBadge status={item.status} /></td> */}
                      <td className="px-4 py-3 text-slate-700">{new Date(item.lastUpdated).toLocaleDateString('en-GB')}</td>
                      <td className="px-4 py-3 text-center"><button onClick={()=>openModal(item)} className="p-1.5 rounded-md text-indigo-600 hover:bg-indigo-100" title="View Details"><Eye className="w-5 h-5" /></button></td>
                    </tr>
                  ))}
-                 {paginatedData.length === 0 && (<tr><td colSpan={13} className="text-center py-10 text-slate-500">No records found.</td></tr>)}
+                 {paginatedData.length === 0 && (<tr><td colSpan={11} className="text-center py-10 text-slate-500">No records found.</td></tr>)}
                </tbody>
              </table>
            </div>

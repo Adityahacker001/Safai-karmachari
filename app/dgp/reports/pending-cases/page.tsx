@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import StatCard from '@/components/ui/stat-card';
 import {
   Home,
   ChevronRight,
@@ -75,24 +76,16 @@ type PendingCase = {
   docs: { name: string, url: string }[];
 };
 
-type Kpi = {
-  title: string;
-  value: string;
-  change?: string;
-  changeType?: 'positive' | 'negative';
-  icon: React.ReactNode;
-  gradient: string;
-  glow: string;
-};
+
 
 // --- MOCK DATA ---
 
-const mockKpis: Kpi[] = [
-  { title: "Total Pending Cases", value: "28", change: "+3", changeType: 'negative', icon: <FileClock size={28} />, gradient: "from-amber-500 to-amber-700", glow: "shadow-amber-500/40" },
-  { title: "SLA Breaches (>30d)", value: "6", change: "+2", changeType: 'negative', icon: <AlertOctagon size={28} />, gradient: "from-red-600 to-red-800", glow: "shadow-red-500/40" },
-  { title: "Escalated to DGP", value: "9", change: "+1", changeType: 'negative', icon: <ArrowUpCircle size={28} />, gradient: "from-orange-500 to-orange-700", glow: "shadow-orange-500/40" },
-  { title: "Avg. Pending Days", value: "22.5", change: "+1.5d", changeType: 'negative', icon: <Clock size={28} />, gradient: "from-slate-500 to-slate-700", glow: "shadow-slate-500/40" },
-];
+const mockKpis = {
+  totalPendingCases: { value: "28", change: "+3" },
+  slaBreaches: { value: "6", change: "+2" },
+  escalatedToDgp: { value: "9", change: "+1" },
+  avgPendingDays: { value: "22.5", change: "+1.5d" },
+};
 
 const mockPendingCases: PendingCase[] = [
   {
@@ -188,34 +181,7 @@ const GlassCard = ({ children, className = "", noHover = false }: {
   </motion.div>
 );
 
-/**
- * 2. KPI Card Component
- */
-const KpiCard = ({ kpi }: { kpi: Kpi }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5, ease: "easeOut" }}
-    whileHover={{ y: -6, boxShadow: `0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04), 0 0 0 4px rgba(255,255,255,0.5)`, transition: { duration: 0.2 } }}
-    className={`relative rounded-xl shadow-lg p-5 text-white overflow-hidden ${kpi.gradient} ${kpi.glow}`}
-  >
-    <div className="relative z-10">
-      <div className="flex justify-between items-center">
-        <span className="text-sm font-medium opacity-90">{kpi.title}</span>
-        {kpi.change && (
-          <span className={`text-xs font-semibold px-2 py-0.5 rounded-full flex items-center gap-1 ${kpi.changeType === 'positive' ? 'bg-white/20' : 'bg-white/20'}`}>
-            {kpi.changeType === 'positive' ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
-            {kpi.change}
-          </span>
-        )}
-      </div>
-      <div className="text-4xl font-bold mt-2 mb-1">{kpi.value}</div>
-    </div>
-    <div className="absolute -right-4 -bottom-4 opacity-10 z-0">
-      {React.cloneElement(kpi.icon as React.ReactElement, { size: 80 })}
-    </div>
-  </motion.div>
-);
+
 
 /**
  * 3. StatusBadge Component
@@ -564,10 +530,11 @@ export default function PendingCasesReport() {
       </GlassCard>
 
       {/* --- KPI Metrics --- */}
-      <section className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-5 mb-8">
-        {mockKpis.map(kpi => (
-          <KpiCard key={kpi.title} kpi={kpi} />
-        ))}
+      <section className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+        <StatCard title="Total Pending Cases" value={mockKpis.totalPendingCases.value} icon={FileClock} color="amber" />
+        <StatCard title="SLA Breaches (>30d)" value={mockKpis.slaBreaches.value} icon={AlertOctagon} color="red" />
+        <StatCard title="Escalated to DGP" value={mockKpis.escalatedToDgp.value} icon={ArrowUpCircle} color="purple" />
+        <StatCard title="Avg. Pending Days" value={mockKpis.avgPendingDays.value} icon={Clock} color="indigo" />
       </section>
       
       {/* --- Main Table --- */}

@@ -14,7 +14,6 @@ import {
   AlertCircle,
   BarChart3,
   FileCheck,
-  Sparkles,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { contractorTheme } from '@/lib/theme';
@@ -145,26 +144,7 @@ export default function DGPDashboardPage() {
     },
   };
 
-  // Direction Compliance Pie Chart
-  const directionComplianceData = {
-    labels: ['Complied', 'Pending'],
-    datasets: [
-      {
-        data: [78, 22],
-        backgroundColor: ['rgba(16, 185, 129, 0.8)', 'rgba(239, 68, 68, 0.8)'],
-        borderWidth: 2,
-        borderColor: '#fff',
-      },
-    ],
-  };
 
-  const directionComplianceOptions = {
-    responsive: true,
-    plugins: {
-      legend: { position: 'bottom' as const },
-      tooltip: { enabled: true },
-    },
-  };
 
   // Compensation Tracker Line Chart
   const compensationTrackerData = {
@@ -289,33 +269,28 @@ export default function DGPDashboardPage() {
         </section>
 
         {/* Charts Section */}
-        <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-          {/* Incident Category Pie Chart */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-100/50 hover:shadow-xl transition-all duration-300">
-            <h3 className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4 sm:mb-6">Incident Category (Statewide)</h3>
-            <div className="h-64 sm:h-72 flex items-center justify-center">
-              <Pie data={incidentCategoryData} options={incidentCategoryOptions} />
+        <section className="space-y-4 sm:space-y-6">
+          {/* First Row - Pie Chart and Bar Chart */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+            {/* Incident Category Pie Chart */}
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-100/50 hover:shadow-xl transition-all duration-300">
+              <h3 className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4 sm:mb-6">Incident Category (Statewide)</h3>
+              <div className="h-64 sm:h-72 flex items-center justify-center">
+                <Pie data={incidentCategoryData} options={incidentCategoryOptions} />
+              </div>
             </div>
-          </div>
-          
-          {/* Direction Compliance Pie Chart */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-100/50 hover:shadow-xl transition-all duration-300">
-            <h3 className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent mb-4 sm:mb-6">Direction Compliance</h3>
-            <div className="h-64 sm:h-72 flex items-center justify-center">
-              <Pie data={directionComplianceData} options={directionComplianceOptions} />
+
+            {/* Investigation Status Bar Chart */}
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-100/50 hover:shadow-xl transition-all duration-300">
+              <h3 className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent mb-4 sm:mb-6">Investigation Status by District</h3>
+              <div className="h-64 sm:h-72 flex items-center justify-center">
+                <Bar data={investigationStatusData} options={investigationStatusOptions} />
+              </div>
             </div>
           </div>
 
-          {/* Investigation Status Bar Chart */}
-          <div className="lg:col-span-2 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-100/50 hover:shadow-xl transition-all duration-300">
-            <h3 className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent mb-4 sm:mb-6">Investigation Status by District</h3>
-            <div className="h-64 sm:h-80 flex items-center justify-center">
-              <Bar data={investigationStatusData} options={investigationStatusOptions} />
-            </div>
-          </div>
-
-          {/* Compensation Tracker Line Chart */}
-          <div className="lg:col-span-2 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-100/50 hover:shadow-xl transition-all duration-300">
+          {/* Second Row - Compensation Tracker Line Chart */}
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-100/50 hover:shadow-xl transition-all duration-300">
             <h3 className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent mb-4 sm:mb-6">Compensation Tracker (Monthly)</h3>
             <div className="h-64 sm:h-80 flex items-center justify-center">
               <Line data={compensationTrackerData} options={compensationTrackerOptions} />
@@ -325,7 +300,7 @@ export default function DGPDashboardPage() {
         <section className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-100/50 hover:shadow-xl transition-all duration-300">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-2">
             <h3 className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Quick Actions</h3>
-            <span className="text-sm text-gray-500 bg-gray-50 px-3 py-1 rounded-full">6 available actions</span>
+            <span className="text-sm text-gray-500 bg-gray-50 px-3 py-1 rounded-full">5 available actions</span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <button className="bg-gradient-to-br from-white to-blue-50/30 border border-gray-100 p-4 text-left w-full rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 hover:border-blue-200 group">
@@ -370,15 +345,6 @@ export default function DGPDashboardPage() {
                 <div className="flex-1">
                   <p className="font-medium text-indigo-900 text-sm">Generate Annual Report</p>
                   <p className="text-xs text-indigo-700/70">Comprehensive summary</p>
-                </div>
-              </div>
-            </button>
-            <button className="bg-gradient-to-br from-white to-amber-50/30 border border-gray-100 p-4 text-left w-full rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 hover:border-amber-200 group">
-              <div className="flex items-start gap-3">
-                <Sparkles className="h-6 w-6 text-amber-600 mb-2 group-hover:scale-110 transition-transform duration-300" />
-                <div className="flex-1">
-                  <p className="font-medium text-amber-900 text-sm">Generative AI Assistant</p>
-                  <p className="text-xs text-amber-700/70">Draft reports & replies</p>
                 </div>
               </div>
             </button>

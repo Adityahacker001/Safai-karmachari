@@ -322,7 +322,7 @@ const PendingDisbursementReportPage = () => {
                    <SortableHeader colKey="scheme" title="Scheme" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[200px]" />
                    <SortableHeader colKey="amtSanctioned" title="Sanctioned (₹)" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[150px] text-right" />
                    <SortableHeader colKey="dateSanction" title="Sanction Date" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[130px]" />
-                   <SortableHeader colKey="status" title="Status" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px]" />
+                   {/* <SortableHeader colKey="status" title="Status" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px]" /> */}
                    <th className="px-4 py-3 text-left min-w-[250px]">Reason for Delay</th>
                    <th className="px-4 py-3 text-left min-w-[250px]">Remarks</th>
                    <SortableHeader colKey="lastUpdated" title="Last Updated" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
@@ -337,14 +337,14 @@ const PendingDisbursementReportPage = () => {
                      <td className="px-4 py-3 text-slate-700">{item.scheme}</td>
                      <td className="px-4 py-3 text-slate-700 font-medium text-right">{formatCurrency(item.amtSanctioned)}</td>
                      <td className="px-4 py-3 text-slate-700">{new Date(item.dateSanction).toLocaleDateString('en-GB')}</td>
-                     <td className="px-4 py-3"><DisbursementStatusBadge status={item.status as Status} /></td>
+                     {/* <td className="px-4 py-3"><DisbursementStatusBadge status={item.status as Status} /></td> */}
                      <td className={`px-4 py-3 text-xs whitespace-normal max-w-xs ${item.status === 'Delayed' ? 'text-red-600 font-medium' : 'text-slate-500'}`}>{item.delayReason}</td>
                      <td className="px-4 py-3 text-slate-500 text-xs truncate max-w-xs">{item.remarks}</td>
                      <td className="px-4 py-3 text-slate-700">{new Date(item.lastUpdated).toLocaleDateString('en-GB')}</td>
                      <td className="px-4 py-3 text-center"><button onClick={()=>openModal(item)} className="p-1.5 rounded-md text-indigo-600 hover:bg-indigo-100" title="View Details"><Eye className="w-5 h-5" /></button></td>
                    </tr>
                  ))}
-                 {paginatedData.length === 0 && (<tr><td colSpan={10} className="text-center py-10 text-slate-500">No pending disbursements found.</td></tr>)}
+                 {paginatedData.length === 0 && (<tr><td colSpan={9} className="text-center py-10 text-slate-500">No pending disbursements found.</td></tr>)}
                </tbody>
              </table>
            </div>

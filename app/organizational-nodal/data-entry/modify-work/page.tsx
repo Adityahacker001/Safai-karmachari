@@ -23,12 +23,6 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   FileSignature, // Page Header
   Search, // Select Work ID
-  CalendarDays, // For Dates
-  Building, // For Contractor
-  Users, // For Worker Count
-  ShieldAlert, // For Hazardous
-  Trash2, // For Ragpickers
-  UserCheck, // For Ordinary SKs
   AlertTriangle, // For Manual Scavenging & Alerts
   Save, // For Submit button
   CheckCircle, // For Success
@@ -220,20 +214,17 @@ export default function ModifyWorkAssignmentPage() {
                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
                    <InputGroup>
                     <Label htmlFor="startDate">Start Date</Label>
-                    <InputWithIcon id="startDate" name="startDate" type="date" value={formData.startDate || ""} onChange={handleChange} icon={CalendarDays} />
+                    <Input id="startDate" name="startDate" type="date" value={formData.startDate || ""} onChange={handleChange} className="focus:ring-2 focus:ring-teal-300" />
                   </InputGroup>
                   <InputGroup>
                     <Label htmlFor="endDate">End Date</Label>
-                    <InputWithIcon id="endDate" name="endDate" type="date" value={formData.endDate || ""} onChange={handleChange} icon={CalendarDays} />
+                    <Input id="endDate" name="endDate" type="date" value={formData.endDate || ""} onChange={handleChange} className="focus:ring-2 focus:ring-teal-300" />
                   </InputGroup>
                    <InputGroup className="md:col-span-2">
                     <Label htmlFor="contractor">Contractor (NSKC Verified Only)</Label>
                     <Select name="contractor" value={formData.contractor || ""} onValueChange={handleContractorChange}>
                       <SelectTrigger className="focus:ring-2 focus:ring-teal-300">
-                         <div className="flex items-center gap-2">
-                            <Building className="w-4 h-4 text-gray-400" />
-                            <SelectValue placeholder="Select a verified contractor..." />
-                        </div>
+                        <SelectValue placeholder="Select a verified contractor..." />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="CleanForce Pvt Ltd">CleanForce Pvt Ltd</SelectItem>
@@ -251,13 +242,13 @@ export default function ModifyWorkAssignmentPage() {
                <div className="grid grid-cols-1 md:grid-cols-4 gap-x-6 gap-y-5">
                     <InputGroup className="md:col-span-4">
                         <Label htmlFor="totalWorkers">Total Number of Workers</Label>
-                        <InputWithIcon id="totalWorkers" name="totalWorkers" type="number" value={formData.totalWorkers || ""} onChange={handleChange} icon={Users} />
+                        <Input id="totalWorkers" name="totalWorkers" type="number" value={formData.totalWorkers || ""} onChange={handleChange} className="focus:ring-2 focus:ring-teal-300" />
                     </InputGroup>
                     <Label className="md:col-span-4 text-sm font-medium text-gray-700 -mb-2">Worker Category Breakdown</Label>
-                    <InputGroup><Label htmlFor="catManualScavenging">Manual Scavenging</Label><InputWithIcon id="catManualScavenging" name="catManualScavenging" type="number" value={formData.catManualScavenging || ""} onChange={handleChange} icon={AlertTriangle} /></InputGroup>
-                    <InputGroup><Label htmlFor="catRagpickers">Ragpickers</Label><InputWithIcon id="catRagpickers" name="catRagpickers" type="number" value={formData.catRagpickers || ""} onChange={handleChange} icon={Trash2} /></InputGroup>
-                    <InputGroup><Label htmlFor="catHazardous">Hazardous</Label><InputWithIcon id="catHazardous" name="catHazardous" type="number" value={formData.catHazardous || ""} onChange={handleChange} icon={ShieldAlert} /></InputGroup>
-                    <InputGroup><Label htmlFor="catOrdinarySKs">Ordinary SKs</Label><InputWithIcon id="catOrdinarySKs" name="catOrdinarySKs" type="number" value={formData.catOrdinarySKs || ""} onChange={handleChange} icon={UserCheck} /></InputGroup>
+                    <InputGroup><Label htmlFor="catManualScavenging">Manual Scavenging</Label><Input id="catManualScavenging" name="catManualScavenging" type="number" value={formData.catManualScavenging || ""} onChange={handleChange} className="focus:ring-2 focus:ring-teal-300" /></InputGroup>
+                    <InputGroup><Label htmlFor="catRagpickers">Ragpickers</Label><Input id="catRagpickers" name="catRagpickers" type="number" value={formData.catRagpickers || ""} onChange={handleChange} className="focus:ring-2 focus:ring-teal-300" /></InputGroup>
+                    <InputGroup><Label htmlFor="catHazardous">Hazardous</Label><Input id="catHazardous" name="catHazardous" type="number" value={formData.catHazardous || ""} onChange={handleChange} className="focus:ring-2 focus:ring-teal-300" /></InputGroup>
+                    <InputGroup><Label htmlFor="catOrdinarySKs">Ordinary SKs</Label><Input id="catOrdinarySKs" name="catOrdinarySKs" type="number" value={formData.catOrdinarySKs || ""} onChange={handleChange} className="focus:ring-2 focus:ring-teal-300" /></InputGroup>
                </div>
             </div>
             
@@ -332,23 +323,3 @@ function InputGroup({ children, className }: { children: React.ReactNode, classN
   return <div className={`space-y-1.5 ${className || ''}`}>{children}</div>;
 }
 
-function InputWithIcon({
-  id, name, type = "text", value, placeholder, onChange, readOnly = false, className, icon: Icon,
-}: {
-  id: string; name?: string; type?: string; value: string | number; placeholder?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; readOnly?: boolean; className?: string; icon: React.ElementType;
-}) {
-  return (
-    <div className="relative">
-      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-        <Icon className="h-5 w-5 text-gray-400" />
-      </div>
-      <Input
-        id={id} name={name} type={type} value={value} readOnly={readOnly} placeholder={placeholder} onChange={onChange}
-        className={`block w-full pl-10 p-2.5 border border-gray-300 rounded-lg text-sm transition duration-150 ${
-          readOnly ? "bg-gray-100 text-gray-600 cursor-not-allowed focus:ring-0 focus:border-gray-300" : "bg-white focus:ring-2 focus:ring-teal-300 focus:border-teal-500 hover:border-gray-400"
-        } ${className || ''}`}
-      />
-    </div>
-  );
-}

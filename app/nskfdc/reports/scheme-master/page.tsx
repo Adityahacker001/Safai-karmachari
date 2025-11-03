@@ -461,10 +461,10 @@ const SchemeMasterReportPage = () => {
                   <SortableHeader colKey="name" title="Scheme Name" className="min-w-[250px]" />
                   <SortableHeader colKey="type" title="Scheme Type" className="min-w-[150px]" />
                   <SortableHeader colKey="limit" title="Fin. Limit (₹)" className="min-w-[130px]" />
-                  <SortableHeader colKey="rate" title="Interest Rate" className="min-w-[120px]" />
+                  {/* <SortableHeader colKey="rate" title="Interest Rate" className="min-w-[120px]" /> */}
                   <SortableHeader colKey="agency" title="Agency" className="min-w-[200px]" />
                   <SortableHeader colKey="effectiveDate" title="Effective Date" className="min-w-[130px]" />
-                  <SortableHeader colKey="status" title="Status" className="min-w-[140px]" />
+                  {/* <SortableHeader colKey="status" title="Status" className="min-w-[140px]" /> */}
                   <th className="px-4 py-3 text-left min-w-[200px]">Remarks</th>
                 </tr>
               </thead>
@@ -477,20 +477,20 @@ const SchemeMasterReportPage = () => {
                     <td className="px-4 py-3 text-slate-700 whitespace-nowrap text-right font-medium">
                       {item.limit.toLocaleString('en-IN')}
                     </td>
-                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{item.rate}</td>
+                    {/* <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{item.rate}</td> */}
                     <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{item.agency}</td>
                     <td className="px-4 py-3 text-slate-700 whitespace-nowrap">
                       {new Date(item.effectiveDate).toLocaleDateString('en-GB')}
                     </td>
-                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap">
+                    {/* <td className="px-4 py-3 text-slate-700 whitespace-nowrap">
                       <StatusBadge status={item.status as any} />
-                    </td>
+                    </td> */}
                     <td className="px-4 py-3 text-slate-500 text-xs truncate max-w-xs">{item.remarks}</td>
                   </tr>
                 ))}
                 {paginatedData.length === 0 && (
                   <tr>
-                    <td colSpan={9} className="text-center py-10 text-slate-500">
+                    <td colSpan={7} className="text-center py-10 text-slate-500">
                       No schemes found matching your criteria.
                     </td>
                   </tr>

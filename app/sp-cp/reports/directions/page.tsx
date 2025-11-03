@@ -14,7 +14,6 @@ import {
   BarChart3, // Used for Stats
   Gavel,     // For Judiciary
   Building,  // For NSKC/DGP/Ministry (Authority)
-  Bot,        // AI Icon
   XCircle,    // Reset Icon
   Download as FileDownIcon,
   RotateCw as RefreshCwIcon,
@@ -105,9 +104,6 @@ export default function DirectionReportsPage() {
   const handleUploadDoc = () => alert("Upload Document functionality to be implemented.");
   const handleMarkComplied = () => alert("Mark as Complied functionality to be implemented.");
   const handleGenerateSummary = () => alert("Generate Summary functionality to be implemented.");
-  const handleDraftReply = () => alert("Draft Reply (AI) functionality to be implemented.");
-  const handleSummarize = () => alert("Summarize Directions (AI) functionality to be implemented.");
-  const handlePredictRisks = () => alert("Predict Overdue Risks (AI) functionality to be implemented.");
   
   // --- Badge Styling ---
   const getStatusBadge = (status: Direction['complianceStatus']) => {
@@ -240,7 +236,7 @@ export default function DirectionReportsPage() {
       </Card>
 
       {/* Charts Section */}
-      <Card className="shadow-lg border border-gray-100 rounded-lg bg-white">
+      {/* <Card className="shadow-lg border border-gray-100 rounded-lg bg-white">
         <CardHeader className="bg-gradient-to-r from-gray-50 to-gray-100 border-b p-4">
           <CardTitle className="text-lg font-semibold text-gray-800 flex items-center gap-2">
             <PieChartIcon className="w-5 h-5 text-indigo-600" /> Direction Compliance Overview
@@ -268,10 +264,10 @@ export default function DirectionReportsPage() {
             </PieChart>
           </ResponsiveContainer>
         </CardContent>
-      </Card>
+      </Card> */}
 
       {/* Summary Section */}
-      <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-2 gap-6">
         <Card className="shadow-md border border-gray-100 rounded-lg bg-white">
           <CardHeader className="flex flex-row items-center gap-2">
             <BarChart3 className="w-5 h-5 text-blue-600"/>
@@ -296,18 +292,6 @@ export default function DirectionReportsPage() {
             <Button variant="outline" size="sm" onClick={handleUploadDoc}><Upload className="w-4 h-4 mr-2"/> Upload Compliance Doc</Button>
             <Button variant="outline" size="sm" onClick={handleMarkComplied}><CheckCheck className="w-4 h-4 mr-2"/> Mark as Complied</Button>
             <Button variant="outline" size="sm" onClick={handleGenerateSummary}><FileBarChart className="w-4 h-4 mr-2"/> Generate Summary</Button>
-          </CardContent>
-        </Card>
-
-        <Card className="shadow-md border border-gray-100 rounded-lg bg-white">
-          <CardHeader className="flex flex-row items-center gap-2">
-            <Bot className="w-5 h-5 text-purple-600"/>
-            <CardTitle className="text-base font-semibold text-gray-700">AI Assistance</CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-3">
-            <Button variant="outline" size="sm" onClick={handleDraftReply}>Draft Reply Letter (AI)</Button>
-            <Button variant="outline" size="sm" onClick={handleSummarize}>Summarize Directions (AI)</Button>
-            <Button variant="outline" size="sm" onClick={handlePredictRisks}>Predict Overdue Risks (AI)</Button>
           </CardContent>
         </Card>
       </div>

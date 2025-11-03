@@ -5,6 +5,7 @@
 'use client'; // Next.js App Router ke liye
 
 import React from 'react';
+import StatCard from '@/components/ui/stat-card';
 import {
   ResponsiveContainer,
   BarChart,
@@ -22,7 +23,6 @@ import {
 } from 'recharts';
 
 import {
-  LayoutDashboard,
   Target,
   FileText,
   CheckSquare,
@@ -32,77 +32,25 @@ import {
   MessageSquareWarning,
   CheckCircle,
   Clock,
-  ArrowUpRight,
-  ArrowDownRight,
   PlusCircle,
   Send,
   ShieldAlert,
-  CalendarCheck,
   Contact,
   PieChart as PieChartIcon,
   BarChart2,
   LineChart as LineChartIcon,
   Map,
   Filter,
-  Users,
   Building,
-  Calendar,
   Layers,
   FileWarning,
   BookOpen,
-  ClipboardList,
-  Award,
   TrendingUp,
-  Activity,
-  UserCheck,
   BookCopy,
+  ArrowUpRight,
 } from 'lucide-react';
 
-// --- 1. Reusable Metric Card Component ---
-
-type MetricCardProps = {
-  title: string;
-  value: string;
-  trend: string;
-  trendType: 'up' | 'down';
-  icon: React.ElementType;
-  color: string; // Tailwind color class (e.g., 'indigo', 'green', 'sky')
-};
-
-const MetricCard: React.FC<MetricCardProps> = ({ title, value, trend, trendType, icon: Icon, color }) => {
-  const colorClasses = {
-    bg: `bg-${color}-100`,
-    text: `text-${color}-600`,
-    trendUp: 'text-green-500',
-    trendDown: 'text-red-500',
-  };
-
-  return (
-    <div className="relative p-5 bg-white rounded-xl shadow-lg border border-slate-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 transform-gpu">
-      <div className="flex justify-between items-start">
-        <div className="flex-1">
-          <p className="text-sm font-medium text-slate-500 truncate">{title}</p>
-          <p className="text-3xl font-bold text-slate-800 mt-1">{value}</p>
-          <div className="flex items-center text-xs mt-2">
-            <span className={`flex items-center ${trendType === 'up' ? colorClasses.trendUp : colorClasses.trendDown}`}>
-              {trendType === 'up' ? 
-                <ArrowUpRight className="w-3.5 h-3.5 mr-0.5" /> : 
-                <ArrowDownRight className="w-3.5 h-3.5 mr-0.5" />
-              }
-              {trend}
-            </span>
-            <span className="text-slate-400 ml-1">vs last month</span>
-          </div>
-        </div>
-        <div className={`p-3 rounded-full ${colorClasses.bg}`}>
-          <Icon className={`w-6 h-6 ${colorClasses.text}`} />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// --- 2. Reusable Quick Action Button Component ---
+// --- 1. Reusable Quick Action Button Component ---
 
 type ActionButtonProps = {
   title: string;
@@ -120,7 +68,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ title, icon: Icon, gradient
   </button>
 );
 
-// --- 3. Reusable Chart Card Component ---
+// --- 2. Reusable Chart Card Component ---
 
 type ChartCardProps = {
   title: string;
@@ -152,7 +100,7 @@ const ChartCard: React.FC<ChartCardProps> = ({ title, icon: Icon, children, filt
   </div>
 );
 
-// --- 4. Reusable Filter Dropdown ---
+// --- 3. Reusable Filter Dropdown ---
 const FilterSelect: React.FC<{ options: string[] }> = ({ options }) => (
   <select className="text-xs text-slate-600 bg-white border border-slate-300 rounded-md py-1 px-2 focus:outline-none focus:ring-2 focus:ring-indigo-400">
     {options.map(opt => <option key={opt}>{opt}</option>)}
@@ -225,7 +173,7 @@ const getHeatmapColor = (util: number) => {
   return 'bg-red-500 hover:bg-red-600';
 };
 
-// --- 5. Main Page Component ---
+// --- 4. Main Page Component ---
 const NskfdcDashboardPage = () => {
   return (
     <div className="min-h-screen p-4 md:p-8 bg-gradient-to-b from-white via-sky-50 to-indigo-50 font-sans">
@@ -244,21 +192,19 @@ const NskfdcDashboardPage = () => {
         </div>
 
         {/* --- METRIC CARDS SECTION --- */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 mb-8">
-          <MetricCard title="Total Schemes" value="48" trend="+2" trendType="up" icon={Target} color="blue" />
-          <MetricCard title="Total Applications" value="12,450" trend="+8%" trendType="up" icon={FileText} color="indigo" />
-          <MetricCard title="Sanctions Issued" value="9,820" trend="+5%" trendType="up" icon={CheckSquare} color="green" />
-          <MetricCard title="Funds Disbursed" value="₹ 8.2 Cr" trend="+12%" trendType="up" icon={DollarSign} color="teal" />
-          <MetricCard title="Pending Disbursements" value="₹ 1.5 Cr" trend="-3%" trendType="down" icon={Banknote} color="amber" />
-          <MetricCard title="Grievances Received" value="180" trend="+15" trendType="up" icon={MessageSquareWarning} color="orange" />
-          <MetricCard title="Grievances Resolved" value="142" trend="+8%" trendType="up" icon={CheckCircle} color="emerald" />
-          <MetricCard title="Directions Received" value="35" trend="+5" trendType="up" icon={AlertCircle} color="purple" />
-          <MetricCard title="Directions Complied" value="28" trend="+2" trendType="up" icon={ShieldAlert} color="sky" />
-          <MetricCard title="Low Utilization Dists." value="9" trend="-1" trendType="down" icon={Map} color="red" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mb-8">
+          <StatCard title="Total Schemes" value="48" icon={Target} color="blue" />
+          <StatCard title="Total Applications" value="12,450" icon={FileText} color="indigo" />
+          <StatCard title="Sanctions Issued" value="9,820" icon={CheckSquare} color="green" />
+          <StatCard title="Funds Disbursed" value="₹ 8.2 Cr" icon={DollarSign} color="emerald" />
+          <StatCard title="Pending Disbursements" value="₹ 1.5 Cr" icon={Banknote} color="amber" />
+          <StatCard title="Grievances Received" value="180" icon={MessageSquareWarning} color="orange" />
+          <StatCard title="Grievances Resolved" value="142" icon={CheckCircle} color="emerald" />
+          <StatCard title="Directions Received" value="35" icon={AlertCircle} color="purple" />
         </div>
 
         {/* --- QUICK ACTIONS SECTION --- */}
-        <div className="mb-8 p-4 bg-white/70 backdrop-blur-sm rounded-xl shadow-lg border border-slate-100">
+        {/* <div className="mb-8 p-4 bg-white/70 backdrop-blur-sm rounded-xl shadow-lg border border-slate-100">
           <div className="flex flex-col md:flex-row flex-wrap gap-3">
             <ActionButton title="Add New Scheme" icon={PlusCircle} gradient="from-indigo-500 to-blue-500" glow="hover:shadow-indigo-500/40" />
             <ActionButton title="Sanction Funds" icon={Send} gradient="from-green-500 to-emerald-500" glow="hover:shadow-green-500/40" />
@@ -268,10 +214,10 @@ const NskfdcDashboardPage = () => {
             <ActionButton title="Generate Annual Report" icon={BookCopy} gradient="from-purple-500 to-violet-500" glow="hover:shadow-purple-500/40" />
             <ActionButton title="Contact NSKC" icon={Contact} gradient="from-slate-600 to-gray-700" glow="hover:shadow-slate-600/40" />
           </div>
-        </div>
+        </div> */}
 
         {/* --- CHARTS & VISUALIZATIONS SECTION --- */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 mb-8">
           
           {/* 1. Scheme Distribution (Pie) */}
           <ChartCard 
@@ -295,124 +241,6 @@ const NskfdcDashboardPage = () => {
             </ResponsiveContainer>
           </ChartCard>
 
-          {/* 2. Application Status (Bar) */}
-          <ChartCard 
-            title="Application Status" 
-            icon={BarChart2}
-            filters={<>
-              <FilterSelect options={['All Districts', 'Lucknow', 'Kanpur']} />
-              <FilterSelect options={['Last 6 Months', 'This Year']} />
-            </>}
-            className="lg:col-span-2"
-          >
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={barData} margin={{ top: 5, right: 0, left: 0, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
-                <XAxis dataKey="name" fontSize={12} />
-                <YAxis fontSize={12} />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="Total" fill="#a8b1ff" />
-                <Bar dataKey="Approved" fill="#00C49F" />
-                <Bar dataKey="Rejected" fill="#FF8042" />
-                <Bar dataKey="Pending" fill="#FFBB28" />
-              </BarChart>
-            </ResponsiveContainer>
-          </ChartCard>
-
-          {/* 3. Fund Utilization (Line) */}
-          <ChartCard 
-            title="Fund Utilization Trend" 
-            icon={LineChartIcon}
-            filters={<>
-              <FilterSelect options={['All Schemes', 'Scheme A']} />
-              <FilterSelect options={['All Districts', 'Lucknow']} />
-            </>}
-            className="lg:col-span-2"
-          >
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={lineData} margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
-                <XAxis dataKey="month" fontSize={12} />
-                <YAxis fontSize={12} />
-                <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey="Sanctioned" stroke="#8884d8" strokeWidth={2} activeDot={{ r: 8 }} />
-                <Line type="monotone" dataKey="Disbursed" stroke="#82ca9d" strokeWidth={2} />
-                <Line type="monotone" dataKey="Pending" stroke="#ffc658" strokeWidth={2} />
-              </LineChart>
-            </ResponsiveContainer>
-          </ChartCard>
-
-          {/* 4. Grievance Resolution (Stacked Bar) */}
-          <ChartCard 
-            title="Grievance Resolution" 
-            icon={Layers}
-            filters={<>
-              <FilterSelect options={['All Sources', 'Individual', 'SHG']} />
-            </>}
-          >
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={stackedBarData} layout="vertical" margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
-                <XAxis type="number" fontSize={12} />
-                <YAxis dataKey="name" type="category" fontSize={12} width={80} />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="Resolved" stackId="a" fill="#00C49F" />
-                <Bar dataKey="Pending" stackId="a" fill="#FFBB28" />
-                <Bar dataKey="Escalated" stackId="a" fill="#FF8042" />
-              </BarChart>
-            </ResponsiveContainer>
-          </ChartCard>
-
-          {/* 5. Direction Compliance (Pie) */}
-          <ChartCard 
-            title="Direction Compliance" 
-            icon={PieChartIcon}
-            filters={<>
-              <FilterSelect options={['All Authorities', 'NSKC', 'Ministry']} />
-            </>}
-            className="lg:col-span-1"
-          >
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie data={pieData02} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={60} outerRadius={80} fill="#8884d8" paddingAngle={5} label>
-                  {pieData02.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={PIE_COLORS_02[index % PIE_COLORS_02.length]} />
-                  ))}
-                </Pie>
-                <Tooltip formatter={(value) => `${value}%`} />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
-          </ChartCard>
-
-          {/* 6. District Utilization (Heatmap) */}
-          <ChartCard 
-            title="District-Wise Fund Utilization (%)" 
-            icon={Map}
-            filters={<>
-              <FilterSelect options={['All Schemes', 'Scheme A']} />
-              <FilterSelect options={['This Year', 'Last Year']} />
-              <FilterSelect options={['All Groups', 'SHG']} />
-            </>}
-            className="lg:col-span-2"
-          >
-            <div className="grid grid-cols-5 gap-2.5 h-full">
-              {heatmapData.map(item => (
-                <div 
-                  key={item.district} 
-                  className={`flex flex-col justify-center items-center p-3 rounded-lg text-white font-bold text-center shadow-md transition-all duration-200 cursor-pointer ${getHeatmapColor(item.util)}`}
-                  title={`${item.district}: ${item.util}% Utilization`}
-                >
-                  <span className="text-lg">{item.util}%</span>
-                  <span className="text-xs font-normal opacity-90">{item.district}</span>
-                </div>
-              ))}
-            </div>
-          </ChartCard>
-
         </div>
 
         {/* --- REPORTS & ANALYTICS SECTION --- */}
@@ -431,7 +259,6 @@ const NskfdcDashboardPage = () => {
                 <thead className="bg-slate-100">
                   <tr>
                     <th scope="col" className="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">District</th>
-                    <th scope="col" className="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Total SKs</th>
                     <th scope="col" className="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Total SHGs</th>
                     <th scope="col" className="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Apps. Received</th>
                     <th scope="col" className="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Sanctioned</th>
@@ -443,7 +270,6 @@ const NskfdcDashboardPage = () => {
                   {districtPerfData.map((row) => (
                     <tr key={row.id} className="hover:bg-sky-50/50 transition-colors">
                       <td className="px-5 py-4 whitespace-nowrap text-sm font-medium text-slate-900">{row.district}</td>
-                      <td className="px-5 py-4 whitespace-nowrap text-sm text-slate-600">{row.sks}</td>
                       <td className="px-5 py-4 whitespace-nowrap text-sm text-slate-600">{row.shgs}</td>
                       <td className="px-5 py-4 whitespace-nowrap text-sm text-slate-600">{row.apps}</td>
                       <td className="px-5 py-4 whitespace-nowrap text-sm text-green-600 font-medium">{row.sanctioned}</td>
@@ -497,19 +323,6 @@ const NskfdcDashboardPage = () => {
                     <span>{item}</span>
                   </li>
                 ))}
-              </ul>
-            </div>
-
-            {/* Other Analytics */}
-            <div className="bg-white rounded-xl shadow-lg border border-slate-100 p-5">
-              <h3 className="flex items-center text-lg font-semibold text-teal-700 mb-4">
-                <TrendingUp className="w-5 h-5 mr-2.5" />
-                Key Analytics
-              </h3>
-              <ul className="space-y-2.5">
-                <li className="flex justify-between text-sm"><span className="text-slate-600">Avg. Grievance Closure Time:</span> <span className="font-bold text-slate-800">4.2 Days</span></li>
-                <li className="flex justify-between text-sm"><span className="text-slate-600">Overall Fund Utilization %:</span> <span className="font-bold text-green-600">78%</span></li>
-                <li className="flex justify-between text-sm"><span className="text-slate-600">State Compliance Score:</span> <span className="font-bold text-blue-600">B+</span></li>
               </ul>
             </div>
 

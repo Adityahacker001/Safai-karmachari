@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import StatCard from '@/components/ui/stat-card';
 import {
   Home,
   ChevronRight,
@@ -130,41 +131,7 @@ const StatusBadge = ({ color = 'gray', text, className = '' }: { color: 'green' 
   );
 };
 
-/**
- * A single statistic card for the summary section.
- * @param {object} props
- * @param {string} props.title - Card title
- * @param {string} props.value - Main statistic value
- * @param {string} props.description - Description text
- * @param {React.ReactNode} props.icon - Icon component
- * @param {'green' | 'red' | 'amber'} props.color - Color theme
- */
-const StatCard = ({ title, value, description, icon, color = 'green' }: { title: string; value: string; description: string; icon: React.ReactNode; color: 'green' | 'red' | 'amber' }) => {
-  const colorClasses: { [key in 'green' | 'red' | 'amber']: string } = {
-    green: 'text-green-600 bg-green-50 border-green-300',
-    red: 'text-red-600 bg-red-50 border-red-300',
-    amber: 'text-yellow-600 bg-yellow-50 border-yellow-300',
-  };
 
-  return (
-    <div className={`relative overflow-hidden rounded-lg p-5 shadow-md border ${colorClasses[color]}`}>
-      <div className="flex items-center">
-        <div className={`flex-shrink-0 rounded-md p-3 ${colorClasses[color].replace('text', 'bg').replace('-600', '-100')}`}>
-          {icon}
-        </div>
-        <div className="ml-5 w-0 flex-1">
-          <dl>
-            <dt className="truncate text-sm font-medium text-gray-700">{title}</dt>
-            <dd>
-              <div className="text-2xl font-bold text-gray-900">{value}</div>
-            </dd>
-          </dl>
-        </div>
-      </div>
-      <p className="mt-4 truncate text-xs text-gray-600">{description}</p>
-    </div>
-  );
-};
 
 /**
  * A styled dropdown for the filter panel.
@@ -299,47 +266,35 @@ const FilterPanel = () => (
  * Summary statistics cards section.
  */
 const SummaryCards = () => (
-  <div className="mb-6 grid grid-cols-1 gap-5 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3">
+  <div className="mb-6 grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
     <StatCard
       title="Total Workers"
       value="1,24,560"
-      description="State me registered workers"
-      icon={<Users size={24} />}
-      color="green"
-    />
-    <StatCard
-      title="Contractor-Mapped"
-      value="1,12,300"
-      description="Contractor ke under"
-      icon={<Briefcase size={24} />}
+      icon={Users}
       color="green"
     />
     <StatCard
       title="Incident-Linked"
       value="482"
-      description="Jinke cases reported hue"
-      icon={<AlertTriangle size={24} />}
+      icon={AlertTriangle}
       color="red"
     />
     <StatCard
       title="FIR Filed"
       value="390"
-      description="Workers jinke case me FIR hui"
-      icon={<FileText size={24} />}
+      icon={FileText}
       color="red"
     />
     <StatCard
       title="Compensation Paid"
       value="310"
-      description="Total paid count"
-      icon={<CheckCircle size={24} />}
+      icon={CheckCircle}
       color="green"
     />
     <StatCard
       title="Pending Compensation"
       value="80"
-      description="Pending cases"
-      icon={<Clock size={24} />}
+      icon={Clock}
       color="amber"
     />
   </div>

@@ -405,7 +405,7 @@ const DirectionComplianceReportPage = () => {
                   <SortableHeader colKey="issuedBy" title="Issued By" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[150px]" />
                   <SortableHeader colKey="dateIssued" title="Date Issued" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[130px]" />
                   <th className="px-4 py-3 text-left min-w-[250px]">Subject / Summary</th>
-                  <SortableHeader colKey="status" title="Compliance Status" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[150px]" />
+                  {/* <SortableHeader colKey="status" title="Compliance Status" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[150px]" /> */}
                   <SortableHeader colKey="dateComplied" title="Date Complied" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[130px]" />
                   <th className="px-4 py-3 text-left min-w-[140px]">Proof Document</th>
                   <th className="px-4 py-3 text-left min-w-[200px]">Remarks</th>
@@ -420,7 +420,7 @@ const DirectionComplianceReportPage = () => {
                     <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{item.issuedBy}</td>
                     <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{new Date(item.dateIssued).toLocaleDateString('en-GB')}</td>
                     <td className="px-4 py-3 text-slate-700 whitespace-nowrap truncate max-w-xs">{item.subject}</td>
-                    <td className="px-4 py-3 whitespace-nowrap"><ComplianceStatusBadge status={item.status as Status} /></td>
+                    {/* <td className="px-4 py-3 whitespace-nowrap"><ComplianceStatusBadge status={item.status as Status} /></td> */}
                     <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{item.dateComplied ? new Date(item.dateComplied).toLocaleDateString('en-GB') : '—'}</td>
                     <td className="px-4 py-3 whitespace-nowrap">
                       {item.proofUrl ? (
@@ -436,7 +436,7 @@ const DirectionComplianceReportPage = () => {
                   </tr>
                 ))}
                 {paginatedData.length === 0 && (
-                  <tr><td colSpan={10} className="text-center py-10 text-slate-500">No directions found matching your criteria.</td></tr>
+                  <tr><td colSpan={9} className="text-center py-10 text-slate-500">No directions found matching your criteria.</td></tr>
                 )}
               </tbody>
             </table>

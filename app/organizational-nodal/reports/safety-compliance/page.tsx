@@ -204,7 +204,6 @@ export default function SafetyComplianceReportPage() {
                   <th>Worker Name</th>
                   <th>PPE Checklist</th>
                   <th>Last Violation</th>
-                  <th>Compliance Score</th>
                   <th>Supervisor Remarks</th>
                 </tr>
               </thead>
@@ -228,20 +227,7 @@ export default function SafetyComplianceReportPage() {
                         {record.lastViolation || 'N/A'}
                       </td>
                       
-                      {/* 5. Compliance Score */}
-                      <td className="scoreCell">
-                        <div className="scoreBarWrapper">
-                          <div
-                            className={`scoreBar ${getScoreColor(record.complianceScore)}`}
-                            style={{ width: `${record.complianceScore}%` }}
-                          ></div>
-                        </div>
-                        <span className={`scoreText ${getScoreColor(record.complianceScore)}`}>
-                          {record.complianceScore}%
-                        </span>
-                      </td>
-                      
-                      {/* 6. Supervisor Remarks */}
+                      {/* 5. Supervisor Remarks */}
                       <td className="remarksCell">
                         {record.supervisorRemarks}
                       </td>
@@ -249,7 +235,7 @@ export default function SafetyComplianceReportPage() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={6} className="noResults">
+                    <td colSpan={5} className="noResults">
                       No safety records found matching your criteria.
                     </td>
                   </tr>
@@ -310,7 +296,6 @@ export default function SafetyComplianceReportPage() {
         }
 
         .pageContainer {
-          background-color: #f4f7fa; /* --bg-color */
           padding: 1.5rem 2rem;
           min-height: 100vh;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',

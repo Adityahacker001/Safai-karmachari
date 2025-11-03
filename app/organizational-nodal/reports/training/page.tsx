@@ -32,25 +32,16 @@ import {
   Search,
   Filter,
   XCircle,           // Reset Icon
-  BarChart3,
   Users,             // Worker Category
   Building,          // Contractor
   List,              // Table Icon
   CheckCircle,       // Completed
   Clock,             // Pending
 } from "lucide-react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  CartesianGrid,
-} from "recharts";
+
 import { motion } from "framer-motion"; // For animations
 import { cn } from "@/lib/utils"; // Assuming you have cn utility
+import StatCard from "@/components/ui/stat-card";
 
 // --- Interfaces ---
 type TrainingStatus = "Completed" | "Pending";
@@ -77,13 +68,7 @@ const initialTrainingData: TrainingRecord[] = [
     { id: 6, workerName: "Mohammad Irfan", contractor: "UrbanClean Services", workerCategory: "Hazardous", trainingModule: "First-Aid Basics", completionDate: "2025-10-01", trainerName: "Dr. B. Das", status: "Completed" },
 ];
 
-// --- Chart Data ---
-const initialChartData = [
-  { module: "Sewer Safety", Completed: 2, Pending: 1 },
-  { module: "PPE Usage", Completed: 1, Pending: 1 },
-  { module: "First-Aid Basics", Completed: 1, Pending: 0 },
-  { module: "Hazardous Waste", Completed: 0, Pending: 3 },
-];
+
 
 // --- Main Page Component ---
 export default function TrainingReportPage() {
@@ -93,7 +78,6 @@ export default function TrainingReportPage() {
   const [categoryFilter, setCategoryFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [trainingData, setTrainingData] = useState<TrainingRecord[]>(initialTrainingData);
-  const [chartData, setChartData] = useState(initialChartData);
 
   // --- Handlers ---
   const handleFilterChange = (filterSetter: React.Dispatch<React.SetStateAction<string>>) => (value: string) => {
@@ -111,7 +95,6 @@ export default function TrainingReportPage() {
   const handleRefresh = () => {
     alert("Refreshing data (simulation)...");
     setTrainingData(initialTrainingData);
-    setChartData(initialChartData);
     resetFilters();
   };
 
@@ -123,17 +106,7 @@ export default function TrainingReportPage() {
     (statusFilter ? record.status === statusFilter : true)
   ), [search, contractorFilter, categoryFilter, statusFilter, trainingData]);
 
-  // --- Dynamic Chart Data (Based on Filters) ---
-  const dynamicChartData = useMemo(() => {
-     const moduleStats = filteredData.reduce((acc, record) => {
-        if (!acc[record.trainingModule]) {
-            acc[record.trainingModule] = { module: record.trainingModule, Completed: 0, Pending: 0 };
-        }
-        acc[record.trainingModule][record.status]++;
-        return acc;
-     }, {} as Record<string, { module: string; Completed: number; Pending: number }>);
-     return Object.values(moduleStats);
-  }, [filteredData]);
+
   
   // --- Dynamic Summary Stats ---
   const totalTrained = useMemo(() => filteredData.filter(r => r.status === 'Completed').length, [filteredData]);
@@ -216,42 +189,22 @@ export default function TrainingReportPage() {
         </CardContent>
       </Card>
 
-      {/* Visual Chart & Summary */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="shadow-lg border border-gray-100 rounded-lg bg-white lg:col-span-2">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 border-b bg-gray-50/70 p-4">
-            <CardTitle className="text-base font-semibold text-gray-700">Training Completion Chart (Filtered)</CardTitle>
-            <BarChart3 className="w-4 h-4 text-indigo-500" />
-          </CardHeader>
-          <CardContent className="pt-6">
-             {filteredData.length > 0 ? (
-                <ResponsiveContainer width="100%" height={250}>
-                  <BarChart data={dynamicChartData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                    <XAxis dataKey="module" fontSize={11} tickLine={false} axisLine={false} />
-                    <YAxis fontSize={12} tickLine={false} axisLine={false} />
-                    <Tooltip cursor={{ fill: '#f3f4f6' }} />
-                    <Legend wrapperStyle={{ fontSize: '12px' }}/>
-                    <Bar dataKey="Completed" fill="#22c55e" radius={[4, 4, 0, 0]} barSize={20} />
-                    <Bar dataKey="Pending" fill="#f59e0b" radius={[4, 4, 0, 0]} barSize={20} />
-                  </BarChart>
-                </ResponsiveContainer>
-             ) : (
-                <div className="h-[250px] flex items-center justify-center text-gray-500">No data for chart based on filters.</div>
-             )}
-          </CardContent>
-        </Card>
-        
-        <Card className="shadow-lg border border-gray-100 rounded-lg bg-white lg:col-span-1">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 border-b bg-gray-50/70 p-4">
-                <CardTitle className="text-base font-semibold text-gray-700">Summary (Filtered)</CardTitle>
-                <Users className="w-4 h-4 text-indigo-500" />
-            </CardHeader>
-            <CardContent className="grid grid-cols-2 gap-4 pt-6 items-center justify-center h-full">
-                <SummaryStat label="Workers Trained" value={totalTrained} className="text-green-600" />
-                <SummaryStat label="Training Pending" value={totalPending} className="text-yellow-600" />
-            </CardContent>
-        </Card>
+      {/* Summary Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
+        <StatCard
+          title="Workers Trained"
+          value={totalTrained}
+          subtitle="Completed training"
+          icon={CheckCircle}
+          color="green"
+        />
+        <StatCard
+          title="Training Pending"
+          value={totalPending}
+          subtitle="Awaiting completion"
+          icon={Clock}
+          color="amber"
+        />
       </div>
 
 
@@ -300,14 +253,4 @@ export default function TrainingReportPage() {
       </Card>
     </div>
   );
-}
-
-// Helper component for summary stats
-function SummaryStat({ label, value, className = "" }: { label: string, value: string | number, className?: string }) {
-    return (
-        <div className={cn("p-4 bg-gray-50 rounded-lg text-center shadow-inner", className)}>
-            <div className="text-xs uppercase text-gray-500 font-medium">{label}</div>
-            <div className="text-3xl font-bold text-gray-800">{value}</div>
-        </div>
-    );
 }

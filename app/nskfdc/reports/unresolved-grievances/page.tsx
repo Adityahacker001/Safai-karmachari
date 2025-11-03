@@ -337,8 +337,8 @@ const UnresolvedGrievanceReportPage = () => {
                    <SortableHeader colKey="state" title="State" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
                    <SortableHeader colKey="district" title="District" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
                    <th className="px-4 py-3 text-left min-w-[150px]">Category</th>
-                   <SortableHeader colKey="status" title="Status" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px]" />
-                   <SortableHeader colKey="daysPending" title="Days Pending" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px] text-right" />
+                   {/* <SortableHeader colKey="status" title="Status" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px]" /> */}
+                   {/* <SortableHeader colKey="daysPending" title="Days Pending" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px] text-right" /> */}
                    <th className="px-4 py-3 text-left min-w-[200px]">Last Action</th>
                    <th className="px-4 py-3 text-left min-w-[200px]">Remarks</th>
                    <SortableHeader colKey="lastUpdated" title="Last Updated" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
@@ -356,15 +356,15 @@ const UnresolvedGrievanceReportPage = () => {
                      <td className="px-4 py-3 text-slate-700">{item.state}</td>
                      <td className="px-4 py-3 text-slate-700">{item.district}</td>
                      <td className="px-4 py-3 text-slate-700">{item.category}</td>
-                     <td className="px-4 py-3"><GrievanceStatusBadge status={item.status as Status} /></td>
-                     <td className="px-4 py-3 text-red-600 font-bold text-right">{item.daysPending}</td>
+                     {/* <td className="px-4 py-3"><GrievanceStatusBadge status={item.status as Status} /></td> */}
+                     {/* <td className="px-4 py-3 text-red-600 font-bold text-right">{item.daysPending}</td> */}
                      <td className="px-4 py-3 text-slate-600 text-xs truncate max-w-xs">{item.lastAction}</td>
                      <td className="px-4 py-3 text-slate-500 text-xs truncate max-w-xs">{item.remarks}</td>
                      <td className="px-4 py-3 text-slate-700">{new Date(item.lastUpdated).toLocaleDateString('en-GB')}</td>
                      <td className="px-4 py-3 text-center"><button onClick={()=>openModal(item)} className="p-1.5 rounded-md text-indigo-600 hover:bg-indigo-100" title="View Details"><Eye className="w-5 h-5" /></button></td>
                    </tr>
                  ))}
-                 {paginatedData.length === 0 && (<tr><td colSpan={14} className="text-center py-10 text-slate-500">No unresolved grievances found.</td></tr>)}
+                 {paginatedData.length === 0 && (<tr><td colSpan={12} className="text-center py-10 text-slate-500">No unresolved grievances found.</td></tr>)}
                </tbody>
              </table>
            </div>

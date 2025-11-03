@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
+import StatCard from "@/components/ui/stat-card";
 import {
   User,
   Building2,
@@ -293,46 +294,14 @@ function ProfileHeader({ info }: { info: ProfileInfo }) {
 }
 
 function StateStatistics({ stats }: { stats: StateStats }) {
-  const items = [
-    { icon: MapPin, label: "Total Districts", value: stats.totalDistricts.toString(), color: "from-blue-500 to-blue-600", bgColor: "bg-blue-50", textColor: "text-blue-700" },
-    { icon: Users, label: "SP/CP  Onboarded", value: stats.spCpUnitsOnboarded, color: "from-indigo-500 to-indigo-600", bgColor: "bg-indigo-50", textColor: "text-indigo-700" },
-    { icon: AlertTriangle, label: "Total Incidents", value: stats.totalIncidents.toString(), color: "from-orange-500 to-orange-600", bgColor: "bg-orange-50", textColor: "text-orange-700" },
-    { icon: Activity, label: "Active Cases", value: stats.activeCases.toString(), color: "from-purple-500 to-purple-600", bgColor: "bg-purple-50", textColor: "text-purple-700" },
-    { icon: CheckCircle, label: "Completed Investigations", value: stats.completedInvestigations.toString(), color: "from-green-500 to-green-600", bgColor: "bg-green-50", textColor: "text-green-700" },
-    { icon: TrendingUp, label: "Total Compensation", value: stats.totalCompensation, color: "from-emerald-500 to-emerald-600", bgColor: "bg-emerald-50", textColor: "text-emerald-700" },
-  ];
-
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3">
-      {items.map((item, i) => (
-        <div
-          key={i}
-          className="animate-scaleIn card-hover"
-          style={{ animationDelay: `${0.2 + i * 0.05}s` }}
-        >
-          <Card className={cn(
-            "overflow-hidden border border-gray-100/50 backdrop-blur-sm group relative shadow-md hover:shadow-xl transition-all duration-500 h-40",
-            item.bgColor
-          )}>
-            <div className="absolute inset-0 bg-gradient-to-br from-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <div className="absolute inset-0 animate-shimmer opacity-0 group-hover:opacity-100" />
-            <CardContent className="p-2.5 sm:p-3 md:p-4 relative z-10">
-              <div className={cn(
-                "inline-flex p-1.5 sm:p-2 rounded-lg bg-gradient-to-br shadow-sm mb-1.5 sm:mb-2",
-                "transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-6",
-                item.color
-              )}>
-                <item.icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-white" />
-              </div>
-              <p className="text-xs text-gray-600 font-medium mb-0.5 sm:mb-1 line-clamp-2 group-hover:text-gray-800 transition-colors">{item.label}</p>
-              <p className={cn(
-                "text-base sm:text-lg md:text-xl lg:text-2xl font-bold transition-all duration-300 group-hover:scale-105",
-                item.textColor
-              )}>{item.value}</p>
-            </CardContent>
-          </Card>
-        </div>
-      ))}
+    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6">
+      <StatCard title="Total Districts" value={stats.totalDistricts.toString()} icon={MapPin} color="blue" />
+      <StatCard title="SP/CP Onboarded" value={stats.spCpUnitsOnboarded} icon={Users} color="indigo" />
+      <StatCard title="Total Incidents" value={stats.totalIncidents.toString()} icon={AlertTriangle} color="red" />
+      <StatCard title="Active Cases" value={stats.activeCases.toString()} icon={Activity} color="purple" />
+      <StatCard title="Completed Investigations" value={stats.completedInvestigations.toString()} icon={CheckCircle} color="green" />
+      <StatCard title="Total Compensation" value={stats.totalCompensation} icon={TrendingUp} color="emerald" />
     </div>
   );
 }

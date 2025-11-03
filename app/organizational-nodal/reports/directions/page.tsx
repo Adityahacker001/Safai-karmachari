@@ -14,6 +14,7 @@ import {
   FiClock,          // For Days Pending / Aging
   FiArchive,        // For Total Received
   FiInbox,          // Alt for Received
+  FiEye,            // For View button
 } from 'react-icons/fi';
 
 // --- 1. TYPE DEFINITION ---
@@ -29,6 +30,7 @@ type DirectionRecord = {
   replyDate: string | null;
   status: DirectionStatus;
   daysPending: number;
+  directionMessage: string; // Direction details/message
   supportingDocsLink?: string; // Optional link to documents
 };
 
@@ -48,13 +50,13 @@ const calculateDaysPending = (dateIssued: string, status: DirectionStatus, reply
 // --- 2. MOCK DATA ---
 // Data sourced from Direction Input form
 const DUMMY_RECORDS_RAW: Omit<DirectionRecord, 'daysPending'>[] = [
-  { id: 1, directionId: 'DIR001', issuingAuthority: 'NSKC', dateIssued: '2025-10-15', replyDate: '2025-10-20', status: 'Complied', supportingDocsLink: '#' },
-  { id: 2, directionId: 'DIR002', issuingAuthority: 'District', dateIssued: '2025-10-18', replyDate: null, status: 'Pending' },
-  { id: 3, directionId: 'DIR003', issuingAuthority: 'State', dateIssued: '2025-09-01', replyDate: null, status: 'Pending' }, // Long pending
-  { id: 4, directionId: 'DIR004', issuingAuthority: 'ULB', dateIssued: '2025-10-22', replyDate: '2025-10-25', status: 'Complied', supportingDocsLink: '#' },
-  { id: 5, directionId: 'DIR005', issuingAuthority: 'NSKC', dateIssued: '2025-10-24', replyDate: null, status: 'Pending' },
-  { id: 6, directionId: 'DIR006', issuingAuthority: 'District', dateIssued: '2025-08-15', replyDate: '2025-08-25', status: 'Complied', supportingDocsLink: '#' },
-  { id: 7, directionId: 'DIR007', issuingAuthority: 'State', dateIssued: '2025-10-05', replyDate: null, status: 'Pending' },
+  { id: 1, directionId: 'DIR001', issuingAuthority: 'NSKC', dateIssued: '2025-10-15', replyDate: '2025-10-20', status: 'Complied', directionMessage: 'Implement proper waste segregation protocols in all designated areas. Ensure compliance with safety standards and provide training to all personnel.', supportingDocsLink: '#' },
+  { id: 2, directionId: 'DIR002', issuingAuthority: 'District', dateIssued: '2025-10-18', replyDate: null, status: 'Pending', directionMessage: 'Submit monthly progress report on sanitation work completion. Include photographic evidence and worker attendance records.' },
+  { id: 3, directionId: 'DIR003', issuingAuthority: 'State', dateIssued: '2025-09-01', replyDate: null, status: 'Pending', directionMessage: 'Ensure all sanitation workers have proper PPE equipment. Conduct health checkups for all workers and maintain health records.' },
+  { id: 4, directionId: 'DIR004', issuingAuthority: 'ULB', dateIssued: '2025-10-22', replyDate: '2025-10-25', status: 'Complied', directionMessage: 'Complete street cleaning schedule as per the assigned routes. Maintain cleanliness standards and report any issues immediately.', supportingDocsLink: '#' },
+  { id: 5, directionId: 'DIR005', issuingAuthority: 'NSKC', dateIssued: '2025-10-24', replyDate: null, status: 'Pending', directionMessage: 'Provide skill development training to all registered workers. Submit training completion certificates and assessment reports.' },
+  { id: 6, directionId: 'DIR006', issuingAuthority: 'District', dateIssued: '2025-08-15', replyDate: '2025-08-25', status: 'Complied', directionMessage: 'Update worker database with latest information. Verify all worker documents and ensure proper registration status.', supportingDocsLink: '#' },
+  { id: 7, directionId: 'DIR007', issuingAuthority: 'State', dateIssued: '2025-10-05', replyDate: null, status: 'Pending', directionMessage: 'Implement digital attendance system for all workers. Ensure proper tracking of work hours and payment processing.' },
 ];
 
 // Calculate daysPending for mock data
@@ -106,6 +108,8 @@ export default function DirectionsComplianceReportPage() {
   const [hasMounted, setHasMounted] = useState(false); // FOUC prevention
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedDirection, setSelectedDirection] = useState<DirectionRecord | null>(null);
+  const [showDirectionModal, setShowDirectionModal] = useState(false);
   const ITEMS_PER_PAGE = 10;
 
   // --- MOUNTING EFFECT ---
@@ -155,6 +159,16 @@ export default function DirectionsComplianceReportPage() {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
     }
+  };
+
+  const handleViewDirection = (direction: DirectionRecord) => {
+    setSelectedDirection(direction);
+    setShowDirectionModal(true);
+  };
+
+  const closeDirectionModal = () => {
+    setShowDirectionModal(false);
+    setSelectedDirection(null);
   };
 
   // --- RENDER ---
@@ -238,9 +252,8 @@ export default function DirectionsComplianceReportPage() {
                   <th>Issuing Authority</th>
                   <th>Date Issued</th>
                   <th>Reply Date</th>
-                  <th>Status</th>
-                  <th>Days Pending</th>
                   <th>Supporting Docs</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -262,15 +275,7 @@ export default function DirectionsComplianceReportPage() {
                       {/* 5. Reply Date */}
                       <td>{record.replyDate || 'N/A'}</td>
                       
-                      {/* 6. Status */}
-                      <td><StatusPill status={record.status} /></td>
-                      
-                      {/* 7. Days Pending */}
-                      <td className={`daysPendingCell ${record.daysPending > 15 ? 'pendingWarning' : ''} ${record.daysPending > 30 ? 'pendingCritical' : ''}`}>
-                         {record.status === 'Pending' ? `${record.daysPending} days` : '-'}
-                      </td>
-                      
-                      {/* 8. Supporting Documents */}
+                      {/* 6. Supporting Documents */}
                       <td className="docsCell">
                         {record.supportingDocsLink ? (
                           <a href={record.supportingDocsLink} target="_blank" rel="noopener noreferrer" title="View Document">
@@ -280,11 +285,22 @@ export default function DirectionsComplianceReportPage() {
                           '-'
                         )}
                       </td>
+                      
+                      {/* 7. Actions */}
+                      <td className="actionsCell">
+                        <button 
+                          className="viewButton"
+                          onClick={() => handleViewDirection(record)}
+                          title="View Direction Details"
+                        >
+                          <FiEye />
+                        </button>
+                      </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={8} className="noResults">
+                    <td colSpan={7} className="noResults">
                       No direction records found matching your criteria.
                     </td>
                   </tr>
@@ -319,6 +335,46 @@ export default function DirectionsComplianceReportPage() {
             </div>
           </div>
         </div>
+
+        {/* --- DIRECTION DETAILS MODAL --- */}
+        {showDirectionModal && selectedDirection && (
+          <div className="modalOverlay" onClick={closeDirectionModal}>
+            <div className="modalContent" onClick={(e) => e.stopPropagation()}>
+              <div className="modalHeader">
+                <h3>Direction Details - {selectedDirection.directionId}</h3>
+                <button className="closeButton" onClick={closeDirectionModal}>
+                  ×
+                </button>
+              </div>
+              <div className="modalBody">
+                <div className="directionInfo">
+                  <div className="infoRow">
+                    <span className="label">Issuing Authority:</span>
+                    <span className="value">{selectedDirection.issuingAuthority}</span>
+                  </div>
+                  <div className="infoRow">
+                    <span className="label">Date Issued:</span>
+                    <span className="value">{selectedDirection.dateIssued}</span>
+                  </div>
+                  <div className="infoRow">
+                    <span className="label">Reply Date:</span>
+                    <span className="value">{selectedDirection.replyDate || 'Not replied yet'}</span>
+                  </div>
+                  <div className="infoRow">
+                    <span className="label">Status:</span>
+                    <span className="value">
+                      <StatusPill status={selectedDirection.status} />
+                    </span>
+                  </div>
+                </div>
+                <div className="messageSection">
+                  <h4>Direction Message:</h4>
+                  <p className="directionMessage">{selectedDirection.directionMessage}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* --- STYLES (CSS-in-JS using styled-jsx) --- */}
@@ -577,6 +633,31 @@ export default function DirectionsComplianceReportPage() {
            font-size: 1.1rem;
            vertical-align: middle;
          }
+
+        /* --- Actions Cell --- */
+        .actionsCell {
+          text-align: center;
+        }
+
+        .viewButton {
+          background-color: #007bff;
+          color: white;
+          border: none;
+          border-radius: 50%;
+          padding: 0.5rem;
+          font-size: 1rem;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 32px;
+          height: 32px;
+        }
+        .viewButton:hover {
+          background-color: #0056b3;
+          transform: translateY(-1px) scale(1.1);
+        }
         
         .noResults {
           text-align: center;
@@ -610,6 +691,104 @@ export default function DirectionsComplianceReportPage() {
           color: #f39c12; /* --yellow-dark */
         }
 
+        /* --- Direction Modal --- */
+        .modalOverlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: rgba(0, 0, 0, 0.5);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+          padding: 1rem;
+        }
+
+        .modalContent {
+          background-color: white;
+          border-radius: 12px;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+          max-width: 600px;
+          width: 100%;
+          max-height: 80vh;
+          overflow-y: auto;
+        }
+
+        .modalHeader {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1.5rem;
+          border-bottom: 1px solid #e_a_eb_e_c;
+        }
+
+        .modalHeader h3 {
+          margin: 0;
+          font-size: 1.25rem;
+          color: #2c3e50;
+        }
+
+        .closeButton {
+          background: none;
+          border: none;
+          font-size: 1.5rem;
+          cursor: pointer;
+          color: #7f8c8d;
+          padding: 0;
+          width: 30px;
+          height: 30px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          transition: all 0.2s ease;
+        }
+        .closeButton:hover {
+          background-color: #f4f7fa;
+          color: #2c3e50;
+        }
+
+        .modalBody {
+          padding: 1.5rem;
+        }
+
+        .directionInfo {
+          margin-bottom: 1.5rem;
+        }
+
+        .infoRow {
+          display: flex;
+          margin-bottom: 1rem;
+          align-items: center;
+        }
+
+        .infoRow .label {
+          font-weight: 600;
+          color: #2c3e50;
+          min-width: 140px;
+        }
+
+        .infoRow .value {
+          color: #555;
+        }
+
+        .messageSection h4 {
+          margin: 0 0 1rem 0;
+          font-size: 1.1rem;
+          color: #2c3e50;
+        }
+
+        .directionMessage {
+          background-color: #f8f9fa;
+          border-left: 4px solid #007bff;
+          padding: 1rem;
+          border-radius: 6px;
+          line-height: 1.6;
+          color: #2c3e50;
+          margin: 0;
+        }
 
         /* --- Pagination --- */
         .pagination {

@@ -20,18 +20,14 @@ import {
     XCircle, // Added for Reset
     PieChart as LucidePieChart // Correct import for the icon
 } from 'lucide-react';
+import StatCard from '@/components/ui/stat-card';
 import {
-    BarChart,
-    Bar,
-    CartesianGrid,
     Cell,
     Legend,
     Pie,
     PieChart,
     ResponsiveContainer,
     Tooltip,
-    XAxis,
-    YAxis,
 } from 'recharts';
 
 // --- MOCK DATA & TYPES ---
@@ -53,13 +49,6 @@ interface CaseData {
     investigationStatus: 'Completed' | 'In Progress' | 'Initiated';
     chargeSheetFiled: 'Yes' | 'No';
     compensationPaid: 'Yes' | 'No';
-}
-
-interface BarChartEntry {
-    name: string;
-    Initiated: number;
-    'In Progress': number;
-    Completed: number;
 }
 
 interface PieChartEntry {
@@ -94,13 +83,6 @@ const initialTableData: CaseData[] = [
     { slNo: 3, caseId: 'CASE003', incidentId: 'INC030', policeStation: 'Lucknow Zone', firNo: 'FIR-145/2025', investigationStatus: 'Initiated', chargeSheetFiled: 'No', compensationPaid: 'No' },
     { slNo: 4, caseId: 'CASE004', incidentId: 'INC031', policeStation: 'Delhi North', firNo: 'FIR-235/2025', investigationStatus: 'In Progress', chargeSheetFiled: 'No', compensationPaid: 'Yes' },
     { slNo: 5, caseId: 'CASE005', incidentId: 'INC035', policeStation: 'Kolkata South', firNo: 'FIR-111/2025', investigationStatus: 'Completed', chargeSheetFiled: 'Yes', compensationPaid: 'Yes' },
-];
-
-const initialChartBarData: BarChartEntry[] = [
-    { name: 'Delhi North', Initiated: 15, 'In Progress': 30, Completed: 45 },
-    { name: 'Mumbai Central', Initiated: 25, 'In Progress': 20, Completed: 10 },
-    { name: 'Lucknow Zone', Initiated: 40, 'In Progress': 10, Completed: 5 },
-    { name: 'Kolkata South', Initiated: 10, 'In Progress': 22, Completed: 28 },
 ];
 
 const initialChartPieData: PieChartEntry[] = [
@@ -152,7 +134,6 @@ export default function TotalCasesReportPage() {
     // --- State ---
     const [summaryMetrics, setSummaryMetrics] = useState(initialSummaryMetrics);
     const [tableData, setTableData] = useState(initialTableData);
-    const [chartBarData, setChartBarData] = useState(initialChartBarData);
     const [chartPieData, setChartPieData] = useState(initialChartPieData);
 
     // Filter State
@@ -177,7 +158,6 @@ export default function TotalCasesReportPage() {
     const handleRefresh = () => {
         alert("Refreshing data (simulation)...");
         setSummaryMetrics(initialSummaryMetrics);
-        setChartBarData(initialChartBarData);
         setChartPieData(initialChartPieData);
         resetFilters();
     };
@@ -203,9 +183,6 @@ export default function TotalCasesReportPage() {
     const handleUploadDocs = () => alert("Upload Case Documents (simulation)");
     const handleSyncRecords = () => alert("Sync Investigation Records (simulation)");
     const handleGenerateSummary = () => alert("Generate Case Summary (simulation)");
-    const handleSummarizeProgress = () => alert("AI: Summarize Progress (simulation)");
-    const handleDraftClosure = () => alert("AI: Draft Closure Report (simulation)");
-    const handleIdentifyDelays = () => alert("AI: Identify Delays (simulation)");
 
 
     return (
@@ -237,31 +214,30 @@ export default function TotalCasesReportPage() {
 
                 {/* Quick Summary Cards */}
                 <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-                    {summaryMetrics.map((item, index) => (
-                        <div
-                            key={item.title}
-                            className={`rounded-xl shadow-lg p-6 border border-slate-200 dark:border-slate-700 transition-transform duration-200 hover:scale-[1.03] hover:shadow-xl ${
-                                index % 4 === 0 ? 'bg-red-100 dark:bg-red-900' :
-                                index % 4 === 1 ? 'bg-green-100 dark:bg-green-900' :
-                                index % 4 === 2 ? 'bg-blue-100 dark:bg-blue-900' :
-                                'bg-yellow-100 dark:bg-yellow-900'
-                            }`}
-                        >
-                            <div className="flex items-center space-x-4">
-                                <div
-                                    className={`flex-shrink-0 flex items-center justify-center h-14 w-14 rounded-full ${item.bgColor} border border-slate-200 dark:border-slate-700`}
-                                >
-                                    <item.icon size={28} className={item.color} />
-                                </div>
-                                <div className="overflow-hidden">
-                                    <div className="text-sm font-medium text-slate-500 dark:text-slate-400 truncate">
-                                        {item.title}
-                                    </div>
-                                    <div className="text-3xl font-bold text-slate-800 dark:text-slate-100">{item.metric}</div>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
+                    <StatCard
+                        title="Total FIR Cases"
+                        value="245"
+                        icon={FileText}
+                        color="blue"
+                    />
+                    <StatCard
+                        title="Under Investigation"
+                        value="112"
+                        icon={AlertTriangle}
+                        color="amber"
+                    />
+                    <StatCard
+                        title="Charge Sheet Filed"
+                        value="98"
+                        icon={ClipboardList}
+                        color="green"
+                    />
+                    <StatCard
+                        title="Compensation Paid"
+                        value="165"
+                        icon={CheckCircle2}
+                        color="emerald"
+                    />
                 </div>
             </div>
 
@@ -432,44 +408,9 @@ export default function TotalCasesReportPage() {
             </div>
 
             {/* 4️⃣ Dashboard Visualization & Analytics */}
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-                {/* Bar Chart */}
-                <div className="lg:col-span-3 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
-                   <h3 className="text-xl font-bold mb-6 text-slate-800 dark:text-slate-200 flex items-center gap-3">
-                       <BarChartIcon className="text-blue-600" size={22}/> {/* Use renamed icon */}
-                       Case Distribution by Police Station
-                   </h3>
-                    <div className="h-[350px]">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <BarChart
-                                data={chartBarData}
-                                margin={{ top: 20, right: 30, left: -10, bottom: 5 }}
-                            >
-                                <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.1} className="stroke-slate-400 dark:stroke-slate-600" />
-                                <XAxis dataKey="name" className="text-xs" stroke="currentColor" tick={{ fill: '#64748b' }}/>
-                                <YAxis className="text-xs" stroke="currentColor" tick={{ fill: '#64748b' }}/>
-                                <Tooltip
-                                    contentStyle={{
-                                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                                        border: '1px solid #cbd5e1',
-                                        borderRadius: '0.75rem',
-                                        boxShadow: '0 8px 16px rgba(0,0,0,0.1)',
-                                    }}
-                                     labelStyle={{ fontWeight: 'bold', color: '#1e293b' }}
-                                     itemStyle={{ fontSize: '12px' }}
-                                    cursor={{ fill: 'rgba(220, 230, 255, 0.4)' }}
-                                />
-                                <Legend iconType="circle" wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
-                                <Bar dataKey="Initiated" stackId="a" fill="#F59E0B" radius={[4, 4, 0, 0]} barSize={20} />
-                                <Bar dataKey="In Progress" stackId="a" fill="#3B82F6" barSize={20} />
-                                <Bar dataKey="Completed" stackId="a" fill="#10B981" radius={[4, 4, 0, 0]} barSize={20} />
-                            </BarChart>
-                        </ResponsiveContainer>
-                    </div>
-                </div>
-
+            <div className="grid grid-cols-1 gap-8">
                 {/* Donut Chart */}
-                <div className="lg:col-span-2 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+                <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
                    <h3 className="text-xl font-bold mb-6 text-slate-800 dark:text-slate-200 flex items-center gap-3">
                        <LucidePieChart className="text-emerald-600" size={22} /> {/* Use PieChart icon */}
                        Charge Sheet vs Compensation Status
@@ -518,7 +459,7 @@ export default function TotalCasesReportPage() {
             </div>
 
             {/* 5️⃣ Quick Actions Panel */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 gap-8">
                 <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
                     <h3 className="text-xl font-bold mb-4 text-slate-800 dark:text-slate-200">Quick Actions</h3>
                     <div className="flex flex-wrap gap-4">
@@ -539,30 +480,6 @@ export default function TotalCasesReportPage() {
                             className="flex items-center gap-2 px-4 py-2.5 bg-slate-100 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors text-sm font-medium transform hover:scale-105">
                             <UploadCloud size={16} />
                             Upload Case Documents
-                        </button>
-                    </div>
-                </div>
-
-                <div className="bg-gradient-to-r from-purple-100 via-indigo-100 to-blue-100 dark:from-purple-900/50 dark:via-indigo-900/50 dark:to-blue-900/50 rounded-xl shadow-lg border border-purple-200 dark:border-purple-700 p-8">
-                    <h3 className="text-xl font-bold mb-4 flex items-center gap-3 text-purple-800 dark:text-purple-300">
-                        <Sparkles className="text-purple-500" size={22} />
-                        AI Assistance Tools
-                    </h3>
-                    <div className="flex flex-wrap gap-4">
-                        <button
-                            onClick={handleSummarizeProgress}
-                            className="flex items-center gap-2 px-4 py-2.5 bg-purple-200 text-purple-800 dark:bg-purple-900/70 dark:text-purple-200 border border-purple-300 dark:border-purple-600 rounded-lg shadow-sm hover:bg-purple-300 dark:hover:bg-purple-800 transition-colors text-sm font-medium transform hover:scale-105">
-                            Summarize Progress
-                        </button>
-                        <button
-                             onClick={handleDraftClosure}
-                            className="flex items-center gap-2 px-4 py-2.5 bg-purple-200 text-purple-800 dark:bg-purple-900/70 dark:text-purple-200 border border-purple-300 dark:border-purple-600 rounded-lg shadow-sm hover:bg-purple-300 dark:hover:bg-purple-800 transition-colors text-sm font-medium transform hover:scale-105">
-                            Draft Closure Report
-                        </button>
-                        <button
-                             onClick={handleIdentifyDelays}
-                            className="flex items-center gap-2 px-4 py-2.5 bg-purple-200 text-purple-800 dark:bg-purple-900/70 dark:text-purple-200 border border-purple-300 dark:border-purple-600 rounded-lg shadow-sm hover:bg-purple-300 dark:hover:bg-purple-800 transition-colors text-sm font-medium transform hover:scale-105">
-                            Identify Delays
                         </button>
                     </div>
                 </div>

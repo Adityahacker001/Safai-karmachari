@@ -26,29 +26,37 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge"; // Shadcn Badge
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   Users,             // Header Icon
   FileDown,
   RefreshCw,
   Search,
   Filter,
   XCircle,           // Reset Icon
-  PieChart as PieChartIcon,
   BarChart,
   AlertTriangle,     // Manual Scavenging
   Trash2,            // Ragpickers
   ShieldAlert,       // Hazardous
   UserCheck,         // Ordinary SKs
   List,               // List Icon
+  Eye,               // View Icon
+  User,              // User Profile Icon
+  Building,          // Contractor Icon
+  Calendar,          // Duration Icon
+  MapPin,            // Location Icon
+  Phone,             // Contact Icon
+  Mail,              // Email Icon
 } from "lucide-react";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  ResponsiveContainer,
-  Tooltip,
-  Legend,
-} from "recharts";
+
 import { cn } from "@/lib/utils"; // Assuming you have cn utility
+import StatCard from "@/components/ui/stat-card";
 
 // --- Interfaces ---
 type WorkerCategory = "Manual Scavenging" | "Ragpicker" | "Hazardous" | "Ordinary SK";
@@ -78,13 +86,7 @@ const initialWorkersData: Worker[] = [
     { id: 6, name: "Mohammad Irfan", contractor: "UrbanClean Services", category: "Hazardous", caste: "General", religion: "Muslim", gender: "Male", age: 45, assignedLocation: "Medical Waste", workDuration: "2.5 Years", status: "Active" },
 ];
 
-// --- Pie Chart Colors ---
-const PIE_COLORS = {
-  "Manual Scavenging": "#ef4444", // red-500
-  "Ragpicker": "#eab308",         // yellow-500
-  "Hazardous": "#f97316",         // orange-500
-  "Ordinary SK": "#22c55e",       // green-500
-};
+
 
 // --- Main Page Component ---
 export default function TotalWorkersReportPage() {
@@ -97,6 +99,8 @@ export default function TotalWorkersReportPage() {
   const [ageFilter, setAgeFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [workersData, setWorkersData] = useState<Worker[]>(initialWorkersData);
+  const [selectedWorker, setSelectedWorker] = useState<Worker | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   // --- Handlers ---
   const handleFilterChange = (filterSetter: React.Dispatch<React.SetStateAction<string>>) => (value: string) => {
@@ -114,6 +118,11 @@ export default function TotalWorkersReportPage() {
   };
 
   const handleExport = () => alert("Export functionality to be implemented.");
+  const handleViewReport = () => alert("Viewing detailed worker report...");
+  const handleViewWorker = (worker: Worker) => {
+    setSelectedWorker(worker);
+    setIsDialogOpen(true);
+  };
   const handleRefresh = () => {
     alert("Refreshing data (simulation)...");
     setWorkersData(initialWorkersData);
@@ -136,15 +145,7 @@ export default function TotalWorkersReportPage() {
     ) : true)
   ), [search, categoryFilter, casteFilter, religionFilter, genderFilter, ageFilter, statusFilter, workersData]);
 
-  // --- Dynamic Pie Chart Data ---
-  const pieData = useMemo(() => {
-    const counts = filteredWorkers.reduce((acc, worker) => {
-        acc[worker.category] = (acc[worker.category] || 0) + 1;
-        return acc;
-    }, {} as Record<WorkerCategory, number>);
-    
-    return Object.entries(counts).map(([name, value]) => ({ name: name as WorkerCategory, value }));
-  }, [filteredWorkers]);
+
 
   // --- Badge Styling ---
   const getCategoryBadge = (category: WorkerCategory) => {
@@ -174,6 +175,9 @@ export default function TotalWorkersReportPage() {
           👥 Total Workers Report
         </h1>
         <div className="flex gap-3">
+          <Button variant="default" onClick={handleViewReport} className="shadow-sm hover:shadow transition-shadow duration-200 bg-teal-600 hover:bg-teal-700">
+            <Eye className="w-4 h-4 mr-2" /> View Report
+          </Button>
           <Button variant="outline" onClick={handleExport} className="shadow-sm hover:shadow transition-shadow duration-200">
             <FileDown className="w-4 h-4 mr-2" /> Export Report
           </Button>
@@ -232,42 +236,36 @@ export default function TotalWorkersReportPage() {
         </CardContent>
       </Card>
 
-      {/* Visuals Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="shadow-lg border border-gray-100 rounded-lg bg-white lg:col-span-1">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 border-b bg-gray-50/70">
-            <CardTitle className="text-base font-semibold text-gray-700">Worker Distribution (Filtered)</CardTitle>
-            <PieChartIcon className="w-4 h-4 text-indigo-500" />
-          </CardHeader>
-          <CardContent className="pt-6">
-             {filteredWorkers.length > 0 ? (
-                <ResponsiveContainer width="100%" height={250}>
-                  <PieChart>
-                    <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} labelLine={false} label={({ name, percent }) => `${(percent * 100).toFixed(0)}%`}>
-                      {pieData.map((entry) => (<Cell key={entry.name} fill={PIE_COLORS[entry.name as keyof typeof PIE_COLORS]} />))}
-                    </Pie>
-                    <Tooltip />
-                    <Legend wrapperStyle={{ fontSize: '12px' }} />
-                  </PieChart>
-                </ResponsiveContainer>
-             ) : (
-                <div className="h-[250px] flex items-center justify-center text-gray-500">No data for chart.</div>
-             )}
-          </CardContent>
-        </Card>
-        
-        <Card className="shadow-lg border border-gray-100 rounded-lg bg-white lg:col-span-2">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 border-b bg-gray-50/70">
-                <CardTitle className="text-base font-semibold text-gray-700">Filtered Summary</CardTitle>
-                <BarChart className="w-4 h-4 text-indigo-500" />
-            </CardHeader>
-            <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6 justify-center items-center h-full">
-                <SummaryStat label="Total Workers" value={filteredWorkers.length} />
-                <SummaryStat label="Manual Scavenging" value={filteredWorkers.filter(w => w.category === 'Manual Scavenging').length} className="text-red-600" />
-                <SummaryStat label="Hazardous" value={filteredWorkers.filter(w => w.category === 'Hazardous').length} className="text-orange-600" />
-                <SummaryStat label="On-Leave" value={filteredWorkers.filter(w => w.status === 'On-Leave').length} className="text-yellow-600" />
-            </CardContent>
-        </Card>
+      {/* Summary Section */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+        <StatCard
+          title="Total Workers"
+          value={filteredWorkers.length}
+          subtitle="Active workforce"
+          icon={Users}
+          color="blue"
+        />
+        <StatCard
+          title="Manual Scavenging"
+          value={filteredWorkers.filter(w => w.category === 'Manual Scavenging').length}
+          subtitle="High risk workers"
+          icon={AlertTriangle}
+          color="red"
+        />
+        <StatCard
+          title="Hazardous Work"
+          value={filteredWorkers.filter(w => w.category === 'Hazardous').length}
+          subtitle="Safety critical"
+          icon={ShieldAlert}
+          color="orange"
+        />
+        <StatCard
+          title="On Leave"
+          value={filteredWorkers.filter(w => w.status === 'On-Leave').length}
+          subtitle="Temporary absence"
+          icon={Calendar}
+          color="amber"
+        />
       </div>
 
 
@@ -294,6 +292,7 @@ export default function TotalWorkersReportPage() {
                   <TableHead className="min-w-[150px] font-semibold text-gray-600">Assigned Location</TableHead>
                   <TableHead className="min-w-[100px] font-semibold text-gray-600">Work Duration</TableHead>
                   <TableHead className="min-w-[100px] font-semibold text-gray-600">Status</TableHead>
+                  <TableHead className="w-[80px] font-semibold text-gray-600 text-center">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -310,11 +309,22 @@ export default function TotalWorkersReportPage() {
                     <TableCell className="text-xs text-gray-600">{w.assignedLocation}</TableCell>
                     <TableCell className="text-gray-700">{w.workDuration}</TableCell>
                     <TableCell>{getStatusBadge(w.status)}</TableCell>
+                    <TableCell className="text-center">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleViewWorker(w)}
+                        className="h-8 w-8 p-0 hover:bg-teal-100 hover:text-teal-700 transition-colors duration-200"
+                        title={`View details for ${w.name}`}
+                      >
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
                 {filteredWorkers.length === 0 && (
                      <TableRow>
-                        <TableCell colSpan={11} className="text-center text-gray-500 py-10">
+                        <TableCell colSpan={12} className="text-center text-gray-500 py-10">
                             No workers found matching your criteria. Please adjust filters.
                         </TableCell>
                     </TableRow>
@@ -324,16 +334,169 @@ export default function TotalWorkersReportPage() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Worker Details Dialog */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-xl font-bold text-teal-700">
+              <User className="h-6 w-6" />
+              Worker Details
+            </DialogTitle>
+            <DialogDescription className="text-gray-600">
+              Complete information about the selected worker
+            </DialogDescription>
+          </DialogHeader>
+          
+          {selectedWorker && (
+            <div className="space-y-6">
+              {/* Personal Information */}
+              <Card className="border-teal-200">
+                <CardHeader className="bg-gradient-to-r from-teal-50 to-blue-50 pb-3">
+                  <CardTitle className="flex items-center gap-2 text-lg text-teal-700">
+                    <User className="h-5 w-5" />
+                    Personal Information
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-600">Full Name</label>
+                      <div className="p-3 bg-gray-50 rounded-lg border">
+                        <span className="font-semibold text-gray-800">{selectedWorker.name}</span>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-600">Worker ID</label>
+                      <div className="p-3 bg-gray-50 rounded-lg border">
+                        <span className="font-semibold text-gray-800">SK-{selectedWorker.id.toString().padStart(4, '0')}</span>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-600">Gender</label>
+                      <div className="p-3 bg-gray-50 rounded-lg border">
+                        <span className="text-gray-800">{selectedWorker.gender}</span>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-600">Age</label>
+                      <div className="p-3 bg-gray-50 rounded-lg border">
+                        <span className="text-gray-800">{selectedWorker.age} years</span>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-600">Caste Category</label>
+                      <div className="p-3 bg-gray-50 rounded-lg border">
+                        <Badge variant="outline" className="bg-blue-100 text-blue-800 border-blue-200">
+                          {selectedWorker.caste}
+                        </Badge>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-600">Religion</label>
+                      <div className="p-3 bg-gray-50 rounded-lg border">
+                        <span className="text-gray-800">{selectedWorker.religion}</span>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Work Information */}
+              <Card className="border-blue-200">
+                <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 pb-3">
+                  <CardTitle className="flex items-center gap-2 text-lg text-blue-700">
+                    <Building className="h-5 w-5" />
+                    Work Information
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-600">Contractor</label>
+                      <div className="p-3 bg-gray-50 rounded-lg border">
+                        <span className="font-semibold text-gray-800">{selectedWorker.contractor}</span>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-600">Work Category</label>
+                      <div className="p-3 bg-gray-50 rounded-lg border">
+                        {getCategoryBadge(selectedWorker.category)}
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-600">Assigned Location</label>
+                      <div className="p-3 bg-gray-50 rounded-lg border flex items-center gap-2">
+                        <MapPin className="h-4 w-4 text-gray-500" />
+                        <span className="text-gray-800">{selectedWorker.assignedLocation}</span>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-600">Work Duration</label>
+                      <div className="p-3 bg-gray-50 rounded-lg border flex items-center gap-2">
+                        <Calendar className="h-4 w-4 text-gray-500" />
+                        <span className="text-gray-800">{selectedWorker.workDuration}</span>
+                      </div>
+                    </div>
+                    <div className="space-y-2 md:col-span-2">
+                      <label className="text-sm font-medium text-gray-600">Current Status</label>
+                      <div className="p-3 bg-gray-50 rounded-lg border">
+                        {getStatusBadge(selectedWorker.status)}
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Contact Information */}
+              <Card className="border-green-200">
+                <CardHeader className="bg-gradient-to-r from-green-50 to-emerald-50 pb-3">
+                  <CardTitle className="flex items-center gap-2 text-lg text-green-700">
+                    <Phone className="h-5 w-5" />
+                    Contact Information
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-600">Phone Number</label>
+                      <div className="p-3 bg-gray-50 rounded-lg border flex items-center gap-2">
+                        <Phone className="h-4 w-4 text-gray-500" />
+                        <span className="text-gray-800">+91 98765 43210</span>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-600">Email Address</label>
+                      <div className="p-3 bg-gray-50 rounded-lg border flex items-center gap-2">
+                        <Mail className="h-4 w-4 text-gray-500" />
+                        <span className="text-gray-800">{selectedWorker.name.toLowerCase().replace(' ', '.')}@contractor.com</span>
+                      </div>
+                    </div>
+                    <div className="space-y-2 md:col-span-2">
+                      <label className="text-sm font-medium text-gray-600">Address</label>
+                      <div className="p-3 bg-gray-50 rounded-lg border">
+                        <span className="text-gray-800">123 Worker Colony, Delhi - 110001</span>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3 pt-4">
+                <Button className="flex-1 bg-teal-600 hover:bg-teal-700">
+                  <User className="h-4 w-4 mr-2" />
+                  Edit Worker
+                </Button>
+                <Button variant="outline" className="flex-1 border-blue-300 text-blue-700 hover:bg-blue-50">
+                  <FileDown className="h-4 w-4 mr-2" />
+                  Download Report
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
-}
-
-// Helper component for summary stats
-function SummaryStat({ label, value, className = "" }: { label: string, value: string | number, className?: string }) {
-    return (
-        <div className={cn("p-4 bg-gray-50 rounded-lg text-center shadow-inner", className)}>
-            <div className="text-xs uppercase text-gray-500 font-medium">{label}</div>
-            <div className="text-3xl font-bold text-gray-800">{value}</div>
-        </div>
-    );
 }

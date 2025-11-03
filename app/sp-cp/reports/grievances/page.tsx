@@ -16,20 +16,9 @@ import {
   Filter,         // Filter Icon
   List,           // Table Icon
   BarChart,     // Stats Icon
-  Bot,            // AI Icon
   ListChecks,     // Quick Actions Icon
   XCircle,        // Reset Icon
 } from "lucide-react";
-import {
-  BarChart as ReBarChart, // Renamed to avoid conflict
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  CartesianGrid, // Added CartesianGrid
-} from "recharts";
 
 // --- Interfaces ---
 interface Grievance {
@@ -44,27 +33,12 @@ interface Grievance {
   escalatedTo: string;
 }
 
-interface ChartData {
-  type: string;
-  Total: number;
-  Replied: number;
-  Pending: number;
-  Escalated: number;
-}
-
 // --- Initial Mock Data ---
 const initialGrievances: Grievance[] = [
     { id: 1, grievanceId: "GRV001", source: "Worker", type: "Police Inaction", description: "FIR not filed despite complaint", dateReceived: "2025-10-14", actionTaken: "Officer reprimanded, FIR registered", status: "Resolved", escalatedTo: "—", },
     { id: 2, grievanceId: "GRV002", source: "SHG", type: "Delay", description: "Investigation pending over 30 days", dateReceived: "2025-10-12", actionTaken: "Awaiting report from SHO", status: "Pending", escalatedTo: "DGP", },
     { id: 3, grievanceId: "GRV003", source: "Public", type: "Harassment", description: "Improper police behavior during questioning", dateReceived: "2025-10-10", actionTaken: "Forwarded to SP for internal review", status: "Escalated", escalatedTo: "NSKC", },
     { id: 4, grievanceId: "GRV004", source: "Worker", type: "Other", description: "Equipment not returned after case closure.", dateReceived: "2025-10-09", actionTaken: "SHO instructed to return equipment.", status: "Resolved", escalatedTo: "—", },
-];
-
-const initialChartData: ChartData[] = [
-    { type: "Police Inaction", Total: 12, Replied: 8, Pending: 2, Escalated: 2 },
-    { type: "Delay", Total: 9, Replied: 4, Pending: 3, Escalated: 2 },
-    { type: "Harassment", Total: 6, Replied: 2, Pending: 1, Escalated: 3 },
-    { type: "Other", Total: 5, Replied: 5, Pending: 0, Escalated: 0 },
 ];
 
 // --- Main Page Component ---
@@ -74,7 +48,6 @@ export default function GrievanceReportsPage() {
   const [typeFilter, setTypeFilter] = useState("");
   const [sourceFilter, setSourceFilter] = useState("");
   const [grievancesData, setGrievancesData] = useState<Grievance[]>(initialGrievances);
-  const [chartData, setChartData] = useState<ChartData[]>(initialChartData);
 
   // useEffect(() => { /* Fetch data here */ }, []);
 
@@ -113,7 +86,6 @@ export default function GrievanceReportsPage() {
   const handleRefresh = () => {
     alert("Refreshing data (simulation)...");
     setGrievancesData(initialGrievances);
-    setChartData(initialChartData);
     resetFilters();
   };
   const handleAddGrievance = () => alert("Add Grievance functionality to be implemented.");
@@ -259,32 +231,8 @@ export default function GrievanceReportsPage() {
         </CardContent>
       </Card>
 
-      {/* Charts Section */}
-      <Card className="shadow-lg border border-gray-100 rounded-lg bg-white">
-        <CardHeader className="bg-gradient-to-r from-gray-50 to-gray-100 border-b p-4">
-          <CardTitle className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-            <BarChart3 className="w-5 h-5 text-indigo-600" /> Grievance Resolution Trends
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="pt-6">
-          <ResponsiveContainer width="100%" height={350}>
-            <ReBarChart data={chartData} margin={{ top: 5, right: 20, left: -20, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis dataKey="type" fontSize={12} tickLine={false} axisLine={false} />
-              <YAxis fontSize={12} tickLine={false} axisLine={false} />
-              <Tooltip cursor={{ fill: '#f3f4f6' }} />
-              <Legend iconType="circle" wrapperStyle={{ fontSize: '12px' }}/>
-              {/* <Bar dataKey="Total" stackId="a" fill="#cbd5e1" radius={[4, 4, 0, 0]} barSize={40} */}
-              <Bar dataKey="Replied" stackId="a" fill="#22c55e" radius={[4, 4, 0, 0]} barSize={40}/>
-              <Bar dataKey="Pending" stackId="a" fill="#facc15" barSize={40}/>
-              <Bar dataKey="Escalated" stackId="a" fill="#ef4444" radius={[4, 4, 0, 0]} barSize={40}/>
-            </ReBarChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
-
       {/* Summary */}
-      <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-2 gap-6">
         <Card className="shadow-md border border-gray-100 rounded-lg bg-white">
           <CardHeader className="flex flex-row items-center gap-2">
             <BarChart className="w-5 h-5 text-blue-600"/>
@@ -297,18 +245,6 @@ export default function GrievanceReportsPage() {
               <li>Pending: <strong className="text-yellow-600">{pending}</strong></li>
               <li>Escalated: <strong className="text-red-600">{escalated}</strong></li>
             </ul>
-          </CardContent>
-        </Card>
-
-        <Card className="shadow-md border border-gray-100 rounded-lg bg-white">
-          <CardHeader className="flex flex-row items-center gap-2">
-            <Bot className="w-5 h-5 text-purple-600"/>
-            <CardTitle className="text-base font-semibold text-gray-700">AI Assistance</CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-3">
-            <Button variant="outline" size="sm">Summarize Grievances (AI)</Button>
-            <Button variant="outline" size="sm">Draft Escalation Report (AI)</Button>
-            <Button variant="outline" size="sm">Predict Resolution Time (AI)</Button>
           </CardContent>
         </Card>
 

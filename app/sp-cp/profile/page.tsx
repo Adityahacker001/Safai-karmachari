@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   Card,
   CardHeader,
@@ -43,9 +44,50 @@ interface DocumentInfo { name: string; type: string; verifiedBy: string; status:
 
 // --- Main Page Component ---
 export default function SPProfilePage() {
-    // --- State Variables (remain the same) ---
-    const [profileInfo, setProfileInfo] = useState<ProfileInfo>({ name: "Superintendent of Police, Lucknow", jurisdiction: "Lucknow Urban District", email: "sp.lucknow@police.gov.in", phone: "+91 98765 43210", avatarUrl: "/sp-avatar.png", isVerified: true, });
-    const [verificationInfo, setVerificationInfo] = useState<VerificationInfo>({ status: "Verified", role: "Superintendent of Police", jurisdictionAccess: "6 Police Stations", lastSynced: "22 Oct 2025, 10:15 AM", });
+    // --- User Role Detection with URL Sync ---
+    const [userRole, setUserRole] = useState<'SP' | 'CP'>('SP');
+    
+    // Get URL search params to sync with layout
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const roleParam = urlParams.get('role');
+        if (roleParam === 'sp' || roleParam === 'cp') {
+            setUserRole(roleParam.toUpperCase() as 'SP' | 'CP');
+        } else {
+            // Set default role in URL if not present
+            const url = new URL(window.location.href);
+            url.searchParams.set('role', 'sp');
+            window.history.replaceState({}, '', url.toString());
+        }
+    }, []);
+    
+    const router = useRouter();
+    
+    // Update URL when role changes
+    const handleRoleChange = (newRole: 'SP' | 'CP') => {
+        setUserRole(newRole);
+        const url = new URL(window.location.href);
+        url.searchParams.set('role', newRole.toLowerCase());
+        window.history.replaceState({}, '', url.toString());
+        // Refresh to update the layout
+        router.refresh();
+    };
+    
+    // --- State Variables (dynamic based on role) ---
+    const [profileInfo, setProfileInfo] = useState<ProfileInfo>({ 
+        name: userRole === 'SP' ? "Superintendent of Police, Lucknow" : "Commissioner of Police, Mumbai", 
+        jurisdiction: userRole === 'SP' ? "Lucknow Urban District" : "Mumbai Police Zone", 
+        email: userRole === 'SP' ? "sp.lucknow@police.gov.in" : "cp.mumbai@police.gov.in", 
+        phone: "+91 98765 43210", 
+        avatarUrl: userRole === 'SP' ? "/sp-avatar.png" : "/cp-avatar.png", 
+        isVerified: true, 
+    });
+    const [verificationInfo, setVerificationInfo] = useState<VerificationInfo>({ 
+        status: "Verified", 
+        role: userRole === 'SP' ? "Superintendent of Police" : "Commissioner of Police", 
+        jurisdictionAccess: userRole === 'SP' ? "6 Police Stations" : "12 Police Stations", 
+        lastSynced: "22 Oct 2025, 10:15 AM", 
+    });
     const [stations, setStations] = useState<PoliceStation[]>([ { name: "Central PS", incidents: 10, active: 6, pending: 2, completed: 2, compensation: "₹1.2L" }, { name: "South PS", incidents: 7, active: 4, pending: 1, completed: 2, compensation: "₹85K" }, { name: "East PS", incidents: 5, active: 2, pending: 2, completed: 1, compensation: "₹1.5L" }, ]);
     const [profileSettings, setProfileSettings] = useState<ProfileSettings>({ alternateContact: "+91 99888 11223", language: "English", notificationType: "Email + SMS", });
     const [accountSettings, setAccountSettings] = useState<AccountSettings>({ email: "sp.lucknow@police.gov.in", });
@@ -60,25 +102,91 @@ export default function SPProfilePage() {
     const handleMailSupport = () => console.log("Mail Support clicked");
     const handleViewLogs = () => console.log("View Logs clicked");
 
-    // --- Effect for dynamic updates (remain the same) ---
+    // --- Effect for role change and dynamic updates ---
     useEffect(() => {
+        // Update profile info when role changes
+        setProfileInfo({
+            name: userRole === 'SP' ? "Superintendent of Police, Lucknow" : "Commissioner of Police, Mumbai", 
+            jurisdiction: userRole === 'SP' ? "Lucknow Urban District" : "Mumbai Police Zone", 
+            email: userRole === 'SP' ? "sp.lucknow@police.gov.in" : "cp.mumbai@police.gov.in", 
+            phone: "+91 98765 43210", 
+            avatarUrl: userRole === 'SP' ? "/sp-avatar.png" : "/cp-avatar.png", 
+            isVerified: true,
+        });
+        
+        setVerificationInfo({
+            status: "Verified", 
+            role: userRole === 'SP' ? "Superintendent of Police" : "Commissioner of Police", 
+            jurisdictionAccess: userRole === 'SP' ? "6 Police Stations" : "12 Police Stations", 
+            lastSynced: "22 Oct 2025, 10:15 AM",
+        });
+
+        // Update station data based on role
+        if (userRole === 'SP') {
+            setStations([
+                { name: "Central PS", incidents: 10, active: 6, pending: 2, completed: 2, compensation: "₹1.2L" },
+                { name: "South PS", incidents: 7, active: 4, pending: 1, completed: 2, compensation: "₹85K" },
+                { name: "East PS", incidents: 5, active: 2, pending: 2, completed: 1, compensation: "₹1.5L" },
+            ]);
+        } else {
+            setStations([
+                { name: "Andheri PS", incidents: 15, active: 8, pending: 3, completed: 4, compensation: "₹2.1L" },
+                { name: "Bandra PS", incidents: 12, active: 6, pending: 2, completed: 4, compensation: "₹1.8L" },
+                { name: "Colaba PS", incidents: 8, active: 3, pending: 1, completed: 4, compensation: "₹1.2L" },
+                { name: "Worli PS", incidents: 10, active: 5, pending: 2, completed: 3, compensation: "₹1.5L" },
+            ]);
+        }
+        
+        // Update activity logs with current time (excluding Last Login as it's moved to header)
         const now = new Date();
         const formattedDate = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
         const formattedTime = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-        setActivityLogs(prevLogs => prevLogs.map(log => log.label === "Last Login" ? { ...log, value: `${formattedDate}, ${formattedTime}` } : log ));
-    }, []);
+        setActivityLogs([
+            { label: "Last Login", value: `${formattedDate}, ${formattedTime}` }, // Keep for header reference
+            { label: "Reports Approved", value: "5" },
+            { label: "Grievance Replies", value: "2" },
+            { label: "Directions Replied", value: "3" },
+        ]);
+    }, [userRole]);
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8 bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 min-h-screen">
       {/* 🔹 Header */}
       <div className="mb-8">
-        <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-          SP/CP Profile Management
-        </h1>
-        <p className="text-sm text-gray-600 mt-1">Overview, Settings, and Compliance Status</p>
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+              {userRole} Profile Management
+            </h1>
+            <p className="text-sm text-gray-600 mt-1">Overview, Settings, and Compliance Status</p>
+            <div className="flex items-center gap-2 mt-2">
+              <Clock className="h-4 w-4 text-purple-600" />
+              <span className="text-sm text-purple-700 font-medium">
+                Last Login: {activityLogs.find(log => log.label === "Last Login")?.value || "N/A"}
+              </span>
+            </div>
+          </div>
+          {/* Role Switcher for Demo */}
+          <div className="flex gap-2">
+            <Button 
+              variant={userRole === 'SP' ? 'default' : 'outline'} 
+              size="sm"
+              onClick={() => handleRoleChange('SP')}
+            >
+              SP Mode
+            </Button>
+            <Button 
+              variant={userRole === 'CP' ? 'default' : 'outline'} 
+              size="sm"
+              onClick={() => handleRoleChange('CP')}
+            >
+              CP Mode
+            </Button>
+          </div>
+        </div>
       </div>
 
-      <ProfileHeader info={profileInfo} />
+      <ProfileHeader info={profileInfo} userRole={userRole} />
       <VerificationCard info={verificationInfo} />
       <PoliceStationsTable stations={stations} />
       <ProfileTabs
@@ -87,10 +195,10 @@ export default function SPProfilePage() {
         onUploadSignature={handleUploadSignature}
         onSaveChanges={handleSaveChanges}
       />
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <ActivityLogCard logs={activityLogs} />
         <ComplianceSummary metrics={complianceMetrics} />
-      </div>
+      </div> */}
       <SupportSection
         onContactDGP={handleContactDGP}
         onMailSupport={handleMailSupport}
@@ -103,12 +211,12 @@ export default function SPProfilePage() {
 
 // --- Child Components (Enhanced Styling) ---
 
-function ProfileHeader({ info }: { info: ProfileInfo }) {
+function ProfileHeader({ info, userRole }: { info: ProfileInfo; userRole: 'SP' | 'CP' }) {
   return (
     <Card className="p-6 flex flex-col md:flex-row items-center gap-6 shadow-lg border-none bg-gradient-to-r from-indigo-700 to-purple-800 text-white rounded-xl">
       <img
         src={info.avatarUrl}
-        alt="SP Avatar"
+        alt={`${userRole} Avatar`}
         className="w-28 h-28 rounded-full object-cover border-4 border-white/50 shadow-md flex-shrink-0"
       />
       <div className="space-y-1.5 text-center md:text-left">
@@ -123,7 +231,7 @@ function ProfileHeader({ info }: { info: ProfileInfo }) {
         <div className="pt-2">
           {info.isVerified ? (
             <Badge variant="secondary" className="bg-green-500/80 text-white border-none text-xs font-medium">
-              <CheckCircle className="w-3 h-3 mr-1.5"/> Verified SP (NSKC Authorized)
+              <CheckCircle className="w-3 h-3 mr-1.5"/> Verified {userRole} (NSKC Authorized)
             </Badge>
           ) : (
              <Badge variant="destructive" className="text-xs font-medium">
@@ -290,6 +398,9 @@ function InputItem({ label, value, onChange, type = "text", icon }: {
 }
 
 function ActivityLogCard({ logs }: { logs: ActivityLog[] }) {
+  // Filter out "Last Login" as it's now shown in the header
+  const filteredLogs = logs.filter(log => log.label !== "Last Login");
+  
   return (
     <Card className="shadow-md border border-gray-100 rounded-lg bg-white">
       <CardHeader className="flex flex-row items-center gap-2">
@@ -297,34 +408,34 @@ function ActivityLogCard({ logs }: { logs: ActivityLog[] }) {
            <CardTitle className="text-lg font-semibold text-gray-800">Recent Activity</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3 text-sm">
-        {logs.map((log, i) => (
+        {filteredLogs.map((log, i) => (
           <div key={i} className="flex justify-between items-center border-b border-gray-100 pb-2 last:border-b-0">
             <span className="text-gray-600">{log.label}</span>
             <span className="font-medium text-gray-800 bg-gray-100 px-2.5 py-1 rounded-full text-xs">{log.value}</span>
           </div>
         ))}
-         {logs.length === 0 && (<p className="text-center text-gray-500 py-4">No recent activity logged.</p>)}
+         {filteredLogs.length === 0 && (<p className="text-center text-gray-500 py-4">No recent activity logged.</p>)}
       </CardContent>
     </Card>
   );
 }
 
-function ComplianceSummary({ metrics }: { metrics: ComplianceMetric[] }) {
-  return (
-    <Card className="shadow-md border border-gray-100 rounded-lg bg-white">
-      <CardHeader className="flex flex-row items-center gap-2">
-            <CheckCircle className="h-5 w-5 text-indigo-600"/>
-            <CardTitle className="text-lg font-semibold text-gray-800">Compliance & Performance</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-5 pt-4">
-        {metrics.map((metric, i) => (
-          <Metric key={i} label={metric.label} value={metric.value} />
-        ))}
-        {metrics.length === 0 && (<p className="text-center text-gray-500 py-4">No compliance data available.</p>)}
-      </CardContent>
-    </Card>
-  );
-}
+// function ComplianceSummary({ metrics }: { metrics: ComplianceMetric[] }) {
+//   return (
+//     // <Card className="shadow-md border border-gray-100 rounded-lg bg-white">
+//     //   <CardHeader className="flex flex-row items-center gap-2">
+//     //         <CheckCircle className="h-5 w-5 text-indigo-600"/>
+//     //         <CardTitle className="text-lg font-semibold text-gray-800">Compliance & Performance</CardTitle>
+//     //   </CardHeader>
+//     //   <CardContent className="space-y-5 pt-4">
+//     //     {metrics.map((metric, i) => (
+//     //       <Metric key={i} label={metric.label} value={metric.value} />
+//     //     ))}
+//     //     {metrics.length === 0 && (<p className="text-center text-gray-500 py-4">No compliance data available.</p>)}
+//     //   </CardContent>
+//     // </Card>
+//   );
+// }
 
 // Updated Metric component with styled progress bar
 function Metric({ label, value }: { label: string; value: number }) {

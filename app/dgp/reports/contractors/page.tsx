@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence, animate } from 'framer-motion';
+import StatCard from '@/components/ui/stat-card';
 import {
   UsersRound,
   ChevronRight as ChevronRightIcon,
@@ -114,29 +115,7 @@ const AnimatedNumber: React.FC<{ value: number; isPercentage?: boolean }> = ({ v
   );
 };
 
-/**
- * 3. MetricCard Component
- * For the top dashboard metrics.
- */
-const MetricCard: React.FC<{ title: string; value: number; icon: React.ElementType; gradient: string; isPercentage?: boolean }> = ({ title, value, icon, gradient, isPercentage = false }) => {
-  const Icon = icon;
-  return (
-    <GlassCard className={`relative text-white overflow-hidden bg-gradient-to-br ${gradient}`}>
-      <div className="p-5 relative z-10">
-        <div className="flex items-center justify-between">
-          <span className="text-sm font-medium opacity-90">{title}</span>
-          <div className="p-2 bg-white/20 rounded-full">
-            <Icon size={18} />
-          </div>
-        </div>
-        <h2 className="text-4xl font-bold mt-2">
-          <AnimatedNumber value={value} isPercentage={isPercentage} />
-          {isPercentage && <span className="text-3xl opacity-80">%</span>}
-        </h2>
-      </div>
-    </GlassCard>
-  );
-};
+
 
 /**
  * 4. AppButton Component
@@ -484,13 +463,11 @@ export default function TotalContractorsReport() {
           </GlassCard>
 
           {/* --- Top Metric Cards --- */}
-          <section className="mb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
-            <MetricCard title="Total Contractors" value={mockMetrics.totalContractors} icon={Building2} gradient="from-blue-600 to-navy-800" />
-            <MetricCard title="Total Workers" value={mockMetrics.totalWorkers} icon={Users} gradient="from-sky-500 to-blue-700" />
-            <MetricCard title="Incidents Linked" value={mockMetrics.incidentsLinked} icon={AlertTriangle} gradient="from-amber-500 to-orange-700" />
-            <MetricCard title="FIRs Filed" value={mockMetrics.firsFiled} icon={FileSearch} gradient="from-red-500 to-rose-700" />
-            <MetricCard title="High-Risk" value={mockMetrics.highRisk} icon={ShieldAlert} gradient="from-rose-700 to-red-900" />
-            <MetricCard title="Compliance Score" value={mockMetrics.complianceScore} icon={BadgeCheck} gradient="from-emerald-500 to-green-700" isPercentage />
+          <section className="mb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            <StatCard title="Total Contractors" value={mockMetrics.totalContractors.toString()} icon={Building2} color="blue" />
+            <StatCard title="Total Workers" value={mockMetrics.totalWorkers.toLocaleString('en-IN')} icon={Users} color="purple" />
+            <StatCard title="Incidents Linked" value={mockMetrics.incidentsLinked.toString()} icon={AlertTriangle} color="amber" />
+            <StatCard title="FIRs Filed" value={mockMetrics.firsFiled.toString()} icon={FileSearch} color="red" />
           </section>
 
           {/* --- Contractor Table --- */}

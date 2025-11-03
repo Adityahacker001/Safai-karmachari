@@ -206,7 +206,6 @@ export default function AttendanceReportPage() {
                   <th>Total Days Worked</th>
                   <th>Absences</th>
                   <th>Late Entries</th>
-                  <th>Attendance Score</th>
                 </tr>
               </thead>
               <tbody>
@@ -245,24 +244,11 @@ export default function AttendanceReportPage() {
                           '0'
                         )}
                       </td>
-                      
-                      {/* 6. Attendance Score */}
-                      <td className="scoreCell">
-                        <div className="scoreBarWrapper">
-                          <div
-                            className={`scoreBar ${getScoreColor(record.attendanceScore)}`}
-                            style={{ width: `${record.attendanceScore}%` }}
-                          ></div>
-                        </div>
-                        <span className={`scoreText ${getScoreColor(record.attendanceScore)}`}>
-                          {record.attendanceScore}%
-                        </span>
-                      </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={6} className="noResults">
+                    <td colSpan={5} className="noResults">
                       No attendance records found matching your criteria.
                     </td>
                   </tr>

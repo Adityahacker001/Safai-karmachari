@@ -33,7 +33,6 @@ import {
   Filter,   // Filter Icon
   List,     // Table Icon
   BarChart2,// Stats Icon
-  Bot,      // AI Icon
   ListChecks,// Quick Actions Icon
   XCircle,  // Reset Icon
 } from "lucide-react";
@@ -269,7 +268,7 @@ export default function WorkersReportsPage() {
       </Card>
 
       {/* Quick Summary Section */}
-      <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-2 gap-6">
         <Card className="shadow-md border border-gray-100 rounded-lg bg-white">
           <CardHeader className="flex flex-row items-center gap-2">
              <BarChart2 className="w-5 h-5 text-blue-600"/>
@@ -284,18 +283,6 @@ export default function WorkersReportsPage() {
               <li>Compensation Paid: <strong>{filteredWorkers.filter(w => w.compensationStatus === 'Paid').length}</strong></li>
               <li>Pending Investigations: <strong>{filteredWorkers.filter(w => w.investigationStatus === 'In Progress' || w.investigationStatus === 'Initiated').length}</strong></li>
             </ul>
-          </CardContent>
-        </Card>
-
-        <Card className="shadow-md border border-gray-100 rounded-lg bg-white">
-           <CardHeader className="flex flex-row items-center gap-2">
-             <Bot className="w-5 h-5 text-purple-600"/>
-             <CardTitle className="text-base font-semibold text-gray-700">AI Assistance</CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-3">
-            <Button variant="outline" size="sm">Generate Worker Summary (AI)</Button>
-            <Button variant="outline" size="sm">Draft Compensation Report (AI)</Button>
-            <Button variant="outline" size="sm">Suggest Case Closure Notes (AI)</Button>
           </CardContent>
         </Card>
 

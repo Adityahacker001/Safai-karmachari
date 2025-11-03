@@ -281,35 +281,24 @@ type DynamicDisplayProps = {
   released: string;
 };
 const DynamicDisplay: React.FC<DynamicDisplayProps> = ({ sanctioned, released }) => {
-  const { pendingAmount, utilization } = useMemo(() => {
+  const { pendingAmount } = useMemo(() => {
     const san = parseFloat(sanctioned) || 0;
     const rel = parseFloat(released) || 0;
     const pending = san - rel;
-    const util = san === 0 ? 0 : (rel / san) * 100;
     return {
       pendingAmount: pending.toLocaleString('en-IN'),
-      utilization: util.toFixed(2),
     };
   }, [sanctioned, released]);
 
   return (
-    <div className="bg-gradient-to-r from-indigo-50 to-sky-50 border border-indigo-200 rounded-lg p-4 grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
-      <div className="flex items-center space-x-3">
+    <div className="bg-gradient-to-r from-indigo-50 to-sky-50 border border-indigo-200 rounded-lg p-6 my-6">
+      <div className="flex flex-col items-center justify-center text-center space-y-3">
         <span className="p-3 bg-white rounded-full text-orange-500 shadow-sm">
           <Calculator className="w-6 h-6" />
         </span>
         <div>
           <p className="text-sm font-semibold text-slate-600">Pending Amount</p>
           <p className="text-2xl font-bold text-slate-800">₹{pendingAmount}</p>
-        </div>
-      </div>
-      <div className="flex items-center space-x-3">
-        <span className="p-3 bg-white rounded-full text-green-500 shadow-sm">
-          <TrendingUp className="w-6 h-6" />
-        </span>
-        <div>
-          <p className="text-sm font-semibold text-slate-600">Utilization</p>
-          <p className="text-2xl font-bold text-slate-800">{utilization}% <span className="text-base font-normal">released</span></p>
         </div>
       </div>
     </div>

@@ -12,10 +12,10 @@ import {
   RefreshCw,
   Search,
   Send,
-  Sparkles,
   Clock,
   XCircle, // For Reset Button
 } from 'lucide-react';
+import StatCard from '@/components/ui/stat-card';
 import {
   BarChart,
   Bar,
@@ -65,7 +65,7 @@ const initialSummaryMetrics: SummaryMetric[] = [
   { title: 'Total Pending Cases', metric: '52', icon: Clock, color: 'text-white', bgColor: 'bg-gradient-to-r from-yellow-400 to-yellow-600' },
   { title: 'Awaiting Charge Sheet', metric: '18', icon: FileWarning, color: 'text-white', bgColor: 'bg-gradient-to-r from-orange-400 to-orange-600' },
   { title: 'Total Escalated', metric: '9', icon: AlertTriangle, color: 'text-white', bgColor: 'bg-gradient-to-r from-red-400 to-red-600' },
-  { title: 'Avg. Pending Days', metric: '46', icon: Clock, color: 'text-white', bgColor: 'bg-gradient-to-r from-blue-400 to-blue-600' },
+  
 ];
 
 const allPoliceStations = [
@@ -193,9 +193,6 @@ export default function PendingCasesReportPage() {
 
   const handleGeneratePendingReport = () => alert("Generate Pending Report (simulation)");
   const handleEscalateSelected = () => alert("Escalate Selected Cases (simulation)");
-  const handleAISummarize = () => alert("AI: Summarize Delays (simulation)");
-  const handleAIDraftMemo = () => alert("AI: Draft Escalation Memo (simulation)");
-  const handleAIBottlenecks = () => alert("AI: Identify Bottlenecks (simulation)");
 
 
   return (
@@ -225,27 +222,25 @@ export default function PendingCasesReportPage() {
         </div>
 
         {/* Quick Summary Cards */}
-        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-          {summaryMetrics.map((item) => (
-            <div
-              key={item.title}
-              className={`${item.bgColor} rounded-xl shadow-lg p-5 border-transparent transition-transform duration-200 hover:scale-[1.03] hover:shadow-xl`}
-            >
-              <div className="flex items-center space-x-4">
-                <div
-                  className={`flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-white/20 border border-white/30`}
-                >
-                  <item.icon size={24} className={item.color} />
-                </div>
-                <div className="overflow-hidden">
-                  <div className="text-sm font-medium text-white/90 truncate">
-                    {item.title}
-                  </div>
-                  <div className="text-3xl font-bold text-white">{item.metric}</div>
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          <StatCard
+            title="Total Pending Cases"
+            value="52"
+            icon={Clock}
+            color="amber"
+          />
+          <StatCard
+            title="Awaiting Charge Sheet"
+            value="18"
+            icon={FileWarning}
+            color="orange"
+          />
+          <StatCard
+            title="Total Escalated"
+            value="9"
+            icon={AlertTriangle}
+            color="red"
+          />
         </div>
       </div>
 
@@ -533,7 +528,7 @@ export default function PendingCasesReportPage() {
       </div>
 
       {/* 5️⃣ Quick Actions Panel */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6">
         <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-6">
           <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-slate-200">
             Quick Actions
@@ -552,33 +547,6 @@ export default function PendingCasesReportPage() {
             >
               <Send size={16} />
               Escalate Selected Cases
-            </button>
-          </div>
-        </div>
-
-        <div className="bg-gradient-to-r from-purple-50 via-indigo-50 to-blue-50 dark:from-purple-900/30 dark:via-indigo-900/30 dark:to-blue-900/30 rounded-xl shadow-lg border border-purple-200 dark:border-purple-700 p-6">
-          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-purple-800 dark:text-purple-300">
-            <Sparkles className="text-purple-500" size={20} />
-            AI Assistance Tools
-          </h3>
-          <div className="flex flex-wrap gap-3">
-            <button
-              onClick={handleAISummarize}
-              className="flex items-center gap-2 px-4 py-2 bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300 border border-purple-300 dark:border-purple-700 rounded-lg shadow-sm hover:bg-purple-200 dark:hover:bg-purple-800 transition-colors text-sm font-medium"
-            >
-              Summarize Delays
-            </button>
-            <button
-              onClick={handleAIDraftMemo}
-              className="flex items-center gap-2 px-4 py-2 bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300 border border-purple-300 dark:border-purple-700 rounded-lg shadow-sm hover:bg-purple-200 dark:hover:bg-purple-800 transition-colors text-sm font-medium"
-            >
-              Draft Escalation Memo
-            </button>
-            <button
-              onClick={handleAIBottlenecks}
-              className="flex items-center gap-2 px-4 py-2 bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300 border border-purple-300 dark:border-purple-700 rounded-lg shadow-sm hover:bg-purple-200 dark:hover:bg-purple-800 transition-colors text-sm font-medium"
-            >
-              Identify Bottlenecks
             </button>
           </div>
         </div>

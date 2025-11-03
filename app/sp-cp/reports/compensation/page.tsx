@@ -30,6 +30,7 @@ import {
   FileWarning,
   XCircle, // Added for Reset
 } from 'lucide-react';
+import StatCard from '@/components/ui/stat-card';
 
 // --- MOCK DATA & TYPES ---
 
@@ -213,26 +214,30 @@ export default function CompensationReportPage() {
 
         {/* Quick Summary Cards */}
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-          {summaryMetrics.map((item) => (
-            <div
-              key={item.title}
-              className={`${item.bgColor} rounded-xl shadow-lg p-6 border-transparent transition-transform duration-200 hover:scale-[1.03] hover:shadow-xl`}
-            >
-              <div className="flex items-center space-x-4">
-                <div
-                  className={`flex-shrink-0 flex items-center justify-center h-14 w-14 rounded-full bg-white/20 border border-white/30`}
-                >
-                  <item.icon size={28} className={item.color} />
-                </div>
-                <div className="overflow-hidden">
-                  <div className="text-sm font-medium text-white/90 truncate">
-                    {item.title}
-                  </div>
-                  <div className="text-3xl font-bold text-white">{item.metric}</div>
-                </div>
-              </div>
-            </div>
-          ))}
+          <StatCard
+            title="Total Sanctioned"
+            value="₹1,25,00,000"
+            icon={CircleDollarSign}
+            color="blue"
+          />
+          <StatCard
+            title="Total Paid"
+            value="₹98,50,000"
+            icon={CheckCircle2}
+            color="green"
+          />
+          <StatCard
+            title="Total Pending"
+            value="₹26,50,000"
+            icon={FileWarning}
+            color="red"
+          />
+          <StatCard
+            title="Cases Awaiting Payment"
+            value="14"
+            icon={Clock}
+            color="amber"
+          />
         </div>
       </div>
 
@@ -301,7 +306,7 @@ export default function CompensationReportPage() {
       </div>
 
       {/* 5. Compensation Tracker Line Chart (Visualisation) */}
-      <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+      {/* <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
         <h3 className="text-xl font-bold mb-6 flex items-center gap-3 text-slate-800 dark:text-slate-200">
           <TrendingUp className="text-green-500" />
           Compensation Tracker (Monthly)
@@ -341,37 +346,34 @@ export default function CompensationReportPage() {
                   itemStyle={{ fontSize: '12px' }}
               />
               <Legend iconType="circle" wrapperStyle={{ fontSize: '12px' }} />
-              {/* Using explicit <></> for clarity */}
-              <>
-                <Line
-                  type="monotone"
-                  dataKey="Total Sanctioned"
-                  stroke="#3B82F6" // blue-500
-                  strokeWidth={3}
-                  dot={{ r: 4, fill: '#3B82F6' }}
+              <Line
+                type="monotone"
+                dataKey="Total Sanctioned"
+                stroke="#3B82F6" // blue-500
+                strokeWidth={3}
+                dot={{ r: 4, fill: '#3B82F6' }}
+                activeDot={{ r: 6 }}
+              />
+              <Line
+                type="monotone"
+                dataKey="Total Paid"
+                stroke="#10B981" // green-500
+                strokeWidth={3}
+                dot={{ r: 4, fill: '#10B981' }}
+                activeDot={{ r: 6 }}
+              />
+              <Line
+                type="monotone"
+                dataKey="Pending"
+                stroke="#EF4444" // red-500
+                strokeWidth={3}
+                dot={{ r: 4, fill: '#EF4444' }}
                   activeDot={{ r: 6 }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="Total Paid"
-                  stroke="#10B981" // green-500
-                  strokeWidth={3}
-                  dot={{ r: 4, fill: '#10B981' }}
-                  activeDot={{ r: 6 }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="Pending"
-                  stroke="#EF4444" // red-500
-                  strokeWidth={3}
-                  dot={{ r: 4, fill: '#EF4444' }}
-                    activeDot={{ r: 6 }}
-                />
-              </>
+              />
             </LineChart>
           </ResponsiveContainer>
         </div>
-      </div>
+      </div> */}
 
       {/* 1. Compensation Report Tabular Format (Report 7) */}
       <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden">

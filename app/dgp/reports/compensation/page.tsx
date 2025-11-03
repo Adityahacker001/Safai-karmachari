@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import StatCard from '@/components/ui/stat-card';
 import {
   Home,
   ChevronRight,
@@ -97,25 +98,15 @@ type CompensationCase = {
   docs: { name: string, url: string }[];
 };
 
-type Kpi = {
-  title: string;
-  value: string;
-  change?: string;
-  changeType?: 'positive' | 'negative';
-  icon: React.ReactNode;
-  gradient: string;
-  glow: string;
-};
+
 
 // --- MOCK DATA ---
 
-const mockKpis: Kpi[] = [
-  { title: "Total Sanctioned", value: "₹ 1.25 Cr", change: "+10L", changeType: 'positive', icon: <DollarSign size={28} />, gradient: "from-blue-600 to-blue-800", glow: "shadow-blue-500/40" },
-  { title: "Total Paid", value: "₹ 95 L", change: "+5L", changeType: 'positive', icon: <CheckCircle size={28} />, gradient: "from-emerald-500 to-emerald-700", glow: "shadow-emerald-500/40" },
-  { title: "Total Pending", value: "₹ 30 L", change: "+5L", changeType: 'negative', icon: <Clock size={28} />, gradient: "from-amber-500 to-amber-700", glow: "shadow-amber-500/40" },
-  { title: "Avg. Payment Delay", value: "28 Days", change: "+2d", changeType: 'negative', icon: <AlertTriangle size={28} />, gradient: "from-slate-500 to-slate-700", glow: "shadow-slate-500/40" },
-  { title: "High-Priority Pending (>60d)", value: "4 Cases", change: "+1", changeType: 'negative', icon: <AlertOctagon size={28} />, gradient: "from-red-600 to-red-800", glow: "shadow-red-500/40" },
-];
+const mockKpis = {
+  totalSanctioned: { value: "₹ 1.25 Cr", change: "+10L" },
+  totalPaid: { value: "₹ 95 L", change: "+5L" },
+  totalPending: { value: "₹ 30 L", change: "+5L" },
+};
 
 const mockCompensationCases: CompensationCase[] = [
   {
@@ -241,34 +232,7 @@ const GlassCard: React.FC<{ children: React.ReactNode; className?: string; noHov
   </motion.div>
 );
 
-/**
- * 2. KPI Card Component
- */
-const KpiCard = ({ kpi }: { kpi: Kpi }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5, ease: "easeOut" }}
-    whileHover={{ y: -6, boxShadow: `0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04), 0 0 0 4px rgba(255,255,255,0.5)`, transition: { duration: 0.2 } }}
-    className={`relative rounded-xl shadow-lg p-5 text-white overflow-hidden bg-gradient-to-r ${kpi.gradient} ${kpi.glow}`}
-  >
-    <div className="relative z-10">
-      <div className="flex justify-between items-center">
-        <span className="text-sm font-medium opacity-90">{kpi.title}</span>
-        {kpi.change && (
-          <span className={`text-xs font-semibold px-2 py-0.5 rounded-full flex items-center gap-1 ${kpi.changeType === 'positive' ? 'bg-white/20' : 'bg-red-500/50'}`}>
-            {kpi.changeType === 'positive' ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
-            {kpi.change}
-          </span>
-        )}
-      </div>
-      <div className="text-4xl font-bold mt-2 mb-1">{kpi.value}</div>
-    </div>
-    <div className="absolute -right-4 -bottom-4 opacity-10 z-0">
-      {React.cloneElement(kpi.icon as React.ReactElement, { size: 80 })}
-    </div>
-  </motion.div>
-);
+
 
 /**
  * 3. PaidBadge Component (as requested)
@@ -611,10 +575,10 @@ export default function CompensationReport() {
       </GlassCard>
 
       {/* --- KPI Metrics --- */}
-      <section className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
-        {mockKpis.slice(0, 4).map(kpi => (
-          <KpiCard key={kpi.title} kpi={kpi} />
-        ))}
+      <section className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8">
+        <StatCard title="Total Sanctioned" value={mockKpis.totalSanctioned.value} icon={DollarSign} color="blue" />
+        <StatCard title="Total Paid" value={mockKpis.totalPaid.value} icon={CheckCircle} color="green" />
+        <StatCard title="Total Pending" value={mockKpis.totalPending.value} icon={Clock} color="amber" />
       </section>
       
       {/* --- Main Table --- */}

@@ -508,7 +508,7 @@ const DirectionInputPage = () => {
           </FormCard>
 
           {/* Card 2: Compliance Information */}
-          <FormCard title="Compliance Information" icon={ShieldCheck}>
+          {/* <FormCard title="Compliance Information" icon={ShieldCheck}>
             <FormSelect
               label="Compliance Status" name="complianceStatus"
               value={formData.complianceStatus} onChange={handleChange}
@@ -560,7 +560,7 @@ const DirectionInputPage = () => {
               className="md:col-span-2"
               required={formData.complianceStatus === 'Complied' || formData.complianceStatus === 'Partially Complied'}
             />
-          </FormCard>
+          </FormCard> */}
           
           {/* --- 3. Buttons Section --- */}
           <div className="mt-8 pt-6 border-t border-slate-200">

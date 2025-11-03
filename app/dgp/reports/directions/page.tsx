@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import StatCard from '@/components/ui/stat-card';
 import {
   Home,
   ChevronRight,
@@ -90,25 +91,17 @@ type Direction = {
   policeUnit: string;
 };
 
-type Kpi = {
-  title: string;
-  value: string;
-  change?: string;
-  changeType?: 'positive' | 'negative';
-  icon: React.ReactNode;
-  gradient: string;
-  glow: string;
-};
+
 
 // --- MOCK DATA ---
 
-const mockKpis: Kpi[] = [
-  { title: "Total Directions", value: "82", change: "+5", changeType: 'positive', icon: <ClipboardCheck size={28} />, gradient: "from-blue-600 to-blue-800", glow: "shadow-blue-500/40" },
-  { title: "Complied", value: "65", change: "+10", changeType: 'positive', icon: <CheckCircle size={28} />, gradient: "from-emerald-500 to-emerald-700", glow: "shadow-emerald-500/40" },
-  { title: "Pending", value: "17", change: "-5", changeType: 'positive', icon: <Clock size={28} />, gradient: "from-amber-500 to-amber-700", glow: "shadow-amber-500/40" },
-  { title: "Avg. Pending Days", value: "14.2", change: "+2.1d", changeType: 'negative', icon: <AlertTriangle size={28} />, gradient: "from-slate-500 to-slate-700", glow: "shadow-slate-500/40" },
-  { title: "High-Priority Pending", value: "3", change: "+1", changeType: 'negative', icon: <AlertOctagon size={28} />, gradient: "from-red-600 to-red-800", glow: "shadow-red-500/40" },
-];
+const mockKpis = {
+  totalDirections: { value: "82", change: "+5" },
+  complied: { value: "65", change: "+10" },
+  pending: { value: "17", change: "-5" },
+  avgPendingDays: { value: "14.2", change: "+2.1d" },
+  highPriorityPending: { value: "3", change: "+1" },
+};
 
 const mockDirections: Direction[] = [
   {
@@ -206,34 +199,7 @@ const GlassCard = ({ children, className = "", noHover = false }: {
   </motion.div>
 );
 
-/**
- * 2. KPI Card Component
- */
-const KpiCard = ({ kpi }: { kpi: Kpi }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5, ease: "easeOut" }}
-    whileHover={{ y: -6, boxShadow: `0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04), 0 0 0 4px rgba(255,255,255,0.5)`, transition: { duration: 0.2 } }}
-    className={`relative rounded-xl shadow-lg p-5 text-white overflow-hidden ${kpi.gradient} ${kpi.glow}`}
-  >
-    <div className="relative z-10">
-      <div className="flex justify-between items-center">
-        <span className="text-sm font-medium opacity-90">{kpi.title}</span>
-        {kpi.change && (
-          <span className={`text-xs font-semibold px-2 py-0.5 rounded-full flex items-center gap-1 ${kpi.changeType === 'positive' ? 'bg-white/20' : 'bg-red-500/50'}`}>
-            {kpi.changeType === 'positive' ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
-            {kpi.change}
-          </span>
-        )}
-      </div>
-      <div className="text-4xl font-bold mt-2 mb-1">{kpi.value}</div>
-    </div>
-    <div className="absolute -right-4 -bottom-4 opacity-10 z-0">
-      {React.cloneElement(kpi.icon as React.ReactElement, { size: 80 })}
-    </div>
-  </motion.div>
-);
+
 
 /**
  * 3. StatusBadge Component
@@ -568,152 +534,97 @@ export default function DirectionReport() {
       </GlassCard>
 
       {/* --- KPI Metrics --- */}
-      <section className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
-        {mockKpis.map(kpi => (
-          <KpiCard key={kpi.title} kpi={{ ...kpi, gradient: 'bg-gradient-to-r from-blue-500 to-green-500' }} />
-        ))}
+      <section className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+        <StatCard title="Total Directions" value={mockKpis.totalDirections.value} icon={ClipboardCheck} color="blue" />
+        <StatCard title="Complied" value={mockKpis.complied.value} icon={CheckCircle} color="green" />
+        <StatCard title="Pending" value={mockKpis.pending.value} icon={Clock} color="amber" />
+        <StatCard title="Avg. Pending Days" value={mockKpis.avgPendingDays.value} icon={AlertTriangle} color="red" />
       </section>
       
-      {/* --- Main Content (Table & Charts) --- */}
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+      {/* --- Main Content (Table) --- */}
+      <div className="max-w-7xl mx-auto">
         
         {/* --- Main Table --- */}
-        <div className="lg:col-span-2">
-          <GlassCard noHover>
-            <div className="overflow-x-auto">
-              <table className="table-auto w-full">
-                <thead className="sticky top-0 bg-slate-100/80 backdrop-blur-sm z-10">
-                  <tr>
-                    <th className="th-cell">Direction ID</th>
-                    <th className="th-cell">Issued By</th>
-                    <th className="th-cell">District</th>
-                    <th className="th-cell">Date Received</th>
-                    <th className="th-cell">Summary</th>
-                    <th className="th-cell">Status</th>
-                    <th className="th-cell">Days Pending</th>
-                    <th className="th-cell">Docs</th>
-                    <th className="th-cell">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-slate-100">
-                  {paginatedDirections.map((d) => (
-                    <motion.tr
-                      key={d.id}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.05 }}
-                      className={
-                        d.status === "Pending" ? 'bg-red-50/70 hover:bg-red-100/70' : 
-                        d.status === "In-Process" ? 'bg-amber-50/70 hover:bg-amber-100/70' :
-                        'hover:bg-sky-50/50'
-                      }
-                    >
-                      <td className="td-cell font-medium text-navy-800">{d.id}</td>
-                      <td className="td-cell">{d.issuedBy}</td>
-                      <td className="td-cell">{d.district}</td>
-                      <td className="td-cell">{d.dateReceived}</td>
-                      <td className="td-cell max-w-xs truncate" title={d.summary}>{d.summary}</td>
-                      <td className="td-cell"><StatusBadge status={d.status} /></td>
-                      <td className="td-cell text-center"><DaysPendingBadge days={d.daysPending} /></td>
-                      <td className="td-cell text-center">
-                        {d.docs.length > 0 ? (
-                          <FileText size={16} className="text-sky-600" />
-                        ) : (
-                          <span className="text-slate-400">-</span>
-                        )}
-                      </td>
-                      <td className="td-cell">
-                        <StyledButton onClick={() => setSelectedDirection(d)} variant="icon" className="p-1.5 h-auto">
-                          <Eye size={16} />
-                        </StyledButton>
-                      </td>
-                    </motion.tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            
-            {/* Pagination */}
-            <div className="p-4 flex flex-col md:flex-row justify-between items-center border-t border-sky-100">
-              <div className="flex items-center gap-2 mb-3 md:mb-0">
-                <span className="text-sm text-slate-600">Rows per page:</span>
-                <select className="form-select-sm p-1.5" defaultValue="10">
-                  <option>10</option>
-                  <option>25</option>
-                  <option>50</option>
-                </select>
-                <span className="text-sm text-slate-600">
-                  Showing {paginatedDirections.length} of {filteredDirections.length} results
-                </span>
-              </div>
-              <div className="flex gap-2">
-                <StyledButton onClick={() => setCurrentPage(p => Math.max(p - 1, 1))} disabled={currentPage === 1} variant="secondary" className="px-3 py-1.5">
-                  <ArrowLeft size={16} /> Previous
-                </StyledButton>
-                <span className="px-4 py-1.5 text-sm font-medium text-slate-700">
-                  Page {currentPage} of {totalPages}
-                </span>
-                <StyledButton onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))} disabled={currentPage === totalPages} variant="secondary" className="px-3 py-1.5">
-                  Next <ArrowRight size={16} />
-                </StyledButton>
-              </div>
-            </div>
-          </GlassCard>
-        </div>
-
-        {/* --- Charts Section --- */}
-        <div className="lg:col-span-1 flex flex-col gap-8">
-          <GlassCard noHover>
-            <CardHeader>
-              <div className="flex items-center gap-2">
-                <PieChart size={18} />
-                <span className="text-lg font-semibold">Compliance Pie Chart</span>
-              </div>
-            </CardHeader>
-            <div className="p-4 h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={mockPieData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    paddingAngle={5}
-                    dataKey="value"
-                    label={labelFunction}
+        <GlassCard noHover>
+          <div className="overflow-x-auto">
+            <table className="table-auto w-full">
+              <thead className="sticky top-0 bg-slate-100/80 backdrop-blur-sm z-10">
+                <tr>
+                  <th className="th-cell">Direction ID</th>
+                  <th className="th-cell">Issued By</th>
+                  <th className="th-cell">District</th>
+                  <th className="th-cell">Date Received</th>
+                  <th className="th-cell">Summary</th>
+                  <th className="th-cell">Status</th>
+                  <th className="th-cell">Days Pending</th>
+                  <th className="th-cell">Docs</th>
+                  <th className="th-cell">Action</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-slate-100">
+                {paginatedDirections.map((d) => (
+                  <motion.tr
+                    key={d.id}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.05 }}
+                    className={
+                      d.status === "Pending" ? 'bg-red-50/70 hover:bg-red-100/70' : 
+                      d.status === "In-Process" ? 'bg-amber-50/70 hover:bg-amber-100/70' :
+                      'hover:bg-sky-50/50'
+                    }
                   >
-                    {mockPieData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.fill} />
-                    ))}
-                  </Pie>
-                  <RechartsTooltip content={<CustomTooltip />} />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-          </GlassCard>
+                    <td className="td-cell font-medium text-navy-800">{d.id}</td>
+                    <td className="td-cell">{d.issuedBy}</td>
+                    <td className="td-cell">{d.district}</td>
+                    <td className="td-cell">{d.dateReceived}</td>
+                    <td className="td-cell max-w-xs truncate" title={d.summary}>{d.summary}</td>
+                    <td className="td-cell"><StatusBadge status={d.status} /></td>
+                    <td className="td-cell text-center"><DaysPendingBadge days={d.daysPending} /></td>
+                    <td className="td-cell text-center">
+                      {d.docs.length > 0 ? (
+                        <FileText size={16} className="text-sky-600" />
+                      ) : (
+                        <span className="text-slate-400">-</span>
+                      )}
+                    </td>
+                    <td className="td-cell">
+                      <StyledButton onClick={() => setSelectedDirection(d)} variant="icon" className="p-1.5 h-auto">
+                        <Eye size={16} />
+                      </StyledButton>
+                    </td>
+                  </motion.tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
           
-          <GlassCard noHover>
-            <CardHeader>
-              <div className="flex items-center gap-2">
-                <BarChart2 size={18} />
-                <span className="text-lg font-semibold">Directions by Authority</span>
-              </div>
-            </CardHeader>
-            <div className="p-4 h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={mockBarData} layout="vertical" margin={{ left: 30 }}>
-                  <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-                  <XAxis type="number" fontSize={10} />
-                  <YAxis type="category" dataKey="name" fontSize={10} />
-                  <RechartsTooltip content={<CustomTooltip />} />
-                  <Bar dataKey="Directions" barSize={20} radius={[0, 4, 4, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
+          {/* Pagination */}
+          <div className="p-4 flex flex-col md:flex-row justify-between items-center border-t border-sky-100">
+            <div className="flex items-center gap-2 mb-3 md:mb-0">
+              <span className="text-sm text-slate-600">Rows per page:</span>
+              <select className="form-select-sm p-1.5" defaultValue="10">
+                <option>10</option>
+                <option>25</option>
+                <option>50</option>
+              </select>
+              <span className="text-sm text-slate-600">
+                Showing {paginatedDirections.length} of {filteredDirections.length} results
+              </span>
             </div>
-          </GlassCard>
-        </div>
+            <div className="flex gap-2">
+              <StyledButton onClick={() => setCurrentPage(p => Math.max(p - 1, 1))} disabled={currentPage === 1} variant="secondary" className="px-3 py-1.5">
+                <ArrowLeft size={16} /> Previous
+              </StyledButton>
+              <span className="px-4 py-1.5 text-sm font-medium text-slate-700">
+                Page {currentPage} of {totalPages}
+              </span>
+              <StyledButton onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))} disabled={currentPage === totalPages} variant="secondary" className="px-3 py-1.5">
+                Next <ArrowRight size={16} />
+              </StyledButton>
+            </div>
+          </div>
+        </GlassCard>
 
       </div>
 

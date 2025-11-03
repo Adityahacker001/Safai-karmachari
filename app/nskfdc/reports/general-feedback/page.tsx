@@ -332,7 +332,7 @@ const GeneralFeedbackReportPage = () => {
                    <th className="px-4 py-3 text-left min-w-[300px]">Description</th>
                    <SortableHeader colKey="dateReceived" title="Date Received" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[130px]" />
                    <th className="px-4 py-3 text-left min-w-[250px]">Action Taken</th>
-                   <SortableHeader colKey="status" title="Status" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
+                   {/* <SortableHeader colKey="status" title="Status" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" /> */}
                    <th className="px-4 py-3 text-center">Action</th>
                  </tr>
                </thead>
@@ -346,11 +346,11 @@ const GeneralFeedbackReportPage = () => {
                      <td className="px-4 py-3 text-slate-500 text-xs truncate max-w-sm">{item.description}</td>
                      <td className="px-4 py-3 text-slate-700">{new Date(item.dateReceived).toLocaleDateString('en-GB')}</td>
                      <td className="px-4 py-3 text-slate-500 text-xs truncate max-w-xs">{item.actionTaken}</td>
-                     <td className="px-4 py-3"><FeedbackStatusBadge status={item.status as Status} /></td>
+                     {/* <td className="px-4 py-3"><FeedbackStatusBadge status={item.status as Status} /></td> */}
                      <td className="px-4 py-3 text-center"><button onClick={()=>openModal(item)} className="p-1.5 rounded-md text-indigo-600 hover:bg-indigo-100" title="View Details"><Eye className="w-5 h-5" /></button></td>
                    </tr>
                  ))}
-                 {paginatedData.length === 0 && (<tr><td colSpan={9} className="text-center py-10 text-slate-500">No feedback found.</td></tr>)}
+                 {paginatedData.length === 0 && (<tr><td colSpan={8} className="text-center py-10 text-slate-500">No feedback found.</td></tr>)}
                </tbody>
              </table>
            </div>

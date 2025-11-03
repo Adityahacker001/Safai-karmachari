@@ -327,7 +327,7 @@ const DelayedComplianceReportPage = () => {
                    <SortableHeader colKey="state" title="State" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
                    <SortableHeader colKey="district" title="District" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
                    <th className="px-4 py-3 text-left min-w-[120px]">Type</th>
-                   <SortableHeader colKey="status" title="Status" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px]" />
+                   {/* <SortableHeader colKey="status" title="Status" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px]" /> */}
                    <SortableHeader colKey="delay" title="Delay (Days)" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[110px] text-right" />
                    <th className="px-4 py-3 text-left min-w-[200px]">Reason for Delay</th>
                    <th className="px-4 py-3 text-left min-w-[200px]">Remarks</th>
@@ -346,7 +346,7 @@ const DelayedComplianceReportPage = () => {
                      <td className="px-4 py-3 text-slate-700">{item.state}</td>
                      <td className="px-4 py-3 text-slate-700">{item.district}</td>
                      <td className="px-4 py-3 text-slate-700">{item.type}</td>
-                     <td className="px-4 py-3"><ComplianceStatusBadge status={item.status as Status} /></td>
+                     {/* <td className="px-4 py-3"><ComplianceStatusBadge status={item.status as Status} /></td> */}
                      <td className="px-4 py-3 text-red-600 font-bold text-right">{item.delay}</td>
                      <td className="px-4 py-3 text-slate-600 text-xs truncate max-w-xs">{item.reason}</td>
                      <td className="px-4 py-3 text-slate-500 text-xs truncate max-w-xs">{item.remarks}</td>
@@ -354,7 +354,7 @@ const DelayedComplianceReportPage = () => {
                      <td className="px-4 py-3 text-center"><button onClick={()=>openModal(item)} className="p-1.5 rounded-md text-indigo-600 hover:bg-indigo-100" title="View Details"><Eye className="w-5 h-5" /></button></td>
                    </tr>
                  ))}
-                 {paginatedData.length === 0 && (<tr><td colSpan={14} className="text-center py-10 text-slate-500">No delayed compliance records found.</td></tr>)}
+                 {paginatedData.length === 0 && (<tr><td colSpan={13} className="text-center py-10 text-slate-500">No delayed compliance records found.</td></tr>)}
                </tbody>
              </table>
            </div>

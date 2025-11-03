@@ -110,7 +110,7 @@ const NavigationTabs: React.FC<NavigationTabsProps> = ({ onScrollTo, refs }) => 
   const tabs = [
     { name: 'Profile Info', icon: User, ref: refs.profileRef },
     { name: 'Access Rights', icon: ShieldCheck, ref: refs.accessRef },
-    { name: 'Documents', icon: FileText, ref: refs.docsRef },
+    // { name: 'Documents', icon: FileText, ref: refs.docsRef },
     { name: 'Activity Log', icon: History, ref: refs.activityRef },
   ];
 
@@ -373,14 +373,14 @@ const NskfdcProfilePage = () => {
         </section>
 
         {/* --- 5. Documents & Verification Section --- */}
-        <section ref={docsRef} className="scroll-mt-24">
+        {/* <section ref={docsRef} className="scroll-mt-24">
           <Card title="Documents & Verification" icon={FileText}>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <DocumentCard title="Govt ID Proof (Aadhaar/PAN)" status="Verified" />
               <DocumentCard title="Employee ID Card" status="Verified" />
               <DocumentCard title="Office Authorization Letter" status="Pending" />
               <DocumentCard title="Bank Account Proof" status="Verified" />
-              {/* <DocumentCard title="Educational Certificates" status="Rejected" /> */}
+              <DocumentCard title="Educational Certificates" status="Rejected" />
             </div>
             <div className="flex flex-col md:flex-row items-center justify-center gap-3 mt-6 pt-6 border-t border-slate-200">
               <button className="w-full md:w-auto flex items-center justify-center px-5 py-2.5 rounded-lg font-semibold text-white bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5">
@@ -393,7 +393,7 @@ const NskfdcProfilePage = () => {
               </button>
             </div>
           </Card>
-        </section>
+        </section> */}
 
         {/* --- 6. Activity Log Section --- */}
         <section ref={activityRef} className="scroll-mt-24">

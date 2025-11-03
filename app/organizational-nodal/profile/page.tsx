@@ -36,6 +36,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion"; // For eye-catchy animations
 import { Badge } from "@/components/ui/badge";
+import StatCard from "@/components/ui/stat-card";
 
 // --- Interfaces ---
 interface OrgProfile {
@@ -101,7 +102,15 @@ export default function OrganizationalNodalProfilePage() {
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-8 bg-gradient-to-br from-gray-50 via-teal-50 to-indigo-100 min-h-screen">
+    <div className="p-4 sm:p-6 lg:p-8 space-y-8 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 min-h-screen relative">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `radial-gradient(circle at 25px 25px, rgba(59, 130, 246, 0.15) 2px, transparent 0),
+                           radial-gradient(circle at 75px 75px, rgba(139, 92, 246, 0.15) 2px, transparent 0)`,
+          backgroundSize: '100px 100px'
+        }} />
+      </div>
       {/* 🔹 Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -109,13 +118,59 @@ export default function OrganizationalNodalProfilePage() {
         transition={{ duration: 0.5 }}
         className="mb-8"
       >
-        <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-teal-600 via-cyan-600 to-blue-600 bg-clip-text text-transparent">
-          Organizational Profile
+        <h1 className="text-2xl lg:text-3xl font-bold text-blue-600 mb-2">
+          Organizational Profile Management
         </h1>
-        <p className="text-sm text-gray-600 mt-1">
-          Manage your organization's details, officer information, and workforce
-          metrics.
+        <p className="text-sm text-gray-600 mb-6">
+          Overview, Settings, and Compliance Status
         </p>
+        
+        {/* Profile Header Card */}
+        <Card className="shadow-2xl border-0 rounded-2xl bg-gradient-to-r from-blue-600 to-purple-700 overflow-hidden mb-8">
+          <CardContent className="p-8">
+            <div className="flex items-start gap-6 text-white">
+              {/* Avatar Circle */}
+              <div className="relative">
+                <div className="w-20 h-20 bg-blue-400 rounded-full flex items-center justify-center text-2xl font-bold border-4 border-white/30">
+                  ON
+                </div>
+                <span className="absolute -top-1 -right-1 text-xs bg-white text-blue-600 px-1.5 py-0.5 rounded text-[10px] font-semibold">
+                  Avatar
+                </span>
+              </div>
+              
+              {/* Profile Info */}
+              <div className="flex-1">
+                <h2 className="text-2xl font-bold mb-1">
+                  {profile.nodalOfficerName}, {profile.orgName}
+                </h2>
+                <p className="text-blue-100 mb-3">
+                  Jurisdiction: {profile.jurisdiction}
+                </p>
+                
+                <div className="flex flex-wrap gap-4 text-sm">
+                  <div className="flex items-center gap-1">
+                    <Mail className="w-4 h-4" />
+                    <span>{profile.email}</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Phone className="w-4 h-4" />
+                    <span>{profile.contactNumber}</span>
+                  </div>
+                </div>
+                
+                <div className="mt-3">
+                  <span className="inline-flex items-center gap-1 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                    ✓ Verified SP (NSKC Authorized)
+                  </span>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Verification & Role Info Cards */}
+        
       </motion.div>
 
       {/* 🔹 Profile Form in Cards */}
@@ -126,11 +181,16 @@ export default function OrganizationalNodalProfilePage() {
       >
         <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
           {/* --- Section 1: Organizational Details --- */}
-          <Card className="shadow-lg border border-gray-100 rounded-lg bg-white/80 backdrop-blur-sm overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-teal-50 to-cyan-50 border-b p-4">
-              <CardTitle className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                <Building className="w-5 h-5 text-teal-700" />
-                1. Organizational Details
+          <Card className="shadow-2xl border-0 rounded-2xl bg-white/95 backdrop-blur-lg overflow-hidden hover:shadow-3xl transition-all duration-300 ring-1 ring-white/20">
+            <CardHeader className="bg-gradient-to-r from-emerald-500 to-teal-600 border-b p-6 relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 to-teal-500/20" />
+              <CardTitle className="text-xl font-bold text-white flex items-center gap-3 relative z-10">
+                <div className="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
+                  <Building className="w-6 h-6 text-white" />
+                </div>
+                <span className="bg-gradient-to-r from-white to-emerald-50 bg-clip-text text-transparent">
+                  Organizational Details
+                </span>
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
@@ -142,7 +202,7 @@ export default function OrganizationalNodalProfilePage() {
                   value={profile.orgName}
                   onChange={handleChange}
                   placeholder="e.g., Lucknow International Airport"
-                  className="focus:ring-2 focus:ring-teal-300"
+                  className="focus:ring-2 focus:ring-emerald-400 focus:border-emerald-500 shadow-sm hover:shadow-md transition-all"
                 />
               </InputGroup>
 
@@ -153,7 +213,7 @@ export default function OrganizationalNodalProfilePage() {
                   value={profile.orgType}
                   onValueChange={(value) => handleSelectChange("orgType", value)}
                 >
-                  <SelectTrigger className="focus:ring-2 focus:ring-teal-300">
+                  <SelectTrigger className="focus:ring-2 focus:ring-emerald-400 focus:border-emerald-500 shadow-sm hover:shadow-md transition-all">
                     <SelectValue placeholder="Select a type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -179,15 +239,15 @@ export default function OrganizationalNodalProfilePage() {
                     value={profile.address}
                     onChange={handleChange}
                     placeholder="Enter full address"
-                    className="focus:ring-2 focus:ring-teal-300"
+                    className="focus:ring-2 focus:ring-emerald-400 focus:border-emerald-500 shadow-sm hover:shadow-md transition-all"
                   />
                   <Button
                     variant="outline"
                     size="icon"
-                    className="border-gray-300"
+                    className="border-emerald-300 hover:border-emerald-500 hover:bg-emerald-50 shadow-sm hover:shadow-md transition-all"
                     onClick={() => alert("Geo-location tagging (simulation)")}
                   >
-                    <Globe className="w-4 h-4 text-gray-600" />
+                    <Globe className="w-4 h-4 text-emerald-600" />
                   </Button>
                 </div>
               </InputGroup>
@@ -207,11 +267,16 @@ export default function OrganizationalNodalProfilePage() {
           </Card>
 
           {/* --- Section 2: Nodal Officer Details --- */}
-          <Card className="shadow-lg border border-gray-100 rounded-lg bg-white/80 backdrop-blur-sm overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50 border-b p-4">
-              <CardTitle className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                <User className="w-5 h-5 text-indigo-700" />
-                2. Nodal Officer Details
+          <Card className="shadow-2xl border-0 rounded-2xl bg-white/95 backdrop-blur-lg overflow-hidden hover:shadow-3xl transition-all duration-300 ring-1 ring-white/20">
+            <CardHeader className="bg-gradient-to-r from-blue-500 to-indigo-600 border-b p-6 relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-indigo-500/20" />
+              <CardTitle className="text-xl font-bold text-white flex items-center gap-3 relative z-10">
+                <div className="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
+                  <User className="w-6 h-6 text-white" />
+                </div>
+                <span className="bg-gradient-to-r from-white to-blue-50 bg-clip-text text-transparent">
+                  Nodal Officer Details
+                </span>
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
@@ -223,7 +288,7 @@ export default function OrganizationalNodalProfilePage() {
                   value={profile.nodalOfficerName}
                   onChange={handleChange}
                   placeholder="Enter full name"
-                  className="focus:ring-2 focus:ring-indigo-300"
+                  className="focus:ring-2 focus:ring-blue-400 focus:border-blue-500 shadow-sm hover:shadow-md transition-all"
                 />
               </InputGroup>
 
@@ -235,7 +300,7 @@ export default function OrganizationalNodalProfilePage() {
                   value={profile.designation}
                   onChange={handleChange}
                   placeholder="e.g., Senior Manager"
-                  className="focus:ring-2 focus:ring-indigo-300"
+                  className="focus:ring-2 focus:ring-blue-400 focus:border-blue-500 shadow-sm hover:shadow-md transition-all"
                 />
               </InputGroup>
 
@@ -247,7 +312,7 @@ export default function OrganizationalNodalProfilePage() {
                   value={profile.contactNumber}
                   onChange={handleChange}
                   placeholder="+91 XXXXX XXXXX"
-                  className="focus:ring-2 focus:ring-indigo-300"
+                  className="focus:ring-2 focus:ring-blue-400 focus:border-blue-500 shadow-sm hover:shadow-md transition-all"
                   icon={Phone}
                 />
               </InputGroup>
@@ -261,7 +326,7 @@ export default function OrganizationalNodalProfilePage() {
                   value={profile.email}
                   onChange={handleChange}
                   placeholder="officer@example.com"
-                  className="focus:ring-2 focus:ring-indigo-300"
+                  className="focus:ring-2 focus:ring-blue-400 focus:border-blue-500 shadow-sm hover:shadow-md transition-all"
                   icon={Mail}
                 />
               </InputGroup>
@@ -269,20 +334,25 @@ export default function OrganizationalNodalProfilePage() {
           </Card>
 
           {/* --- Section 3: Workforce Metrics (Auto-Calculated) --- */}
-          <Card className="shadow-lg border border-gray-100 rounded-lg bg-white/80 backdrop-blur-sm overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-green-50 to-lime-50 border-b p-4">
-              <CardTitle className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                <Users className="w-5 h-5 text-green-700" />
-                3. Workforce Metrics (Auto-Calculated)
+          <Card className="shadow-2xl border-0 rounded-2xl bg-white/95 backdrop-blur-lg overflow-hidden hover:shadow-3xl transition-all duration-300 ring-1 ring-white/20">
+            <CardHeader className="bg-gradient-to-r from-purple-500 to-pink-600 border-b p-6 relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-400/20 to-pink-500/20" />
+              <CardTitle className="text-xl font-bold text-white flex items-center gap-3 relative z-10">
+                <div className="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
+                  <Users className="w-6 h-6 text-white" />
+                </div>
+                <span className="bg-gradient-to-r from-white to-purple-50 bg-clip-text text-transparent">
+                  Workforce Metrics (Auto-Calculated)
+                </span>
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
               <InputGroup>
                 <Label>Contractors Assigned (NSKC Verified)</Label>
                 {/* Simulating a multi-select display */}
-                <div className="flex flex-wrap gap-2 p-2.5 border border-gray-300 rounded-lg bg-gray-100 min-h-[40px]">
+                <div className="flex flex-wrap gap-2 p-3 border border-purple-200 rounded-xl bg-gradient-to-r from-purple-50 to-pink-50 min-h-[50px] shadow-inner">
                   {metrics.contractorsAssigned.map((name) => (
-                    <Badge key={name} variant="secondary" className="bg-gray-200 text-gray-700">
+                    <Badge key={name} className="bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-sm hover:shadow-md transition-all">
                       {name}
                     </Badge>
                   ))}
@@ -295,7 +365,7 @@ export default function OrganizationalNodalProfilePage() {
                   id="totalWorkers"
                   value={metrics.totalWorkers}
                   readOnly
-                  className="bg-gray-100 cursor-not-allowed text-lg font-bold text-gray-900"
+                  className="bg-gradient-to-r from-purple-50 to-pink-50 border-purple-200 cursor-not-allowed text-xl font-bold text-purple-900 shadow-inner"
                   icon={Users}
                 />
               </InputGroup>
@@ -305,39 +375,39 @@ export default function OrganizationalNodalProfilePage() {
                   Category Breakdown (Auto-Calculated)
                 </Label>
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                  <MetricDisplay
+                  <StatCard
                     icon={ShieldAlert}
-                    label="Hazardous Workers"
+                    title="Hazardous Workers"
                     value={metrics.hazardous}
-                    color="text-red-600 bg-red-50"
+                    color="red"
                   />
-                  <MetricDisplay
+                  <StatCard
                     icon={AlertTriangle}
-                    label="Manual Scavenging"
+                    title="Manual Scavenging"
                     value={metrics.manualScavenging}
-                    color="text-orange-600 bg-orange-50"
+                    color="orange"
                   />
-                  <MetricDisplay
+                  <StatCard
                     icon={Trash2}
-                    label="Ragpickers"
+                    title="Ragpickers"
                     value={metrics.ragpickers}
-                    color="text-yellow-600 bg-yellow-50"
+                    color="amber"
                   />
-                  <MetricDisplay
+                  <StatCard
                     icon={UserCheck}
-                    label="Ordinary SKs"
+                    title="Ordinary SKs"
                     value={metrics.ordinarySKs}
-                    color="text-green-600 bg-green-50"
+                    color="green"
                   />
                 </div>
               </div>
             </CardContent>
-            <CardFooter className="bg-gray-50/50 p-4 flex justify-end">
+            <CardFooter className="bg-gradient-to-r from-slate-50 to-purple-50/50 p-6 flex justify-end border-t border-purple-100">
               <Button
                 onClick={handleSave}
-                className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 shadow-md hover:shadow-lg transition-all duration-200"
+                className="bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 px-8 py-3 rounded-xl font-semibold"
               >
-                <Save className="w-4 h-4 mr-2" /> Save Profile Changes
+                <Save className="w-5 h-5 mr-2" /> Save Profile Changes
               </Button>
             </CardFooter>
           </Card>
@@ -357,37 +427,10 @@ function InputGroup({
   children: React.ReactNode;
   className?: string;
 }) {
-  return <div className={`space-y-1.5 ${className || ""}`}>{children}</div>;
+  return <div className={`space-y-2 ${className || ""}`}>{children}</div>;
 }
 
-// Re-styled MetricDisplay for workforce breakdown
-function MetricDisplay({
-  icon: Icon,
-  label,
-  value,
-  color,
-}: {
-  icon: React.ElementType;
-  label: string;
-  value: number;
-  color: string;
-}) {
-  return (
-    <div
-      className={`flex items-center gap-3 p-3 border rounded-lg ${color} border-gray-200`}
-    >
-      <div className="p-2 rounded-full">
-        <Icon className="w-6 h-6" />
-      </div>
-      <div>
-        <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">
-          {label}
-        </p>
-        <p className="font-bold text-xl text-gray-800">{value}</p>
-      </div>
-    </div>
-  );
-}
+
 
 // Renamed local Input component to avoid conflict
 function LocalInput({

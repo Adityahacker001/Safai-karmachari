@@ -23,16 +23,10 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import {
   GraduationCap, // Page Header
-  User,            // Worker Name
-  BookOpen,        // Training Module
-  CalendarDays,    // Date Icon
-  UserCheck,       // Trainer Name
-  FileText,        // Remarks
   AlertTriangle,   // Alert Icon
   CheckCircle,     // Success Icon
   Save,            // Button Icon
   Send,            // Button Icon
-  ChevronDown,     // For Select
 } from "lucide-react";
 import { cn } from "@/lib/utils"; // Assuming you have cn utility
 
@@ -171,10 +165,7 @@ function TrainingForm() {
                 <Label htmlFor="workerName">Worker Name</Label>
                 <Select name="workerName" value={formData.workerName} onValueChange={(value) => handleSelectChange("workerName", value)}>
                   <SelectTrigger className="focus:ring-2 focus:ring-cyan-300">
-                     <div className="flex items-center gap-2">
-                        <User className="w-4 h-4 text-gray-400" />
-                        <SelectValue placeholder="Select a worker..." />
-                    </div>
+                    <SelectValue placeholder="Select a worker..." />
                   </SelectTrigger>
                   <SelectContent>
                     {mockWorkers.map(w => (
@@ -188,10 +179,7 @@ function TrainingForm() {
                 <Label htmlFor="trainingModule">Training Module</Label>
                 <Select name="trainingModule" value={formData.trainingModule} onValueChange={(value) => handleSelectChange("trainingModule", value)}>
                   <SelectTrigger className="focus:ring-2 focus:ring-cyan-300">
-                     <div className="flex items-center gap-2">
-                        <BookOpen className="w-4 h-4 text-gray-400" />
-                        <SelectValue placeholder="Select a module..." />
-                    </div>
+                    <SelectValue placeholder="Select a module..." />
                   </SelectTrigger>
                   <SelectContent>
                     {mockModules.map(m => (
@@ -203,20 +191,20 @@ function TrainingForm() {
 
               <InputGroup>
                 <Label htmlFor="completionDate">Completion Date</Label>
-                <InputWithIcon
+                <Input
                   id="completionDate" name="completionDate" type="date"
                   value={formData.completionDate} onChange={handleChange}
-                  icon={CalendarDays}
+                  className="focus:ring-2 focus:ring-cyan-300"
                 />
               </InputGroup>
               
               <InputGroup>
                 <Label htmlFor="trainerName">Trainer Name / Organization</Label>
-                <InputWithIcon
+                <Input
                   id="trainerName" name="trainerName"
                   value={formData.trainerName} onChange={handleChange}
                   placeholder="e.g., Mr. Sharma / UrbanTech NGO"
-                  icon={UserCheck}
+                  className="focus:ring-2 focus:ring-cyan-300"
                 />
               </InputGroup>
             </div>
@@ -224,8 +212,8 @@ function TrainingForm() {
             {/* --- Section 2: Remarks --- */}
             <div className="border-t border-gray-200 pt-6">
                <InputGroup>
-                <Label htmlFor="remarks" className="text-base font-medium text-gray-700 flex items-center gap-2">
-                    <FileText className="w-5 h-5 text-gray-500" /> Remarks (Optional)
+                <Label htmlFor="remarks" className="text-base font-medium text-gray-700">
+                    Remarks (Optional)
                 </Label>
                 <Textarea
                   id="remarks"
@@ -303,82 +291,3 @@ function InputGroup({ children, className }: { children: React.ReactNode, classN
   return <div className={`space-y-1.5 ${className || ''}`}>{children}</div>;
 }
 
-// Custom Input with Icon
-function InputWithIcon({
-  id,
-  name,
-  type = "text",
-  value,
-  placeholder,
-  onChange,
-  readOnly = false,
-  className,
-  icon: Icon,
-}: {
-  id: string;
-  name?: string;
-  type?: string;
-  value: string | number;
-  placeholder?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  readOnly?: boolean;
-  className?: string;
-  icon: React.ElementType;
-}) {
-  return (
-    <div className="relative">
-      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-        <Icon className="h-5 w-5 text-gray-400" />
-      </div>
-      <Input
-        id={id}
-        name={name}
-        type={type}
-        value={value}
-        readOnly={readOnly}
-        placeholder={placeholder}
-        onChange={onChange}
-        className={cn(
-          `block w-full pl-10 p-2.5 border-gray-300 rounded-lg text-sm transition duration-150`,
-          readOnly
-            ? "bg-gray-100 text-gray-600 cursor-not-allowed focus:ring-0 focus:border-gray-300"
-            : "bg-white focus:ring-2 focus:ring-cyan-300 focus:border-cyan-500 hover:border-gray-400",
-          className
-        )}
-      />
-    </div>
-  );
-}
-
-// Custom Select with Icon
-function SelectWithIcon({
-  label,
-  name,
-  value,
-  options,
-  onChange,
-  icon: Icon,
-}: {
-  label: string;
-  name: string;
-  value: string;
-  options: string[];
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  icon: React.ElementType;
-}) {
-  return (
-    <div className="relative">
-      <Label htmlFor={name || label} className="block text-sm font-medium text-gray-700 mb-1.5">{label}</Label>
-       <div className="relative rounded-lg shadow-sm">
-          {Icon && <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><Icon className="h-5 w-5 text-gray-400" /></div>}
-            <select
-              id={name || label} name={name} value={value} onChange={onChange}
-              className={cn(`appearance-none block w-full p-2.5 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-cyan-300 focus:border-cyan-500 transition duration-150 pl-10 pr-8 hover:border-gray-400`)}
-            >
-              {options.map((opt, i) => ( <option key={i} value={opt} disabled={opt === ""}> {opt === "" ? "-- Select an Option --" : opt} </option> ))}
-            </select>
-            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none"> <ChevronDown className="h-4 w-4 text-gray-400"/> </div>
-        </div>
-    </div>
-  );
-}

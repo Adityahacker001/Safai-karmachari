@@ -348,7 +348,7 @@ const BeneficiaryReportPage = () => {
                   <SortableHeader colKey="amtSanctioned" title="Amt Sanctioned (₹)" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[160px]" />
                   <SortableHeader colKey="amtDisbursed" title="Amt Disbursed (₹)" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[160px]" />
                   <th className="px-4 py-3 text-left min-w-[200px]">Agency</th>
-                  <SortableHeader colKey="status" title="Status" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px]" />
+                  {/* <SortableHeader colKey="status" title="Status" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px]" /> */}
                   <th className="px-4 py-3 text-left min-w-[200px]">Remarks</th>
                 </tr>
               </thead>
@@ -375,15 +375,15 @@ const BeneficiaryReportPage = () => {
                       {item.amtDisbursed.toLocaleString('en-IN')}
                     </td>
                     <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{item.agency}</td>
-                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap">
+                    {/* <td className="px-4 py-3 text-slate-700 whitespace-nowrap">
                       <StatusBadge status={item.status as Status} />
-                    </td>
+                    </td> */}
                     <td className="px-4 py-3 text-slate-500 text-xs truncate max-w-xs">{item.remarks}</td>
                   </tr>
                 ))}
                 {paginatedData.length === 0 && (
                   <tr>
-                    <td colSpan={16} className="text-center py-10 text-slate-500">
+                    <td colSpan={15} className="text-center py-10 text-slate-500">
                       No beneficiaries found matching your criteria.
                     </td>
                   </tr>

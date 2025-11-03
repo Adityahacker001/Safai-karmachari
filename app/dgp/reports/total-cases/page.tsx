@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import StatCard from '@/components/ui/stat-card';
 import {
   Home,
   ChevronRight,
@@ -70,25 +71,17 @@ type Case = {
   pendingReason?: string;
 };
 
-type Kpi = {
-  title: string;
-  value: string;
-  change?: string;
-  changeType?: 'positive' | 'negative';
-  icon: React.ReactNode;
-  gradient: string;
-  glow: string;
-};
+
 
 // --- MOCK DATA ---
 
-const mockKpis: Kpi[] = [
-  { title: "Total Cases", value: "52", change: "+4", changeType: 'positive', icon: <FileText size={28} />, gradient: "from-blue-600 to-blue-800", glow: "shadow-blue-500/40" },
-  { title: "In Progress", value: "18", change: "+1", changeType: 'negative', icon: <Loader size={28} />, gradient: "from-amber-500 to-amber-700", glow: "shadow-amber-500/40" },
-  { title: "Charge Sheets Filed", value: "30", change: "+3", changeType: 'positive', icon: <FileCheck2 size={28} />, gradient: "from-sky-500 to-sky-700", glow: "shadow-sky-500/40" },
-  { title: "Compensation Paid", value: "28", change: "+2", changeType: 'positive', icon: <DollarSign size={28} />, gradient: "from-emerald-500 to-emerald-700", glow: "shadow-emerald-500/40" },
-  { title: "Compensation Pending", value: "4", change: "+1", changeType: 'negative', icon: <AlertOctagon size={28} />, gradient: "from-red-600 to-red-800", glow: "shadow-red-500/40" },
-];
+const mockKpis = {
+  totalCases: { value: "52", change: "+4" },
+  inProgress: { value: "18", change: "+1" },
+  chargeSheetsField: { value: "30", change: "+3" },
+  compensationPaid: { value: "28", change: "+2" },
+  compensationPending: { value: "4", change: "+1" },
+};
 
 const mockCases: Case[] = [
   {
@@ -181,34 +174,7 @@ const GlassCard = ({ children, className = "", noHover = false }: {
   </motion.div>
 );
 
-/**
- * 2. KPI Card Component
- */
-const KpiCard = ({ kpi }: { kpi: Kpi }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5, ease: "easeOut" }}
-    whileHover={{ y: -6, boxShadow: `0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04), 0 0 0 4px rgba(255,255,255,0.5)`, transition: { duration: 0.2 } }}
-    className={`relative rounded-xl shadow-lg p-5 text-white overflow-hidden ${kpi.gradient} ${kpi.glow}`}
-  >
-    <div className="relative z-10">
-      <div className="flex justify-between items-center">
-        <span className="text-sm font-medium opacity-90">{kpi.title}</span>
-        {kpi.change && (
-          <span className={`text-xs font-semibold px-2 py-0.5 rounded-full flex items-center gap-1 ${kpi.changeType === 'positive' ? 'bg-white/20' : 'bg-red-500/50'}`}>
-            {kpi.changeType === 'positive' ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
-            {kpi.change}
-          </span>
-        )}
-      </div>
-      <div className="text-4xl font-bold mt-2 mb-1">{kpi.value}</div>
-    </div>
-    <div className="absolute -right-4 -bottom-4 opacity-10 z-0">
-      {React.cloneElement(kpi.icon as React.ReactElement, { size: 80 })}
-    </div>
-  </motion.div>
-);
+
 
 /**
  * 3. StatusBadge Component
@@ -552,10 +518,12 @@ export default function TotalCasesReport() {
       </GlassCard>
 
       {/* --- KPI Metrics --- */}
-      <section className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
-        {mockKpis.map(kpi => (
-          <KpiCard key={kpi.title} kpi={{ ...kpi, gradient: 'bg-gradient-to-r from-blue-500 to-green-500' }} />
-        ))}
+      <section className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6 mb-8">
+        <StatCard title="Total Cases" value={mockKpis.totalCases.value} icon={FileText} color="blue" />
+        <StatCard title="In Progress" value={mockKpis.inProgress.value} icon={Loader} color="amber" />
+        <StatCard title="Charge Sheets Filed" value={mockKpis.chargeSheetsField.value} icon={FileCheck2} color="indigo" />
+        <StatCard title="Compensation Paid" value={mockKpis.compensationPaid.value} icon={DollarSign} color="green" />
+        <StatCard title="Compensation Pending" value={mockKpis.compensationPending.value} icon={AlertOctagon} color="red" />
       </section>
       
       {/* --- Main Table --- */}

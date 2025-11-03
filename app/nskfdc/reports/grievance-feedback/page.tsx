@@ -478,7 +478,7 @@ const GrievanceReportPage = () => {
                   <th className="px-4 py-3 text-left min-w-[250px]">Description</th>
                   <SortableHeader colKey="dateReceived" title="Date Received" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[130px]" />
                   <th className="px-4 py-3 text-left min-w-[250px]">Action Taken</th>
-                  <SortableHeader colKey="status" title="Status" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
+                  {/* <SortableHeader colKey="status" title="Status" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" /> */}
                   <th className="px-4 py-3 text-left min-w-[150px]">Escalated To</th>
                   <th className="px-4 py-3 text-left">Action</th>
                 </tr>
@@ -493,7 +493,7 @@ const GrievanceReportPage = () => {
                     <td className="px-4 py-3 text-slate-500 text-xs truncate max-w-xs">{item.description}</td>
                     <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{new Date(item.dateReceived).toLocaleDateString('en-GB')}</td>
                     <td className="px-4 py-3 text-slate-500 text-xs truncate max-w-xs">{item.actionTaken}</td>
-                    <td className="px-4 py-3 whitespace-nowrap"><GrievanceStatusBadge status={item.status as Status} /></td>
+                    {/* <td className="px-4 py-3 whitespace-nowrap"><GrievanceStatusBadge status={item.status as Status} /></td> */}
                     <td className={`px-4 py-3 whitespace-nowrap ${item.escalatedTo ? 'text-red-600 font-medium' : 'text-slate-400'}`}>{item.escalatedTo || '—'}</td>
                     <td className="px-4 py-3 whitespace-nowrap">
                       <button onClick={() => openModal(item)} className="flex items-center gap-1 text-indigo-600 hover:underline hover:text-indigo-800">
@@ -503,7 +503,7 @@ const GrievanceReportPage = () => {
                   </tr>
                 ))}
                 {paginatedData.length === 0 && (
-                  <tr><td colSpan={10} className="text-center py-10 text-slate-500">No grievances found matching your criteria.</td></tr>
+                  <tr><td colSpan={9} className="text-center py-10 text-slate-500">No grievances found matching your criteria.</td></tr>
                 )}
               </tbody>
             </table>

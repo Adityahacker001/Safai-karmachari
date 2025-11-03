@@ -1,9 +1,8 @@
 'use client';
 
-import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { motion, AnimatePresence, animate } from 'framer-motion';
+import React, { useState, useMemo } from 'react';
+import { motion } from 'framer-motion';
 import {
-  UsersRound,
   ChevronRight as ChevronRightIcon,
   Shield,
   Building,
@@ -14,12 +13,8 @@ import {
   ArrowUp,
   ArrowDown,
   Eye,
-  X,
   ChevronLeft as ChevronLeftIcon,
-  Send,
-  ShieldAlert,
   Signal,
-  SignalLow,
   SignalZero,
   CheckCircle2,
   XCircle,
@@ -176,22 +171,7 @@ const SyncStatus: React.FC<SyncStatusProps> = ({ lastSync }) => {
 };
 
 /**
- * 5. ComplianceCell Component
- */
-interface ComplianceCellProps {
-  score: number;
-}
-
-const ComplianceCell: React.FC<ComplianceCellProps> = ({ score }) => {
-  const classConfig = score > 90 ? "text-emerald-600" : score > 75 ? "text-amber-600" : "text-red-600";
-  if (score === 0) {
-    return <span className="text-gray-500 font-medium">N/A</span>;
-  }
-  return <span className={`text-base font-bold ${classConfig}`}>{score.toFixed(1)}%</span>;
-};
-
-/**
- * 6. SelectInput Component
+ * 5. SelectInput Component
  */
 interface SelectInputProps {
   label: string;
@@ -217,7 +197,7 @@ const SelectInput: React.FC<SelectInputProps> = ({ label, name, value, onChange,
 );
 
 /**
- * 7. ThSortable Component
+ * 6. ThSortable Component
  */
 interface ThSortableProps {
   sortKey: string;
@@ -252,7 +232,7 @@ export default function DGPOnboardingReport() {
   const [searchTerm, setSearchTerm] = useState('');
 
   // Table State
-  const [sortConfig, setSortConfig] = useState({ key: 'compliance', direction: 'asc' });
+  const [sortConfig, setSortConfig] = useState({ key: 'district', direction: 'asc' });
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 7;
 
@@ -417,7 +397,6 @@ export default function DGPOnboardingReport() {
                     <ThSortable sortKey="lastSync" title="Last Sync" handleSort={handleSort} sortIcon={getSortIcon('lastSync')} />
                     <ThSortable sortKey="incidents" title="Incidents Logged" handleSort={handleSort} sortIcon={getSortIcon('incidents')} />
                     <ThSortable sortKey="cases" title="Total Cases" handleSort={handleSort} sortIcon={getSortIcon('cases')} />
-                    <ThSortable sortKey="compliance" title="Compliance Score" handleSort={handleSort} sortIcon={getSortIcon('compliance')} />
                     <th className="px-5 py-4 font-semibold text-gray-600 uppercase tracking-wider text-center">Actions</th>
                   </tr>
                 </thead>
@@ -450,31 +429,10 @@ export default function DGPOnboardingReport() {
                       </td>
                       <td className="px-5 py-4 whitespace-nowrap font-bold text-center">{d.incidents}</td>
                       <td className="px-5 py-4 whitespace-nowrap font-bold text-center">{d.cases}</td>
-                      <td className="px-5 py-4 whitespace-nowrap font-bold text-center">
-                        <ComplianceCell score={d.compliance} />
-                      </td>
                       <td className="px-5 py-4 whitespace-nowrap text-center">
                         <div className="flex items-center justify-center gap-2">
                           <AppButton variant="action" icon={Eye} onClick={() => {}} className="px-3">
                             <span className="sr-only">View</span>
-                          </AppButton>
-                          <AppButton 
-                            variant="warning" 
-                            icon={Send} 
-                            onClick={() => {}} 
-                            className="px-3"
-                            disabled={d.onboarded === 'Yes'}
-                          >
-                            <span className="sr-only">Send Reminder</span>
-                          </AppButton>
-                          <AppButton 
-                            variant="danger" 
-                            icon={ShieldAlert} 
-                            onClick={() => {}} 
-                            className="px-3"
-                            disabled={getSyncStatus(d.lastSync).status !== 'Failed'}
-                          >
-                             <span className="sr-only">Escalate</span>
                           </AppButton>
                         </div>
                       </td>

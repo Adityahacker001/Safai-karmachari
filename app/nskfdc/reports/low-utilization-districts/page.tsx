@@ -359,11 +359,11 @@ const LowUtilizationPage = () => {
                    <SortableHeader colKey="fy" title="FY" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[100px]" />
                    <SortableHeader colKey="fundSanctioned" title="Sanctioned (₹)" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px] text-right" />
                    <SortableHeader colKey="fundUtilized" title="Utilized (₹)" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px] text-right" />
-                   <SortableHeader colKey="utilizationPercent" title="Util %" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[100px] text-right" />
+                   {/* <SortableHeader colKey="utilizationPercent" title="Util %" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[100px] text-right" /> */}
                    <th className="px-4 py-3 text-center min-w-[100px]">Target Ben.</th>
                    <th className="px-4 py-3 text-center min-w-[100px]">Achieved Ben.</th>
-                   <SortableHeader colKey="achievementPercent" title="Achieve %" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[110px] text-right" />
-                   <SortableHeader colKey="rating" title="Rating" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[180px]" />
+                   {/* <SortableHeader colKey="achievementPercent" title="Achieve %" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[110px] text-right" /> */}
+                   {/* <SortableHeader colKey="rating" title="Rating" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[180px]" /> */}
                    <th className="px-4 py-3 text-left min-w-[200px]">Reason</th>
                    <th className="px-4 py-3 text-left min-w-[200px]">Remarks</th>
                    <SortableHeader colKey="lastUpdated" title="Last Updated" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
@@ -380,18 +380,18 @@ const LowUtilizationPage = () => {
                      <td className="px-4 py-3 text-slate-700">{item.fy}</td>
                      <td className="px-4 py-3 text-slate-700 font-medium text-right">{formatCurrency(item.fundSanctioned)}</td>
                      <td className="px-4 py-3 text-emerald-700 font-bold text-right">{formatCurrency(item.fundUtilized)}</td>
-                     <td className={`px-4 py-3 font-bold text-right ${item.utilizationPercent < 60 ? 'text-red-600' : 'text-green-600'}`}>{item.utilizationPercent}%</td>
+                     {/* <td className={`px-4 py-3 font-bold text-right ${item.utilizationPercent < 60 ? 'text-red-600' : 'text-green-600'}`}>{item.utilizationPercent}%</td> */}
                      <td className="px-4 py-3 text-slate-700 text-center">{item.targetBen}</td>
                      <td className="px-4 py-3 text-green-700 font-bold text-center">{item.achievedBen}</td>
-                     <td className={`px-4 py-3 font-bold text-right ${item.achievementPercent < 60 ? 'text-red-600' : 'text-green-600'}`}>{item.achievementPercent}%</td>
-                     <td className="px-4 py-3"><PerformanceRatingBadge rating={item.rating} /></td>
+                     {/* <td className={`px-4 py-3 font-bold text-right ${item.achievementPercent < 60 ? 'text-red-600' : 'text-green-600'}`}>{item.achievementPercent}%</td> */}
+                     {/* <td className="px-4 py-3"><PerformanceRatingBadge rating={item.rating} /></td> */}
                      <td className="px-4 py-3 text-slate-600 text-xs truncate max-w-[150px]">{item.reason}</td>
                      <td className="px-4 py-3 text-slate-500 text-xs truncate max-w-[150px]">{item.remarks}</td>
                      <td className="px-4 py-3 text-slate-700">{new Date(item.lastUpdated).toLocaleDateString('en-GB')}</td>
                      <td className="px-4 py-3 text-center"><button onClick={()=>openModal(item)} className="p-1.5 rounded-md text-indigo-600 hover:bg-indigo-100" title="View Details"><Eye className="w-5 h-5" /></button></td>
                    </tr>
                  ))}
-                 {paginatedData.length === 0 && (<tr><td colSpan={16} className="text-center py-10 text-slate-500">No low utilization records found.</td></tr>)}
+                 {paginatedData.length === 0 && (<tr><td colSpan={13} className="text-center py-10 text-slate-500">No low utilization records found.</td></tr>)}
                </tbody>
              </table>
            </div>

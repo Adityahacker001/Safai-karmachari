@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import StatCard from '@/components/ui/stat-card';
 import {
   Home,
   ChevronRight,
@@ -152,42 +153,7 @@ const GlassCard = ({ children, className = "", noHover = false }: {
   </motion.div>
 );
 
-/**
- * 2. KPI Card Component
- */
-const KpiCard = ({ title, value, change, changeType, icon, gradient, glow }: {
-  title: string;
-  value: string | number;
-  change?: string;
-  changeType?: 'positive' | 'negative';
-  icon: React.ReactNode;
-  gradient: string;
-  glow: string;
-}) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5, ease: "easeOut" }}
-    whileHover={{ y: -6, boxShadow: `0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04), 0 0 0 4px rgba(255,255,255,0.5)`, transition: { duration: 0.2 } }}
-    className={`relative rounded-xl shadow-lg p-5 text-white overflow-hidden ${gradient} ${glow}`}
-  >
-    <div className="relative z-10">
-      <div className="flex justify-between items-center">
-        <span className="text-sm font-medium opacity-90">{title}</span>
-        {change && (
-          <span className={`text-xs font-semibold px-2 py-0.5 rounded-full flex items-center gap-1 ${changeType === 'positive' ? 'bg-white/20' : 'bg-red-500/50'}`}>
-            {changeType === 'positive' ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
-            {change}
-          </span>
-        )}
-      </div>
-      <div className="text-4xl font-bold mt-2 mb-1">{value}</div>
-    </div>
-    <div className="absolute -right-4 -bottom-4 opacity-10 z-0">
-      {React.cloneElement(icon as React.ReactElement, { size: 80 })}
-    </div>
-  </motion.div>
-);
+
 
 /**
  * 3. StatusBadge Component
@@ -528,13 +494,11 @@ export default function GrievancesReport() {
       </GlassCard>
 
       {/* --- KPI Metrics --- */}
-      <section className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
-        <KpiCard title="Total Grievances" value={mockKpis.total.value} change={mockKpis.total.change} changeType="positive" icon={<MessageSquare size={28} />} gradient="bg-gradient-to-r from-blue-500 to-blue-800" glow="shadow-blue-500/40" />
-        <KpiCard title="Resolved" value={mockKpis.resolved.value} change={mockKpis.resolved.change} changeType="positive" icon={<CheckCircle size={28} />} gradient="bg-gradient-to-r from-green-400 to-green-700" glow="shadow-green-500/40" />
-        <KpiCard title="Pending" value={mockKpis.pending.value} change={mockKpis.pending.change} changeType="negative" icon={<Clock size={28} />} gradient="bg-gradient-to-r from-yellow-400 to-yellow-700" glow="shadow-yellow-500/40" />
-        <KpiCard title="Escalated" value={mockKpis.escalated.value} change={mockKpis.escalated.change} changeType="negative" icon={<AlertTriangle size={28} />} gradient="bg-gradient-to-r from-red-500 to-red-800" glow="shadow-red-500/40" />
-        <KpiCard title="Resolution %" value={mockKpis.resolvedPercent.value} change={mockKpis.resolvedPercent.change} changeType="negative" icon={<BarChart2 size={28} />} gradient="bg-gradient-to-r from-sky-500 to-sky-700" glow="shadow-sky-500/40" />
-        <KpiCard title="Avg. Resolution Time" value={mockKpis.avgTime.value} change={mockKpis.avgTime.change} changeType="negative" icon={<Clock size={28} />} gradient="bg-gradient-to-r from-gray-500 to-gray-700" glow="shadow-gray-500/40" />
+      <section className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+        <StatCard title="Total Grievances" value={mockKpis.total.value.toString()} icon={MessageSquare} color="blue" />
+        <StatCard title="Resolved" value={mockKpis.resolved.value.toString()} icon={CheckCircle} color="green" />
+        <StatCard title="Pending" value={mockKpis.pending.value.toString()} icon={Clock} color="amber" />
+        <StatCard title="Escalated" value={mockKpis.escalated.value.toString()} icon={AlertTriangle} color="red" />
       </section>
 
       {/* --- Main Worker Table --- */}

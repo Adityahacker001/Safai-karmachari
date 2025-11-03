@@ -7,6 +7,7 @@ import {
   CardTitle,
   CardContent,
 } from "@/components/ui/card"; // Shadcn
+import StatCard from "@/components/ui/stat-card";
 import {
   Table,
   TableBody,
@@ -17,13 +18,6 @@ import {
 } from "@/components/ui/table"; // Shadcn
 import { Input } from "@/components/ui/input"; // Shadcn
 import { Button } from "@/components/ui/button"; // Shadcn
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select"; // Shadcn
 import { Badge } from "@/components/ui/badge"; // Shadcn
 import {
   Users,
@@ -37,9 +31,6 @@ import {
   HeartPulse,
   UserX,
   FileText,
-  BarChart3,
-  PieChart as PieChartIcon,
-  LineChart as LineChartIcon,
   Plus,
   Send,
   BellRing,
@@ -47,31 +38,16 @@ import {
   ArrowUp,
   ArrowDown,
   Star,
-  Settings,
+  LucideIcon,
 } from "lucide-react";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend,
-  LineChart,
-  Line,
-  CartesianGrid,
-} from "recharts";
 
 // --- Data Interfaces ---
 interface SummaryCardData {
   title: string;
   value: string;
-  subtext: string;
-  icon: React.ElementType;
-  color: string; // Tailwind color class
+  subtitle: string;
+  icon: LucideIcon;
+  color: 'blue' | 'green' | 'orange' | 'red' | 'purple' | 'indigo' | 'emerald' | 'amber' | 'sky' | 'violet' | 'pink';
 }
 interface WorkerPerformance {
   rank: number;
@@ -92,15 +68,15 @@ interface WorkerIssues {
 
 // --- Mock Data ---
 const mockSummaryData: SummaryCardData[] = [
-  { title: "Total Workers", value: "350", subtext: "15 Hazardous, 20 MS, 45 RP", icon: Users, color: "bg-gradient-to-br from-blue-500 via-cyan-400 to-green-300" },
-  { title: "Total Contractors", value: "4", subtext: "NSKC Verified", icon: Building, color: "bg-gradient-to-br from-gray-400 via-gray-500 to-gray-700" },
-  { title: "Training", value: "85%", subtext: "52 Workers Pending", icon: GraduationCap, color: "bg-gradient-to-br from-cyan-400 via-blue-400 to-indigo-400" },
-  { title: "Incidents", value: "3", subtext: "1 Death, 2 Injuries, 1 FIR", icon: AlertTriangle, color: "bg-gradient-to-br from-red-500 via-pink-500 to-orange-400" },
-  { title: "Grievances", value: "8", subtext: "2 Pending, 1 Escalated", icon: MessageSquareWarning, color: "bg-gradient-to-br from-orange-400 via-yellow-400 to-pink-400" },
-  { title: "Directions", value: "5", subtext: "1 Pending (Aging > 3 days)", icon: ClipboardCheck, color: "bg-gradient-to-br from-purple-500 via-fuchsia-400 to-blue-400" },
-  { title: "Feedback", value: "12", subtext: "3 Pending (from Public)", icon: MessageSquareHeart, color: "bg-gradient-to-br from-pink-500 via-rose-400 to-yellow-200" },
-  { title: "Payment Status", value: "92%", subtext: "28 Pending, 2 Contractors Delayed", icon: Banknote, color: "bg-gradient-to-br from-green-400 via-lime-300 to-yellow-200" },
-  { title: "Medical Exams", value: "78%", subtext: "4 Follow-up, 12 Overdue", icon: HeartPulse, color: "bg-gradient-to-br from-teal-400 via-emerald-400 to-green-400" },
+  { title: "Total Workers", value: "350", subtitle: "15 Hazardous, 20 MS, 45 RP", icon: Users as LucideIcon, color: "blue" as const },
+  { title: "Total Contractors", value: "4", subtitle: "NSKC Verified", icon: Building as LucideIcon, color: "indigo" as const },
+  // { title: "Training", value: "85%", subtitle: "52 Workers Pending", icon: GraduationCap as LucideIcon, color: "sky" as const },
+  { title: "Incidents", value: "3", subtitle: "1 Death, 2 Injuries, 1 FIR", icon: AlertTriangle as LucideIcon, color: "red" as const },
+  { title: "Grievances", value: "8", subtitle: "2 Pending, 1 Escalated", icon: MessageSquareWarning as LucideIcon, color: "orange" as const },
+  { title: "Directions", value: "5", subtitle: "1 Pending (Aging > 3 days)", icon: ClipboardCheck as LucideIcon, color: "purple" as const },
+  { title: "Feedback", value: "12", subtitle: "3 Pending (from Public)", icon: MessageSquareHeart as LucideIcon, color: "pink" as const },
+  // { title: "Payment Status", value: "92%", subtitle: "28 Pending, 2 Contractors Delayed", icon: Banknote as LucideIcon, color: "green" as const },
+  // { title: "Medical Exams", value: "78%", subtitle: "4 Follow-up, 12 Overdue", icon: HeartPulse as LucideIcon, color: "emerald" as const },
 ];
 
 const mockTopWorkers: WorkerPerformance[] = [
@@ -139,13 +115,10 @@ export default function OrganizationalNodalDashboardPage() {
       {/* 🔹 1. Summary Metrics */}
       <SummaryCards data={summaryData} />
 
-      {/* 🔹 2. Graphs & Charts */}
-      <DashboardCharts />
-
-      {/* 🔹 3. Quick Action Buttons */}
+      {/* 🔹 2. Quick Action Buttons */}
       <QuickActions onActionClick={handleQuickAction} />
 
-      {/* 🔹 4. Worker Performance Snapshot */}
+      {/* 🔹 3. Worker Performance Snapshot */}
       <PerformanceSnapshot topWorkers={topWorkers} bottomWorkers={bottomWorkers} />
     </div>
   );
@@ -161,28 +134,18 @@ function SummaryCards({ data }: { data: SummaryCardData[] }) {
     data.slice(6, 9),
   ];
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       {rows.map((row, idx) => (
-        <div key={idx} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+        <div key={idx} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {row.map((item) => (
-            <Card
+            <StatCard
               key={item.title}
-              className={`relative overflow-hidden ${item.color} text-white shadow-lg rounded-xl hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 ring-2 ring-white/60 hover:ring-4 hover:ring-white/80`}
-              style={{ boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.18), 0 1.5px 8px 0 rgba(0,0,0,0.10)' }}
-            >
-              {/* Glow overlay */}
-              <div className="absolute inset-0 pointer-events-none" style={{background: 'radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.01) 70%)'}} />
-              <div className={`absolute top-4 right-4 p-2 rounded-lg bg-white/20 border border-white/30`}>
-                <item.icon className="h-6 w-6" strokeWidth={1.5} />
-              </div>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-semibold text-white/90">{item.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-3xl font-bold text-white drop-shadow-lg">{item.value}</p>
-                <p className="text-xs text-white/90 mt-1 truncate" title={item.subtext}>{item.subtext}</p>
-              </CardContent>
-            </Card>
+              title={item.title}
+              value={item.value}
+              subtitle={item.subtitle}
+              icon={item.icon}
+              color={item.color}
+            />
           ))}
         </div>
       ))}
@@ -190,169 +153,7 @@ function SummaryCards({ data }: { data: SummaryCardData[] }) {
   );
 }
 
-function DashboardCharts() {
-  // Mock data for charts
-  const workerPieData = [ { name: 'Ordinary', value: 270 }, { name: 'Hazardous', value: 15 }, { name: 'Ragpickers', value: 45 }, { name: 'Manual Scav.', value: 20 }, ];
-  const incidentBarData = [ { name: 'Death', count: 1 }, { name: 'Injury', count: 2 }, { name: 'FIR Filed', count: 1 }, { name: 'Comp. Paid', count: 0 }, ];
-  const compliancePieData = [ { name: 'Complied', value: 4 }, { name: 'Pending', value: 1 } ];
-  const grievanceBarData = [ { name: 'Safety', Total: 3, Complied: 2, Pending: 1, Escalated: 0 }, { name: 'Payment', Total: 4, Complied: 2, Pending: 1, Escalated: 1 }, { name: 'Equipment', Total: 1, Complied: 1, Pending: 0, Escalated: 0 } ];
-  const feedbackLineData = [ { month: 'Jan', Received: 5, Complied: 3, Pending: 2 }, { month: 'Feb', Received: 8, Complied: 5, Pending: 3 }, { month: 'Mar', Received: 6, Complied: 4, Pending: 2 } ];
-  const trainingBarData = [ { name: 'Module A', Completed: 300, Pending: 50 }, { name: 'Module B', Completed: 250, Pending: 100 } ];
-  const medicalPieData = [ { name: 'Completed', value: 273 }, { name: 'Follow-up', value: 4 }, { name: 'Overdue', value: 12 } ];
-  const PIE_COLORS = { 'Ordinary': '#3b82f6', 'Hazardous': '#f97316', 'Ragpickers': '#eab308', 'Manual Scav.': '#ef4444' };
-  
-  return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-semibold text-gray-800">📊 Visual Analytics</h2>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
-        {/* Worker Distribution Pie */}
-        <ChartCard title="Worker Distribution" icon={PieChartIcon} className="lg:col-span-1">
-          <ChartFilters filters={['Caste', 'Religion', 'Gender', 'Age']} />
-          <ResponsiveContainer width="100%" height={250}>
-            <PieChart>
-              <Pie data={workerPieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} labelLine={false} label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`} fontSize={11}>
-                {workerPieData.map((entry) => (<Cell key={entry.name} fill={PIE_COLORS[entry.name as keyof typeof PIE_COLORS]} />))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        </ChartCard>
 
-        {/* Incident Bar Chart */}
-        <ChartCard title="Incident Summary" icon={BarChart3} className="lg:col-span-2">
-           <ChartFilters filters={['Date Range', 'Contractor', 'Location']} />
-          <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={incidentBarData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
-              <YAxis fontSize={12} tickLine={false} axisLine={false} />
-              <Tooltip />
-              <Bar dataKey="count" fill="#ef4444" radius={[4, 4, 0, 0]} barSize={40} />
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
-
-        {/* Direction Compliance Pie */}
-        <ChartCard title="Direction Compliance" icon={PieChartIcon} className="lg:col-span-1">
-          <ResponsiveContainer width="100%" height={250}>
-            <PieChart>
-              <Pie data={compliancePieData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={50} outerRadius={80} label={({ name, value }) => `${name}: ${value}`}>
-                 <Cell fill="#22c55e" />
-                 <Cell fill="#f97316" />
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        </ChartCard>
-
-        {/* Grievance Status Stacked Bar */}
-        <ChartCard title="Grievance Status" icon={BarChart3} className="lg:col-span-2">
-           <ChartFilters filters={['Source', 'Type', 'Contractor']} />
-          <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={grievanceBarData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
-              <YAxis fontSize={12} tickLine={false} axisLine={false} />
-              <Tooltip />
-              <Legend wrapperStyle={{ fontSize: '12px' }}/>
-              <Bar dataKey="Complied" stackId="a" fill="#22c55e" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="Pending" stackId="a" fill="#f59e0b" />
-              <Bar dataKey="Escalated" stackId="a" fill="#ef4444" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
-
-        {/* Feedback Status Line Chart */}
-        <ChartCard title="Feedback Status (Monthly)" icon={LineChartIcon} className="lg:col-span-2">
-           <ChartFilters filters={['Source', 'Type']} />
-          <ResponsiveContainer width="100%" height={250}>
-            <LineChart data={feedbackLineData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" fontSize={12} tickLine={false} axisLine={false} />
-              <YAxis fontSize={12} tickLine={false} axisLine={false} />
-              <Tooltip />
-              <Legend wrapperStyle={{ fontSize: '12px' }}/>
-              <Line type="monotone" dataKey="Received" stroke="#3b82f6" strokeWidth={2} activeDot={{ r: 6 }} />
-              <Line type="monotone" dataKey="Complied" stroke="#22c55e" strokeWidth={2} />
-              <Line type="monotone" dataKey="Pending" stroke="#f97316" strokeWidth={2} />
-            </LineChart>
-          </ResponsiveContainer>
-        </ChartCard>
-
-        {/* Training Completion Bar */}
-        <ChartCard title="Training Completion" icon={BarChart3} className="lg:col-span-1">
-           <ChartFilters filters={['Contractor', 'Category']} />
-          <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={trainingBarData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
-              <YAxis fontSize={12} tickLine={false} axisLine={false} />
-              <Tooltip />
-              <Bar dataKey="Completed" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="Pending" fill="#f59e0b" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
-        
-        {/* Medical Examination Pie */}
-        <ChartCard title="Medical Examination Tracker" icon={PieChartIcon} className="lg:col-span-3"> {/* Spanning full width */}
-           <ChartFilters filters={['Contractor', 'Category']} />
-          <ResponsiveContainer width="100%" height={250}>
-            <PieChart>
-              <Pie data={medicalPieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label={({ name, value }) => `${name}: ${value}`}>
-                 <Cell fill="#22c55e" /> {/* Completed */}
-                 <Cell fill="#f97316" /> {/* Follow-up */}
-                 <Cell fill="#ef4444" /> {/* Overdue */}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
-        </ChartCard>
-
-      </div>
-    </div>
-  );
-}
-
-// Helper for Chart Cards
-function ChartCard({ title, icon: Icon, className, children }: { title: string, icon: React.ElementType, className?: string, children: React.ReactNode }) {
-  return (
-    <Card className={`shadow-lg border border-gray-100 rounded-lg bg-white ${className || ''}`}>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 border-b bg-gray-50/70 p-4">
-        <CardTitle className="text-base font-semibold text-gray-700 flex items-center gap-2">
-          <Icon className="w-5 h-5 text-indigo-600" />
-          {title}
-        </CardTitle>
-        <Settings className="h-4 w-4 text-gray-400 cursor-pointer hover:text-gray-600" /> {/* Placeholder for chart settings */}
-      </CardHeader>
-      <CardContent className="pt-4 px-2">
-        {children}
-      </CardContent>
-    </Card>
-  );
-}
-
-// Helper for Chart Filters
-function ChartFilters({ filters }: { filters: string[] }) {
-    return (
-        <div className="flex flex-wrap gap-2 px-4 pb-3 border-b mb-2">
-            {filters.map(f => (
-                <Select key={f} onValueChange={(value) => console.log(`Filter ${f} set to ${value}`)}>
-                    <SelectTrigger className="w-auto h-7 text-xs rounded-full border-gray-300">
-                        <SelectValue placeholder={f} />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="all">All</SelectItem>
-                        <SelectItem value="option1">{f} Option 1</SelectItem>
-                        <SelectItem value="option2">{f} Option 2</SelectItem>
-                    </SelectContent>
-                </Select>
-            ))}
-        </div>
-    );
-}
 
 function QuickActions({ onActionClick }: { onActionClick: (action: string) => void }) {
   const actions = [
@@ -410,10 +211,6 @@ function PerformanceSnapshot({ topWorkers, bottomWorkers }: {
                 <TableRow>
                   <TableHead className="w-[50px]">Rank</TableHead>
                   <TableHead>Name</TableHead>
-                  <TableHead>Attendance</TableHead>
-                  <TableHead>Safety</TableHead>
-                  <TableHead>Training</TableHead>
-                  <TableHead>Rating</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -421,10 +218,6 @@ function PerformanceSnapshot({ topWorkers, bottomWorkers }: {
                   <TableRow key={w.rank} className="hover:bg-green-50/50">
                     <TableCell className="font-bold">{w.rank}</TableCell>
                     <TableCell className="font-medium">{w.name}</TableCell>
-                    <TableCell className="text-green-600">{w.attendance}%</TableCell>
-                    <TableCell className="text-green-600">{w.safety}%</TableCell>
-                    <TableCell className="text-green-600">{w.training}%</TableCell>
-                    <TableCell className="flex items-center gap-1 text-yellow-500"><Star className="w-4 h-4"/>{w.rating}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -445,10 +238,6 @@ function PerformanceSnapshot({ topWorkers, bottomWorkers }: {
                 <TableRow>
                   <TableHead className="w-[50px]">Rank</TableHead>
                   <TableHead>Name</TableHead>
-                  <TableHead>Absent (Days)</TableHead>
-                  <TableHead>Violations</TableHead>
-                  <TableHead>Pending (Train)</TableHead>
-                  <TableHead>Remarks</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -456,10 +245,6 @@ function PerformanceSnapshot({ topWorkers, bottomWorkers }: {
                   <TableRow key={w.rank} className="hover:bg-red-50/50">
                     <TableCell className="font-bold">{w.rank}</TableCell>
                     <TableCell className="font-medium">{w.name}</TableCell>
-                    <TableCell className="text-red-600 font-medium">{w.absenteeism}</TableCell>
-                    <TableCell className="text-red-600 font-medium">{w.violations}</TableCell>
-                    <TableCell className="text-orange-600 font-medium">{w.pendingTraining}</TableCell>
-                    <TableCell className="text-xs text-gray-600">{w.remarks}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

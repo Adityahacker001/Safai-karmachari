@@ -410,7 +410,7 @@ const FundDisbursementReportPage = () => {
                   <SortableHeader colKey="amtSanctioned" title="Amt Sanctioned (₹)" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[160px]" />
                   <SortableHeader colKey="amtDisbursed" title="Amt Disbursed (₹)" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[160px]" />
                   <SortableHeader colKey="date" title="Disbursement Date" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[150px]" />
-                  <SortableHeader colKey="status" title="Status" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
+                  {/* <SortableHeader colKey="status" title="Status" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" /> */}
                   <th className="px-4 py-3 text-left min-w-[200px]">Delay Reason</th>
                 </tr>
               </thead>
@@ -424,12 +424,12 @@ const FundDisbursementReportPage = () => {
                     <td className="px-4 py-3 text-slate-700 whitespace-nowrap text-right font-medium">{formatCurrency(item.amtSanctioned)}</td>
                     <td className="px-4 py-3 text-green-700 whitespace-nowrap text-right font-bold">{formatCurrency(item.amtDisbursed)}</td>
                     <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{new Date(item.date).toLocaleDateString('en-GB')}</td>
-                    <td className="px-4 py-3 whitespace-nowrap"><StatusBadge status={item.status as Status} /></td>
+                    {/* <td className="px-4 py-3 whitespace-nowrap"><StatusBadge status={item.status as Status} /></td> */}
                     <td className={`px-4 py-3 text-xs whitespace-nowrap ${item.status === 'Delayed' ? 'text-red-600 font-medium' : 'text-slate-500'}`}>{item.delayReason}</td>
                   </tr>
                 ))}
                 {paginatedData.length === 0 && (
-                  <tr><td colSpan={9} className="text-center py-10 text-slate-500">No records found matching your criteria.</td></tr>
+                  <tr><td colSpan={8} className="text-center py-10 text-slate-500">No records found matching your criteria.</td></tr>
                 )}
               </tbody>
             </table>
