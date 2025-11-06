@@ -94,9 +94,7 @@ export default function DirectiveTrackingReportPage() {
 							</p>
 						</div>
 					</div>
-					<div className="text-sm sm:text-base md:text-lg text-white/90 font-semibold bg-white/20 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/30">
-						Last updated: {new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
-					</div>
+					
 				</div>
 			</header>
 
@@ -247,9 +245,6 @@ export default function DirectiveTrackingReportPage() {
 								<th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
 									Status
 								</th>
-								<th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
-									MOCA
-								</th>
 								<th className="px-6 py-3 text-right text-xs font-medium text-white uppercase tracking-wider">
 									Actions
 								</th>
@@ -288,9 +283,6 @@ export default function DirectiveTrackingReportPage() {
 											? "bg-red-100 text-red-800 border border-red-300"
 											: "bg-gray-100 text-gray-800 border border-gray-300"
 										}`}>{d.status}</span>
-									</td>
-									<td className="px-6 py-4 whitespace-nowrap">
-										<span className="px-2 py-1 rounded bg-gray-200 text-xs font-mono text-gray-700">{d.moca}</span>
 									</td>
 									<td className="px-6 py-4 whitespace-nowrap text-right">
 										<Dialog>

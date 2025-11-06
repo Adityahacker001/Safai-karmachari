@@ -503,9 +503,7 @@ export default function App() {
                       <Clock size={14} className="text-blue-700" />
                       Auto Timestamp: <span className="font-medium text-blue-900">{currentTimestamp}</span>
                     </div>
-                    <span className="px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full font-medium">
-                      Last Updated: 1 min ago
-                    </span>
+                  
                   </div>
                 </div>
               </Card>

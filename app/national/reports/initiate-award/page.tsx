@@ -52,14 +52,13 @@ export default function InitiateAwardPage() {
     ];
 
     return (
-        <div className="ml-64">
-            <div className="space-y-8 p-4 md:p-6 bg-slate-50 dark:bg-gray-900 rounded-lg">
-                <div>
-                    <h1 className="text-4xl font-extrabold mb-2 bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-                        Award Ratification Center
-                    </h1>
-                    <p className="text-lg text-gray-500 dark:text-gray-400">Review, vote on, and confer national-level awards.</p>
-                </div>
+        <div className="space-y-8 p-4 md:p-6 bg-slate-50 dark:bg-gray-900 rounded-lg">
+            <div>
+                <h1 className="text-4xl font-extrabold mb-2 bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                    Award Ratification Center
+                </h1>
+                <p className="text-lg text-gray-500 dark:text-gray-400">Review, vote on, and confer national-level awards.</p>
+            </div>
 
                 {/* KPI Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -171,7 +170,6 @@ export default function InitiateAwardPage() {
                         </Table>
                     </CardContent>
                 </Card>
-            </div>
         </div>
     );
 }

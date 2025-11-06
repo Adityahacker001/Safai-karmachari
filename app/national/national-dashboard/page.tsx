@@ -103,20 +103,18 @@ export default function NationalDashboard() {
               Comprehensive oversight of nationwide sanitation initiatives
             </p>
           </div>
-          <div className="text-sm sm:text-base md:text-lg text-white/90 font-semibold bg-white/20 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/30">
-            Last updated: {new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
-          </div>
+         
         </div>
       </header>
 
       {/* Enhanced Dashboard Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
         <DashboardCard
-          title="State Count"
+          title="States Monitored"
           value="28"
           icon={MapPin}
           color="indigo"
-          description="Total States"
+          description="Plus 8 UTs"
         />
         <DashboardCard
           title="District Count"
@@ -154,18 +152,18 @@ export default function NationalDashboard() {
           description="All states combined"
         />
         <DashboardCard
-          title="States Monitored"
-          value="28"
-          icon={MapPin}
-          color="indigo"
-          description="Plus 8 UTs"
-        />
-        <DashboardCard
           title="Recognition Programs"
           value="347"
           icon={Award}
           color="purple"
           description="Awards distributed"
+        />
+        <DashboardCard
+          title="Active Grievances"
+          value="1,573"
+          icon={AlertTriangle}
+          color="blue"
+          description="Nationwide pending"
         />
       </div>
 

@@ -16,19 +16,21 @@ import {
 // --- Mock Data ---
 
 const MOCK_SCHEMES = [
-  { id: 1, name: 'Self Employment Scheme (SES)', category: 'Loan', maxAmount: '₹5,00,000', rate: '4% p.a.', eligibility: 'Registered SKs/Dependents, SHGs', docs: 'Aadhaar, Bank Details, Project Report', deadline: '2025-12-31', brochureUrl: '/docs/ses.pdf' },
-  { id: 2, name: 'Skill Development Grant', category: 'Grant', maxAmount: 'Up to ₹25,000/trainee', rate: 'N/A', eligibility: 'SKs/Dependents for approved courses', docs: 'Aadhaar, Course Admission Proof', deadline: null, brochureUrl: '/docs/sdg.pdf' },
-  { id: 3, name: 'Sanitary Mart Loan', category: 'Livelihood', maxAmount: '₹15,00,000', rate: '5% p.a.', eligibility: 'Registered SHGs (min. 1 year)', docs: 'SHG Reg., Project Report, Quotations', deadline: '2026-03-31', brochureUrl: '/docs/sml.pdf' },
-  { id: 4, name: 'Mechanized Cleaning Grant', category: 'Subsidy', maxAmount: 'Up to 75% Project Cost', rate: 'N/A', eligibility: 'SHGs, ULBs for equipment purchase', docs: 'Project Proposal, Quotations, SHG/ULB Docs', deadline: null, brochureUrl: '/docs/mcg.pdf' },
-  { id: 5, name: 'Education Loan for Dependents', category: 'Loan', maxAmount: '₹10,00,000', rate: '3.5% p.a.', eligibility: 'Children of SKs for higher education', docs: 'Aadhaar, Admission Letter, Fee Structure', deadline: '2025-11-30', brochureUrl: '/docs/edu.pdf' },
+  { id: 1, name: 'Railway Station Cleaning Contract', category: 'Contract', maxAmount: '₹8,00,000', rate: 'Per annum', eligibility: 'Registered SHGs with railway cleaning experience', docs: 'SHG Registration, Work Experience Certificate, Bank Details', deadline: '2025-12-31', brochureUrl: '/docs/railway_cleaning.pdf' },
+  { id: 2, name: 'Railway Safety Training Program', category: 'Training', maxAmount: 'Up to ₹15,000/member', rate: 'N/A', eligibility: 'Railway cleaning staff and SHG members', docs: 'Aadhaar, Medical Certificate, SHG Membership', deadline: null, brochureUrl: '/docs/railway_safety_training.pdf' },
+  { id: 3, name: 'Railway Equipment Procurement Loan', category: 'Asset', maxAmount: '₹12,00,000', rate: '3% p.a.', eligibility: 'SHGs involved in railway maintenance work', docs: 'SHG Registration, Equipment Quotations, Work Order Copy', deadline: '2026-03-31', brochureUrl: '/docs/railway_equipment_loan.pdf' },
+  { id: 4, name: 'Platform Maintenance Grant', category: 'Grant', maxAmount: 'Up to 80% Project Cost', rate: 'N/A', eligibility: 'SHGs with railway platform cleaning contracts', docs: 'Contract Agreement, Project Proposal, SHG Documents', deadline: null, brochureUrl: '/docs/platform_maintenance.pdf' },
+  { id: 5, name: 'Railway Worker Welfare Scheme', category: 'Welfare', maxAmount: '₹50,000', rate: 'One-time', eligibility: 'Railway cleaning staff families and dependents', docs: 'Employee ID, Family Details, Income Certificate', deadline: '2025-11-30', brochureUrl: '/docs/railway_welfare.pdf' },
+  { id: 6, name: 'Track Cleaning Mechanization Fund', category: 'Loan', maxAmount: '₹20,00,000', rate: '4.5% p.a.', eligibility: 'SHGs undertaking railway track cleaning', docs: 'Railway Authorization, Equipment Specifications, SHG Profile', deadline: '2026-01-15', brochureUrl: '/docs/track_mechanization.pdf' },
 ];
 
 const MOCK_APPLICATIONS = [
-  { id: 'APP001', schemeName: 'Self Employment Scheme', dateApplied: '2025-10-15', loanRequested: '₹1,50,000', status: 'Approved', remarks: 'Funds disbursed on 2025-10-25', ackUrl: '/docs/ack001.pdf' },
-  { id: 'APP002', schemeName: 'Sanitary Mart Loan', dateApplied: '2025-09-20', loanRequested: '₹4,80,000', status: 'Pending', remarks: 'Under review by State Nodal Officer', ackUrl: '/docs/ack002.pdf' },
-  { id: 'APP003', schemeName: 'Skill Development Grant', dateApplied: '2025-10-01', loanRequested: '₹20,000', status: 'Rejected', remarks: 'Ineligible course selected', ackUrl: '/docs/ack003.pdf' },
-  { id: 'APP004', schemeName: 'Self Employment Scheme', dateApplied: '2025-10-22', loanRequested: '₹80,000', status: 'Under Review', remarks: 'Awaiting document verification', ackUrl: '/docs/ack004.pdf' },
-  { id: 'APP005', schemeName: 'Education Loan', dateApplied: '2025-08-10', loanRequested: '₹3,00,000', status: 'Approved', remarks: 'First installment released', ackUrl: '/docs/ack005.pdf' },
+  { id: 'APP001', schemeName: 'Railway Station Cleaning Contract', dateApplied: '2025-10-15', loanRequested: '₹6,50,000', status: 'Approved', remarks: 'Contract awarded for New Delhi Railway Station', ackUrl: '/docs/ack001.pdf' },
+  { id: 'APP002', schemeName: 'Railway Equipment Procurement Loan', dateApplied: '2025-09-20', loanRequested: '₹8,80,000', status: 'Pending', remarks: 'Under review by Railway Board Finance Division', ackUrl: '/docs/ack002.pdf' },
+  { id: 'APP003', schemeName: 'Railway Safety Training Program', dateApplied: '2025-10-01', loanRequested: '₹45,000', status: 'Rejected', remarks: 'Incomplete medical certificates submitted', ackUrl: '/docs/ack003.pdf' },
+  { id: 'APP004', schemeName: 'Platform Maintenance Grant', dateApplied: '2025-10-22', loanRequested: '₹1,20,000', status: 'Under Review', remarks: 'Awaiting site inspection by Railway Engineer', ackUrl: '/docs/ack004.pdf' },
+  { id: 'APP005', schemeName: 'Railway Worker Welfare Scheme', dateApplied: '2025-08-10', loanRequested: '₹35,000', status: 'Approved', remarks: 'Welfare benefits sanctioned for 5 families', ackUrl: '/docs/ack005.pdf' },
+  { id: 'APP006', schemeName: 'Track Cleaning Mechanization Fund', dateApplied: '2025-10-28', loanRequested: '₹15,50,000', status: 'Under Review', remarks: 'Technical evaluation in progress', ackUrl: '/docs/ack006.pdf' },
 ];
 
 // --- Reusable Components ---
@@ -288,8 +290,8 @@ const SchemesApplicationPage = () => {
             <div className="flex items-center space-x-4">
               <span className="p-3 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-2xl text-white shadow-lg"><Award className="w-8 h-8" /></span>
               <div>
-                <h1 className="text-3xl font-bold text-slate-800">Schemes & Application</h1>
-                <p className="text-slate-500 mt-1">Explore available schemes & apply for funding.</p>
+                <h1 className="text-3xl font-bold text-slate-800">Railway Schemes & Applications</h1>
+                <p className="text-slate-500 mt-1">Explore railway cleaning contracts, equipment loans & welfare schemes.</p>
               </div>
             </div>
             {/* Add Header buttons like Search, Filter if needed for schemes */}
@@ -298,7 +300,7 @@ const SchemesApplicationPage = () => {
 
         {/* --- 2. Schemes List Section --- */}
         <section>
-          <h2 className="text-2xl font-semibold text-slate-800 mb-5 flex items-center gap-2"><Sparkles className="w-6 h-6 text-amber-500"/> Available Schemes for Your SHG</h2>
+          <h2 className="text-2xl font-semibold text-slate-800 mb-5 flex items-center gap-2"><Sparkles className="w-6 h-6 text-amber-500"/> Available Railway Schemes for Your SHG</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {MOCK_SCHEMES.map(scheme => (
               <SchemeCard 

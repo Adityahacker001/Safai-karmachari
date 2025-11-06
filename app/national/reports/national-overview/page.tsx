@@ -42,9 +42,7 @@ export default function NationalOverviewReportPage() {
             </p>
           </div>
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-            <div className="text-sm sm:text-base md:text-lg text-white/90 font-semibold bg-white/20 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/30">
-              Last updated: {new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
-            </div>
+           
             <Button variant="outline" className="bg-white/20 backdrop-blur-sm text-white border-white/30 hover:bg-white/30 transition-all font-bold rounded-xl">
               <Download className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
               Export National Data (CSV)

@@ -114,18 +114,6 @@ const Reports = () => {
             <Download className="w-8 h-8" />
           </div>
         </Card>
-
-        {/* Data Size */}
-        <Card className="relative overflow-hidden rounded-2xl shadow-lg bg-gradient-to-r from-amber-400 to-orange-500 text-white">
-          <CardContent className="p-6">
-            <p className="text-sm font-semibold">Data Size</p>
-            <p className="text-3xl font-bold mt-2">14.1 MB</p>
-          </CardContent>
-          {/* Icon Watermark */}
-          <div className="absolute right-4 bottom-4 text-white/20 text-6xl">
-            <BarChart className="w-8 h-8" />
-          </div>
-        </Card>
       </div>
 
       {/* Reports Grid */}
@@ -163,6 +151,10 @@ const Reports = () => {
               </div>
               
               <div className="flex flex-wrap gap-3">
+                <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:opacity-90 shadow-md transition">
+                  <FileText className="w-4 h-4" />
+                  <span>View</span>
+                </button>
                 <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:opacity-90 shadow-md transition">
                   <Download className="w-4 h-4" />
                   <span>PDF</span>

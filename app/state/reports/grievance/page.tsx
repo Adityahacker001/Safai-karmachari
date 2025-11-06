@@ -3,41 +3,74 @@ import React, { useState } from "react";
 import DashboardCard from "@/components/dashboard/dashboard-card";
 import DataTable from "@/components/ui/data-table";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import {
   MessageSquare,
   CheckCircle,
   Clock,
   AlertTriangle,
   Timer,
   Eye,
+  User,
+  MapPin,
+  Calendar,
+  Flag,
 } from "lucide-react";
 
 const Grievances = () => {
   const [activeTab, setActiveTab] = useState<"summary" | "escalated">("summary");
+  const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
+  const [isGrievanceDetailsOpen, setIsGrievanceDetailsOpen] = useState(false);
 
   const kpiData = [
     { title: "Total Grievances", value: 892, icon: MessageSquare, color: "blue" as const },
     { title: "Resolved", value: 654, icon: CheckCircle, color: "green" as const },
     { title: "Pending", value: 186, icon: Clock, color: "orange" as const },
     { title: "Escalated", value: 52, icon: AlertTriangle, color: "red" as const },
-    { title: "Avg. Resolution Time", value: "4.2 days", icon: Timer, color: "purple" as const },
+   
   ];
 
   const districtData = [
-    { district: "Mumbai", total: 145, resolved: 128, pending: 12, escalated: 5, avgTime: "3.8 days" },
-    { district: "Pune", total: 98, resolved: 82, pending: 14, escalated: 2, avgTime: "4.1 days" },
-    { district: "Nashik", total: 76, resolved: 65, pending: 8, escalated: 3, avgTime: "3.9 days" },
-    { district: "Nagpur", total: 112, resolved: 89, pending: 18, escalated: 5, avgTime: "4.5 days" },
-    { district: "Aurangabad", total: 67, resolved: 54, pending: 9, escalated: 4, avgTime: "4.2 days" },
-    { district: "Kolhapur", total: 89, resolved: 71, pending: 13, escalated: 5, avgTime: "4.0 days" },
-    { district: "Solapur", total: 54, resolved: 48, pending: 5, escalated: 1, avgTime: "3.7 days" },
-    { district: "Ahmednagar", total: 78, resolved: 62, pending: 12, escalated: 4, avgTime: "4.3 days" },
+    { district: "Kolkata", total: 145, resolved: 128, pending: 12, escalated: 5 },
+    { district: "Howrah", total: 98, resolved: 82, pending: 14, escalated: 2 },
+    { district: "North 24 Parganas", total: 76, resolved: 65, pending: 8, escalated: 3 },
+    { district: "South 24 Parganas", total: 112, resolved: 89, pending: 18, escalated: 5 },
+    { district: "Darjeeling", total: 67, resolved: 54, pending: 9, escalated: 4 },
+    { district: "Hooghly", total: 89, resolved: 71, pending: 13, escalated: 5 },
+    { district: "Murshidabad", total: 54, resolved: 48, pending: 5, escalated: 1 },
+    { district: "Nadia", total: 78, resolved: 62, pending: 12, escalated: 4 },
   ];
 
+  // Sample grievance details data
+  const grievanceDetails = {
+    "GRV-001": {
+      caseId: "GRV-001",
+      type: "Manual Scavenging",
+      contractor: "ABC Sanitation Services",
+      reportedDate: "2025-01-15",
+      location: "Railway Station, Platform No. 2",
+      reportedBy: "Station Master - rahul Kumar",
+      priority: "High",
+      status: "Action Required",
+      description: "Reported manual scavenging activity at Railway Station Area. Workers were seen entering septic tank without proper safety equipment. Immediate action required to ensure worker safety and provide proper training and equipment.",
+      officers: [
+        { name: "Dr. Amit Kumar", designation: "District Nodal Officer", contact: "+91 9876543210", email: "amit.kumar@wb.gov.in" },
+        { name: "Mrs. Priya Singh", designation: "Assistant Engineer", contact: "+91 9876543211", email: "priya.singh@wb.gov.in" },
+        { name: "Mr. Ravi Sharma", designation: "Safety Inspector", contact: "+91 9876543212", email: "ravi.sharma@wb.gov.in" }
+      ]
+    }
+  };
+
   const escalatedData = [
-    { id: "GRV001", district: "Mumbai", officer: "Abishek Kumar", dateRaised: "2024-01-10", daysPending: 15, status: "Under Review" },
-    { id: "GRV002", district: "Pune", officer: "Priya Sharma", dateRaised: "2024-01-08", daysPending: 17, status: "Awaiting Response" },
-    { id: "GRV003", district: "Nagpur", officer: "Amit Patel", dateRaised: "2024-01-12", daysPending: 13, status: "In Progress" },
-    { id: "GRV004", district: "Nashik", officer: "Sunita Desai", dateRaised: "2024-01-06", daysPending: 19, status: "Urgent" },
+    { id: "GRV001", district: "Kolkata", officer: "Abishek Kumar", dateRaised: "2024-01-10", status: "Under Review" },
+    { id: "GRV002", district: "Howrah", officer: "Priya Sharma", dateRaised: "2024-01-08", status: "Awaiting Response" },
+    { id: "GRV003", district: "North 24 Parganas", officer: "Amit Patel", dateRaised: "2024-01-12", status: "In Progress" },
+    { id: "GRV004", district: "Darjeeling", officer: "Sunita Desai", dateRaised: "2024-01-06", status: "Urgent" },
   ];
 
   const districtColumns = [
@@ -61,17 +94,7 @@ const Grievances = () => {
       sortable: true,
       render: (value: number) => <span className="text-red-600 font-medium">{value}</span>,
     },
-    { key: "avgTime", header: "Avg Resolution Time", sortable: true },
-    {
-      key: "action",
-      header: "Action",
-      render: () => (
-        <button className="flex items-center space-x-1 px-3 py-1 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors">
-          <Eye className="w-4 h-4" />
-          <span>View Officers</span>
-        </button>
-      ),
-    },
+
   ];
 
   const escalatedColumns = [
@@ -79,16 +102,6 @@ const Grievances = () => {
     { key: "district", header: "District", sortable: true },
     { key: "officer", header: "Nodal Officer", sortable: true },
     { key: "dateRaised", header: "Date Raised", sortable: true },
-    {
-      key: "daysPending",
-      header: "Days Pending",
-      sortable: true,
-      render: (value: number) => (
-        <span className={`font-medium ${value > 15 ? "text-red-600" : "text-yellow-600"}`}>
-          {value} days
-        </span>
-      ),
-    },
     {
       key: "status",
       header: "Status",
@@ -188,7 +201,17 @@ const Grievances = () => {
         <div className="bg-white/80 backdrop-blur-md rounded-xl p-6 shadow-md border border-indigo-100">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">District-wise Breakdown</h2>
           <div className="excel-table">
-            <DataTable title="District-wise Breakdown" columns={districtColumns} data={districtData} tableClassName="excel-table" />
+            <DataTable 
+              title="District-wise Breakdown" 
+              columns={districtColumns} 
+              data={districtData} 
+              tableClassName="excel-table"
+              actions={true}
+              onView={(row) => {
+                setSelectedDistrict(row.district);
+                setIsGrievanceDetailsOpen(true);
+              }}
+            />
           </div>
         </div>
       ) : (
@@ -199,6 +222,125 @@ const Grievances = () => {
           </div>
         </div>
       )}
+
+      {/* Grievance Details Modal */}
+      <Dialog open={isGrievanceDetailsOpen} onOpenChange={setIsGrievanceDetailsOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center space-x-2 text-2xl font-bold text-gray-900">
+              <Eye className="w-6 h-6 text-blue-600" />
+              <span>Grievance Case Details - GRV-001</span>
+            </DialogTitle>
+            <DialogDescription>
+              Complete case information and grievance details for {selectedDistrict}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="mt-6 space-y-6">
+            {/* Case Overview */}
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Case Overview</h3>
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">Case ID</label>
+                    <p className="text-gray-900 font-semibold">GRV-001</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">Contractor</label>
+                    <p className="text-gray-900">ABC Sanitation Services</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">Location</label>
+                    <p className="text-gray-900 flex items-center space-x-1">
+                      <MapPin className="w-4 h-4 text-gray-500" />
+                      <span>Railway Station, Platform No. 2</span>
+                    </p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">Priority</label>
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                      <Flag className="w-3 h-3 mr-1" />
+                      High
+                    </span>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">Type</label>
+                    <p className="text-gray-900">Manual Scavenging</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">Reported Date</label>
+                    <p className="text-gray-900 flex items-center space-x-1">
+                      <Calendar className="w-4 h-4 text-gray-500" />
+                      <span>2025-01-15</span>
+                    </p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">Reported By</label>
+                    <p className="text-gray-900 flex items-center space-x-1">
+                      <User className="w-4 h-4 text-gray-500" />
+                      <span>Station Master - rahul Kumar</span>
+                    </p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">Status</label>
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                      Action Required
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Grievance Details */}
+            <div className="bg-blue-50 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-blue-900 mb-3">Grievance Details</h3>
+              <div>
+                <h4 className="font-medium text-blue-800 mb-2">Message Description</h4>
+                <p className="text-gray-700 leading-relaxed">
+                  Reported manual scavenging activity at Railway Station Area. Workers were seen entering septic tank without proper safety equipment. Immediate action required to ensure worker safety and provide proper training and equipment.
+                </p>
+              </div>
+            </div>
+
+            {/* Assigned Officers */}
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Assigned Officers</h3>
+              <div className="grid gap-4">
+                {grievanceDetails["GRV-001"].officers.map((officer, index) => (
+                  <div key={index} className="bg-gray-50 rounded-lg p-4 border">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="bg-blue-100 p-2 rounded-full">
+                          <User className="w-5 h-5 text-blue-600" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-gray-900">{officer.name}</h4>
+                          <p className="text-sm text-gray-600">{officer.designation}</p>
+                          <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
+                            <span>📱 {officer.contact}</span>
+                            <span>✉️ {officer.email}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex space-x-2">
+                        <button className="px-3 py-1 bg-green-100 text-green-700 rounded-lg text-sm font-medium hover:bg-green-200 transition-colors">
+                          Contact
+                        </button>
+                        <button className="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-200 transition-colors">
+                          Assign Task
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

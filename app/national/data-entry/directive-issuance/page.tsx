@@ -28,9 +28,7 @@ export default function DirectiveIssuancePage() {
               </p>
             </div>
           </div>
-          <div className="text-sm sm:text-base md:text-lg text-white/90 font-semibold bg-white/20 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/30">
-            Last updated: {new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
-          </div>
+         
         </div>
       </header>
       <div className="grid gap-4 sm:gap-6 md:gap-8 items-start">

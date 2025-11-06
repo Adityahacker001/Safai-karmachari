@@ -73,7 +73,7 @@ interface WorkAssignmentForm {
 
 // --- Mock Worker Data ---
 const MOCK_WORKERS: Worker[] = [
-  { id: 1, name: 'Rajesh Kumar', category: 'hazardous', isSelected: false, contractorId: 'CleanForce Pvt Ltd' },
+  { id: 1, name: 'Aditya Kumar', category: 'hazardous', isSelected: false, contractorId: 'CleanForce Pvt Ltd' },
   { id: 2, name: 'Amit Singh', category: 'hazardous', isSelected: false, contractorId: 'CleanForce Pvt Ltd' },
   { id: 3, name: 'Priya Sharma', category: 'ordinarySKs', isSelected: false, contractorId: 'CleanForce Pvt Ltd' },
   { id: 4, name: 'Suresh Yadav', category: 'ordinarySKs', isSelected: false, contractorId: 'CleanForce Pvt Ltd' },

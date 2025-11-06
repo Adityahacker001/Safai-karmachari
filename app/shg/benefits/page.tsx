@@ -21,24 +21,24 @@ import StatCard from '@/components/ui/stat-card';
 // --- Mock Data ---
 
 const MOCK_SUMMARY_STATS = {
-  totalBenefits: 12,
-  totalFinancial: 850000,
-  subsidyReceived: 250000,
-  assetsIssued: 5,
-  membersTrained: 8,
-  insuranceActive: true,
+  totalBenefits: 9,
+  totalFinancial: 950000,
+  subsidyReceived: 350000,
+  assetsIssued: 3,
+  membersTrained: 6,
+  equipmentReceived: 8,
 };
 
 const MOCK_BENEFITS_DATA = [
-  { id: 1, name: 'Rehabilitation Grant', type: 'Financial', scheme: 'Rehab Scheme', date: '2025-08-01', value: 40000, provider: 'District Office', docUrl: '/docs/rehab_grant.pdf', status: 'Received' },
-  { id: 2, name: 'Sewing Machines (x5)', type: 'Asset', scheme: 'Self Employment Scheme', date: '2025-09-01', value: 75000, provider: 'NSKFDC Loan Disbursement', docUrl: '/docs/sewing_invoice.pdf', status: 'Received' },
-  { id: 3, name: 'Tailoring Skill Training', type: 'Training', scheme: 'Skill Development Program', date: '2025-09-15', value: null, provider: 'Training Partner Inc.', docUrl: '/docs/training_cert.pdf', status: 'Completed' }, // Changed status to Completed
-  { id: 4, name: 'PPE Kits (x10)', type: 'Safety', scheme: 'Safety Initiative', date: '2025-09-20', value: 5000, provider: 'Contractor', docUrl: '/docs/ppe_receipt.pdf', status: 'Received' },
-  { id: 5, name: 'Working Capital Subsidy', type: 'Financial', scheme: 'Self Employment Scheme', date: '2025-10-10', value: 25000, provider: 'NSKFDC', docUrl: '/docs/subsidy_sanction.pdf', status: 'Approved' }, // Changed status
-  { id: 6, name: 'Health Insurance Coverage', type: 'Welfare', scheme: 'Ayushman Bharat Linkage', date: '2025-07-01', value: null, provider: 'MoHFW', docUrl: '/docs/health_card.pdf', status: 'Active' }, // Changed status
-  { id: 7, name: 'E-Rickshaw Asset', type: 'Asset', scheme: 'Sanitary Mart Loan', date: '2025-09-15', value: 120000, provider: 'State Channelizing Agency', docUrl: '/docs/erickshaw_rc.pdf', status: 'Received' },
-  { id: 8, name: 'Digital Literacy Training', type: 'Training', scheme: 'Skill Development Program', date: '2025-10-25', value: null, provider: 'Govt. IT Center', docUrl: null, status: 'Ongoing' }, // Changed status
-  { id: 9, name: 'Emergency Relief Fund', type: 'Financial', scheme: 'Disaster Relief Fund', date: '2025-06-10', value: 10000, provider: 'District Magistrate', docUrl: '/docs/relief_order.pdf', status: 'Received' },
+  { id: 1, name: 'Railway Station Cleaning Contract', type: 'Financial', scheme: 'Railway Cleanliness Drive', date: '2025-08-01', value: 45000, provider: 'Railway Station Manager', docUrl: '/docs/cleaning_contract.pdf', status: 'Received' },
+  { id: 2, name: 'Cleaning Equipment Set', type: 'Asset', scheme: 'Railway Sanitation Scheme', date: '2025-09-01', value: 25000, provider: 'Railway Board', docUrl: '/docs/equipment_invoice.pdf', status: 'Received' },
+  { id: 3, name: 'Railway Safety Training', type: 'Training', scheme: 'Railway Worker Safety Program', date: '2025-09-15', value: null, provider: 'Railway Training Institute', docUrl: '/docs/safety_training_cert.pdf', status: 'Completed' },
+  { id: 4, name: 'Safety Gear & Uniforms', type: 'Safety', scheme: 'Railway Worker Safety Initiative', date: '2025-09-20', value: 8000, provider: 'Railway Contractor', docUrl: '/docs/safety_gear_receipt.pdf', status: 'Received' },
+  { id: 5, name: 'Platform Maintenance Grant', type: 'Financial', scheme: 'Railway Infrastructure Maintenance', date: '2025-10-10', value: 35000, provider: 'Railway Division Office', docUrl: '/docs/maintenance_grant.pdf', status: 'Approved' },
+  { id: 6, name: 'Railway Worker Medical Coverage', type: 'Welfare', scheme: 'Railway Employee Health Scheme', date: '2025-07-01', value: null, provider: 'Railway Medical Department', docUrl: '/docs/medical_card.pdf', status: 'Active' },
+  { id: 7, name: 'Track Cleaning Trolley', type: 'Asset', scheme: 'Railway Track Maintenance', date: '2025-09-15', value: 55000, provider: 'Railway Engineering Department', docUrl: '/docs/trolley_allocation.pdf', status: 'Received' },
+  { id: 8, name: 'Railway Operations Training', type: 'Training', scheme: 'Railway Skill Development', date: '2025-10-25', value: null, provider: 'Railway Training Center', docUrl: null, status: 'Ongoing' },
+  { id: 9, name: 'Emergency Railway Cleaning Fund', type: 'Financial', scheme: 'Emergency Railway Sanitation', date: '2025-06-10', value: 15000, provider: 'Railway Divisional Manager', docUrl: '/docs/emergency_fund_order.pdf', status: 'Received' },
 ];
 
 const MOCK_ASSETS = MOCK_BENEFITS_DATA.filter(b => b.type === 'Asset');
@@ -145,8 +145,8 @@ const BenefitsPage = () => {
             <div className="flex items-center space-x-4">
               <span className="p-3 bg-gradient-to-br from-emerald-500 to-green-600 rounded-2xl text-white shadow-lg"><Gift className="w-8 h-8" /></span>
               <div>
-                <h1 className="text-3xl font-bold text-slate-800">Benefits Received by SHG</h1>
-                <p className="text-slate-500 mt-1">View subsidy, welfare, asset, and training benefits.</p>
+                <h1 className="text-3xl font-bold text-slate-800">Railway Benefits Received by SHG</h1>
+                <p className="text-slate-500 mt-1">View railway contracts, equipment, safety gear, and training benefits.</p>
               </div>
             </div>
              <div className="flex items-center gap-2">
@@ -166,7 +166,7 @@ const BenefitsPage = () => {
           {/* Row 2 */}
           <StatCard title="Assets Issued" value={MOCK_SUMMARY_STATS.assetsIssued.toString()} icon={Wrench} color="purple" />
           <StatCard title="Members Trained" value={MOCK_SUMMARY_STATS.membersTrained.toString()} icon={GraduationCap} color="pink" />
-          <StatCard title="Insurance / Safety" value={MOCK_SUMMARY_STATS.insuranceActive ? "Active" : "N/A"} icon={ShieldCheck} color="sky" />
+          <StatCard title="Equipment Received" value="8 Items" icon={PackagePlus} color="sky" />
         </section>
 
         {/* --- 3. Detailed Benefits Table --- */}

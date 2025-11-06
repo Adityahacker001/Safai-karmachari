@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import DataTable from "@/components/ui/data-table";
-import { Users, Plus, CheckCircle, XCircle, Clock } from "lucide-react";
+import { Users, Plus, CheckCircle, XCircle, Clock, Eye } from "lucide-react";
 
 const UserManagement = () => {
   const userData = [
@@ -125,11 +125,23 @@ const UserManagement = () => {
     { key: "lastLogin", header: "Last Login", sortable: true },
     {
       key: "action",
-      header: "Action",
-      render: () => (
-        <button className="px-3 py-1 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:from-blue-600 hover:to-indigo-600 transition-colors">
-          Edit
-        </button>
+      header: "Actions",
+      render: ({ row }: { row: any }) => (
+        <div className="flex space-x-2">
+          <button 
+            className="flex items-center space-x-1 px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:from-purple-600 hover:to-pink-600 transition-colors text-sm"
+            onClick={() => alert(`Viewing user: ${row.name}`)}
+          >
+            <Eye className="w-3 h-3" />
+            <span>View</span>
+          </button>
+          <button 
+            className="flex items-center space-x-1 px-3 py-1 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:from-blue-600 hover:to-indigo-600 transition-colors text-sm"
+            onClick={() => alert(`Editing user: ${row.name}`)}
+          >
+            <span>Edit</span>
+          </button>
+        </div>
       ),
     },
   ];
@@ -144,13 +156,22 @@ const UserManagement = () => {
   return (
     <div className="space-y-6 min-h-screen w-full bg-gradient-to-br from-blue-50 via-purple-50 to-pink-100 p-6 md:p-10">
       {/* Page Header */}
-      <div>
-        <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-          User Management
-        </h1>
-        <p className="text-gray-600 mt-1">
-          Manage users, roles, and permissions
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+            User Management
+          </h1>
+          <p className="text-gray-600 mt-1">
+            Manage users, roles, and permissions
+          </p>
+        </div>
+        <button 
+          className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-colors shadow-lg transform hover:scale-105"
+          onClick={() => alert('Add New User functionality')}
+        >
+          <Plus className="w-5 h-5" />
+          <span>Add User</span>
+        </button>
       </div>
 
       {/* Stats Cards */}
@@ -211,7 +232,7 @@ const UserManagement = () => {
       </div>
 
       {/* Role Distribution */}
-      <div className="bg-gradient-to-br from-white via-blue-50 to-purple-50 p-6 rounded-xl border border-gray-200 shadow-md">
+      {/* <div className="bg-gradient-to-br from-white via-blue-50 to-purple-50 p-6 rounded-xl border border-gray-200 shadow-md">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">
           Role Distribution
         </h3>
@@ -235,7 +256,7 @@ const UserManagement = () => {
             <p className="text-sm font-semibold text-fuchsia-900 mt-1">Contractors</p>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Users Table */}
       <style>{`

@@ -50,7 +50,6 @@ export default function DistrictPerformanceReportPage() {
                 <TableHead>Incidents (30d)</TableHead>
                 <TableHead>Open Grievances</TableHead>
                 <TableHead>Fatalities (YTD)</TableHead>
-                <TableHead>Avg. Resolution Time</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -62,7 +61,6 @@ export default function DistrictPerformanceReportPage() {
                   <TableCell className={`text-center font-semibold ${d.incidents > 20 ? 'text-red-600' : ''}`}>{d.incidents}</TableCell>
                   <TableCell className="text-center">{d.grievances}</TableCell>
                   <TableCell className={`text-center font-bold ${d.fatalities > 0 ? 'text-red-600' : 'text-green-600'}`}>{d.fatalities}</TableCell>
-                  <TableCell>{d.resolutionTime}</TableCell>
                   <TableCell className="text-right">
                     <Dialog>
                       <DialogTrigger asChild><Button className={cn(contractorTheme.button.secondary, "!px-4 !py-2 text-sm") }><Eye className="h-4 w-4 mr-2"/>View Submitted Report</Button></DialogTrigger>

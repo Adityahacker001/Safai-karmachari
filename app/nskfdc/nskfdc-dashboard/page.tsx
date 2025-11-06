@@ -216,10 +216,88 @@ const NskfdcDashboardPage = () => {
           </div>
         </div> */}
 
-        {/* --- CHARTS & VISUALIZATIONS SECTION --- */}
-        <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 mb-8">
+        {/* --- REPORTS & ANALYTICS SECTION --- */}
+        {/* District-wise Performance Table */}
+        <div className="mb-8 bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden">
+          <div className="p-4 border-b border-slate-200 bg-slate-50/50">
+            <h3 className="flex items-center text-lg font-semibold text-slate-700">
+              <Building className="w-5 h-5 mr-2.5 text-indigo-500" />
+              District-Wise Performance
+            </h3>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-slate-200">
+              <thead className="bg-slate-100">
+                <tr>
+                  <th scope="col" className="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">District</th>
+                  <th scope="col" className="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Total SHGs</th>
+                  <th scope="col" className="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Apps. Received</th>
+                  <th scope="col" className="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Sanctioned</th>
+                  <th scope="col" className="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Disbursed</th>
+                  <th scope="col" className="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Grievances</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-slate-100">
+                {districtPerfData.map((row) => (
+                  <tr key={row.id} className="hover:bg-sky-50/50 transition-colors">
+                    <td className="px-5 py-4 whitespace-nowrap text-sm font-medium text-slate-900">{row.district}</td>
+                    <td className="px-5 py-4 whitespace-nowrap text-sm text-slate-600">{row.shgs}</td>
+                    <td className="px-5 py-4 whitespace-nowrap text-sm text-slate-600">{row.apps}</td>
+                    <td className="px-5 py-4 whitespace-nowrap text-sm text-green-600 font-medium">{row.sanctioned}</td>
+                    <td className="px-5 py-4 whitespace-nowrap text-sm text-indigo-600 font-bold">{row.disbursed}</td>
+                    <td className="px-5 py-4 whitespace-nowrap text-sm text-red-600 font-medium">{row.grievances}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* --- CHARTS & REPORTS ROW --- */}
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
           
-          {/* 1. Scheme Distribution (Pie) */}
+          {/* Exception Reports */}
+          <div className="bg-white rounded-xl shadow-lg border border-slate-100 p-5">
+            <h3 className="flex items-center text-lg font-semibold text-red-600 mb-4">
+              <FileWarning className="w-5 h-5 mr-2.5" />
+              Exception Reports
+            </h3>
+            <ul className="space-y-2.5">
+              {[
+                'Pending Disbursement (12)',
+                'Rejected Applications (45)',
+                'Delayed Compliance (7)',
+                'Unresolved Grievances (38)',
+                'Low Utilization Districts (9)',
+              ].map(item => (
+                <li key={item} className="flex items-center justify-between text-sm font-medium text-slate-700 hover:text-indigo-600 cursor-pointer">
+                  <span>{item}</span>
+                  <ArrowUpRight className="w-4 h-4 text-red-500" />
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Annual Report Sections */}
+          <div className="bg-white rounded-xl shadow-lg border border-slate-100 p-5">
+            <h3 className="flex items-center text-lg font-semibold text-indigo-700 mb-4">
+              <BookOpen className="w-5 h-5 mr-2.5" />
+              Annual Report Sections
+            </h3>
+            <ul className="space-y-2 text-sm text-slate-600">
+              {[
+                'Executive Summary', 'Scheme Performance', 'Beneficiary Impact',
+                'Financial Summary', 'Compliance Summary', 'Challenges & Recs.'
+              ].map(item => (
+                <li key={item} className="flex items-center">
+                  <CheckCircle className="w-4 h-4 mr-2 text-green-500 flex-shrink-0" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Scheme Distribution Chart */}
           <ChartCard 
             title="Scheme Distribution" 
             icon={PieChartIcon}
@@ -227,6 +305,7 @@ const NskfdcDashboardPage = () => {
               <FilterSelect options={['All Groups', 'Individual', 'SHG']} />
               <FilterSelect options={['All India', 'State', 'District']} />
             </>}
+            className="h-auto"
           >
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -241,92 +320,6 @@ const NskfdcDashboardPage = () => {
             </ResponsiveContainer>
           </ChartCard>
 
-        </div>
-
-        {/* --- REPORTS & ANALYTICS SECTION --- */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-          
-          {/* District-wise Performance Table */}
-          <div className="xl:col-span-2 bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden">
-            <div className="p-4 border-b border-slate-200 bg-slate-50/50">
-              <h3 className="flex items-center text-lg font-semibold text-slate-700">
-                <Building className="w-5 h-5 mr-2.5 text-indigo-500" />
-                District-Wise Performance
-              </h3>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-slate-200">
-                <thead className="bg-slate-100">
-                  <tr>
-                    <th scope="col" className="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">District</th>
-                    <th scope="col" className="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Total SHGs</th>
-                    <th scope="col" className="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Apps. Received</th>
-                    <th scope="col" className="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Sanctioned</th>
-                    <th scope="col" className="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Disbursed</th>
-                    <th scope="col" className="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Grievances</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-slate-100">
-                  {districtPerfData.map((row) => (
-                    <tr key={row.id} className="hover:bg-sky-50/50 transition-colors">
-                      <td className="px-5 py-4 whitespace-nowrap text-sm font-medium text-slate-900">{row.district}</td>
-                      <td className="px-5 py-4 whitespace-nowrap text-sm text-slate-600">{row.shgs}</td>
-                      <td className="px-5 py-4 whitespace-nowrap text-sm text-slate-600">{row.apps}</td>
-                      <td className="px-5 py-4 whitespace-nowrap text-sm text-green-600 font-medium">{row.sanctioned}</td>
-                      <td className="px-5 py-4 whitespace-nowrap text-sm text-indigo-600 font-bold">{row.disbursed}</td>
-                      <td className="px-5 py-4 whitespace-nowrap text-sm text-red-600 font-medium">{row.grievances}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* Key Reports & Insights */}
-          <div className="space-y-6">
-            
-            {/* Exception Reports */}
-            <div className="bg-white rounded-xl shadow-lg border border-slate-100 p-5">
-              <h3 className="flex items-center text-lg font-semibold text-red-600 mb-4">
-                <FileWarning className="w-5 h-5 mr-2.5" />
-                Exception Reports
-              </h3>
-              <ul className="space-y-2.5">
-                {[
-                  'Pending Disbursement (12)',
-                  'Rejected Applications (45)',
-                  'Delayed Compliance (7)',
-                  'Unresolved Grievances (38)',
-                  'Low Utilization Districts (9)',
-                ].map(item => (
-                  <li key={item} className="flex items-center justify-between text-sm font-medium text-slate-700 hover:text-indigo-600 cursor-pointer">
-                    <span>{item}</span>
-                    <ArrowUpRight className="w-4 h-4 text-red-500" />
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Annual Report Sections */}
-            <div className="bg-white rounded-xl shadow-lg border border-slate-100 p-5">
-              <h3 className="flex items-center text-lg font-semibold text-indigo-700 mb-4">
-                <BookOpen className="w-5 h-5 mr-2.5" />
-                Annual Report Sections
-              </h3>
-              <ul className="space-y-2 text-sm text-slate-600">
-                {[
-                  'Executive Summary', 'Scheme Performance', 'Beneficiary Impact',
-                  'Financial Summary', 'Compliance Summary', 'Challenges & Recs.'
-                ].map(item => (
-                  <li key={item} className="flex items-center">
-                    <CheckCircle className="w-4 h-4 mr-2 text-green-500 flex-shrink-0" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-          </div>
         </div>
         
       </div>

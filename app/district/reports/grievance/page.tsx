@@ -4,18 +4,32 @@ import DashboardCard from '@/components/dashboard/dashboard-card';
 import DataTable from '@/components/ui/data-table';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
+import {
   MessageSquareWarning,
   CheckCircle,
   Clock,
   AlertTriangle,
   Timer,
   Search,
-  X
+  X,
+  Eye,
+  User,
+  MapPin,
+  Calendar,
+  Flag
 } from 'lucide-react';
 
 const Grievances: React.FC = () => {
   const [activeTab, setActiveTab] = useState('summary');
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedGrievance, setSelectedGrievance] = useState<string | null>(null);
+  const [isGrievanceDetailsOpen, setIsGrievanceDetailsOpen] = useState(false);
 
   const nodalOfficerData = [
     {
@@ -85,12 +99,24 @@ const Grievances: React.FC = () => {
       key: 'actions',
       header: 'Actions',
       render: (row: any) => (
-        <button
-          className="px-3 py-1 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-md text-xs font-medium hover:scale-105 transition"
-          onClick={() => alert(`Escalate grievance ${row.grievanceId} to State?`)}
-        >
-          Escalate to State
-        </button>
+        <div className="flex space-x-2">
+          <button
+            className="px-2 py-1 bg-blue-500 text-white rounded-md text-xs font-medium hover:bg-blue-600 transition flex items-center space-x-1"
+            onClick={() => {
+              setSelectedGrievance(row.grievanceId);
+              setIsGrievanceDetailsOpen(true);
+            }}
+          >
+            <Eye className="w-3 h-3" />
+            <span>View</span>
+          </button>
+          <button
+            className="px-2 py-1 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-md text-xs font-medium hover:scale-105 transition"
+            onClick={() => alert(`Escalate grievance ${row.grievanceId} to State?`)}
+          >
+            Escalate
+          </button>
+        </div>
       )
     }
   ];
@@ -101,6 +127,56 @@ const Grievances: React.FC = () => {
     { officer: 'Priya Sharma', zone: 'Zone B', grievanceId: 'GRV-2024-012', dateRaised: '2024-01-12', pending: 3, status: 'Escalated' },
     { officer: 'Amit Singh', zone: 'Zone C', grievanceId: 'GRV-2024-013', dateRaised: '2024-01-14', pending: 1, status: 'Escalated' }
   ];
+
+  // Sample grievance details data
+  const grievanceDetailsData = {
+    "GRV-2024-011": {
+      caseId: "GRV-2024-011",
+      type: "Manual Scavenging",
+      contractor: "ABC Sanitation Services",
+      reportedDate: "2024-01-10",
+      location: "Railway Station, Platform No. 2",
+      reportedBy: "Station Master - Rahul Kumar",
+      priority: "High",
+      status: "Escalated",
+      description: "Reported manual scavenging activity at Railway Station Area. Workers were seen entering septic tank without proper safety equipment. Immediate action required to ensure worker safety and provide proper training and equipment.",
+      officers: [
+        { name: "Dr. Amit Kumar", designation: "District Nodal Officer", contact: "+91 9876543210", email: "amit.kumar@wb.gov.in" },
+        { name: "Mrs. Priya Singh", designation: "Assistant Engineer", contact: "+91 9876543211", email: "priya.singh@wb.gov.in" },
+        { name: "Mr. Ravi Sharma", designation: "Safety Inspector", contact: "+91 9876543212", email: "ravi.sharma@wb.gov.in" }
+      ]
+    },
+    "GRV-2024-012": {
+      caseId: "GRV-2024-012",
+      type: "Unsafe Working Conditions",
+      contractor: "Green Solutions Ltd",
+      reportedDate: "2024-01-12",
+      location: "Municipal Office Complex",
+      reportedBy: "Health Inspector - Suresh Patel",
+      priority: "Medium",
+      status: "Escalated", 
+      description: "Workers found cleaning septic systems without proper protective gear and ventilation equipment. Health hazard identified requiring immediate intervention.",
+      officers: [
+        { name: "Dr. Sneha Gupta", designation: "District Health Officer", contact: "+91 9876543213", email: "sneha.gupta@wb.gov.in" },
+        { name: "Mr. Vikash Roy", designation: "Safety Supervisor", contact: "+91 9876543214", email: "vikash.roy@wb.gov.in" }
+      ]
+    },
+    "GRV-2024-013": {
+      caseId: "GRV-2024-013",
+      type: "Equipment Safety Violation",
+      contractor: "Urban Care Co.",
+      reportedDate: "2024-01-14",
+      location: "Central Bus Terminal",
+      reportedBy: "Terminal Manager - Mohan Das",
+      priority: "High",
+      status: "Escalated",
+      description: "Safety equipment not provided to cleaning staff. Workers using bare hands for waste disposal. Urgent safety protocol implementation needed.",
+      officers: [
+        { name: "Ms. Kavita Joshi", designation: "Safety Compliance Officer", contact: "+91 9876543215", email: "kavita.joshi@wb.gov.in" },
+        { name: "Mr. Deepak Verma", designation: "Field Supervisor", contact: "+91 9876543216", email: "deepak.verma@wb.gov.in" }
+      ]
+    }
+  };
 
   // Filter functions for both tables
   const filteredEscalatedToYou = escalatedToYou.filter(item =>
@@ -135,6 +211,22 @@ const Grievances: React.FC = () => {
           {value}
         </span>
       )
+    },
+    {
+      key: 'actions',
+      header: 'Actions',
+      render: (row: any) => (
+        <button
+          className="px-2 py-1 bg-blue-500 text-white rounded-md text-xs font-medium hover:bg-blue-600 transition flex items-center space-x-1"
+          onClick={() => {
+            setSelectedGrievance(row.grievanceId);
+            setIsGrievanceDetailsOpen(true);
+          }}
+        >
+          <Eye className="w-3 h-3" />
+          <span>View</span>
+        </button>
+      )
     }
   ];
 
@@ -155,9 +247,7 @@ const Grievances: React.FC = () => {
               </p>
             </div>
           </div>
-          <div className="text-sm sm:text-base md:text-lg text-white/90 font-semibold bg-white/20 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/30">
-            Last updated: {new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
-          </div>
+          
         </div>
       </header>
 
@@ -264,12 +354,31 @@ const Grievances: React.FC = () => {
                       <TableCell className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 text-center text-xs sm:text-sm text-gray-800">{row.dateRaised}</TableCell>
                       <TableCell className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 text-center text-xs sm:text-sm text-gray-800">{row.pending}</TableCell>
                       <TableCell className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 text-center text-xs sm:text-sm text-gray-800">{row.status}</TableCell>
-                      <TableCell className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 text-center">{summaryColumns.find(c => c.key === 'actions')!.render!(row)}</TableCell>
+                      <TableCell className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 text-center">
+                        <div className="flex space-x-2">
+                          <button
+                            className="px-2 py-1 bg-blue-500 text-white rounded-md text-xs font-medium hover:bg-blue-600 transition flex items-center space-x-1"
+                            onClick={() => {
+                              setSelectedGrievance(row.grievanceId);
+                              setIsGrievanceDetailsOpen(true);
+                            }}
+                          >
+                            <Eye className="w-3 h-3" />
+                            <span>View</span>
+                          </button>
+                          <button
+                            className="px-2 py-1 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-md text-xs font-medium hover:scale-105 transition"
+                            onClick={() => alert(`Escalate grievance ${row.grievanceId} to State?`)}
+                          >
+                            Escalate
+                          </button>
+                        </div>
+                      </TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center h-24 text-gray-500 text-sm">
+                    <TableCell colSpan={8} className="text-center h-24 text-gray-500 text-sm">
                       {searchTerm ? `No grievances found matching "${searchTerm}"` : 'No grievances available'}
                     </TableCell>
                   </TableRow>
@@ -336,11 +445,23 @@ const Grievances: React.FC = () => {
                           {row.status}
                         </span>
                       </TableCell>
+                      <TableCell className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 text-center">
+                        <button
+                          className="px-2 py-1 bg-blue-500 text-white rounded-md text-xs font-medium hover:bg-blue-600 transition flex items-center space-x-1"
+                          onClick={() => {
+                            setSelectedGrievance(row.grievanceId);
+                            setIsGrievanceDetailsOpen(true);
+                          }}
+                        >
+                          <Eye className="w-3 h-3" />
+                          <span>View</span>
+                        </button>
+                      </TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center h-24 text-gray-500 text-sm">
+                    <TableCell colSpan={7} className="text-center h-24 text-gray-500 text-sm">
                       {searchTerm ? `No escalated grievances found matching "${searchTerm}"` : 'No escalated grievances available'}
                     </TableCell>
                   </TableRow>
@@ -349,7 +470,132 @@ const Grievances: React.FC = () => {
             </Table>
           </div>
         </div>
-      )}    
+      )}
+
+      {/* Grievance Details Modal */}
+      <Dialog open={isGrievanceDetailsOpen} onOpenChange={setIsGrievanceDetailsOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center space-x-2 text-2xl font-bold text-gray-900">
+              <Eye className="w-6 h-6 text-blue-600" />
+              <span>Incident Case Details - {selectedGrievance}</span>
+            </DialogTitle>
+            <DialogDescription>
+              Complete case information and grievance details
+            </DialogDescription>
+          </DialogHeader>
+
+          {selectedGrievance && grievanceDetailsData[selectedGrievance as keyof typeof grievanceDetailsData] && (
+            <div className="mt-6 space-y-6">
+              {/* Case Overview */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Case Overview</h3>
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-sm font-medium text-gray-600">Case ID</label>
+                      <p className="text-gray-900 font-semibold">{grievanceDetailsData[selectedGrievance as keyof typeof grievanceDetailsData].caseId}</p>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium text-gray-600">Contractor</label>
+                      <p className="text-gray-900">{grievanceDetailsData[selectedGrievance as keyof typeof grievanceDetailsData].contractor}</p>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium text-gray-600">Location</label>
+                      <p className="text-gray-900 flex items-center space-x-1">
+                        <MapPin className="w-4 h-4 text-gray-500" />
+                        <span>{grievanceDetailsData[selectedGrievance as keyof typeof grievanceDetailsData].location}</span>
+                      </p>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium text-gray-600">Priority</label>
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                        grievanceDetailsData[selectedGrievance as keyof typeof grievanceDetailsData].priority === 'High' 
+                          ? 'bg-red-100 text-red-800' 
+                          : 'bg-yellow-100 text-yellow-800'
+                      }`}>
+                        <Flag className="w-3 h-3 mr-1" />
+                        {grievanceDetailsData[selectedGrievance as keyof typeof grievanceDetailsData].priority}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-sm font-medium text-gray-600">Type</label>
+                      <p className="text-gray-900">{grievanceDetailsData[selectedGrievance as keyof typeof grievanceDetailsData].type}</p>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium text-gray-600">Reported Date</label>
+                      <p className="text-gray-900 flex items-center space-x-1">
+                        <Calendar className="w-4 h-4 text-gray-500" />
+                        <span>{grievanceDetailsData[selectedGrievance as keyof typeof grievanceDetailsData].reportedDate}</span>
+                      </p>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium text-gray-600">Reported By</label>
+                      <p className="text-gray-900 flex items-center space-x-1">
+                        <User className="w-4 h-4 text-gray-500" />
+                        <span>{grievanceDetailsData[selectedGrievance as keyof typeof grievanceDetailsData].reportedBy}</span>
+                      </p>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium text-gray-600">Status</label>
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                        {grievanceDetailsData[selectedGrievance as keyof typeof grievanceDetailsData].status}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Grievance Details */}
+              <div className="bg-blue-50 rounded-lg p-6">
+                <h3 className="text-lg font-semibold text-blue-900 mb-3">Grievance Details</h3>
+                <div>
+                  <h4 className="font-medium text-blue-800 mb-2">Message Description</h4>
+                  <p className="text-gray-700 leading-relaxed">
+                    {grievanceDetailsData[selectedGrievance as keyof typeof grievanceDetailsData].description}
+                  </p>
+                </div>
+              </div>
+
+              {/* Assigned Officers */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Assigned Officers</h3>
+                <div className="grid gap-4">
+                  {grievanceDetailsData[selectedGrievance as keyof typeof grievanceDetailsData].officers.map((officer, index) => (
+                    <div key={index} className="bg-gray-50 rounded-lg p-4 border">
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-center space-x-3">
+                          <div className="bg-blue-100 p-2 rounded-full">
+                            <User className="w-5 h-5 text-blue-600" />
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-gray-900">{officer.name}</h4>
+                            <p className="text-sm text-gray-600">{officer.designation}</p>
+                            <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
+                              <span>📱 {officer.contact}</span>
+                              <span>✉️ {officer.email}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex space-x-2">
+                          <button className="px-3 py-1 bg-green-100 text-green-700 rounded-lg text-sm font-medium hover:bg-green-200 transition-colors">
+                            Contact
+                          </button>
+                          <button className="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-200 transition-colors">
+                            Assign Task
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>    
     </div>
   );
 };

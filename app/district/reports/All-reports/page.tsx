@@ -369,9 +369,7 @@ export default function PerformanceReportsPage() {
                             Comprehensive analysis of all stakeholders
                         </p>
                     </div>
-                    <div className="text-sm sm:text-base md:text-lg text-white/90 font-semibold bg-white/20 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/30">
-                        Last updated: {new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
-                    </div>
+                    
                 </div>
             </header>
 

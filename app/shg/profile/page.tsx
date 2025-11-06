@@ -321,9 +321,6 @@ export default function SHGProfilePage() {
 
       {/* Members section removed as requested */}
 
-      {/* Projects Section */}
-      <ProjectsCard projects={projects} />
-
       {/* Activity and Admin Controls */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <ActivityLogCard logs={activityLogs} />

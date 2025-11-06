@@ -69,8 +69,7 @@ export default function ContractorPerformanceReportPage() {
             <TableHeader>
               <TableRow className="bg-gray-100">
                 <TableHead className="px-6 py-4 text-sm font-semibold text-gray-700 uppercase border border-gray-300 text-center">Contractor</TableHead>
-                <TableHead className="px-6 py-4 text-sm font-semibold text-gray-700 uppercase border border-gray-300 text-center">PPE Modules</TableHead>
-                <TableHead className="px-6 py-4 text-sm font-semibold text-gray-700 uppercase border border-gray-300 text-center">Overdue Tasks</TableHead>
+                <TableHead className="px-6 py-4 text-sm font-semibold text-gray-700 uppercase border border-gray-300 text-center">Projects Completed</TableHead>
                 <TableHead className="px-6 py-4 text-sm font-semibold text-gray-700 uppercase border border-gray-300 text-center">Last System Login</TableHead>
                 <TableHead className="px-6 py-4 text-sm font-semibold text-gray-700 uppercase border border-gray-300 text-center">Responsiveness Status</TableHead>
                 <TableHead className="text-center px-6 py-4 text-sm font-semibold text-gray-700 uppercase border border-gray-300">Actions</TableHead>
@@ -90,9 +89,6 @@ export default function ContractorPerformanceReportPage() {
                       <Avatar><AvatarFallback>{c.name.substring(0, 2)}</AvatarFallback></Avatar>
                       <span className="font-medium text-gray-800">{c.name}</span>
                     </div>
-                  </TableCell>
-                  <TableCell className="px-6 py-4 border border-gray-300 text-center">
-                    <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">Enabled</span>
                   </TableCell>
                   <TableCell className={cn("px-6 py-4 border border-gray-300 font-bold text-center", c.overdueTasks > 4 ? 'text-red-600' : 'text-gray-700')}>
                     {c.overdueTasks}

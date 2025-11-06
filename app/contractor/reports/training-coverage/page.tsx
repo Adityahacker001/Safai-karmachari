@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Download, GraduationCap, Target, AlertTriangle, CheckCircle, Loader, Clock, XCircle } from "lucide-react";
+import { Download, GraduationCap, Target, AlertTriangle, CheckCircle, Loader, Clock, XCircle, Eye } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import StatCard from "@/components/ui/stat-card";
@@ -239,6 +239,7 @@ export default function TrainingCoverageReportPage() {
                                 <TableHead className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</TableHead>
                                 <TableHead className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score</TableHead>
                                 <TableHead className="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Certificate</TableHead>
+                                <TableHead className="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -265,6 +266,16 @@ export default function TrainingCoverageReportPage() {
                                         ) : (
                                             <XCircle className="h-5 w-5 text-red-400 mx-auto" />
                                         )}
+                                    </TableCell>
+                                    <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-center">
+                                        <Button 
+                                            variant="ghost" 
+                                            size="sm" 
+                                            className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                                            onClick={() => alert(`Viewing details for ${record.worker} - ${record.module}`)}
+                                        >
+                                            <Eye className="h-4 w-4 mr-1" /> View
+                                        </Button>
                                     </TableCell>
                                 </TableRow>
                             ))}
