@@ -99,12 +99,18 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onView, onEdit, onDe
 // --- Mock Data ---
 
 const MOCK_PROJECT_DATA = [
-  { id: 1, title: 'Tailoring Unit Setup', scheme: 'Self Employment Scheme', status: 'Active', startDate: '15 Aug 2025' },
-  { id: 2, title: 'Sanitary Napkin Production', scheme: 'Sanitary Mart Loan', status: 'Completed', startDate: '01 Mar 2025' },
-  { id: 3, title: 'Mechanized Cleaning Service', scheme: 'Mechanized Cleaning Grant', status: 'Pending Approval', startDate: '01 Oct 2025' },
-  { id: 4, title: 'E-Rickshaw Operation', scheme: 'E-Rickshaw Loan', status: 'Active', startDate: '10 Jun 2025' },
-  { id: 5, title: 'Catering Service Expansion', scheme: 'Self Employment Scheme', status: 'On Hold', startDate: '01 Sep 2025' },
-  { id: 6, title: 'Computer Training Center', scheme: 'Skill Development Program', status: 'Active', startDate: '01 Jul 2025' },
+{ id: 1, title: 'Railway Station Platform Cleaning', scheme: 'Railway Sanitation Contract', status: 'Active', startDate: '12 May 2025' },
+{ id: 2, title: 'Train Coach Cleaning & Maintenance', scheme: 'Railway Cleaning Service', status: 'Active', startDate: '20 Apr 2025' },
+{ id: 3, title: 'Railway Track Cleaning & Debris Removal', scheme: 'Railway Track Maintenance', status: 'Completed', startDate: '05 Feb 2025' },
+{ id: 4, title: 'Railway Toilet Cleaning & Sanitization', scheme: 'Railway Sanitation Service', status: 'Active', startDate: '18 Jun 2025' },
+{ id: 5, title: 'Railway Yard Waste Management', scheme: 'Railway Waste Management', status: 'Pending Approval', startDate: '02 Nov 2025' },
+{ id: 6, title: 'Railway Station Washroom Maintenance', scheme: 'Railway Facility Cleaning', status: 'Active', startDate: '25 Mar 2025' },
+{ id: 7, title: 'Railway Platform Mechanized Sweeping', scheme: 'Mechanized Railway Cleaning', status: 'On Hold', startDate: '15 Sep 2025' },
+{ id: 8, title: 'Railway Compartment Deep Cleaning', scheme: 'Railway Deep Cleaning Service', status: 'Active', startDate: '08 Jul 2025' },
+{ id: 9, title: 'Railway Engine Shed Cleaning', scheme: 'Railway Maintenance Contract', status: 'Active', startDate: '14 Jan 2025' },
+{ id: 10, title: 'Railway Pantry Car Sanitization', scheme: 'Railway Food Safety Service', status: 'Completed', startDate: '28 Mar 2025' },
+{ id: 11, title: 'Railway Signal Box Cleaning', scheme: 'Railway Infrastructure Cleaning', status: 'Active', startDate: '05 Aug 2025' },
+{ id: 12, title: 'Railway Overhead Bridge Cleaning', scheme: 'Railway Structure Maintenance', status: 'Pending Approval', startDate: '10 Oct 2025' },
 ];
 
 const mockStatusOptions = ['All', 'Active', 'Completed', 'Pending Approval', 'On Hold'];

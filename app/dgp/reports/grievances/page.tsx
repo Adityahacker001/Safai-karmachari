@@ -9,6 +9,7 @@ import {
   ShieldAlert,
   Filter,
   RotateCcw,
+  RefreshCw,
   FileDown,
   Users,
   Briefcase,
@@ -386,7 +387,21 @@ export default function GrievancesReport() {
       .filter(g => filters.source === "All Sources" || g.source === filters.source)
       .filter(g => filters.type === "All Types" || g.type === filters.type)
       .filter(g => filters.status === "All Statuses" || g.status === filters.status)
-      .filter(g => g.description.toLowerCase().includes(searchTerm.toLowerCase()) || g.id.toLowerCase().includes(searchTerm.toLowerCase()));
+      .filter(g => {
+        if (!searchTerm) return true;
+        const searchLower = searchTerm.toLowerCase();
+        return (
+          g.id.toLowerCase().includes(searchLower) ||
+          g.description.toLowerCase().includes(searchLower) ||
+          g.district.toLowerCase().includes(searchLower) ||
+          g.source.toLowerCase().includes(searchLower) ||
+          g.type.toLowerCase().includes(searchLower) ||
+          g.status.toLowerCase().includes(searchLower) ||
+          g.dateReceived.toLowerCase().includes(searchLower) ||
+          g.actionTaken.toLowerCase().includes(searchLower) ||
+          g.escalatedTo.toLowerCase().includes(searchLower)
+        );
+      });
   }, [filters, searchTerm]);
   
   const paginatedGrievances = useMemo(() => {
@@ -399,7 +414,7 @@ export default function GrievancesReport() {
 
   if (!hasMounted) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-white via-sky-50 to-slate-100">
+      <div className="min-h-screen flex items-center justify-center">
         <Loader2 size={48} className="animate-spin text-blue-700" />
       </div>
     );
@@ -410,100 +425,179 @@ export default function GrievancesReport() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen p-6 lg:p-10 bg-gradient-to-br from-white via-sky-50 to-slate-100"
+      className="min-h-screen p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8"
     >
-      {/* --- Header --- */}
-      <header className="max-w-7xl mx-auto mb-8">
-        {/* Breadcrumb */}
-        <nav className="flex items-center text-sm font-medium text-slate-500" aria-label="Breadcrumb">
-          <a href="#" className="hover:text-slate-700">DGP Dashboard</a>
-          <ChevronRight size={16} className="mx-1.5" />
-          <a href="#" className="hover:text-slate-700">Reports & Analytics</a>
-          <ChevronRight size={16} className="mx-1.5" />
-          <span className="text-slate-800 font-semibold">Grievances Report</span>
-        </nav>
-        {/* Title */}
-        <div className="flex items-center justify-between mt-3">
-          <div className="flex items-center gap-4">
-            <div className="flex-shrink-0 w-14 h-14 flex items-center justify-center rounded-full bg-navy-700 text-gold-400 shadow-lg shadow-navy-500/30 border-2 border-white/50">
-              <ShieldAlert size={32} />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-navy-900">Grievances Report</h1>
-              <p className="text-sm text-slate-600">State-wide police grievance monitoring and resolution tracking.</p>
-            </div>
+      {/* --- Enhanced Header --- */}
+      <header className="max-w-7xl mx-auto mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 rounded-xl sm:rounded-2xl"></div>
+        <div className="relative p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col gap-3 sm:gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
+          <div className="flex-1">
+            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-black text-white drop-shadow-lg leading-tight">
+              Grievances Report
+            </h1>
+            <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-white/90 font-medium mt-1 sm:mt-2 lg:mt-3 drop-shadow-md">
+              State-wide police grievance monitoring and resolution tracking
+            </p>
           </div>
-          <span className="info-chip bg-navy-100 text-navy-800 border-navy-200">
-            <Shield size={14} className="text-navy-600" />
-            DGP State View — Full Access
-          </span>
+          <nav className="text-xs sm:text-sm font-bold text-white overflow-x-auto" aria-label="Breadcrumb">
+            <ol className="flex items-center space-x-2 sm:space-x-3 bg-white/20 backdrop-blur-lg rounded-lg sm:rounded-xl lg:rounded-2xl px-3 sm:px-4 lg:px-6 py-2 sm:py-3 border border-white/30 shadow-lg whitespace-nowrap">
+              <li><a href="#" className="hover:text-yellow-300 transition-colors drop-shadow-md">DGP Dashboard</a></li>
+              <li><ChevronRight size={12} className="sm:hidden text-white/70" /></li>
+              <li><ChevronRight size={16} className="hidden sm:block lg:hidden text-white/70 drop-shadow-md" /></li>
+              <li><ChevronRight size={18} className="hidden lg:block text-white/70 drop-shadow-md" /></li>
+              <li className="hidden sm:block"><a href="#" className="hover:text-yellow-300 transition-colors drop-shadow-md">Reports</a></li>
+              <li className="hidden sm:block"><ChevronRight size={12} className="sm:hidden text-white/70" /></li>
+              <li className="hidden sm:block"><ChevronRight size={16} className="hidden sm:block lg:hidden text-white/70 drop-shadow-md" /></li>
+              <li className="hidden sm:block"><ChevronRight size={18} className="hidden lg:block text-white/70 drop-shadow-md" /></li>
+              <li className="font-black text-yellow-300 drop-shadow-md">Grievances</li>
+            </ol>
+          </nav>
         </div>
       </header>
-      
-      {/* --- Filter Panel --- */}
-      <GlassCard className="max-w-7xl mx-auto mb-8" noHover>
-        <div className="flex items-center gap-3 px-6 py-4 border-b border-sky-100">
-          <ListFilter size={18} className="text-blue-700" />
-          <h3 className="text-base font-semibold text-navy-800">Filter Grievances</h3>
-        </div>
-        <div className="p-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
-            <select name="district" value={filters.district} onChange={handleFilterChange} className="form-select-sm">
-              {filterOptions.districts.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-            </select>
-            <select name="source" value={filters.source} onChange={handleFilterChange} className="form-select-sm">
-              {filterOptions.sources.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-            </select>
-            <select name="type" value={filters.type} onChange={handleFilterChange} className="form-select-sm">
-              {filterOptions.types.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-            </select>
-            <select name="status" value={filters.status} onChange={handleFilterChange} className="form-select-sm">
-              {filterOptions.statuses.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-            </select>
-            <select name="timePeriod" value={filters.timePeriod} onChange={handleFilterChange} className="form-select-sm">
-              {filterOptions.timePeriods.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-            </select>
-            <div className="relative col-span-2 lg:col-span-1">
-              <input 
-                type="text" 
-                placeholder="Search ID or keywords..." 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="form-input-sm pl-9 w-full" 
-              />
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-            </div>
-            <StyledButton onClick={() => {}} variant="primary" className="h-full">
-              <Filter size={16} /> Apply
-            </StyledButton>
-          </div>
-          <div className="flex justify-between items-center mt-4 pt-4 border-t border-sky-100">
-             <StyledButton onClick={handleResetFilters} variant="secondary" className="px-3 py-1.5">
-              <RotateCcw size={16} /> Reset Filters
-            </StyledButton>
-             <div className="flex gap-2">
-              <StyledButton onClick={() => {}} variant="exportPdf">
-                <FileDown size={16} /> PDF
-              </StyledButton>
-              <StyledButton onClick={() => {}} variant="exportExcel">
-                <FileSpreadsheet size={16} /> Excel
-              </StyledButton>
-            </div>
-          </div>
-        </div>
-      </GlassCard>
 
       {/* --- KPI Metrics --- */}
-      <section className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+      <section className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 lg:gap-6 mb-3 sm:mb-4 md:mb-6 lg:mb-8">
         <StatCard title="Total Grievances" value={mockKpis.total.value.toString()} icon={MessageSquare} color="blue" />
         <StatCard title="Resolved" value={mockKpis.resolved.value.toString()} icon={CheckCircle} color="green" />
         <StatCard title="Pending" value={mockKpis.pending.value.toString()} icon={Clock} color="amber" />
         <StatCard title="Escalated" value={mockKpis.escalated.value.toString()} icon={AlertTriangle} color="red" />
       </section>
+      
+      {/* --- Enhanced Filter Panel --- */}
+      <GlassCard className="max-w-7xl mx-auto mb-4 sm:mb-6 lg:mb-8 bg-white/95 backdrop-blur-xl border border-gray-200/50 shadow-lg" noHover>
+        <div className="p-3 sm:p-4 lg:p-6 relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-pink-500/5 rounded-2xl"></div>
+          <div className="relative">
+            <div className="flex items-center gap-3 mb-4 sm:mb-6">
+              <h3 className="text-lg sm:text-xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                Filter Grievances
+              </h3>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
+              <select name="district" value={filters.district} onChange={handleFilterChange} className="form-select-sm">
+                {filterOptions.districts.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+              </select>
+              <select name="source" value={filters.source} onChange={handleFilterChange} className="form-select-sm">
+                {filterOptions.sources.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+              </select>
+              <select name="type" value={filters.type} onChange={handleFilterChange} className="form-select-sm">
+                {filterOptions.types.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+              </select>
+              <select name="status" value={filters.status} onChange={handleFilterChange} className="form-select-sm">
+                {filterOptions.statuses.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+              </select>
+              <select name="timePeriod" value={filters.timePeriod} onChange={handleFilterChange} className="form-select-sm">
+                {filterOptions.timePeriods.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+              </select>
+              <div className="relative">
+                <input 
+                  type="text" 
+                  placeholder="Global search..." 
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="form-input-sm pl-9 w-full" 
+                />
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              </div>
+            </div>
+            <div className="flex items-center justify-between mt-4 pt-4 border-t border-gradient-to-r from-blue-200/50 via-purple-200/50 to-pink-200/50">
+              <div className="flex items-center gap-3">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 lg:px-6 py-2 sm:py-2.5 lg:py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300"
+                >
+                  <Filter size={14} className="sm:hidden" />
+                  <Filter size={16} className="hidden sm:block" />
+                  <span className="hidden sm:inline">Apply Filters</span>
+                  <span className="sm:hidden">Filter</span>
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.02, rotate: 180 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="p-2 sm:p-2.5 lg:p-3 bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                  onClick={handleResetFilters}
+                >
+                  <RefreshCw size={14} className="sm:hidden" />
+                  <RefreshCw size={16} className="hidden sm:block lg:hidden" />
+                  <RefreshCw size={18} className="hidden lg:block" />
+                </motion.button>
+              </div>
+              {/* <div className="flex gap-2 sm:gap-3">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg text-xs sm:text-sm font-semibold shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40 transition-all duration-300"
+                >
+                  <FileDown size={14} className="sm:hidden" />
+                  <FileDown size={16} className="hidden sm:block" />
+                  PDF
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-emerald-600 to-green-700 text-white rounded-lg text-xs sm:text-sm font-semibold shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/40 transition-all duration-300"
+                >
+                  <FileSpreadsheet size={14} className="sm:hidden" />
+                  <FileSpreadsheet size={16} className="hidden sm:block" />
+                  Excel
+                </motion.button>
+              </div> */}
+            </div>
+          </div>
+        </div>
+      </GlassCard>
 
-      {/* --- Main Worker Table --- */}
-      <GlassCard className="max-w-7xl mx-auto" noHover>
-        <div className="overflow-x-auto">
+      {/* --- Enhanced Main Worker Table --- */}
+      <GlassCard className="max-w-7xl mx-auto bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30 backdrop-blur-xl border border-blue-200/50 shadow-xl shadow-blue-500/20" noHover>
+        {/* Global Search Bar */}
+        <div className="p-3 sm:p-4 md:p-6 border-b border-slate-200/50">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center justify-between">
+            <div className="flex-1 max-w-md">
+              <div className="relative">
+                <input 
+                  type="text" 
+                  placeholder="Search grievances, sources, actions..." 
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2.5 bg-white/80 backdrop-blur-sm border border-slate-300/50 rounded-lg text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200" 
+                />
+                <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                {searchTerm && (
+                  <button
+                    onClick={() => setSearchTerm("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                  >
+                    <X size={16} />
+                  </button>
+                )}
+              </div>
+            </div>
+            <div className="flex gap-2 sm:gap-3">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+              >
+                <FileDown size={16} />
+                <span className="hidden sm:inline">Export PDF</span>
+                <span className="sm:hidden">PDF</span>
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-emerald-600 to-green-700 text-white rounded-lg text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+              >
+                <FileSpreadsheet size={16} />
+                <span className="hidden sm:inline">Export Excel</span>
+                <span className="sm:hidden">Excel</span>
+              </motion.button>
+            </div>
+          </div>
+        </div>
+        
+        <div className="overflow-x-auto rounded-b-lg sm:rounded-b-xl">
           <table className="table-auto w-full">
             <thead className="sticky top-0 bg-slate-100/80 backdrop-blur-sm z-10">
               <tr>
@@ -520,17 +614,21 @@ export default function GrievancesReport() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-slate-100">
-              {paginatedGrievances.map((g) => (
+              {paginatedGrievances.map((g, index) => (
                 <motion.tr
                   key={g.id}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.05 }}
-                  className={
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  whileHover={{ 
+                    backgroundColor: 'rgba(59, 130, 246, 0.05)', 
+                    scale: 1.005,
+                  }}
+                  className={`cursor-pointer transition-all duration-300 ${
                     g.status === "Escalated" ? 'bg-red-50/70 hover:bg-red-100/70' : 
                     g.status === "Pending" ? 'bg-amber-50/70 hover:bg-amber-100/70' :
-                    'hover:bg-sky-50/50'
-                  }
+                    'bg-white hover:bg-blue-50/50'
+                  }`}
                 >
                   <td className="td-cell font-medium text-navy-800">{g.id}</td>
                   <td className="td-cell">{g.source}</td>

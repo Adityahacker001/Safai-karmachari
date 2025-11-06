@@ -67,34 +67,51 @@ export default function Reports() {
   };
 
   return (
-    <div className="space-y-10 p-4 sm:p-6 lg:p-8 min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-green-50">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-4xl font-bold text-slate-800">Reports & Analytics</h1>
-          <p className="mt-1 text-md text-slate-500">Access pre-built reports or generate custom analytics.</p>
+    <div className="min-h-screen p-3 sm:p-4 md:p-6 lg:p-8 space-y-4 sm:space-y-6 md:space-y-8">
+      {/* Professional Header */}
+      <header className="relative overflow-hidden bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
+        <div className="relative p-4 sm:p-6 md:p-8 lg:p-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div className="flex-1 flex items-center gap-4">
+            <BarChart3 className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-white drop-shadow-2xl" />
+            <div>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white drop-shadow-2xl leading-tight">
+                Reports & Analytics
+              </h1>
+              <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 font-bold drop-shadow-lg mt-2">
+                Access pre-built reports or generate custom analytics
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <div className="text-sm sm:text-base md:text-lg text-white/90 font-semibold bg-white/20 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/30">
+              Last updated: {new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </div>
+            <button
+              onClick={handleGenerateAnnualReport}
+              className="px-4 sm:px-5 py-2 sm:py-3 bg-white/20 backdrop-blur-sm text-white border border-white/30 hover:bg-white/30 transition-all font-bold rounded-xl flex items-center gap-2 sm:gap-3 shadow-xl hover:shadow-2xl transform hover:scale-105"
+            >
+              <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="text-sm sm:text-base">Generate Annual Report</span>
+            </button>
+          </div>
         </div>
-        <button
-          onClick={handleGenerateAnnualReport}
-          className="mt-4 sm:mt-0 px-5 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl hover:from-indigo-600 hover:to-purple-700 transition-all duration-300 flex items-center space-x-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-        >
-          <BarChart3 className="w-5 h-5" />
-          <span className="font-semibold">Generate Annual Report</span>
-        </button>
-      </div>
+      </header>
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Enhanced Quick Stats */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
         <StatCard title="Total Reports" value="24" icon={FileText} color="purple" />
         <StatCard title="Downloads This Month" value="156" icon={Download} color="green" />
         <StatCard title="Last Updated" value="Today" icon={Calendar} color="blue" />
         <StatCard title="Auto-Generated" value="18" icon={BarChart3} color="yellow" />
       </div>
 
-      {/* Pre-Built Reports */}
-      <div className="space-y-6">
-        <h2 className="text-2xl font-bold text-slate-700">Reports</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Enhanced Pre-Built Reports */}
+      <div className="space-y-4 sm:space-y-6">
+        <div className="backdrop-blur-xl bg-white/20 rounded-2xl shadow-2xl p-4 sm:p-6">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900">Reports</h2>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
           {preBuiltReports.map((report, index) => {
             const style = categoryStyles[report.category] || categoryStyles['Audit'];
             const Icon = style.icon;

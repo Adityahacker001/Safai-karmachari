@@ -98,21 +98,36 @@ export default function Grievances() {
   };
 
   return (
-    <div className="space-y-8 p-4 sm:p-6 lg:p-8 min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-teal-50">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-4xl font-bold text-gray-800">Grievance Management</h1>
-          <p className="mt-1 text-md text-gray-500">Track, manage, and resolve all reported grievances efficiently.</p>
+    <div className="min-h-screen p-3 sm:p-4 md:p-6 lg:p-8 space-y-4 sm:space-y-6 md:space-y-8">
+      {/* Professional Header */}
+      <header className="relative overflow-hidden bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
+        <div className="relative p-4 sm:p-6 md:p-8 lg:p-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div className="flex-1 flex items-center gap-4">
+            <MessageCircle className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-white drop-shadow-2xl" />
+            <div>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white drop-shadow-2xl leading-tight">
+                Grievance Management
+              </h1>
+              <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 font-bold drop-shadow-lg mt-2">
+                Track, manage, and resolve all reported grievances efficiently
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <div className="text-sm sm:text-base md:text-lg text-white/90 font-semibold bg-white/20 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/30">
+              Last updated: {new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </div>
+            <button className="px-4 sm:px-5 py-2 sm:py-3 bg-white/20 backdrop-blur-sm text-white border border-white/30 hover:bg-white/30 transition-all font-bold rounded-xl flex items-center gap-2 sm:gap-3 shadow-xl hover:shadow-2xl transform hover:scale-105">
+              <Filter className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="text-sm sm:text-base">Advanced Filters</span>
+            </button>
+          </div>
         </div>
-        <button className="mt-4 sm:mt-0 px-5 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 flex items-center space-x-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-          <Filter className="w-5 h-5" />
-          <span className="font-semibold">Advanced Filters</span>
-        </button>
-      </div>
+      </header>
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Enhanced KPI Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
         {kpiData.map((kpi) => (
           <KPICard
             key={kpi.title}
@@ -124,8 +139,8 @@ export default function Grievances() {
         ))}
       </div>
 
-      {/* Main Content Area with Table */}
-      <div className="bg-white/60 backdrop-blur-md rounded-2xl shadow-xl border border-gray-200/80">
+      {/* Professional Main Content Area with Table */}
+      <div className="backdrop-blur-xl bg-white/20 rounded-2xl shadow-2xl overflow-hidden">
         {/* Only All Grievances tab remains, so remove tab UI */}
 
         {/* Data Table */}

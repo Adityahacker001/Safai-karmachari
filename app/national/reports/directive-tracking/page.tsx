@@ -78,103 +78,117 @@ export default function DirectiveTrackingReportPage() {
 	const highPriorityCount = sentDirectives.filter((d) => d.priority === "High").length;
 
 	return (
-		<div className="space-y-8 p-6 bg-gradient-to-br from-indigo-50 via-pink-50 to-yellow-50 rounded-xl shadow-lg min-h-screen">
-			<div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-				<div>
-					<h1 className="text-3xl font-extrabold bg-gradient-to-r from-indigo-600 via-pink-600 to-yellow-500 bg-clip-text text-transparent">
-						Directive Tracking Report
-					</h1>
-					<p className="text-gray-700 mt-2">
-						Track issued directives to lower hierarchy, with MOCA data alignment
-					</p>
-				</div>
-				<div className="flex flex-col gap-4">
-					{/* <Button
-						className="flex items-center gap-2 px-6 py-2 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold shadow-lg hover:scale-105 transition-all"
-						onClick={() => setShowModal(true)}
-					>
-						<Plus className="w-5 h-5" />
-						Issue New Directive
-					</Button> */}
-					{showModal && (
-						<div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
-							<div className="w-full max-w-xl bg-white rounded-2xl shadow-xl p-8 relative">
-								<div
-									className="-mx-8 -mt-8 mb-8 rounded-t-2xl px-8 py-4"
-									style={{
-										background:
-											"linear-gradient(90deg, #e0c3fc 0%, #8ec5fc 100%)",
-									}}
-								>
-									<h2 className="text-2xl font-bold text-black text-center">
-										Issue New Directive
-									</h2>
-								</div>
-								<form className="space-y-5">
-									<div>
-										<label className="block text-gray-700 font-medium mb-1">
-											Recipients
-										</label>
-										<select className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200">
-											<option>All States</option>
-											<option>State 1</option>
-											<option>State 2</option>
-										</select>
-									</div>
-									<div>
-										<label className="block text-gray-700 font-medium mb-1">
-											Title
-										</label>
-										<input
-											type="text"
-											className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200"
-											placeholder="Enter directive title"
-										/>
-									</div>
-									<div>
-										<label className="block text-gray-700 font-medium mb-1">
-											Message
-										</label>
-										<textarea
-											className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200"
-											rows={4}
-											placeholder="Enter directive message"
-										/>
-									</div>
-									<div>
-										<label className="block text-gray-700 font-medium mb-1">
-											Priority
-										</label>
-										<select className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200">
-											<option>High</option>
-											<option>Medium</option>
-											<option>Low</option>
-										</select>
-									</div>
-									<div className="flex justify-end gap-3 pt-2">
-										<button
-											type="button"
-											className="px-5 py-2 rounded-md border border-gray-300 bg-white text-gray-700 font-medium hover:bg-gray-100"
-											onClick={() => setShowModal(false)}
-										>
-											Cancel
-										</button>
-										<button
-											type="submit"
-											className="px-5 py-2 rounded-md bg-gradient-to-r from-blue-400 to-blue-600 text-white font-semibold shadow hover:from-blue-500 hover:to-blue-700"
-										>
-											Send Directive
-										</button>
-									</div>
-								</form>
-							</div>
+		<div className="min-h-screen p-3 sm:p-4 md:p-6 lg:p-8 space-y-4 sm:space-y-6 md:space-y-8">
+			{/* Professional Header */}
+			<header className="relative overflow-hidden bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl">
+				<div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
+				<div className="relative p-4 sm:p-6 md:p-8 lg:p-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+					<div className="flex-1 flex items-center gap-4">
+						<FileText className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-white drop-shadow-2xl" />
+						<div>
+							<h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white drop-shadow-2xl leading-tight">
+								Directive Tracking Report
+							</h1>
+							<p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 font-bold drop-shadow-lg mt-2">
+								Track issued directives to lower hierarchy, with MOCA data alignment
+							</p>
 						</div>
-					)}
+					</div>
+					<div className="text-sm sm:text-base md:text-lg text-white/90 font-semibold bg-white/20 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/30">
+						Last updated: {new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
+					</div>
 				</div>
+			</header>
+
+			{/* Action Button */}
+			<div className="flex justify-start">
+				<Button
+					className="flex items-center gap-2 px-6 py-2 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold shadow-lg hover:scale-105 transition-all"
+					onClick={() => setShowModal(true)}
+				>
+					<Plus className="w-5 h-5" />
+					Issue New Directive
+				</Button>
 			</div>
 
-			{/* Summary Cards */}
-			<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+			{/* Modal for Issue New Directive */}
+			{showModal && (
+				<div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
+					<div className="w-full max-w-xl bg-white rounded-2xl shadow-xl p-8 relative">
+						<div
+							className="-mx-8 -mt-8 mb-8 rounded-t-2xl px-8 py-4"
+							style={{
+								background:
+									"linear-gradient(90deg, #e0c3fc 0%, #8ec5fc 100%)",
+							}}
+						>
+							<h2 className="text-2xl font-bold text-black text-center">
+								Issue New Directive
+							</h2>
+						</div>
+						<form className="space-y-5">
+							<div>
+								<label className="block text-gray-700 font-medium mb-1">
+									Recipients
+								</label>
+								<select className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200">
+									<option>All States</option>
+									<option>State 1</option>
+									<option>State 2</option>
+								</select>
+							</div>
+							<div>
+								<label className="block text-gray-700 font-medium mb-1">
+									Title
+								</label>
+								<input
+									type="text"
+									className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200"
+									placeholder="Enter directive title"
+								/>
+							</div>
+							<div>
+								<label className="block text-gray-700 font-medium mb-1">
+									Message
+								</label>
+								<textarea
+									className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200"
+									rows={4}
+									placeholder="Enter directive message"
+								/>
+							</div>
+							<div>
+								<label className="block text-gray-700 font-medium mb-1">
+									Priority
+								</label>
+								<select className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200">
+									<option>High</option>
+									<option>Medium</option>
+									<option>Low</option>
+								</select>
+							</div>
+							<div className="flex justify-end gap-3 pt-2">
+								<button
+									type="button"
+									className="px-5 py-2 rounded-md border border-gray-300 bg-white text-gray-700 font-medium hover:bg-gray-100"
+									onClick={() => setShowModal(false)}
+								>
+									Cancel
+								</button>
+								<button
+									type="submit"
+									className="px-5 py-2 rounded-md bg-gradient-to-r from-blue-400 to-blue-600 text-white font-semibold shadow hover:from-blue-500 hover:to-blue-700"
+								>
+									Send Directive
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			)}
+
+			{/* Enhanced Summary Cards */}
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
 				<div className="bg-gradient-to-r from-green-500 to-emerald-500 p-6 rounded-xl shadow-lg text-white">
 					<div className="flex items-center justify-between">
 						<div>
@@ -199,11 +213,11 @@ export default function DirectiveTrackingReportPage() {
 				</div>
 			</div>
 
-			{/* Issued Directives Table */}
-			<div className="bg-white rounded-xl shadow-xl overflow-hidden">
-				<div className="border-b border-gray-200 bg-gradient-to-r from-pink-50 to-yellow-50">
+			{/* Professional Directives Table */}
+			<div className="backdrop-blur-xl bg-white/20 rounded-2xl shadow-2xl overflow-hidden">
+				<div className="bg-gradient-to-r from-white/10 via-white/5 to-white/10 backdrop-blur-sm border-b border-white/20">
 					<nav className="-mb-px flex">
-						<span className="py-4 px-6 text-sm font-medium border-b-4 border-pink-500 text-pink-700 bg-pink-50">
+						<span className="py-3 sm:py-4 px-4 sm:px-6 text-sm sm:text-base font-bold border-b-4 border-blue-500 text-gray-900">
 							Directives Issued
 						</span>
 					</nav>

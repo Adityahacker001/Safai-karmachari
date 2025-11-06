@@ -193,7 +193,9 @@ export default function IncidentInputPage() {
   const [firNo, setFirNo] = useState('');
   const [policeStation, setPoliceStation] = useState('');
   const [compensationInitiated, setCompensationInitiated] = useState(false);
-  const [files, setFiles] = useState<File[]>([]);
+  const [photoFiles, setPhotoFiles] = useState<File[]>([]);
+  const [mlcFiles, setMlcFiles] = useState<File[]>([]);
+  const [firFiles, setFirFiles] = useState<File[]>([]);
   const [savingDraft, setSavingDraft] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [toast, setToast] =
@@ -221,9 +223,19 @@ export default function IncidentInputPage() {
     setVictims(copy);
   }
 
-  function handleFiles(e: React.ChangeEvent<HTMLInputElement>) {
+  function handlePhotoFiles(e: React.ChangeEvent<HTMLInputElement>) {
     const fileList = e.target.files ? Array.from(e.target.files) : [];
-    setFiles(fileList);
+    setPhotoFiles(fileList);
+  }
+
+  function handleMlcFiles(e: React.ChangeEvent<HTMLInputElement>) {
+    const fileList = e.target.files ? Array.from(e.target.files) : [];
+    setMlcFiles(fileList);
+  }
+
+  function handleFirFiles(e: React.ChangeEvent<HTMLInputElement>) {
+    const fileList = e.target.files ? Array.from(e.target.files) : [];
+    setFirFiles(fileList);
   }
 
   function detectLocation() {
@@ -268,7 +280,9 @@ export default function IncidentInputPage() {
     setFirNo('');
     setPoliceStation('');
     setCompensationInitiated(false);
-    setFiles([]);
+    setPhotoFiles([]);
+    setMlcFiles([]);
+    setFirFiles([]);
     setToast({ type: 'info', message: 'Form has been cleared' });
   }
 
@@ -288,7 +302,11 @@ export default function IncidentInputPage() {
       injuries,
       fir: firFiled ? { firNo, policeStation } : null,
       compensationInitiated,
-      attachments: files.map((f) => ({ name: f.name, size: f.size })),
+      attachments: {
+        photos: photoFiles.map((f) => ({ name: f.name, size: f.size })),
+        mlc: mlcFiles.map((f) => ({ name: f.name, size: f.size })),
+        fir: firFiles.map((f) => ({ name: f.name, size: f.size })),
+      },
       meta: {
         createdBy: 'OrgNodalUser',
         createdAt: new Date().toISOString(),
@@ -577,28 +595,83 @@ export default function IncidentInputPage() {
                 <Upload className="text-gray-500" />
                 6. Attachments
               </h2>
-              <FormInputGroup label="Upload (Photos, MLC, FIR Copy)" icon={<Upload size={16} />}>
-                <input 
-                  onChange={handleFiles} 
-                  multiple 
-                  type="file" 
-                  className="form-file-input"
-                />
-                <div className="mt-3 text-sm text-gray-600 space-y-1">
-                  {files.length > 0 ? (
-                     files.map((f) => (
-                       <div key={f.name} className="flex items-center gap-2">
-                         <FileText size={14} className="text-blue-500" />
-                         <span>{f.name} — {(f.size / 1024).toFixed(1)} KB</span>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Photos */}
+                <FormInputGroup label="Photos" icon={<Upload size={16} />}>
+                  <input 
+                    onChange={handlePhotoFiles} 
+                    multiple 
+                    type="file" 
+                    accept="image/*"
+                    className="form-file-input"
+                  />
+                  <div className="mt-3 text-sm text-gray-600 space-y-1">
+                    {photoFiles.length > 0 ? (
+                       photoFiles.map((f) => (
+                         <div key={f.name} className="flex items-center gap-2">
+                           <FileText size={14} className="text-green-500" />
+                           <span className="truncate">{f.name} — {(f.size / 1024).toFixed(1)} KB</span>
+                         </div>
+                       ))
+                    ) : (
+                       <div className="flex items-center gap-2 text-gray-500">
+                         <Upload size={14} /> No photos selected
                        </div>
-                     ))
-                  ) : (
-                     <div className="flex items-center gap-2 text-gray-500">
-                       <Upload size={14} /> No files selected
-                     </div>
-                  )}
-                </div>
-              </FormInputGroup>
+                    )}
+                  </div>
+                </FormInputGroup>
+
+                {/* MLC Documents */}
+                <FormInputGroup label="MLC Documents" icon={<FileText size={16} />}>
+                  <input 
+                    onChange={handleMlcFiles} 
+                    multiple 
+                    type="file" 
+                    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                    className="form-file-input"
+                  />
+                  <div className="mt-3 text-sm text-gray-600 space-y-1">
+                    {mlcFiles.length > 0 ? (
+                       mlcFiles.map((f) => (
+                         <div key={f.name} className="flex items-center gap-2">
+                           <FileText size={14} className="text-blue-500" />
+                           <span className="truncate">{f.name} — {(f.size / 1024).toFixed(1)} KB</span>
+                         </div>
+                       ))
+                    ) : (
+                       <div className="flex items-center gap-2 text-gray-500">
+                         <FileText size={14} /> No MLC documents selected
+                       </div>
+                    )}
+                  </div>
+                </FormInputGroup>
+
+                {/* FIR Copy */}
+                <FormInputGroup label="FIR Copy" icon={<Shield size={16} />}>
+                  <input 
+                    onChange={handleFirFiles} 
+                    multiple 
+                    type="file" 
+                    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                    className="form-file-input"
+                  />
+                  <div className="mt-3 text-sm text-gray-600 space-y-1">
+                    {firFiles.length > 0 ? (
+                       firFiles.map((f) => (
+                         <div key={f.name} className="flex items-center gap-2">
+                           <FileText size={14} className="text-purple-500" />
+                           <span className="truncate">{f.name} — {(f.size / 1024).toFixed(1)} KB</span>
+                         </div>
+                       ))
+                    ) : (
+                       <div className="flex items-center gap-2 text-gray-500">
+                         <Shield size={14} /> No FIR copy selected
+                       </div>
+                    )}
+                  </div>
+                </FormInputGroup>
+              </div>
             </section>
 
             {/* Footer */}

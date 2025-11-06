@@ -43,9 +43,38 @@ const MOCK_BENEFICIARY_DATA = [
 ];
 
 const mockStates = ['Uttar Pradesh', 'Maharashtra', 'Rajasthan', 'Gujarat', 'Delhi', 'Bihar', 'Tamil Nadu', 'Punjab', 'West Bengal', 'Uttarakhand'];
-const mockDistricts = ['Kanpur', 'Pune', 'Jaipur', 'Lucknow', 'Ahmedabad', 'New Delhi', 'Patna', 'Chennai', 'Ludhiana', 'Kolkata', 'Agra', 'Dehradun'];
-const mockSchemeTypes = ['Loan', 'Skill Development', 'Rehabilitation'];
-const mockStatuses = ['Active', 'Completed', 'Pending', 'Rejected'];
+
+// Districts mapped by state
+const districtsByState: { [key: string]: string[] } = {
+  'Uttar Pradesh': ['Kanpur', 'Lucknow', 'Agra'],
+  'Maharashtra': ['Pune'],
+  'Rajasthan': ['Jaipur'],
+  'Gujarat': ['Ahmedabad'],
+  'Delhi': ['New Delhi'],
+  'Bihar': ['Patna'],
+  'Tamil Nadu': ['Chennai'],
+  'Punjab': ['Ludhiana'],
+  'West Bengal': ['Kolkata'],
+  'Uttarakhand': ['Dehradun']
+};
+
+// Scheme types mapped by district
+const schemeTypesByDistrict: { [key: string]: string[] } = {
+  'Kanpur': ['Loan', 'Skill Development'],
+  'Lucknow': ['Loan'],
+  'Agra': ['Skill Development'],
+  'Pune': ['Skill Development'],
+  'Jaipur': ['Rehabilitation'],
+  'Ahmedabad': ['Loan'],
+  'New Delhi': ['Skill Development'],
+  'Patna': ['Loan'],
+  'Chennai': ['Loan'],
+  'Ludhiana': ['Loan'],
+  'Kolkata': ['Rehabilitation'],
+  'Dehradun': ['Loan']
+};
+
+
 
 // --- Reusable Components ---
 
@@ -74,7 +103,7 @@ const FormInput: React.FC<{ label: string, type: string, name: string, value: st
     <label htmlFor={name} className="block text-sm font-medium text-slate-600 mb-1">{label}</label>
     <input
       type={type} id={name} name={name} value={value} onChange={onChange}
-      className="block w-full p-2 rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/50 sm:text-sm transition-colors duration-200"
+      className="block w-full p-2 rounded-lg border-2 border-slate-800 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/50 sm:text-sm transition-colors duration-200"
     />
   </div>
 );
@@ -127,10 +156,10 @@ const SortableHeader: React.FC<SortableHeaderProps> = ({ colKey, title, sortConf
 const BeneficiaryReportPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({
+    beneficiaryId: '',
     state: '',
     district: '',
     schemeType: '',
-    status: '',
     dateFrom: '',
     dateTo: '',
   });
@@ -139,11 +168,25 @@ const BeneficiaryReportPage = () => {
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null);
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setFilters(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    
+    setFilters(prev => {
+      let newFilters = { ...prev, [name]: value };
+      
+      // Reset dependent dropdowns when parent changes
+      if (name === 'state') {
+        newFilters.district = '';
+        newFilters.schemeType = '';
+      } else if (name === 'district') {
+        newFilters.schemeType = '';
+      }
+      
+      return newFilters;
+    });
   };
 
   const clearFilters = () => {
-    setFilters({ state: '', district: '', schemeType: '', status: '', dateFrom: '', dateTo: '' });
+    setFilters({ beneficiaryId: '', state: '', district: '', schemeType: '', dateFrom: '', dateTo: '' });
     setSearchQuery('');
     setCurrentPage(1);
     setSortConfig(null);
@@ -167,11 +210,11 @@ const BeneficiaryReportPage = () => {
       );
     }
 
-    // 2. Filter by dropdowns
+    // 2. Filter by dropdowns and beneficiary ID
+    if (filters.beneficiaryId) data = data.filter(item => item.id.toLowerCase().includes(filters.beneficiaryId.toLowerCase()));
     if (filters.state) data = data.filter(item => item.state === filters.state);
     if (filters.district) data = data.filter(item => item.district === filters.district);
     if (filters.schemeType) data = data.filter(item => item.schemeType === filters.schemeType);
-    if (filters.status) data = data.filter(item => item.status === filters.status);
     
     // 3. Filter by date range (Registration Date)
     if (filters.dateFrom) data = data.filter(item => new Date(item.regDate) >= new Date(filters.dateFrom));
@@ -286,23 +329,33 @@ const BeneficiaryReportPage = () => {
             <Filter className="w-5 h-5 text-indigo-600" />
             Filters
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <FormInput label="Beneficiary ID" type="text" name="beneficiaryId" value={filters.beneficiaryId} onChange={handleFilterChange} />
+            
+            {/* State Dropdown */}
             <FormSelect label="State" name="state" value={filters.state} onChange={handleFilterChange}>
-              <option value="">All States</option>
+              <option value="">Select State</option>
               {mockStates.map(s => <option key={s} value={s}>{s}</option>)}
             </FormSelect>
-            <FormSelect label="District" name="district" value={filters.district} onChange={handleFilterChange}>
-              <option value="">All Districts</option>
-              {mockDistricts.map(d => <option key={d} value={d}>{d}</option>)}
-            </FormSelect>
-            <FormSelect label="Scheme Type" name="schemeType" value={filters.schemeType} onChange={handleFilterChange}>
-              <option value="">All Types</option>
-              {mockSchemeTypes.map(t => <option key={t} value={t}>{t}</option>)}
-            </FormSelect>
-            <FormSelect label="Status" name="status" value={filters.status} onChange={handleFilterChange}>
-              <option value="">All Statuses</option>
-              {mockStatuses.map(s => <option key={s} value={s}>{s}</option>)}
-            </FormSelect>
+            
+            {/* District Dropdown - Only show if state is selected */}
+            {filters.state && (
+              <FormSelect label="District" name="district" value={filters.district} onChange={handleFilterChange}>
+                <option value="">Select District</option>
+                {districtsByState[filters.state]?.map(d => <option key={d} value={d}>{d}</option>)}
+              </FormSelect>
+            )}
+            
+            {/* Scheme Type Dropdown - Only show if district is selected */}
+            {filters.district && (
+              <FormSelect label="Scheme Type" name="schemeType" value={filters.schemeType} onChange={handleFilterChange}>
+                <option value="">Select Scheme Type</option>
+                {schemeTypesByDistrict[filters.district]?.map(t => <option key={t} value={t}>{t}</option>)}
+              </FormSelect>
+            )}
+            
+
+            
             {/* Date Range */}
             <div className="grid grid-cols-2 gap-2">
               <FormInput label="From Date" type="date" name="dateFrom" value={filters.dateFrom} onChange={handleFilterChange} />

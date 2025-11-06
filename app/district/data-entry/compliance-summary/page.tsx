@@ -5,8 +5,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Upload, BarChart3, FileText } from "lucide-react";
+import { Upload, BarChart3, FileText, AlertTriangle, Clock, TrendingUp, Award, AlertCircle } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
+import StatCard from "@/components/ui/stat-card";
 
 export default function MonthlyComplianceSummaryPage() {
 
@@ -20,50 +21,73 @@ export default function MonthlyComplianceSummaryPage() {
     };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold text-gray-900">Monthly Compliance Summary</h2>
-        <p className="text-gray-600">Compile and submit the official monthly performance report for your district to the State Command Centre.</p>
-      </div>
+    <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-4 sm:space-y-6 min-h-screen">
+      {/* Enhanced Header */}
+      <header className="mb-4 sm:mb-6 lg:mb-8 relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 rounded-xl sm:rounded-2xl"></div>
+        <div className="relative p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col gap-2 sm:gap-3">
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white drop-shadow-2xl leading-tight">
+            Monthly Compliance Summary
+          </h1>
+          <p className="text-xs sm:text-sm md:text-base lg:text-lg text-white/90 font-bold drop-shadow-lg">
+            Compile and submit the official monthly performance report for your district to the State Command Centre
+          </p>
+        </div>
+      </header>
 
-      <Card className="bg-white shadow-sm border border-gray-200">
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <FileText className="h-5 w-5 text-orange-600" />
+      <Card className="bg-white/95 backdrop-blur-xl shadow-xl border border-white/20 rounded-xl sm:rounded-2xl">
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="flex items-center space-x-2 text-base sm:text-lg md:text-xl">
+            <FileText className="h-5 w-5 sm:h-6 sm:w-6 text-orange-600" />
             <span>District Report for July 2025</span>
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-sm sm:text-base">
             The system has automatically aggregated data from all Nodal units. Please review the summary and add your official commentary before submission.
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-8">
+        <CardContent className="space-y-6 sm:space-y-8 p-4 sm:p-6">
 
             {/* Section 1: Auto-Aggregated Performance Summary */}
-            <div className="p-6 border rounded-lg bg-gray-50/50">
-              <div className="flex items-center space-x-3 mb-4">
-                <BarChart3 className="h-5 w-5 text-gray-600"/>
-                <h3 className="text-lg font-semibold text-gray-800">Auto-Aggregated Performance Summary</h3>
+            <div className="p-4 sm:p-6 border border-white/20 rounded-lg sm:rounded-xl bg-white/50 backdrop-blur-sm">
+              <div className="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-4">
+                <BarChart3 className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600"/>
+                <h3 className="text-base sm:text-lg font-semibold text-gray-800">Auto-Aggregated Performance Summary</h3>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                 <div className="p-4 bg-white rounded border">
-                    <Label className="text-xs text-gray-500">Total Incidents (Month)</Label>
-                    <p className="text-2xl font-bold">{aggregatedData.totalIncidents}</p>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+                 <StatCard
+                   title="Total Incidents (Month)"
+                   value={aggregatedData.totalIncidents}
+                   icon={AlertTriangle}
+                   color="red"
+                 />
+                 <StatCard
+                   title="Avg. Compliance Score"
+                   value={aggregatedData.avgComplianceScore}
+                   icon={BarChart3}
+                   color="blue"
+                 />
+                 <StatCard
+                   title="Avg. Grievance Resolution"
+                   value={aggregatedData.avgResolutionTime}
+                   icon={Clock}
+                   color="purple"
+                 />
+                 <div className="col-span-2 md:col-span-1">
+                   <StatCard
+                     title="Top Performing Unit"
+                     value={aggregatedData.topPerformingUnit}
+                     icon={Award}
+                     color="green"
+                   />
                  </div>
-                 <div className="p-4 bg-white rounded border">
-                    <Label className="text-xs text-gray-500">Avg. Compliance Score</Label>
-                    <p className="text-2xl font-bold">{aggregatedData.avgComplianceScore}</p>
-                 </div>
-                 <div className="p-4 bg-white rounded border">
-                    <Label className="text-xs text-gray-500">Avg. Grievance Resolution</Label>
-                    <p className="text-2xl font-bold">{aggregatedData.avgResolutionTime}</p>
-                 </div>
-                 <div className="p-4 bg-white rounded border col-span-2 md:col-span-1">
-                    <Label className="text-xs text-green-600">Top Performing Unit</Label>
-                    <p className="text-lg font-semibold">{aggregatedData.topPerformingUnit}</p>
-                 </div>
-                 <div className="p-4 bg-white rounded border col-span-2">
-                    <Label className="text-xs text-red-600">Unit Requiring Attention</Label>
-                    <p className="text-lg font-semibold">{aggregatedData.worstPerformingUnit}</p>
+                 <div className="col-span-2">
+                   <StatCard
+                     title="Unit Requiring Attention"
+                     value={aggregatedData.worstPerformingUnit}
+                     icon={AlertCircle}
+                     color="orange"
+                   />
                  </div>
               </div>
             </div>

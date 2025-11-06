@@ -69,7 +69,7 @@ interface StatPillProps {
     value: string | number;
 }
 const StatPill = ({ icon, label, value }: StatPillProps) => (
-    <div className="flex items-center gap-2 rounded-full bg-slate-200 dark:bg-gray-700 px-3 py-1 text-xs font-medium text-slate-700 dark:text-slate-200">
+    <div className="flex items-center gap-1 sm:gap-2 rounded-full bg-blue-100/50 backdrop-blur-sm px-2 sm:px-3 py-1 text-xs font-medium text-blue-700">
         {icon}
         <span>{label}: <strong>{value}</strong></span>
     </div>
@@ -118,20 +118,22 @@ const PerformerCard = (props: PerformerCardProps) => {
 
     return (
         <Card className={cn(
-            "border-l-4 shadow-md transition-all hover:shadow-lg hover:scale-[1.01]",
-            isGood ? "border-green-500 bg-green-50/50 dark:bg-green-900/10" : "border-red-500 bg-red-50/50 dark:bg-red-900/10"
+            "border-l-4 bg-white/80 backdrop-blur-xl border-white/20 shadow-xl transition-all hover:shadow-2xl hover:scale-[1.02]",
+            isGood ? "border-l-green-500" : "border-l-red-500"
         )}>
-            <CardHeader className="flex flex-row items-start justify-between pb-3">
-                <div>
-                    <CardTitle className="text-xl font-bold text-gray-800 dark:text-gray-100">{name}</CardTitle>
-                    <CardDescription>{region}</CardDescription>
+            <CardHeader className="flex flex-col sm:flex-row sm:items-start sm:justify-between pb-3 gap-3">
+                <div className="flex-1">
+                    <CardTitle className="text-base sm:text-lg md:text-xl font-bold text-gray-800">{name}</CardTitle>
+                    <CardDescription className="text-xs sm:text-sm">{region}</CardDescription>
                 </div>
                  <div className={cn(
-                    "text-3xl font-extrabold flex items-center gap-2",
-                    isGood ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"
+                    "flex items-center gap-2 text-xl sm:text-2xl md:text-3xl font-extrabold",
+                    isGood ? "text-green-600" : "text-red-600"
                 )}>
-                    {isGood ? <TrendingUp size={28}/> : <TrendingDown size={28}/>}
-                    <StarRating value={score} />
+                    {isGood ? <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7"/> : <TrendingDown className="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7"/>}
+                    <div className="hidden sm:block">
+                        <StarRating value={score} />
+                    </div>
                 </div>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -152,11 +154,11 @@ const PerformerCard = (props: PerformerCardProps) => {
                     {districtRatingChange && <DetailRow icon={<BarChart size={16}/>} label="District Rating Change" value={districtRatingChange} className={districtRatingChange.startsWith('+') ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'} />}
                 </div>
 
-                <div className="flex flex-wrap items-center gap-3 pt-3 border-t border-slate-200 dark:border-gray-700">
+                <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center gap-2 sm:gap-3 pt-3 border-t border-gray-200/50">
                     <StatPill icon={<Calendar size={14} />} label="Since" value={since} />
                     <StatPill icon={detailIcon} label={detailLabel} value={detailValue ?? ''} />
                     <div className="flex-grow"/>
-                    <Button variant="ghost" size="sm" className="text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/20">
+                    <Button variant="ghost" size="sm" className="text-xs sm:text-sm text-blue-600 hover:bg-blue-100 w-full sm:w-auto">
                         View Full Profile
                     </Button>
                 </div>
@@ -173,30 +175,50 @@ interface PerformanceTabContentProps {
 const PerformanceTabContent = ({ goodData, badData, type }: PerformanceTabContentProps) => {
     const [activeTab, setActiveTab] = useState('good');
     const [sortOrder, setSortOrder] = useState('desc'); // 'desc' for highest first, 'asc' for lowest first
+    const [searchTerm, setSearchTerm] = useState('');
 
     const dataForTab = activeTab === 'good' ? goodData : badData;
 
-    const sortedData = React.useMemo(() => 
-        [...dataForTab].sort((a, b) => {
+    const filteredAndSortedData = React.useMemo(() => {
+        // First filter by search term
+        const filtered = dataForTab.filter(item =>
+            item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.region.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.reason.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.score.toString().includes(searchTerm)
+        );
+        
+        // Then sort
+        return filtered.sort((a, b) => {
             if (sortOrder === 'desc') {
                 return b.score - a.score;
             }
             return a.score - b.score;
-        }),
-    [dataForTab, sortOrder]);
+        });
+    }, [dataForTab, sortOrder, searchTerm]);
 
 
     return (
         <div>
-            <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-                 <div className="flex space-x-1 border-b-2 border-slate-200 dark:border-gray-700">
-                     <Button variant="ghost" onClick={() => setActiveTab('good')} className={cn("font-semibold pb-3 rounded-none border-b-4", activeTab === 'good' ? 'text-green-600 border-green-600' : 'text-gray-500 border-transparent')}><Star className="mr-2 h-5 w-5"/> Good Performers</Button>
-                    <Button variant="ghost" onClick={() => setActiveTab('bad')} className={cn("font-semibold pb-3 rounded-none border-b-4", activeTab === 'bad' ? 'text-red-600 border-red-600' : 'text-gray-500 border-transparent')}><ThumbsDown className="mr-2 h-5 w-5"/> Bad Performers</Button>
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
+                 <div className="flex space-x-1 border-b-2 border-gray-200/50">
+                     <Button variant="ghost" onClick={() => setActiveTab('good')} className={cn("font-semibold pb-3 rounded-none border-b-4 text-xs sm:text-sm", activeTab === 'good' ? 'text-green-600 border-green-600' : 'text-gray-500 border-transparent')}><Star className="mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5"/> <span className="hidden sm:inline">Good </span>Performers</Button>
+                    <Button variant="ghost" onClick={() => setActiveTab('bad')} className={cn("font-semibold pb-3 rounded-none border-b-4 text-xs sm:text-sm", activeTab === 'bad' ? 'text-red-600 border-red-600' : 'text-gray-500 border-transparent')}><ThumbsDown className="mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5"/> <span className="hidden sm:inline">Bad </span>Performers</Button>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                    <div className="relative">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3 h-3 sm:w-4 sm:h-4 text-gray-400" />
+                        <input
+                            type="text"
+                            placeholder="Search name, region, reason..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="pl-8 sm:pl-10 pr-3 py-2 text-xs sm:text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 backdrop-blur-sm placeholder-gray-500 w-full sm:w-[200px]"
+                        />
+                    </div>
                     <Select value={sortOrder} onValueChange={setSortOrder}>
-                        <SelectTrigger className="w-[180px]">
-                            <SlidersHorizontal className="w-4 h-4 mr-2"/>
+                        <SelectTrigger className="w-full sm:w-[160px] lg:w-[180px] text-xs sm:text-sm">
+                            <SlidersHorizontal className="w-3 h-3 sm:w-4 sm:h-4 mr-2"/>
                             <span>Sort by Score</span>
                         </SelectTrigger>
                         <SelectContent>
@@ -204,13 +226,15 @@ const PerformanceTabContent = ({ goodData, badData, type }: PerformanceTabConten
                             <SelectItem value="asc">Lowest First</SelectItem>
                         </SelectContent>
                     </Select>
-                     <Button variant="outline"><Search className="w-4 h-4 mr-2"/>Filter Region</Button>
                 </div>
             </div>
 
-            {sortedData.length > 0 ? (
+            {filteredAndSortedData.length > 0 ? (
                 <div className="space-y-4">
-                    {sortedData.map(item => {
+                    <div className="text-xs sm:text-sm text-gray-600 mb-4">
+                        Showing {filteredAndSortedData.length} of {dataForTab.length} {type.toLowerCase()}s
+                    </div>
+                    {filteredAndSortedData.map(item => {
                         // Remove commendations for workers
                         if (type === 'Worker') {
                             const { specialCommendations, ...rest } = item;
@@ -232,8 +256,15 @@ const PerformanceTabContent = ({ goodData, badData, type }: PerformanceTabConten
             ) : (
                 <div className="text-center py-12 bg-slate-50 dark:bg-gray-800/50 rounded-lg">
                     <CheckCircle className="mx-auto h-12 w-12 text-green-500"/>
-                    <h3 className="mt-2 text-lg font-medium text-gray-900 dark:text-gray-100">All Clear!</h3>
-                    <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">No {type}s found in the '{activeTab} performers' category for this period.</p>
+                    <h3 className="mt-2 text-lg font-medium text-gray-900 dark:text-gray-100">
+                        {searchTerm ? 'No Results Found' : 'All Clear!'}
+                    </h3>
+                    <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                        {searchTerm 
+                            ? `No ${type.toLowerCase()}s found matching "${searchTerm}" in the '${activeTab} performers' category.`
+                            : `No ${type}s found in the '${activeTab} performers' category for this period.`
+                        }
+                    </p>
                 </div>
             )}
         </div>
@@ -302,6 +333,9 @@ const RegionalTable = ({ data, title }: RegionalTableProps) => {
 // --- MAIN PAGE COMPONENT ---
 export default function PerformanceReportsPage() {
     const [activeMainTab, setActiveMainTab] = useState('contractors');
+    const [searchTerm, setSearchTerm] = useState('');
+    const [regionFilter, setRegionFilter] = useState('all');
+    
     const mainTabs = [
         { id: 'contractors', label: 'Contractors', icon: Building2 },
         { id: 'workers', label: 'Workers', icon: Users },
@@ -322,25 +356,52 @@ export default function PerformanceReportsPage() {
     };
 
     return (
-        <div className="space-y-8 p-4 md:p-6 bg-slate-100 dark:bg-gray-900 min-h-screen">
-            <div className="flex flex-wrap justify-between items-center gap-4">
-                <div>
-                    <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Performance Reports Hub</h1>
-                    <p className="text-lg text-gray-500 dark:text-gray-400">Comprehensive analysis of all stakeholders.</p>
+        <div className="space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen p-3 sm:p-4 md:p-6 lg:p-8">
+            {/* Professional Header */}
+            <header className="relative overflow-hidden bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
+                <div className="relative p-4 sm:p-6 md:p-8 lg:p-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                    <div className="flex-1">
+                        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white drop-shadow-2xl leading-tight">
+                            Performance Reports Hub
+                        </h1>
+                        <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 font-bold drop-shadow-lg mt-2">
+                            Comprehensive analysis of all stakeholders
+                        </p>
+                    </div>
+                    <div className="text-sm sm:text-base md:text-lg text-white/90 font-semibold bg-white/20 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/30">
+                        Last updated: {new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
+                    </div>
                 </div>
-                <p className="text-sm text-gray-400 dark:text-gray-500">Last updated: {new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-            </div>
+            </header>
 
-            <Card className="shadow-2xl border-0 rounded-2xl overflow-hidden bg-white dark:bg-gray-800">
-                <CardHeader className="p-0 border-b border-slate-200 dark:border-gray-700">
-                     <div className="flex flex-wrap items-center gap-2 p-3 bg-slate-50 dark:bg-gray-900/50">
+            {/* Professional Navigation Tabs */}
+            <Card className="backdrop-blur-xl bg-white/20 border border-white/30 rounded-2xl shadow-2xl overflow-hidden">
+                <CardHeader className="p-0 border-b border-white/20">
+                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 p-4 sm:p-6 bg-gradient-to-r from-white/10 via-white/5 to-white/10 backdrop-blur-sm">
                         {mainTabs.map(tab => {
                             const Icon = tab.icon;
-                            return ( <Button key={tab.id} variant="ghost" onClick={() => setActiveMainTab(tab.id)} className={cn("flex-auto justify-center text-center h-11 px-3 text-sm font-medium transition-all duration-300 rounded-lg", activeMainTab === tab.id ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold shadow-md' : 'text-gray-600 dark:text-gray-300 hover:bg-slate-200 dark:hover:bg-gray-700')}><Icon className="mr-2 h-5 w-5" /> {tab.label}</Button> );
+                            return ( 
+                                <Button 
+                                    key={tab.id} 
+                                    variant="ghost" 
+                                    onClick={() => setActiveMainTab(tab.id)} 
+                                    className={cn(
+                                        "flex-1 sm:flex-auto justify-center text-center h-12 sm:h-14 px-4 sm:px-6 text-sm sm:text-base font-bold transition-all duration-300 rounded-xl border-2", 
+                                        activeMainTab === tab.id 
+                                            ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white border-white/30 shadow-xl transform scale-105' 
+                                            : 'text-gray-700 bg-white/50 hover:bg-white/70 border-white/20 hover:border-white/40 hover:shadow-lg'
+                                    )}
+                                >
+                                    <Icon className="mr-2 sm:mr-3 h-5 w-5 sm:h-6 sm:w-6" /> 
+                                    <span className="hidden sm:inline font-black">{tab.label}</span>
+                                    <span className="sm:hidden font-black">{tab.label.split(' ')[0]}</span>
+                                </Button> 
+                            );
                         })}
                     </div>
                 </CardHeader>
-                <CardContent className="p-6 md:p-8">
+                <CardContent className="p-4 sm:p-6 md:p-8 lg:p-10">
                     {renderContent()}
                 </CardContent>
             </Card>

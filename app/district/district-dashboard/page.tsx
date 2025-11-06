@@ -83,9 +83,23 @@ export default function DistrictDashboard() {
   };
 
   return (
-    <div className={cn("p-6 md:p-8 space-y-6 md:space-y-8 min-h-screen", contractorTheme.page.gradientBackground)}>
+    <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">
+      {/* Enhanced Header */}
+      <header className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 rounded-xl sm:rounded-2xl"></div>
+        <div className="relative p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col gap-2 sm:gap-3">
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-black text-white drop-shadow-2xl leading-tight">
+            District Dashboard
+          </h1>
+          <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-white/90 font-bold drop-shadow-lg">
+            Comprehensive district-level monitoring and management
+          </p>
+        </div>
+      </header>
+
       {/* KPI Cards - Updated to use DashboardCard component */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
         <DashboardCard
           title="Total Nodal Officers"
           value="24"
@@ -125,36 +139,36 @@ export default function DistrictDashboard() {
       </div>
 
       {/* Graphs Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 my-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 my-6 sm:my-8">
         {/* Bar Chart with mock data */}
-        <div className={cn(contractorTheme.card.container, "p-6")}> 
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Worker Attendance Trend</h3>
-          <div className="h-64 flex items-center justify-center">
+        <div className="bg-white/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl p-4 sm:p-6"> 
+          <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4">Worker Attendance Trend</h3>
+          <div className="h-48 sm:h-64 flex items-center justify-center">
             <Bar data={attendanceData} options={attendanceOptions} />
           </div>
         </div>
         {/* Pie Chart with mock data */}
-        <div className={cn(contractorTheme.card.container, "p-6")}> 
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Grievance Resolution Status</h3>
-          <div className="h-64 flex items-center justify-center">
+        <div className="bg-white/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl p-4 sm:p-6"> 
+          <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4">Grievance Resolution Status</h3>
+          <div className="h-48 sm:h-64 flex items-center justify-center">
             <Pie data={grievanceData} options={grievanceOptions} />
           </div>
         </div>
       </div>
 
-      {/* UPDATED: Layout is now a single column as the chart was removed */}
-      <div className="grid grid-cols-1 gap-8 mt-6">
+      {/* Quick Actions Section */}
+      <div className="grid grid-cols-1 gap-6 sm:gap-8 mt-6">
         <div className="space-y-6">
           {/* Quick Actions */}
-          <div className={cn(contractorTheme.card.container, "p-6")}> 
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Monthly Tasks</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <button className={cn(contractorTheme.button.secondary, "p-4 text-left text-sm w-full")}> 
+          <div className="bg-white/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl p-4 sm:p-6"> 
+            <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4">Monthly Tasks</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+              <button className="bg-blue-50/80 hover:bg-blue-100/80 border border-blue-200/50 rounded-lg sm:rounded-xl p-4 text-left text-sm w-full transition-all duration-200 hover:shadow-lg"> 
                 <BarChart3 className="h-6 w-6 text-blue-600 mb-2" />
                 <p className="font-medium text-blue-900">Compliance Summary</p>
                 <p className="text-sm text-blue-700">Generate monthly report</p>
               </button>
-              <button className={cn(contractorTheme.button.secondary, "p-4 text-left text-sm w-full")}> 
+              <button className="bg-purple-50/80 hover:bg-purple-100/80 border border-purple-200/50 rounded-lg sm:rounded-xl p-4 text-left text-sm w-full transition-all duration-200 hover:shadow-lg"> 
                 <Award className="h-6 w-6 text-purple-600 mb-2" />
                 <p className="font-medium text-purple-900">Review Recognitions</p>
                 <p className="text-sm text-purple-700">Process nominations</p>

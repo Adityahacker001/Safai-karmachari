@@ -369,7 +369,20 @@ export default function TotalContractorsReport() {
   // Data Processing
   const filteredData = useMemo(() => {
     return mockContractors.filter(c => {
-      const matchesSearch = c.name.toLowerCase().includes(searchTerm.toLowerCase()) || c.id.toLowerCase().includes(searchTerm.toLowerCase());
+      // Global search across all fields
+      const searchLower = searchTerm.toLowerCase();
+      const matchesSearch = searchTerm === '' || 
+        c.name.toLowerCase().includes(searchLower) || 
+        c.id.toLowerCase().includes(searchLower) ||
+        c.districts.some(district => district.toLowerCase().includes(searchLower)) ||
+        c.workers.toString().includes(searchLower) ||
+        c.incidents.toString().includes(searchLower) ||
+        c.firs.toString().includes(searchLower) ||
+        c.status.toLowerCase().includes(searchLower) ||
+        c.risk.toLowerCase().includes(searchLower) ||
+        c.compliance.toString().includes(searchLower) ||
+        c.lastAudit.toLowerCase().includes(searchLower);
+      
       const matchesDistrict = filters.district === 'All' || c.districts.includes(filters.district);
       const matchesStatus = filters.status === 'All' || c.status === filters.status;
       const matchesRisk = filters.risk === 'All' || c.risk === filters.risk;
@@ -408,124 +421,207 @@ export default function TotalContractorsReport() {
   };
   
   return (
-    <>
-      {/* Background elements */}
-      <div className="absolute inset-0 -z-20 h-full w-full bg-gradient-to-br from-white via-blue-50 to-gray-100" />
-      <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#e0f2fe_1px,transparent_1px),linear-gradient(to_bottom,#e0f2fe_1px,transparent_1px)] bg-[size:32px_32px] opacity-30" />
-      
+    <>      
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="min-h-screen p-6 lg:p-10 font-sans text-navy-900"
+        className="min-h-screen p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 font-sans relative"
       >
-        <main className="max-w-8xl mx-auto">
-          {/* --- Header --- */}
-          <header className="mb-8">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <div className="flex-shrink-0 w-16 h-16 flex items-center justify-center rounded-2xl bg-navy-700 text-gold-400 shadow-lg shadow-navy-500/30 border-2 border-white/50">
-                  <UsersRound size={36} />
-                </div>
-                <div>
-                  <h1 className="text-3xl font-bold text-navy-900">Total Contractors Report</h1>
-                  <p className="text-base text-gray-600">State-wide contractor compliance & incident mapping</p>
+        <main className="max-w-7xl mx-auto">
+          {/* --- Enhanced Header --- */}
+          <header className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 rounded-xl sm:rounded-2xl"></div>
+            <div className="relative p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col gap-3 sm:gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
+              <div className="flex items-start sm:items-center gap-3 sm:gap-6">
+                <div className="flex-1">
+                  <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-black text-white drop-shadow-lg leading-tight">
+                    Total Contractors Report
+                  </h1>
+                  <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-white/90 font-medium mt-1 sm:mt-2 lg:mt-3 drop-shadow-md">
+                    State-wide contractor compliance & incident mapping
+                  </p>
                 </div>
               </div>
-              <nav className="text-sm font-medium text-gray-500" aria-label="Breadcrumb">
-                <ol className="flex items-center space-x-2">
-                  <li><a href="#" className="hover:text-blue-600">Dashboard</a></li>
-                  <li><ChevronRightIcon size={16} /></li>
-                  <li><a href="#" className="hover:text-blue-600">Reports</a></li>
-                  <li><ChevronRightIcon size={16} /></li>
-                  <li className="font-semibold text-gray-700">Contractors</li>
+              <nav className="text-xs sm:text-sm font-bold text-white overflow-x-auto" aria-label="Breadcrumb">
+                <ol className="flex items-center space-x-2 sm:space-x-3 bg-white/20 backdrop-blur-lg rounded-lg sm:rounded-xl lg:rounded-2xl px-3 sm:px-4 lg:px-6 py-2 sm:py-3 border border-white/30 shadow-lg whitespace-nowrap">
+                  <li><a href="#" className="hover:text-yellow-300 transition-colors drop-shadow-md">Dashboard</a></li>
+                  <li><ChevronRightIcon size={12} className="sm:hidden text-white/70" /></li>
+                  <li><ChevronRightIcon size={16} className="hidden sm:block lg:hidden text-white/70 drop-shadow-md" /></li>
+                  <li><ChevronRightIcon size={18} className="hidden lg:block text-white/70 drop-shadow-md" /></li>
+                  <li className="hidden sm:block"><a href="#" className="hover:text-yellow-300 transition-colors drop-shadow-md">Reports</a></li>
+                  <li className="hidden sm:block"><ChevronRightIcon size={12} className="sm:hidden text-white/70" /></li>
+                  <li className="hidden sm:block"><ChevronRightIcon size={16} className="hidden sm:block lg:hidden text-white/70 drop-shadow-md" /></li>
+                  <li className="hidden sm:block"><ChevronRightIcon size={18} className="hidden lg:block text-white/70 drop-shadow-md" /></li>
+                  <li className="font-black text-yellow-300 drop-shadow-md">Contractors</li>
                 </ol>
               </nav>
             </div>
           </header>
 
-          {/* --- Filter Bar --- */}
-          <GlassCard className="mb-8 bg-gradient-to-r from-blue-50/50 via-white/80 to-blue-50/50" noHover>
-            <div className="p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 flex-grow">
-                <SelectInput label="District" name="district" value={filters.district} onChange={handleFilterChange} options={districtOptions} />
-                <SelectInput label="Financial Year" name="year" value={filters.year} onChange={handleFilterChange} options={yearOptions} />
-                <SelectInput label="Status" name="status" value={filters.status} onChange={handleFilterChange} options={statusOptions} />
-                <SelectInput label="Risk Level" name="risk" value={filters.risk} onChange={handleFilterChange} options={riskOptions} />
-              </div>
-              <div className="flex items-center gap-3 pt-4 md:pt-0 border-t md:border-t-0 md:border-l border-gray-200/80 md:pl-5">
-                <AppButton variant="primary" icon={Filter} onClick={() => {}}>Apply</AppButton>
-                <AppButton variant="secondary" icon={RefreshCw} className="px-3" onClick={handleResetFilters}>
-                  <span className="sr-only">Reset</span>
-                </AppButton>
+          {/* --- Enhanced Metric Cards --- */}
+          <section className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 lg:gap-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              <StatCard title="Total Contractors" value={mockMetrics.totalContractors.toString()} icon={Building2} color="blue" />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <StatCard title="Total Workers" value={mockMetrics.totalWorkers.toLocaleString('en-IN')} icon={Users} color="purple" />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <StatCard title="Incidents Linked" value={mockMetrics.incidentsLinked.toString()} icon={AlertTriangle} color="orange" />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              <StatCard title="FIRs Filed" value={mockMetrics.firsFiled.toString()} icon={FileSearch} color="red" />
+            </motion.div>
+          </section>
+
+          {/* --- Enhanced Filter Bar --- */}
+          <GlassCard className="mb-4 sm:mb-6 lg:mb-8 bg-white/95 backdrop-blur-xl border border-gray-200/50 shadow-lg" noHover>
+            <div className="p-3 sm:p-4 lg:p-6 relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-pink-500/5 rounded-2xl"></div>
+              <div className="relative flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between lg:gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 flex-grow">
+                  <SelectInput label="District" name="district" value={filters.district} onChange={handleFilterChange} options={districtOptions} />
+                  <SelectInput label="Financial Year" name="year" value={filters.year} onChange={handleFilterChange} options={yearOptions} />
+                  <SelectInput label="Status" name="status" value={filters.status} onChange={handleFilterChange} options={statusOptions} />
+                  <SelectInput label="Risk Level" name="risk" value={filters.risk} onChange={handleFilterChange} options={riskOptions} />
+                </div>
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 lg:px-6 py-2 sm:py-2.5 lg:py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300"
+                    onClick={() => {}}
+                  >
+                    <Filter size={14} className="sm:hidden" />
+                    <Filter size={16} className="hidden sm:block lg:hidden" />
+                    <Filter size={18} className="hidden lg:block" />
+                    <span className="hidden sm:inline">Apply Filters</span>
+                    <span className="sm:hidden">Filter</span>
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.02, rotate: 180 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="p-2 sm:p-2.5 lg:p-3 bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                    onClick={handleResetFilters}
+                  >
+                    <RefreshCw size={14} className="sm:hidden" />
+                    <RefreshCw size={16} className="hidden sm:block lg:hidden" />
+                    <RefreshCw size={18} className="hidden lg:block" />
+                  </motion.button>
+                </div>
               </div>
             </div>
           </GlassCard>
 
-          {/* --- Top Metric Cards --- */}
-          <section className="mb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            <StatCard title="Total Contractors" value={mockMetrics.totalContractors.toString()} icon={Building2} color="blue" />
-            <StatCard title="Total Workers" value={mockMetrics.totalWorkers.toLocaleString('en-IN')} icon={Users} color="purple" />
-            <StatCard title="Incidents Linked" value={mockMetrics.incidentsLinked.toString()} icon={AlertTriangle} color="amber" />
-            <StatCard title="FIRs Filed" value={mockMetrics.firsFiled.toString()} icon={FileSearch} color="red" />
-          </section>
-
-          {/* --- Contractor Table --- */}
-          <GlassCard noHover className="bg-white/90">
-            <div className="p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-gray-200/80">
-              <div className="relative flex-grow sm:flex-grow-0">
-                <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+          {/* --- Enhanced Contractor Table --- */}
+          <GlassCard noHover className="bg-white/95 backdrop-blur-xl border border-gray-200/50 shadow-xl">
+            <div className="p-3 sm:p-4 lg:p-6 flex flex-col gap-3 sm:gap-4 lg:flex-row lg:items-center lg:justify-between border-b border-gray-200/50">
+              <div className="relative flex-1 lg:flex-grow-0">
+                <Search size={16} className="sm:hidden absolute left-3 top-1/2 -translate-y-1/2 text-blue-500" />
+                <Search size={18} className="hidden sm:block lg:hidden absolute left-4 top-1/2 -translate-y-1/2 text-blue-500" />
+                <Search size={20} className="hidden lg:block absolute left-4 top-1/2 -translate-y-1/2 text-blue-500" />
                 <input
                   type="text"
-                  placeholder="Search by name or ID..."
+                  placeholder="Search across all fields (name, ID, districts, workers, incidents, status...)..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full sm:w-72 pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  className="w-full lg:w-80 pl-9 sm:pl-12 pr-3 sm:pr-4 py-2 sm:py-2.5 lg:py-3 rounded-lg sm:rounded-xl border border-blue-200 bg-gradient-to-r from-white to-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 text-sm sm:text-base font-medium"
                 />
               </div>
-              <div className="flex items-center gap-3">
-                <AppButton variant="exportPdf" icon={FileText} onClick={() => {}}>Export PDF</AppButton>
-                <AppButton variant="exportExcel" icon={FileIcon} onClick={() => {}}>Export Excel</AppButton>
+              <div className="flex items-center gap-2 sm:gap-3">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 lg:px-5 py-2 sm:py-2.5 lg:py-3 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40 transition-all duration-300"
+                  onClick={() => {}}
+                >
+                  <FileText size={14} className="sm:hidden" />
+                  <FileText size={16} className="hidden sm:block lg:hidden" />
+                  <FileText size={18} className="hidden lg:block" />
+                  <span className="hidden sm:inline">Export PDF</span>
+                  <span className="sm:hidden">PDF</span>
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 lg:px-5 py-2 sm:py-2.5 lg:py-3 bg-gradient-to-r from-emerald-500 to-green-500 text-white rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/40 transition-all duration-300"
+                  onClick={() => {}}
+                >
+                  <FileIcon size={14} className="sm:hidden" />
+                  <FileIcon size={16} className="hidden sm:block lg:hidden" />
+                  <FileIcon size={18} className="hidden lg:block" />
+                  <span className="hidden sm:inline">Export Excel</span>
+                  <span className="sm:hidden">Excel</span>
+                </motion.button>
               </div>
             </div>
             
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[1200px] text-sm text-left">
-                <thead className="bg-blue-100/70 sticky top-0 backdrop-blur-sm">
+              <table className="w-full min-w-[800px] lg:min-w-[1200px] text-xs sm:text-sm text-left">
+                <thead className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white sticky top-0 backdrop-blur-sm">
                   <tr>
                     <ThSortable sortKey="id" title="Sl. No." handleSort={handleSort} sortIcon={getSortIcon('id')} />
                     <ThSortable sortKey="name" title="Contractor Name" handleSort={handleSort} sortIcon={getSortIcon('name')} />
-                    <th className="px-5 py-4 font-semibold text-gray-600 uppercase tracking-wider">Districts Covered</th>
+                    <th className="hidden sm:table-cell px-3 sm:px-4 lg:px-5 py-3 sm:py-4 font-semibold text-white uppercase tracking-wider">Districts Covered</th>
                     <ThSortable sortKey="workers" title="Workers" handleSort={handleSort} sortIcon={getSortIcon('workers')} />
                     <ThSortable sortKey="incidents" title="Incidents" handleSort={handleSort} sortIcon={getSortIcon('incidents')} />
                     <ThSortable sortKey="firs" title="FIRs" handleSort={handleSort} sortIcon={getSortIcon('firs')} />
-                    <ThSortable sortKey="status" title="Status" handleSort={handleSort} sortIcon={getSortIcon('status')} />
-                    <ThSortable sortKey="risk" title="Risk Level" handleSort={handleSort} sortIcon={getSortIcon('risk')} />
-                    <th className="px-5 py-4 font-semibold text-gray-600 uppercase tracking-wider text-center">Action</th>
+                    <th className="hidden md:table-cell px-3 sm:px-4 lg:px-5 py-3 sm:py-4 font-semibold text-white uppercase tracking-wider">Status</th>
+                    <th className="hidden lg:table-cell px-3 sm:px-4 lg:px-5 py-3 sm:py-4 font-semibold text-white uppercase tracking-wider">Risk Level</th>
+                    <th className="px-3 sm:px-4 lg:px-5 py-3 sm:py-4 font-semibold text-white uppercase tracking-wider text-center">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200/50">
-                  {paginatedData.map((c) => (
+                  {paginatedData.map((c, index) => (
                     <motion.tr
                       key={c.id}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      whileHover={{ backgroundColor: 'rgba(239, 246, 255, 0.8)' }} // bg-blue-50/80
-                      transition={{ duration: 0.2 }}
-                      className="cursor-pointer"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                      whileHover={{ 
+                        backgroundColor: 'rgba(59, 130, 246, 0.05)', 
+                        scale: 1.005,
+                      }}
+                      className="cursor-pointer bg-white hover:bg-blue-50/50 transition-all duration-300"
                     >
-                      <td className="px-5 py-4 whitespace-nowrap text-gray-700 font-medium">{c.id}</td>
-                      <td className="px-5 py-4 whitespace-nowrap font-semibold text-navy-800">{c.name}</td>
-                      <td className="px-5 py-4 text-gray-600 max-w-xs truncate">{c.districts.join(', ')}</td>
-                      <td className="px-5 py-4 whitespace-nowrap text-gray-700 font-medium text-right">{c.workers.toLocaleString('en-IN')}</td>
-                      <td className={`px-5 py-4 whitespace-nowrap font-bold text-center ${c.incidents > 0 ? 'text-amber-600' : 'text-gray-700'}`}>{c.incidents}</td>
-                      <td className={`px-5 py-4 whitespace-nowrap font-bold text-center ${c.firs > 0 ? 'text-red-600' : 'text-gray-700'}`}>{c.firs}</td>
-                      <td className="px-5 py-4 whitespace-nowrap"><StatusBadge status={c.status as "High-Risk" | "Active" | "Under Watch" | "Suspended"} /></td>
-                      <td className="px-5 py-4 whitespace-nowrap"><RiskBadge risk={c.risk as "Low" | "Medium" | "High-Risk"} /></td>
-                      <td className="px-5 py-4 whitespace-nowrap text-center">
-                        <AppButton variant="action" icon={Eye} onClick={() => handleOpenModal(c)}>
-                          View Details
-                        </AppButton>
+                      <td className="px-3 sm:px-4 lg:px-5 py-3 sm:py-4 whitespace-nowrap text-gray-800 font-bold">{c.id}</td>
+                      <td className="px-3 sm:px-4 lg:px-5 py-3 sm:py-4 whitespace-nowrap font-bold text-blue-900 max-w-[120px] sm:max-w-none truncate">{c.name}</td>
+                      <td className="hidden sm:table-cell px-3 sm:px-4 lg:px-5 py-3 sm:py-4 text-gray-700 max-w-xs truncate font-medium">{c.districts.join(', ')}</td>
+                      <td className="px-3 sm:px-4 lg:px-5 py-3 sm:py-4 whitespace-nowrap text-gray-800 font-bold text-right">{c.workers.toLocaleString('en-IN')}</td>
+                      <td className={`px-3 sm:px-4 lg:px-5 py-3 sm:py-4 whitespace-nowrap font-black text-center ${c.incidents > 0 ? 'text-orange-600' : 'text-green-600'}`}>{c.incidents}</td>
+                      <td className={`px-3 sm:px-4 lg:px-5 py-3 sm:py-4 whitespace-nowrap font-black text-center ${c.firs > 0 ? 'text-red-600' : 'text-green-600'}`}>{c.firs}</td>
+                      <td className="hidden md:table-cell px-3 sm:px-4 lg:px-5 py-3 sm:py-4 whitespace-nowrap"><StatusBadge status={c.status as "High-Risk" | "Active" | "Under Watch" | "Suspended"} /></td>
+                      <td className="hidden lg:table-cell px-3 sm:px-4 lg:px-5 py-3 sm:py-4 whitespace-nowrap"><RiskBadge risk={c.risk as "Low" | "Medium" | "High-Risk"} /></td>
+                      <td className="px-3 sm:px-4 lg:px-5 py-3 sm:py-4 whitespace-nowrap text-center">
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-md sm:rounded-lg text-xs sm:text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-300"
+                          onClick={() => handleOpenModal(c)}
+                        >
+                          <Eye size={12} className="sm:hidden" />
+                          <Eye size={14} className="hidden sm:block lg:hidden" />
+                          <Eye size={16} className="hidden lg:block" />
+                          <span className="hidden sm:inline">View</span>
+                        </motion.button>
                       </td>
                     </motion.tr>
                   ))}
@@ -533,37 +629,55 @@ export default function TotalContractorsReport() {
               </table>
             </div>
             
-            {/* --- Pagination --- */}
-            <div className="p-4 border-t border-gray-200/80 flex items-center justify-between">
-              <span className="text-sm text-gray-600">
-                Showing <span className="font-semibold">{paginatedData.length}</span> of <span className="font-semibold">{sortedData.length}</span> results
+            {/* --- Enhanced Pagination --- */}
+            <div className="p-3 sm:p-4 lg:p-6 border-t border-gray-200/50 bg-gray-50/50 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <span className="text-xs sm:text-sm font-medium text-gray-700 bg-white/80 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-gray-200 text-center sm:text-left">
+                Showing <span className="font-bold text-blue-600">{paginatedData.length}</span> of <span className="font-bold text-purple-600">{sortedData.length}</span> results
               </span>
-              <div className="flex items-center gap-2">
-                <button
+              <div className="flex items-center justify-center gap-2 sm:gap-3">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
-                  className="p-2 rounded-md hover:bg-gray-100 disabled:opacity-50"
+                  className="p-2 sm:p-2.5 lg:p-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
                 >
-                  <ChevronLeftIcon size={18} />
-                </button>
-                <span className="text-sm font-medium text-gray-700">
+                  <ChevronLeftIcon size={16} className="sm:hidden" />
+                  <ChevronLeftIcon size={18} className="hidden sm:block lg:hidden" />
+                  <ChevronLeftIcon size={20} className="hidden lg:block" />
+                </motion.button>
+                <span className="px-3 sm:px-4 py-1.5 sm:py-2 bg-white font-bold text-gray-800 rounded-lg sm:rounded-xl border border-gray-200 shadow-md text-xs sm:text-sm">
                   Page {currentPage} of {totalPages}
                 </span>
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                   disabled={currentPage === totalPages}
-                  className="p-2 rounded-md hover:bg-gray-100 disabled:opacity-50"
+                  className="p-2 sm:p-2.5 lg:p-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
                 >
-                  <ChevronRightIcon size={18} />
-                </button>
+                  <ChevronRightIcon size={16} className="sm:hidden" />
+                  <ChevronRightIcon size={18} className="hidden sm:block lg:hidden" />
+                  <ChevronRightIcon size={20} className="hidden lg:block" />
+                </motion.button>
               </div>
             </div>
           </GlassCard>
 
-          {/* --- Footer --- */}
-          <footer className="text-center text-gray-500 text-sm mt-12 pb-6">
-            “Accountability & safety compliance protect lives.”
-            <p className="mt-1">&copy; {new Date().getFullYear()} DGP Office, State Command Center. All rights reserved.</p>
+          {/* --- Enhanced Footer --- */}
+          <footer className="text-center mt-6 sm:mt-8 lg:mt-12 pb-4 sm:pb-6 relative">
+            <div className="bg-gradient-to-r from-blue-600/90 via-purple-600/90 to-pink-600/90 backdrop-blur-lg rounded-xl sm:rounded-2xl border border-white/30 p-4 sm:p-6 lg:p-8 shadow-xl relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10"></div>
+              <div className="absolute inset-0 bg-gradient-to-tr from-cyan-400/10 to-purple-600/10"></div>
+              <div className="relative z-10">
+                <p className="text-sm sm:text-lg lg:text-2xl font-black text-white drop-shadow-2xl leading-relaxed">
+                  "Accountability & safety compliance protect lives."
+                </p>
+                <p className="mt-2 sm:mt-3 lg:mt-4 text-xs sm:text-sm lg:text-lg text-white/95 font-bold drop-shadow-lg">
+                  © {new Date().getFullYear()} DGP Office, State Command Center. All rights reserved.
+                </p>
+              </div>
+            </div>
           </footer>
         </main>
 
@@ -579,14 +693,14 @@ export default function TotalContractorsReport() {
 // --- Helper Sub-Components ---
 
 const SelectInput: React.FC<{ label: string; name: string; value: string; onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void; options: string[] }> = ({ label, name, value, onChange, options }) => (
-  <div className="flex flex-col gap-1.5">
-    <label htmlFor={name} className="text-xs font-medium text-gray-500">{label}</label>
+  <div className="flex flex-col gap-1.5 sm:gap-2">
+    <label htmlFor={name} className="text-xs sm:text-sm font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">{label}</label>
     <select
       id={name}
       name={name}
       value={value}
       onChange={onChange}
-      className="px-3 py-2.5 rounded-lg border border-gray-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+      className="px-3 sm:px-4 py-2 sm:py-2.5 lg:py-3 rounded-lg sm:rounded-xl border border-blue-200 bg-gradient-to-r from-white to-blue-50 text-gray-800 text-sm sm:text-base font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-purple-300 transition-all duration-300 shadow-md"
     >
       {options.map((opt: string) => <option key={opt} value={opt}>{opt}</option>)}
     </select>
@@ -595,12 +709,12 @@ const SelectInput: React.FC<{ label: string; name: string; value: string; onChan
 
 const ThSortable: React.FC<{ sortKey: ContractorKey; title: string; handleSort: (key: ContractorKey) => void; sortIcon: React.ReactNode }> = ({ sortKey, title, handleSort, sortIcon }) => (
   <th
-    className="px-5 py-4 font-semibold text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-blue-200/30"
+    className="px-3 sm:px-4 lg:px-5 py-3 sm:py-4 font-bold text-white uppercase tracking-wider cursor-pointer hover:bg-white/20 transition-all duration-300"
     onClick={() => handleSort(sortKey)}
   >
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1 sm:gap-2 hover:scale-105 transition-transform duration-200">
       {title}
-      {sortIcon}
+      {sortIcon && <span className="text-yellow-300">{sortIcon}</span>}
     </div>
   </th>
 );

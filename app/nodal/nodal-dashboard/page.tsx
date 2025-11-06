@@ -99,12 +99,12 @@ const pieChartConfig = {
 
 export default function NodalDashboard() {
   return (
-    <div className={cn('min-h-screen p-4 sm:p-6 lg:p-8', contractorTheme.page.background)}>
-      <div className="max-w-7xl mx-auto space-y-8">
-        <h1 className="text-3xl font-bold text-slate-800">Nodal Officer Dashboard</h1>
+    <div className="min-h-screen p-3 sm:p-4 md:p-6 lg:p-8 bg-gray-50">
+      <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6 lg:space-y-8">
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-800">Nodal Officer Dashboard</h1>
 
         {/* Dashboard Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 mb-4 sm:mb-6">
           {/* Row 1: 3 Cards */}
           <div className={cn(contractorTheme.kpiCard.base, 'bg-gradient-to-br from-blue-500 to-blue-700')}>
             <Building className={cn(contractorTheme.kpiCard.icon)} strokeWidth={1} />

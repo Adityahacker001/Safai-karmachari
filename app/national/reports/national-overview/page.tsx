@@ -28,25 +28,43 @@ export default function NationalOverviewReportPage() {
     ];
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-        <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-1">National Overview Report</h2>
-            <p className="text-base text-gray-600 dark:text-gray-300">A comprehensive, data-driven overview of all states and union territories.</p>
+    <div className="min-h-screen p-3 sm:p-4 md:p-6 lg:p-8 space-y-4 sm:space-y-6 md:space-y-8">
+      {/* Professional Header */}
+      <header className="relative overflow-hidden bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
+        <div className="relative p-4 sm:p-6 md:p-8 lg:p-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div className="flex-1">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white drop-shadow-2xl leading-tight">
+              National Overview Report
+            </h1>
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 font-bold drop-shadow-lg mt-2">
+              A comprehensive, data-driven overview of all states and union territories
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <div className="text-sm sm:text-base md:text-lg text-white/90 font-semibold bg-white/20 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/30">
+              Last updated: {new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </div>
+            <Button variant="outline" className="bg-white/20 backdrop-blur-sm text-white border-white/30 hover:bg-white/30 transition-all font-bold rounded-xl">
+              <Download className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
+              Export National Data (CSV)
+            </Button>
+          </div>
         </div>
-        <div className="flex items-center space-x-2 mt-4 sm:mt-0">
-          <Button variant="outline" className="border-primary-300 text-primary-700 bg-gradient-to-r from-primary-50 to-secondary-50"><Download className="h-4 w-4 mr-2" />Export National Data (CSV)</Button>
-        </div>
-      </div>
+      </header>
 
-      <Card className="shadow-2xl border-none rounded-2xl overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-indigo-600 to-purple-700 p-6 text-white shadow-md">
-            <CardTitle className="text-4xl font-bold text-white drop-shadow-lg">National Performance</CardTitle>
-            <CardDescription className="text-purple-200">
-                This master table aggregates key performance indicators from all state-level reports.
+      {/* Professional Performance Table */}
+      <Card className="backdrop-blur-xl bg-white/20 rounded-2xl shadow-2xl overflow-hidden">
+        <CardHeader className="bg-gradient-to-r from-white/10 via-white/5 to-white/10 backdrop-blur-sm border-b border-white/20 p-4 sm:p-6 md:p-8">
+            <CardTitle className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-gray-900 drop-shadow-lg">National Performance</CardTitle>
+            <CardDescription className="text-sm sm:text-base md:text-lg text-gray-700 font-semibold mt-2">
+                This master table aggregates key performance indicators from all state-level reports
             </CardDescription>
-             <div className="flex items-center space-x-2 pt-4">
-                <Input placeholder="Search by state/UT name..." className="max-w-xs bg-white/10 text-white placeholder:text-purple-200 border-purple-400/50 focus:ring-purple-400" />
+             <div className="flex items-center gap-3 pt-4">
+                <Input 
+                  placeholder="Search by state/UT name..." 
+                  className="max-w-xs bg-white/70 backdrop-blur-sm text-gray-900 placeholder:text-gray-500 border-white/30 focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-xl font-semibold" 
+                />
              </div>
         </CardHeader>
         <CardContent className="p-0">

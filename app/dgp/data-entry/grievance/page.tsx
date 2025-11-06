@@ -29,6 +29,7 @@ import {
   FileBarChart,
   AlertOctagon
 } from 'lucide-react';
+import StatCard from '@/components/ui/stat-card';
 
 // --- MOCK DATA & OPTIONS ---
 
@@ -171,39 +172,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ id, value, onChange, disabled =
   />
 );
 
-/**
- * 5. SummaryCard Component (for KPIs)
- * Gradient cards for the dashboard enhancements.
- */
-interface SummaryCardProps {
-  title: string;
-  count: number;
-  change: string;
-  icon: React.ReactNode;
-  gradientClass: string;
-}
-const SummaryCard: React.FC<SummaryCardProps> = ({ title, count, change, icon, gradientClass }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1], delay: 0.1 }}
-    whileHover={{ y: -6, transition: { duration: 0.2 } }}
-    className={`relative rounded-xl shadow-lg p-5 text-white overflow-hidden ${gradientClass}`}
-    style={{
-      background: `linear-gradient(135deg, var(--tw-gradient-from), var(--tw-gradient-to))`,
-      boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)",
-    }}
-  >
-    <div className="absolute inset-0 opacity-10">
-      {icon}
-    </div>
-    <div className="relative z-10">
-      <h3 className="text-lg font-semibold mb-2">{title}</h3>
-      <p className="text-4xl font-bold mb-1">{count}</p>
-      <span className="text-sm font-medium">{change}</span>
-    </div>
-  </motion.div>
-);
+
 
 
 /**
@@ -350,10 +319,10 @@ export default function GrievanceFeedbackEntry() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
-      className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-3 sm:p-4 md:p-6 lg:p-8"
+      className="min-h-screen p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8"
     >
       {/* --- Enhanced Sticky Header --- */}
-      <header className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 border-b-4 border-gradient-to-r from-yellow-400 to-orange-500 shadow-2xl px-3 sm:px-4 md:px-6 lg:px-10 overflow-hidden">
+      <header className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 border-b-2 border-blue-200 shadow-xl px-3 sm:px-4 md:px-6 lg:px-10 overflow-hidden">
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-purple-500/20"></div>
         <div className="relative z-10 mx-auto max-w-7xl py-4 sm:py-6">
@@ -516,26 +485,26 @@ export default function GrievanceFeedbackEntry() {
         <section className="mt-12">
           {/* 📊 Summary Mini-Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            <SummaryCard
+            <StatCard
               title="Pending Grievances"
-              count={mockSummaryData.pending.count}
-              change={mockSummaryData.pending.change}
-              icon={<AlertTriangle size={80} />}
-              gradientClass="from-amber-500 to-yellow-400"
+              value={mockSummaryData.pending.count}
+              subtitle={mockSummaryData.pending.change}
+              icon={AlertTriangle}
+              color="orange"
             />
-            <SummaryCard
+            <StatCard
               title="Resolved Grievances"
-              count={mockSummaryData.resolved.count}
-              change={mockSummaryData.resolved.change}
-              icon={<CheckCircle size={80} />}
-              gradientClass="from-emerald-500 to-green-400"
+              value={mockSummaryData.resolved.count}
+              subtitle={mockSummaryData.resolved.change}
+              icon={CheckCircle}
+              color="emerald"
             />
-            <SummaryCard
+            <StatCard
               title="Escalated Grievances"
-              count={mockSummaryData.escalated.count}
-              change={mockSummaryData.escalated.change}
-              icon={<ArrowUpCircle size={80} />}
-              gradientClass="from-red-500 to-rose-400"
+              value={mockSummaryData.escalated.count}
+              subtitle={mockSummaryData.escalated.change}
+              icon={ArrowUpCircle}
+              color="red"
             />
           </div>
 

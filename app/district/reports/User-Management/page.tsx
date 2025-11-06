@@ -13,11 +13,12 @@ import {
   Search,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import StatCard from "@/components/ui/stat-card";
 
 // --- Helper for dynamic Tailwind class generation ---
 const colorMap = {
@@ -75,28 +76,34 @@ export default function DistrictUserManagement() {
   }, [searchTerm, roleFilter, statusFilter, users]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-sky-100 p-4 md:p-8 space-y-8 animate-fadeIn">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-        <div>
-          <h1 className="text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-500">
-            District User Management
-          </h1>
-          <p className="text-gray-600 mt-1">Oversee, manage, and audit all user accounts under district jurisdiction.</p>
+    <div className="min-h-screen space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 p-3 sm:p-4 md:p-6 lg:p-8">
+      {/* Professional Header */}
+      <header className="relative overflow-hidden bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
+        <div className="relative p-4 sm:p-6 md:p-8 lg:p-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div className="flex-1">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white drop-shadow-2xl leading-tight">
+              District User Management
+            </h1>
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 font-bold drop-shadow-lg mt-2">
+              Oversee, manage, and audit all user accounts under district jurisdiction
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <Button
+              className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white px-4 sm:px-6 py-3 sm:py-4 rounded-xl hover:scale-105 hover:shadow-xl transition-all border border-white/30 text-sm sm:text-base md:text-lg font-medium"
+              onClick={() => setShowAddUserForm((v) => !v)}
+            >
+              <PlusCircle className="w-4 w-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mr-2" />
+              <span>Add User</span>
+            </Button>
+            <Button className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white px-4 sm:px-6 py-3 sm:py-4 rounded-xl hover:scale-105 hover:shadow-xl transition-all border border-white/30 text-sm sm:text-base md:text-lg font-medium">
+              <Upload className="w-4 w-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mr-2" />
+              <span>Import CSV</span>
+            </Button>
+          </div>
         </div>
-        <div className="flex gap-3 mt-4 md:mt-0 flex-col md:flex-row">
-          <Button
-            className="bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-blue-500/50 transform transition-transform duration-300 hover:scale-105"
-            onClick={() => setShowAddUserForm((v) => !v)}
-          >
-            <PlusCircle className="w-4 h-4 mr-2" />
-            Add User
-          </Button>
-          <Button variant="outline" className="bg-white shadow-md transform transition-transform duration-300 hover:scale-105">
-            <Upload className="w-4 h-4 mr-2" />
-            Import CSV
-          </Button>
-        </div>
+      </header>
 
         {/* Add User Form */}
         {showAddUserForm && (
@@ -179,43 +186,49 @@ export default function DistrictUserManagement() {
             </Card>
           </div>
         )}
-      </div>
 
       {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((s, idx) => {
-          const colors = colorMap[s.color as keyof typeof colorMap];
-          return (
-            <Card
-              key={idx}
-              className={`rounded-xl shadow-lg border-l-4 ${colors.border} bg-gradient-to-br ${colors.from} ${colors.to} transform transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl`}
-            >
-              <CardContent className="p-6 flex justify-between items-center">
-                <div>
-                  <p className="text-sm font-medium text-gray-700">{s.title}</p>
-                  <p className="text-3xl font-bold text-gray-900">{s.value}</p>
-                </div>
-                <s.icon className={`w-10 h-10 ${colors.text}`} />
-              </CardContent>
-            </Card>
-          )
-        })}
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
+        <StatCard
+          title="Total Users"
+          value={246}
+          icon={Users}
+          color="blue"
+        />
+        <StatCard
+          title="Active Users"
+          value={198}
+          icon={UserCheck}
+          color="green"
+        />
+        <StatCard
+          title="Pending Approvals"
+          value={12}
+          icon={Clock}
+          color="amber"
+        />
+        <StatCard
+          title="Suspended Users"
+          value={6}
+          icon={UserX}
+          color="red"
+        />
       </div>
 
       {/* Filters Card */}
-      <Card className="shadow-lg border rounded-xl bg-white/80 backdrop-blur-sm">
-        <CardContent className="p-4 grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+      <Card className="backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl">
+        <CardContent className="p-4 sm:p-6 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 items-center">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-gray-400" />
             <Input
               placeholder="Search by user name..."
-              className="pl-10"
+              className="pl-10 sm:pl-12 md:pl-14 text-sm sm:text-base font-medium py-3 sm:py-4 rounded-xl"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
           <Select onValueChange={setRoleFilter} defaultValue="All">
-            <SelectTrigger><SelectValue placeholder="Filter by Role" /></SelectTrigger>
+            <SelectTrigger className="text-sm sm:text-base font-medium py-3 sm:py-4 rounded-xl"><SelectValue placeholder="Filter by Role" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="All">All Roles</SelectItem>
               <SelectItem value="Contractor">Contractor</SelectItem>
@@ -225,7 +238,7 @@ export default function DistrictUserManagement() {
             </SelectContent>
           </Select>
           <Select onValueChange={setStatusFilter} defaultValue="All">
-            <SelectTrigger><SelectValue placeholder="Filter by Status" /></SelectTrigger>
+            <SelectTrigger className="text-sm sm:text-base font-medium py-3 sm:py-4 rounded-xl"><SelectValue placeholder="Filter by Status" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="All">All Statuses</SelectItem>
               <SelectItem value="Active">Active</SelectItem>
@@ -236,72 +249,79 @@ export default function DistrictUserManagement() {
         </CardContent>
       </Card>
 
-      {/* --- MODIFIED USER TABLE --- */}
-      <Card className="shadow-2xl border-t-4 border-blue-600 rounded-xl overflow-hidden">
-        <CardHeader className="border-b border-gray-200">
-          <CardTitle className="text-xl font-semibold text-gray-800">User Accounts</CardTitle>
+      {/* User Table */}
+      <Card className="backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl overflow-hidden">
+        <CardHeader className="bg-gradient-to-r from-blue-600/10 to-purple-600/10 backdrop-blur-sm border-b border-gray-200/50 p-4 sm:p-6 md:p-8">
+          <CardTitle className="text-xl sm:text-2xl md:text-3xl font-black text-gray-800">User Accounts</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-          <Table>
-            {/* 🎨 New Excel-style Header with blue-cyan gradient and white text */}
-            <TableHeader>
-              <TableRow className="bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-400">
-                <TableHead className="text-white font-bold">User ID</TableHead>
-                <TableHead className="text-white font-bold">Name</TableHead>
-                <TableHead className="text-white font-bold">Role</TableHead>
-                <TableHead className="text-white font-bold">Zone</TableHead>
-                <TableHead className="text-white font-bold">Status</TableHead>
-                <TableHead className="text-white font-bold">Last Login</TableHead>
-                <TableHead className="text-right text-white font-bold">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
+          <div className="overflow-x-auto">
+            <Table>
+              {/* 🎨 New Excel-style Header with blue-cyan gradient and white text */}
+              <TableHeader>
+                <TableRow className="bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-400">
+                  <TableHead className="text-white font-bold text-xs sm:text-sm px-2 sm:px-4 py-3">User ID</TableHead>
+                  <TableHead className="text-white font-bold text-xs sm:text-sm px-2 sm:px-4 py-3">Name</TableHead>
+                  <TableHead className="text-white font-bold text-xs sm:text-sm px-2 sm:px-4 py-3">Role</TableHead>
+                  <TableHead className="text-white font-bold text-xs sm:text-sm px-2 sm:px-4 py-3">Zone</TableHead>
+                  <TableHead className="text-white font-bold text-xs sm:text-sm px-2 sm:px-4 py-3">Status</TableHead>
+                  <TableHead className="text-white font-bold text-xs sm:text-sm px-2 sm:px-4 py-3">Last Login</TableHead>
+                  <TableHead className="text-right text-white font-bold text-xs sm:text-sm px-2 sm:px-4 py-3">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
             <TableBody>
               {filteredUsers.length > 0 ? (
                 // 🎨 New Zebra-striped Rows and Grid Lines
                 filteredUsers.map((u) => (
-                  <TableRow key={u.id} className="even:bg-slate-50 odd:bg-white hover:bg-sky-100/70 transition-colors duration-200">
-                    <TableCell className="font-mono text-xs text-gray-600 border-r">{u.id}</TableCell>
-                    <TableCell className="font-medium border-r">{u.name}</TableCell>
-                    <TableCell className="border-r">
-                      <Badge variant="outline" className="bg-blue-100 text-blue-700 border-blue-200 font-semibold">
+                  <TableRow key={u.id} className="even:bg-blue-50/30 odd:bg-white hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 transition-colors duration-200">
+                    <TableCell className="font-mono text-xs sm:text-sm text-gray-600 px-2 sm:px-4 py-3">{u.id}</TableCell>
+                    <TableCell className="font-medium text-xs sm:text-sm px-2 sm:px-4 py-3">{u.name}</TableCell>
+                    <TableCell className="px-2 sm:px-4 py-3">
+                      <Badge variant="outline" className="bg-blue-100 text-blue-700 border-blue-200 font-semibold text-xs">
                         {u.role}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-gray-600 border-r">{u.zone}</TableCell>
-                    <TableCell className="border-r bg-inherit hover:bg-inherit">
-                      <Badge className={statusBadgeVariant[u.status as keyof typeof statusBadgeVariant]}>
+                    <TableCell className="text-gray-600 text-xs sm:text-sm px-2 sm:px-4 py-3">{u.zone}</TableCell>
+                    <TableCell className="px-2 sm:px-4 py-3">
+                      <Badge className={statusBadgeVariant[u.status as keyof typeof statusBadgeVariant] + " text-xs"}>
                         {u.status}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-gray-600 border-r">{u.lastLogin}</TableCell>
-                    <TableCell className="text-right space-x-2">
-                      <Button size="sm" variant="outline" className="transform transition-transform duration-200 hover:scale-105">
-                        <UserCog className="w-4 h-4 mr-1" /> Manage
-                      </Button>
-                      {u.status === "Pending Approval" && (
-                        <Button size="sm" className="bg-green-600 text-white hover:bg-green-700 transform transition-transform duration-200 hover:scale-105">
-                          Approve
+                    <TableCell className="text-gray-600 text-xs sm:text-sm px-2 sm:px-4 py-3">{u.lastLogin}</TableCell>
+                    <TableCell className="text-right px-2 sm:px-4 py-3">
+                      <div className="flex flex-col sm:flex-row gap-1 sm:gap-2">
+                        <Button size="sm" variant="outline" className="text-xs px-2 py-1">
+                          <UserCog className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-1" /> 
+                          <span className="hidden sm:inline">Manage</span>
                         </Button>
-                      )}
-                      {u.status === "Active" && (
-                        <Button size="sm" variant="destructive" className="bg-red-600 text-white hover:bg-red-700 transform transition-transform duration-200 hover:scale-105">
-                          Suspend
-                        </Button>
-                      )}
+                        {u.status === "Pending Approval" && (
+                          <Button size="sm" className="bg-green-600 text-white hover:bg-green-700 text-xs px-2 py-1">
+                            <span className="hidden sm:inline">Approve</span>
+                            <span className="sm:hidden">✓</span>
+                          </Button>
+                        )}
+                        {u.status === "Active" && (
+                          <Button size="sm" variant="destructive" className="bg-red-600 text-white hover:bg-red-700 text-xs px-2 py-1">
+                            <span className="hidden sm:inline">Suspend</span>
+                            <span className="sm:hidden">✕</span>
+                          </Button>
+                        )}
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center h-24 text-gray-500">
+                  <TableCell colSpan={7} className="text-center h-24 text-gray-500 text-sm">
                     No users found matching your criteria.
                   </TableCell>
                 </TableRow>
               )}
             </TableBody>
           </Table>
+          </div>
         </CardContent>
       </Card>
     </div>
   );
-}
+};

@@ -355,18 +355,29 @@ export default function PerformanceReportsPage() {
     };
 
     return (
-        <div className="space-y-8 p-4 md:p-6 bg-slate-100 dark:bg-gray-900 min-h-screen">
-            <div className="flex flex-wrap justify-between items-center gap-4">
-                <div>
-                    <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Performance Reports Hub</h1>
-                    <p className="text-lg text-gray-500 dark:text-gray-400">Comprehensive analysis of all stakeholders.</p>
+        <div className="min-h-screen p-3 sm:p-4 md:p-6 lg:p-8 space-y-4 sm:space-y-6 md:space-y-8">
+            {/* Professional Header */}
+            <header className="relative overflow-hidden bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
+                <div className="relative p-4 sm:p-6 md:p-8 lg:p-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                    <div className="flex-1">
+                        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white drop-shadow-2xl leading-tight">
+                            Performance Reports Hub
+                        </h1>
+                        <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 font-bold drop-shadow-lg mt-2">
+                            Comprehensive analysis of all stakeholders
+                        </p>
+                    </div>
+                    <div className="text-sm sm:text-base md:text-lg text-white/90 font-semibold bg-white/20 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/30">
+                        Last updated: {new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
+                    </div>
                 </div>
-                <p className="text-sm text-gray-400 dark:text-gray-500">Last updated: {new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-            </div>
+            </header>
 
-            <Card className="shadow-2xl border-0 rounded-2xl overflow-hidden bg-white dark:bg-gray-800">
-                <CardHeader className="p-0 border-b border-slate-200 dark:border-gray-700">
-                     <div className="flex flex-wrap items-center gap-2 p-3 bg-slate-50 dark:bg-gray-900/50">
+            {/* Professional Navigation Card */}
+            <Card className="backdrop-blur-xl bg-white/20 rounded-2xl shadow-2xl overflow-hidden">
+                <CardHeader className="p-0 border-b border-white/20">
+                     <div className="flex flex-wrap items-center gap-3 sm:gap-4 p-4 sm:p-6 bg-gradient-to-r from-white/10 via-white/5 to-white/10 backdrop-blur-sm">
                         {mainTabs.map(tab => {
                             const Icon = tab.icon;
                             return ( <Button key={tab.id} variant="ghost" onClick={() => setActiveMainTab(tab.id)} className={cn("flex-auto justify-center text-center h-11 px-3 text-sm font-medium transition-all duration-300 rounded-lg", activeMainTab === tab.id ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold shadow-md' : 'text-gray-600 dark:text-gray-300 hover:bg-slate-200 dark:hover:bg-gray-700')}><Icon className="mr-2 h-5 w-5" /> {tab.label}</Button> );

@@ -187,13 +187,13 @@ export default function DGPProfilePage() {
   }, []);
 
   return (
-    <div className="min-h-screen p-2 sm:p-3 md:p-4 space-y-3 md:space-y-4 bg-gradient-to-br from-slate-50 via-blue-50/20 to-indigo-50/30 animate-fadeIn">
+    <div className="min-h-screen p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 md:space-y-4 lg:space-y-6 animate-fadeIn">
       {/* Header */}
-      <div className="mb-3 md:mb-4 animate-slideUp bg-white/60 backdrop-blur-md rounded-xl p-3 sm:p-4 border border-gray-100/50 shadow-sm">
-        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 bg-clip-text text-transparent">
+      <div className="mb-3 md:mb-4 lg:mb-6 animate-slideUp bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-xl sm:rounded-2xl p-3 sm:p-4 lg:p-6 border border-white/20 shadow-xl">
+        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white drop-shadow-lg">
           DGP Profile Management
         </h1>
-        <p className="text-xs sm:text-sm text-gray-600 mt-1">State Police Nodal - Overview, Settings & Statewide Compliance</p>
+        <p className="text-xs sm:text-sm md:text-base text-white/90 font-medium drop-shadow-md mt-1">State Police Nodal - Overview, Settings & Statewide Compliance</p>
       </div>
 
       <ProfileHeader info={profileInfo} />
@@ -295,7 +295,7 @@ function ProfileHeader({ info }: { info: ProfileInfo }) {
 
 function StateStatistics({ stats }: { stats: StateStats }) {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6">
+    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 md:gap-4 lg:gap-6">
       <StatCard title="Total Districts" value={stats.totalDistricts.toString()} icon={MapPin} color="blue" />
       <StatCard title="SP/CP Onboarded" value={stats.spCpUnitsOnboarded} icon={Users} color="indigo" />
       <StatCard title="Total Incidents" value={stats.totalIncidents.toString()} icon={AlertTriangle} color="red" />

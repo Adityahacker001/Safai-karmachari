@@ -90,93 +90,97 @@ export default function NationalDashboard() {
   ];
 
   return (
-    <div className="space-y-8 min-h-screen py-8 bg-gradient-to-br ">
+    <div className="min-h-screen p-3 sm:p-4 md:p-6 lg:p-8 space-y-4 sm:space-y-6 md:space-y-8">
+      {/* Professional Header */}
+      <header className="relative overflow-hidden bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
+        <div className="relative p-4 sm:p-6 md:p-8 lg:p-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div className="flex-1">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white drop-shadow-2xl leading-tight">
+              National Dashboard
+            </h1>
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 font-bold drop-shadow-lg mt-2">
+              Comprehensive oversight of nationwide sanitation initiatives
+            </p>
+          </div>
+          <div className="text-sm sm:text-base md:text-lg text-white/90 font-semibold bg-white/20 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/30">
+            Last updated: {new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
+          </div>
+        </div>
+      </header>
 
-      {/* Dashboard Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="rounded-xl shadow-md bg-gradient-to-r from-indigo-200 via-blue-100 to-purple-100 p-1">
-          <DashboardCard
-            title="State Count"
-            value="28"
-            icon={MapPin}
-            color="indigo"
-            description="Total States"
-          />
-        </div>
-        <div className="rounded-xl shadow-md bg-gradient-to-r from-blue-200 via-cyan-100 to-green-100 p-1">
-          <DashboardCard
-            title="District Count"
-            value="806"
-            icon={Globe}
-            color="blue"
-            description="Total Districts"
-          />
-        </div>
-        <div className="rounded-xl shadow-md bg-gradient-to-r from-purple-200 via-indigo-100 to-blue-100 p-1">
-          <DashboardCard
-            title="Nodal Count"
-            value="452"
-            icon={Shield}
-            color="indigo"
-            description="Nodal Officers"
-          />
-        </div>
-        <div className="rounded-xl shadow-md bg-gradient-to-r from-blue-200 via-green-100 to-yellow-100 p-1">
-          <DashboardCard
-            title="Contractor Count"
-            value="12,834"
-            icon={FileText}
-            color="blue"
-            description="Registered Contractors"
-          />
-        </div>
-        <div className="rounded-xl shadow-md bg-gradient-to-r from-orange-200 via-yellow-100 to-pink-100 p-1">
-          <DashboardCard
-            title="Workers Count"
-            value="5.2M"
-            icon={TrendingUp}
-            color="orange"
-            description="Registered Workers"
-          />
-        </div>
-        <div className="rounded-xl shadow-md bg-gradient-to-r from-red-200 via-orange-100 to-yellow-100 p-1">
-          <DashboardCard
-            title="Nationwide Incident Count"
-            value="1,247"
-            icon={AlertTriangle}
-            color="red"
-            description="All states combined"
-          />
-        </div>
-        <div className="rounded-xl shadow-md bg-gradient-to-r from-indigo-200 via-blue-100 to-purple-100 p-1">
-          <DashboardCard
-            title="States Monitored"
-            value="28"
-            icon={MapPin}
-            color="indigo"
-            description="Plus 8 UTs"
-          />
-        </div>
-        <div className="rounded-xl shadow-md bg-gradient-to-r from-purple-200 via-pink-100 to-yellow-100 p-1">
-          <DashboardCard
-            title="Recognition Programs"
-            value="347"
-            icon={Award}
-            color="purple"
-            description="Awards distributed"
-          />
-        </div>
+      {/* Enhanced Dashboard Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
+        <DashboardCard
+          title="State Count"
+          value="28"
+          icon={MapPin}
+          color="indigo"
+          description="Total States"
+        />
+        <DashboardCard
+          title="District Count"
+          value="806"
+          icon={Globe}
+          color="blue"
+          description="Total Districts"
+        />
+        <DashboardCard
+          title="Nodal Count"
+          value="452"
+          icon={Shield}
+          color="indigo"
+          description="Nodal Officers"
+        />
+        <DashboardCard
+          title="Contractor Count"
+          value="12,834"
+          icon={FileText}
+          color="blue"
+          description="Registered Contractors"
+        />
+        <DashboardCard
+          title="Workers Count"
+          value="5.2M"
+          icon={TrendingUp}
+          color="orange"
+          description="Registered Workers"
+        />
+        <DashboardCard
+          title="Nationwide Incident Count"
+          value="1,247"
+          icon={AlertTriangle}
+          color="red"
+          description="All states combined"
+        />
+        <DashboardCard
+          title="States Monitored"
+          value="28"
+          icon={MapPin}
+          color="indigo"
+          description="Plus 8 UTs"
+        />
+        <DashboardCard
+          title="Recognition Programs"
+          value="347"
+          icon={Award}
+          color="purple"
+          description="Awards distributed"
+        />
       </div>
 
-      {/* Grievance Analytics (Charts) */}
-      <div className="space-y-6">
-        <h2 className="text-lg font-semibold text-gray-900">Grievance Analytics</h2>
+      {/* Professional Grievance Analytics Section */}
+      <div className="space-y-4 sm:space-y-6">
+        <div className="backdrop-blur-xl bg-white/20 rounded-2xl shadow-2xl p-4 sm:p-6">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900 mb-2">Grievance Analytics</h2>
+          <p className="text-sm sm:text-base md:text-lg text-gray-700 font-semibold">Comprehensive nationwide grievance monitoring</p>
+        </div>
 
-        {/* Charts Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Grievances by State Bar Chart */}
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <h3 className="text-md font-medium text-gray-900 mb-4">Grievances by State</h3>
+        {/* Enhanced Charts Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
+          {/* Professional Grievances by State Chart */}
+          <div className="backdrop-blur-xl bg-white/60 rounded-2xl shadow-2xl p-4 sm:p-6 md:p-8">
+            <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Grievances by State</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -188,9 +192,9 @@ export default function NationalDashboard() {
             </ResponsiveContainer>
           </div>
 
-          {/* Resolution Status Pie Chart */}
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <h3 className="text-md font-medium text-gray-900 mb-4">Overall Resolution Status</h3>
+          {/* Professional Resolution Status Chart */}
+          <div className="backdrop-blur-xl bg-white/60 rounded-2xl shadow-2xl p-4 sm:p-6 md:p-8">
+            <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Overall Resolution Status</h3>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
@@ -212,9 +216,9 @@ export default function NationalDashboard() {
             </ResponsiveContainer>
           </div>
 
-          {/* Pending vs Escalated Comparison */}
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <h3 className="text-md font-medium text-gray-900 mb-4">Pending vs Escalated Cases</h3>
+          {/* Professional Pending vs Escalated Chart */}
+          <div className="backdrop-blur-xl bg-white/60 rounded-2xl shadow-2xl p-4 sm:p-6 md:p-8">
+            <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Pending vs Escalated Cases</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -227,9 +231,9 @@ export default function NationalDashboard() {
             </ResponsiveContainer>
           </div>
 
-          {/* Average Resolution Time Line Chart */}
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <h3 className="text-md font-medium text-gray-900 mb-4">Average Resolution Time (Days)</h3>
+          {/* Professional Resolution Time Chart */}
+          <div className="backdrop-blur-xl bg-white/60 rounded-2xl shadow-2xl p-4 sm:p-6 md:p-8">
+            <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Average Resolution Time (Days)</h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={resolutionData}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -249,25 +253,27 @@ export default function NationalDashboard() {
         </div>
       </div>
 
-      {/* Strategic Actions */}
-      <div className="bg-white p-6 rounded-lg shadow-sm">
-        {/* Changed title to solid black color for visibility */}
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Strategic Initiatives</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <button className="p-4 border border-blue-200 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors text-left">
-            <FileText className="h-6 w-6 text-blue-600 mb-2" />
-            <p className="font-medium text-blue-900">Issue New Directive</p>
-            <p className="text-sm text-blue-700">Policy implementation nationwide</p>
+      {/* Professional Strategic Actions Section */}
+      <div className="backdrop-blur-xl bg-white/20 rounded-2xl shadow-2xl p-4 sm:p-6 md:p-8">
+        <div className="mb-4 sm:mb-6">
+          <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900 mb-2">Strategic Initiatives</h3>
+          <p className="text-sm sm:text-base md:text-lg text-gray-700 font-semibold">National policy implementation and oversight</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          <button className="p-4 sm:p-6 border-2 border-blue-300/50 bg-gradient-to-br from-blue-50/80 to-blue-100/60 backdrop-blur-sm rounded-2xl hover:from-blue-100/90 hover:to-blue-200/70 hover:border-blue-400/60 hover:shadow-xl transition-all duration-300 text-left transform hover:scale-105">
+            <FileText className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600 mb-3" />
+            <p className="font-black text-base sm:text-lg text-blue-900 mb-2">Issue New Directive</p>
+            <p className="text-sm sm:text-base text-blue-700 font-semibold">Policy implementation nationwide</p>
           </button>
-          <button className="p-4 border border-green-200 bg-green-50 rounded-lg hover:bg-green-100 transition-colors text-left">
-            <BarChart3 className="h-6 w-6 text-green-600 mb-2" />
-            <p className="font-medium text-green-900">Annual Report</p>
-            <p className="text-sm text-green-700">Compile national data</p>
+          <button className="p-4 sm:p-6 border-2 border-green-300/50 bg-gradient-to-br from-green-50/80 to-green-100/60 backdrop-blur-sm rounded-2xl hover:from-green-100/90 hover:to-green-200/70 hover:border-green-400/60 hover:shadow-xl transition-all duration-300 text-left transform hover:scale-105">
+            <BarChart3 className="h-6 w-6 sm:h-8 sm:w-8 text-green-600 mb-3" />
+            <p className="font-black text-base sm:text-lg text-green-900 mb-2">Annual Report</p>
+            <p className="text-sm sm:text-base text-green-700 font-semibold">Compile national data</p>
           </button>
-          <button className="p-4 border border-purple-200 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors text-left">
-            <Award className="h-6 w-6 text-purple-600 mb-2" />
-            <p className="font-medium text-purple-900">National Recognition</p>
-            <p className="text-sm text-purple-700">Review state nominations</p>
+          <button className="p-4 sm:p-6 border-2 border-purple-300/50 bg-gradient-to-br from-purple-50/80 to-purple-100/60 backdrop-blur-sm rounded-2xl hover:from-purple-100/90 hover:to-purple-200/70 hover:border-purple-400/60 hover:shadow-xl transition-all duration-300 text-left transform hover:scale-105">
+            <Award className="h-6 w-6 sm:h-8 sm:w-8 text-purple-600 mb-3" />
+            <p className="font-black text-base sm:text-lg text-purple-900 mb-2">National Recognition</p>
+            <p className="text-sm sm:text-base text-purple-700 font-semibold">Review state nominations</p>
           </button>
         </div>
       </div>

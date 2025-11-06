@@ -179,30 +179,30 @@ export default function DGPDashboardPage() {
   };
 
   return (
-    <div className="min-h-screen p-3 sm:p-4 md:p-6 lg:p-8">
-      <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
+    <div className="min-h-screen p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8">
+      <div className="max-w-7xl mx-auto space-y-3 sm:space-y-4 lg:space-y-6">
         {/* Header */}
-        <header className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 sm:gap-6 bg-white/80 backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-gray-100/50 shadow-lg">
-          <div className="space-y-2">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 bg-clip-text text-transparent">
+        <header className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 sm:gap-4 lg:gap-6 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-xl sm:rounded-2xl p-3 sm:p-4 lg:p-6 border border-white/20 shadow-xl">
+          <div className="space-y-1 sm:space-y-2">
+            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white drop-shadow-lg">
               State Police Nodal Dashboard
             </h1>
-            <p className="text-sm sm:text-base text-gray-600">
+            <p className="text-xs sm:text-sm md:text-base text-white/90 font-medium drop-shadow-md">
               Statewide oversight of law enforcement activities for Safai Karmachari cases
             </p>
           </div>
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto">
-            <button className="px-4 sm:px-6 py-3 bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-600 text-white rounded-xl text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+          <div className="flex flex-col xs:flex-row sm:flex-row items-stretch xs:items-center gap-2 sm:gap-3 w-full lg:w-auto">
+            <button className="px-3 sm:px-4 lg:px-6 py-2 sm:py-2.5 lg:py-3 bg-white/20 backdrop-blur-sm text-white rounded-lg sm:rounded-xl text-xs sm:text-sm font-bold shadow-lg hover:bg-white/30 transition-all duration-300 hover:scale-105 border border-white/30">
               Generate Monthly Summary
             </button>
-            <button className="px-4 sm:px-6 py-3 border border-gray-200 bg-white/90 backdrop-blur-sm rounded-xl text-sm font-semibold hover:bg-blue-50/50 transition-all duration-300 hover:scale-105">
+            <button className="px-3 sm:px-4 lg:px-6 py-2 sm:py-2.5 lg:py-3 border border-white/30 bg-white/10 backdrop-blur-sm rounded-lg sm:rounded-xl text-xs sm:text-sm font-bold text-white hover:bg-white/20 transition-all duration-300 hover:scale-105">
               Contact NSKC
             </button>
           </div>
         </header>
 
         {/* Metrics cards */}
-        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <section className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-2 sm:gap-3 md:gap-4 lg:gap-6">
           <StatCard title="Total Workers" value="124" icon={Users} color="green" />
           <StatCard title="Total Contractors" value="5,432" icon={Building2} color="purple" />
           <StatCard title="Total Incidents" value="876" icon={AlertTriangle} color="red" />
@@ -214,9 +214,9 @@ export default function DGPDashboardPage() {
         </section>
 
         {/* Grievances & Directions Breakdown */}
-        <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-100/50 hover:shadow-xl transition-all duration-300">
-            <h3 className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4 sm:mb-6">
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
+          <div className="bg-gradient-to-br from-white/95 via-blue-50/90 to-indigo-50/95 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg p-3 sm:p-4 md:p-6 border border-white/40 hover:shadow-xl transition-all duration-300">
+            <h3 className="text-base sm:text-lg md:text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-3 sm:mb-4 md:mb-6 drop-shadow-sm">
               Grievances Breakdown
             </h3>
             <div className="grid grid-cols-3 gap-3 sm:gap-4">
@@ -241,8 +241,8 @@ export default function DGPDashboardPage() {
             </div>
           </div>
 
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-100/50 hover:shadow-xl transition-all duration-300">
-            <h3 className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent mb-4 sm:mb-6">
+          <div className="bg-gradient-to-br from-white/95 via-indigo-50/90 to-purple-50/95 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg p-3 sm:p-4 md:p-6 border border-white/40 hover:shadow-xl transition-all duration-300">
+            <h3 className="text-base sm:text-lg md:text-xl font-bold bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent mb-3 sm:mb-4 md:mb-6 drop-shadow-sm">
               Directions Status
             </h3>
             <div className="grid grid-cols-3 gap-3 sm:gap-4">
@@ -269,82 +269,82 @@ export default function DGPDashboardPage() {
         </section>
 
         {/* Charts Section */}
-        <section className="space-y-4 sm:space-y-6">
+        <section className="space-y-3 sm:space-y-4 md:space-y-6">
           {/* First Row - Pie Chart and Bar Chart */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
             {/* Incident Category Pie Chart */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-100/50 hover:shadow-xl transition-all duration-300">
-              <h3 className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4 sm:mb-6">Incident Category (Statewide)</h3>
-              <div className="h-64 sm:h-72 flex items-center justify-center">
+            <div className="bg-gradient-to-br from-white/95 via-blue-50/90 to-indigo-50/95 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg p-3 sm:p-4 md:p-6 border border-white/40 hover:shadow-xl transition-all duration-300">
+              <h3 className="text-base sm:text-lg md:text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-3 sm:mb-4 md:mb-6 drop-shadow-sm">Incident Category (Statewide)</h3>
+              <div className="h-48 sm:h-56 md:h-64 lg:h-72 flex items-center justify-center">
                 <Pie data={incidentCategoryData} options={incidentCategoryOptions} />
               </div>
             </div>
 
             {/* Investigation Status Bar Chart */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-100/50 hover:shadow-xl transition-all duration-300">
-              <h3 className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent mb-4 sm:mb-6">Investigation Status by District</h3>
-              <div className="h-64 sm:h-72 flex items-center justify-center">
+            <div className="bg-gradient-to-br from-white/95 via-purple-50/90 to-violet-50/95 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg p-3 sm:p-4 md:p-6 border border-white/40 hover:shadow-xl transition-all duration-300">
+              <h3 className="text-base sm:text-lg md:text-xl font-bold bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent mb-3 sm:mb-4 md:mb-6 drop-shadow-sm">Investigation Status by District</h3>
+              <div className="h-48 sm:h-56 md:h-64 lg:h-72 flex items-center justify-center">
                 <Bar data={investigationStatusData} options={investigationStatusOptions} />
               </div>
             </div>
           </div>
 
           {/* Second Row - Compensation Tracker Line Chart */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-100/50 hover:shadow-xl transition-all duration-300">
-            <h3 className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent mb-4 sm:mb-6">Compensation Tracker (Monthly)</h3>
-            <div className="h-64 sm:h-80 flex items-center justify-center">
+          <div className="bg-gradient-to-br from-white/95 via-orange-50/90 to-amber-50/95 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg p-3 sm:p-4 md:p-6 border border-white/40 hover:shadow-xl transition-all duration-300">
+            <h3 className="text-base sm:text-lg md:text-xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent mb-3 sm:mb-4 md:mb-6 drop-shadow-sm">Compensation Tracker (Monthly)</h3>
+            <div className="h-48 sm:h-56 md:h-64 lg:h-80 flex items-center justify-center">
               <Line data={compensationTrackerData} options={compensationTrackerOptions} />
             </div>
           </div>
         </section>        {/* Quick Actions */}
-        <section className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-100/50 hover:shadow-xl transition-all duration-300">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-2">
-            <h3 className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Quick Actions</h3>
-            <span className="text-sm text-gray-500 bg-gray-50 px-3 py-1 rounded-full">5 available actions</span>
+        <section className="bg-gradient-to-br from-white/95 via-slate-50/90 to-gray-50/95 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg p-3 sm:p-4 md:p-6 border border-white/40 hover:shadow-xl transition-all duration-300">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 sm:mb-4 md:mb-6 gap-2">
+            <h3 className="text-base sm:text-lg md:text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent drop-shadow-sm">Quick Actions</h3>
+            <span className="text-xs sm:text-sm text-gray-500 bg-white/60 backdrop-blur-sm px-2 sm:px-3 py-1 rounded-full border border-gray-200/50">5 available actions</span>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <button className="bg-gradient-to-br from-white to-blue-50/30 border border-gray-100 p-4 text-left w-full rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 hover:border-blue-200 group">
-              <div className="flex items-start gap-3">
-                <FileCheck className="h-6 w-6 text-blue-600 mb-2 group-hover:scale-110 transition-transform duration-300" />
-                <div className="flex-1">
-                  <p className="font-medium text-blue-900 text-xs sm:text-sm">Add Investigation Update</p>
-                  <p className="text-xs text-blue-700/70">Update statewide progress</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2 sm:gap-3 md:gap-4">
+            <button className="bg-gradient-to-br from-white/95 to-blue-50/90 backdrop-blur-sm border border-white/60 p-2 sm:p-3 md:p-4 text-left w-full rounded-lg sm:rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 hover:border-blue-200/60 group">
+              <div className="flex items-start gap-2 sm:gap-3">
+                <FileCheck className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-blue-600 mb-1 sm:mb-2 group-hover:scale-110 transition-transform duration-300" />
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-blue-900 text-xs sm:text-sm truncate">Add Investigation</p>
+                  <p className="text-xs text-blue-700/70 truncate">Update progress</p>
                 </div>
               </div>
             </button>
-            <button className="bg-gradient-to-br from-white to-green-50/30 border border-gray-100 p-4 text-left w-full rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 hover:border-green-200 group">
-              <div className="flex items-start gap-3">
-                <MessageSquare className="h-6 w-6 text-green-600 mb-2 group-hover:scale-110 transition-transform duration-300" />
-                <div className="flex-1">
-                  <p className="font-medium text-green-900 text-sm">Submit Grievance Response</p>
-                  <p className="text-xs text-green-700/70">Reply to pending grievances</p>
+            <button className="bg-gradient-to-br from-white/95 to-green-50/90 backdrop-blur-sm border border-white/60 p-2 sm:p-3 md:p-4 text-left w-full rounded-lg sm:rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 hover:border-green-200/60 group">
+              <div className="flex items-start gap-2 sm:gap-3">
+                <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-green-600 mb-1 sm:mb-2 group-hover:scale-110 transition-transform duration-300" />
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-green-900 text-xs sm:text-sm truncate">Submit Response</p>
+                  <p className="text-xs text-green-700/70 truncate">Reply grievances</p>
                 </div>
               </div>
             </button>
-            <button className="bg-gradient-to-br from-white to-purple-50/30 border border-gray-100 p-4 text-left w-full rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 hover:border-purple-200 group">
-              <div className="flex items-start gap-3">
-                <FileText className="h-6 w-6 text-purple-600 mb-2 group-hover:scale-110 transition-transform duration-300" />
-                <div className="flex-1">
-                  <p className="font-medium text-purple-900 text-sm">Reply to NSKC Direction</p>
-                  <p className="text-xs text-purple-700/70">Compliance updates</p>
+            <button className="bg-gradient-to-br from-white/95 to-purple-50/90 backdrop-blur-sm border border-white/60 p-2 sm:p-3 md:p-4 text-left w-full rounded-lg sm:rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 hover:border-purple-200/60 group">
+              <div className="flex items-start gap-2 sm:gap-3">
+                <FileText className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-purple-600 mb-1 sm:mb-2 group-hover:scale-110 transition-transform duration-300" />
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-purple-900 text-xs sm:text-sm truncate">NSKC Direction</p>
+                  <p className="text-xs text-purple-700/70 truncate">Compliance updates</p>
                 </div>
               </div>
             </button>
-            <button className="bg-gradient-to-br from-white to-red-50/30 border border-gray-100 p-4 text-left w-full rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 hover:border-red-200 group">
-              <div className="flex items-start gap-3">
-                <AlertCircle className="h-6 w-6 text-red-600 mb-2 group-hover:scale-110 transition-transform duration-300" />
-                <div className="flex-1">
-                  <p className="font-medium text-red-900 text-sm">View Exception Alerts</p>
-                  <p className="text-xs text-red-700/70">Low compliance districts</p>
+            <button className="bg-gradient-to-br from-white/95 to-red-50/90 backdrop-blur-sm border border-white/60 p-2 sm:p-3 md:p-4 text-left w-full rounded-lg sm:rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 hover:border-red-200/60 group">
+              <div className="flex items-start gap-2 sm:gap-3">
+                <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-red-600 mb-1 sm:mb-2 group-hover:scale-110 transition-transform duration-300" />
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-red-900 text-xs sm:text-sm truncate">View Alerts</p>
+                  <p className="text-xs text-red-700/70 truncate">Low compliance</p>
                 </div>
               </div>
             </button>
-            <button className="bg-gradient-to-br from-white to-indigo-50/30 border border-gray-100 p-4 text-left w-full rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 hover:border-indigo-200 group">
-              <div className="flex items-start gap-3">
-                <BarChart3 className="h-6 w-6 text-indigo-600 mb-2 group-hover:scale-110 transition-transform duration-300" />
-                <div className="flex-1">
-                  <p className="font-medium text-indigo-900 text-sm">Generate Annual Report</p>
-                  <p className="text-xs text-indigo-700/70">Comprehensive summary</p>
+            <button className="bg-gradient-to-br from-white/95 to-indigo-50/90 backdrop-blur-sm border border-white/60 p-2 sm:p-3 md:p-4 text-left w-full rounded-lg sm:rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 hover:border-indigo-200/60 group">
+              <div className="flex items-start gap-2 sm:gap-3">
+                <BarChart3 className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-indigo-600 mb-1 sm:mb-2 group-hover:scale-110 transition-transform duration-300" />
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-indigo-900 text-xs sm:text-sm truncate">Annual Report</p>
+                  <p className="text-xs text-indigo-700/70 truncate">Generate summary</p>
                 </div>
               </div>
             </button>

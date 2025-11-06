@@ -319,7 +319,16 @@ export default function DGPAnnualReport() {
   const filteredData = useMemo(() => {
     // In a real app, filters (esp. year) would fetch new data. Here we just filter the mock data.
     return mockAnnualDistrictData.filter(d => {
-      const matchesSearch = d.district.toLowerCase().includes(searchTerm.toLowerCase());
+      const searchLower = searchTerm.toLowerCase();
+      const matchesSearch = !searchTerm || (
+        d.district.toLowerCase().includes(searchLower) ||
+        d.incidents.toString().includes(searchLower) ||
+        d.firs.toString().includes(searchLower) ||
+        d.closed.toString().includes(searchLower) ||
+        d.pending.toString().includes(searchLower) ||
+        d.compensation.toString().includes(searchLower) ||
+        d.compensation.toString().includes(searchLower)
+      );
       const matchesDistrict = filters.district === 'All' || d.district === filters.district;
       // Other filters (incidentType, status) would apply here if data structure supported it
       return matchesSearch && matchesDistrict;
@@ -358,61 +367,42 @@ export default function DGPAnnualReport() {
  
   return (
     <>
-      {/* Background elements */}
-      <div className="absolute inset-0 -z-20 h-full w-full bg-gradient-to-br from-white via-blue-50 to-gray-100" />
-      <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#e0f2fe_1px,transparent_1px),linear-gradient(to_bottom,#e0f2fe_1px,transparent_1px)] bg-[size:32px_32px] opacity-30" />
-      
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="min-h-screen p-6 lg:p-10 font-sans text-navy-900"
+        className="min-h-screen p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 font-sans text-navy-900"
       >
         <main className="max-w-8xl mx-auto">
-          {/* --- Header --- */}
-          <header className="mb-8">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <div className="flex-shrink-0 w-16 h-16 flex items-center justify-center rounded-2xl bg-navy-700 text-gold-400 shadow-lg shadow-navy-500/30 border-2 border-white/50">
-                  <GanttChartSquare size={36} />
-                </div>
-                <div>
-                  <h1 className="text-3xl font-bold text-navy-900">DGP Annual Report</h1>
-                  <p className="text-base text-gray-600">State-wide enforcement & compliance summary</p>
-                </div>
+          {/* --- Enhanced Header --- */}
+          <header className="mb-4 sm:mb-6 lg:mb-8 relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/90 via-purple-600/90 to-pink-600/90 backdrop-blur-md rounded-2xl sm:rounded-3xl border border-white/20 shadow-xl"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 rounded-2xl sm:rounded-3xl"></div>
+            <div className="relative p-4 sm:p-6 lg:p-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
+              <div className="flex-1">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white drop-shadow-2xl leading-tight">
+                  DGP Annual Report
+                </h1>
+                <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/90 font-bold mt-2 lg:mt-3 drop-shadow-lg">
+                  State-wide enforcement & compliance summary
+                </p>
               </div>
-              <nav className="text-sm font-medium text-gray-500" aria-label="Breadcrumb">
-                <ol className="flex items-center space-x-2">
-                  <li><a href="#" className="hover:text-blue-600">Dashboard</a></li>
-                  <li><ChevronRight size={16} /></li>
-                  <li><a href="#" className="hover:text-blue-600">Reports</a></li>
-                  <li><ChevronRight size={16} /></li>
-                  <li className="font-semibold text-gray-700">Annual Report</li>
+              <nav className="text-xs sm:text-sm font-bold text-white" aria-label="Breadcrumb">
+                <ol className="flex items-center space-x-2 sm:space-x-3 bg-white/20 backdrop-blur-lg rounded-xl sm:rounded-2xl px-3 sm:px-4 lg:px-6 py-2 sm:py-3 border border-white/30 shadow-lg">
+                  <li><a href="#" className="hover:text-yellow-300 transition-colors drop-shadow-md">Dashboard</a></li>
+                  <li><ChevronRight size={14} className="sm:hidden text-white/70" /></li>
+                  <li><ChevronRight size={18} className="hidden sm:block text-white/70 drop-shadow-md" /></li>
+                  <li><a href="#" className="hover:text-yellow-300 transition-colors drop-shadow-md">Reports</a></li>
+                  <li><ChevronRight size={14} className="sm:hidden text-white/70" /></li>
+                  <li><ChevronRight size={18} className="hidden sm:block text-white/70 drop-shadow-md" /></li>
+                  <li className="font-black text-yellow-300 drop-shadow-md">Annual Report</li>
                 </ol>
               </nav>
             </div>
           </header>
 
-          {/* --- Filter Bar --- */}
-          <GlassCard className="mb-8 bg-gradient-to-r from-blue-50/50 via-white/80 to-blue-50/50" noHover>
-            <div className="p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 flex-grow">
-                <SelectInput label="Year" name="year" value={filters.year} onChange={handleFilterChange} options={yearOptions} />
-                <SelectInput label="District" name="district" value={filters.district} onChange={handleFilterChange} options={districtOptions} />
-                <SelectInput label="Incident Type" name="incidentType" value={filters.incidentType} onChange={handleFilterChange} options={incidentTypeOptions} />
-                <SelectInput label="Status" name="status" value={filters.status} onChange={handleFilterChange} options={statusOptions} />
-              </div>
-              <div className="flex items-center gap-3 pt-4 md:pt-0 border-t md:border-t-0 md:border-l border-gray-200/80 md:pl-5">
-                <AppButton variant="primary" icon={Filter}>Apply</AppButton>
-                <AppButton variant="secondary" icon={RefreshCw} className="px-3" onClick={handleResetFilters}>
-                  <span className="sr-only">Reset</span>
-                </AppButton>
-              </div>
-            </div>
-          </GlassCard>
-
           {/* --- Top Metric Cards --- */}
-          <section className="mb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+          <section className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 lg:gap-6 mb-8">
             <MetricCard title="Incidents Reported" value={mockAnnualMetrics.totalIncidents} icon={AlertTriangle} gradient="from-amber-500 to-orange-700" />
             <MetricCard title="FIRs Registered" value={mockAnnualMetrics.totalFirs} icon={FileSearch} gradient="from-red-500 to-rose-700" />
             <MetricCard title="Cases Resolved" value={mockAnnualMetrics.casesResolved} icon={CheckCircle} gradient="from-emerald-500 to-green-700" />
@@ -420,6 +410,57 @@ export default function DGPAnnualReport() {
             <MetricCard title="Compensation Sanctioned" value={mockAnnualMetrics.compensationSanctioned} icon={DollarSign} gradient="from-blue-600 to-navy-800" isCurrency />
             <MetricCard title="Compensation Disbursed" value={mockAnnualMetrics.compensationDisbursed} icon={TrendingUp} gradient="from-sky-500 to-blue-700" isCurrency />
           </section>
+
+          {/* --- Enhanced Filter Bar --- */}
+          <GlassCard className="mb-4 sm:mb-6 lg:mb-8 bg-white/95 backdrop-blur-xl border border-gray-200/50 shadow-lg" noHover>
+            <div className="p-3 sm:p-4 lg:p-6 relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-pink-500/5 rounded-2xl"></div>
+              <div className="relative">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4 mb-4">
+                  <SelectInput label="Year" name="year" value={filters.year} onChange={handleFilterChange} options={yearOptions} />
+                  <SelectInput label="District" name="district" value={filters.district} onChange={handleFilterChange} options={districtOptions} />
+                  <SelectInput label="Incident Type" name="incidentType" value={filters.incidentType} onChange={handleFilterChange} options={incidentTypeOptions} />
+                  <SelectInput label="Status" name="status" value={filters.status} onChange={handleFilterChange} options={statusOptions} />
+                  <div className="relative">
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Global Search</label>
+                    <input 
+                      type="text" 
+                      placeholder="Search across all data..." 
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="w-full p-2 sm:p-2.5 lg:p-3 border border-gray-300 rounded-lg text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                    />
+                  </div>
+                </div>
+                <div className="flex items-center justify-between pt-4 border-t border-gradient-to-r from-blue-200/50 via-purple-200/50 to-pink-200/50">
+                  <div className="flex items-center gap-3">
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 lg:px-6 py-2 sm:py-2.5 lg:py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300"
+                    >
+                      <Filter size={14} className="sm:hidden" />
+                      <Filter size={16} className="hidden sm:block lg:hidden" />
+                      <Filter size={18} className="hidden lg:block" />
+                      <span className="hidden sm:inline">Apply Filters</span>
+                      <span className="sm:hidden">Filter</span>
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.02, rotate: 180 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="p-2 sm:p-2.5 lg:p-3 bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                      onClick={handleResetFilters}
+                    >
+                      <RefreshCw size={14} className="sm:hidden" />
+                      <RefreshCw size={16} className="hidden sm:block lg:hidden" />
+                      <RefreshCw size={18} className="hidden lg:block" />
+                    </motion.button>
+                  </div>
+                  <div className="flex gap-2 sm:gap-3"></div>
+                </div>
+              </div>
+            </div>
+          </GlassCard>
 
           {/* --- Charts & Insights --- */}
           <section className="mb-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -538,15 +579,13 @@ export default function DGPAnnualReport() {
           </section>
 
 
-          {/* --- District-wise Table --- */}
-          <GlassCard noHover className="bg-white/90">
-            <div className="p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-gray-200/80">
-              <h3 className="text-xl font-bold text-navy-900">District-wise Annual Summary</h3>
-              <div className="flex items-center gap-3">
-                <AppButton variant="exportPdf" icon={FileText}>Export PDF</AppButton>
-                <AppButton variant="exportExcel" icon={FileIcon}>Export Excel</AppButton>
-                <AppButton variant="print" icon={Printer}>Print Report</AppButton>
-              </div>
+          {/* --- Enhanced District-wise Table --- */}
+          <GlassCard noHover className="bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30 backdrop-blur-xl border border-blue-200/50 shadow-xl shadow-blue-500/20">
+            <div className="p-3 sm:p-4 lg:p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 border-b border-gradient-to-r from-blue-200/50 via-purple-200/50 to-pink-200/50 bg-gradient-to-r from-blue-100/50 via-purple-100/50 to-pink-100/50 backdrop-blur-sm">
+              <h3 className="text-lg sm:text-xl lg:text-2xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent drop-shadow-sm">
+                District-wise Annual Summary
+              </h3>
+              
             </div>
             
             <div className="overflow-x-auto">
@@ -563,14 +602,17 @@ export default function DGPAnnualReport() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200/50">
-                  {paginatedData.map((d) => (
+                  {paginatedData.map((d, index) => (
                     <motion.tr
                       key={d.id}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      whileHover={{ backgroundColor: 'rgba(239, 246, 255, 0.8)' }} // bg-blue-50/80
-                      transition={{ duration: 0.2 }}
-                      className="cursor-pointer"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                      whileHover={{ 
+                        backgroundColor: 'rgba(59, 130, 246, 0.05)', 
+                        scale: 1.005,
+                      }}
+                      className="cursor-pointer bg-white hover:bg-blue-50/50 transition-all duration-300"
                     >
                       <td className="px-5 py-4 whitespace-nowrap font-semibold text-navy-800">{d.district}</td>
                       <td className="px-5 py-4 whitespace-nowrap font-bold text-center">{d.incidents}</td>

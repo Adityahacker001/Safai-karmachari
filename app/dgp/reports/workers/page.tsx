@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import { motion } from 'framer-motion';
 import StatCard from '@/components/ui/stat-card';
 import {
   Home,
@@ -8,6 +9,7 @@ import {
   Shield,
   Filter,
   RotateCcw,
+  RefreshCw,
   FileDown,
   Users,
   Briefcase,
@@ -19,7 +21,8 @@ import {
   X,
   Download,
   Search,
-  ChevronDown
+  ChevronDown,
+  FileSpreadsheet
 } from 'lucide-react';
 
 // --- Mock Data ---
@@ -179,84 +182,115 @@ const Button = ({ children, onClick, variant = 'primary', className = '' }: { ch
 // --- Page Sections ---
 
 /**
- * Header section with title, breadcrumbs, and badge.
+ * Enhanced Header section with colorful gradient styling.
  */
 const Header = () => (
-  <div className="mb-6 bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Total Workers Report</h1>
-        <p className="mt-1 text-sm text-gray-500">
+  <div className="mb-4 sm:mb-6 lg:mb-8 relative">
+    <div className="absolute inset-0 bg-gradient-to-r from-blue-600/90 via-purple-600/90 to-pink-600/90 backdrop-blur-md rounded-2xl sm:rounded-3xl border border-white/20 shadow-xl"></div>
+    <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 rounded-2xl sm:rounded-3xl"></div>
+    <div className="relative p-4 sm:p-6 lg:p-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
+      <div className="flex-1">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white drop-shadow-2xl leading-tight">
+          Total Workers Report
+        </h1>
+        <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/90 font-bold mt-2 lg:mt-3 drop-shadow-lg">
           State-wide Safai Karmachari worker & case-link monitoring
         </p>
       </div>
-      <div className="mt-3 sm:mt-0">
-        <span className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-800">
-          <Shield size={16} className="mr-1.5" />
-          DGP State View — Full Access
-        </span>
-      </div>
+      <nav className="text-xs sm:text-sm font-bold text-white" aria-label="Breadcrumb">
+        <ol className="flex items-center space-x-2 sm:space-x-3 bg-white/20 backdrop-blur-lg rounded-xl sm:rounded-2xl px-3 sm:px-4 lg:px-6 py-2 sm:py-3 border border-white/30 shadow-lg">
+          <li><a href="#" className="hover:text-yellow-300 transition-colors drop-shadow-md">Dashboard</a></li>
+          <li><ChevronRight size={14} className="sm:hidden text-white/70" /></li>
+          <li><ChevronRight size={18} className="hidden sm:block text-white/70 drop-shadow-md" /></li>
+          <li><a href="#" className="hover:text-yellow-300 transition-colors drop-shadow-md">Reports & Analytics</a></li>
+          <li><ChevronRight size={14} className="sm:hidden text-white/70" /></li>
+          <li><ChevronRight size={18} className="hidden sm:block text-white/70 drop-shadow-md" /></li>
+          <li className="font-black text-yellow-300 drop-shadow-md">Total Workers Report</li>
+        </ol>
+      </nav>
     </div>
-    <nav className="mt-2 flex" aria-label="Breadcrumb">
-      <ol className="flex items-center space-x-1 text-sm text-gray-500">
-        <li>
-          <a href="#" className="hover:text-gray-700 flex items-center">
-            <Home size={16} className="mr-1.5" />
-            Dashboard
-          </a>
-        </li>
-        <li>
-          <div className="flex items-center">
-            <ChevronRight size={16} />
-            <a href="#" className="ml-1 hover:text-gray-700">
-              Reports & Analytics
-            </a>
-          </div>
-        </li>
-        <li>
-          <div className="flex items-center">
-            <ChevronRight size={16} />
-            <span className="ml-1 text-gray-700 font-medium">Total Workers Report</span>
-          </div>
-        </li>
-      </ol>
-    </nav>
   </div>
 );
 
 /**
- * Filter panel component.
+ * Enhanced Filter panel component with colorful styling.
  */
-const FilterPanel = () => (
-  <div className="mb-6 rounded-lg bg-white p-4 shadow-sm border border-gray-200">
-    <div className="grid grid-cols-1 gap-x-6 gap-y-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-7">
-      <FilterDropdown label="District" options={["Lucknow", "Kanpur", "Varanasi", "Agra"]} icon={null} />
-      <FilterDropdown label="Worker Category" options={["Manual Scavenger", "Sewer Worker", "Hazardous", "Other SKs"]} icon={null} />
-      <FilterDropdown label="Year / Period" options={["2024", "2023", "2022"]} icon={null} />
-      <FilterDropdown label="Incident Linked" options={["Yes", "No"]} icon={null} />
-      <FilterDropdown label="FIR Status" options={["Filed", "Not Filed"]} icon={null} />
-      <FilterDropdown label="Compensation" options={["Paid", "Sanctioned", "Pending"]} icon={null} />
-    </div>
-    <div className="mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between border-t border-gray-200 pt-4">
-      <div className="flex gap-2">
-        <Button variant="primary" onClick={() => console.log('Apply Filter clicked')}>
-          <Filter size={16} className="mr-2" />
-          Apply Filter
-        </Button>
-        <Button variant="secondary" onClick={() => console.log('Reset clicked')}>
-          <RotateCcw size={16} className="mr-2" />
-          Reset
-        </Button>
-      </div>
-      <div className="flex gap-2 mt-3 sm:mt-0">
-        <Button variant="secondary" onClick={() => console.log('Export PDF clicked')}>
-          <FileDown size={16} className="mr-2" />
-          Export PDF
-        </Button>
-        <Button variant="secondary" onClick={() => console.log('Export Excel clicked')}>
-          <FileDown size={16} className="mr-2" />
-          Export Excel
-        </Button>
+const FilterPanel = ({ searchTerm, setSearchTerm, handleResetFilters }: { 
+  searchTerm: string;
+  setSearchTerm: (value: string) => void;
+  handleResetFilters: () => void;
+}) => (
+  <div className="mb-4 sm:mb-6 lg:mb-8 bg-white/95 backdrop-blur-xl border border-gray-200/50 shadow-lg rounded-2xl">
+    <div className="p-3 sm:p-4 lg:p-6 relative">
+      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-pink-500/5 rounded-2xl"></div>
+      <div className="relative">
+        <div className="flex items-center gap-3 mb-4 sm:mb-6">
+          <h3 className="text-lg sm:text-xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+            Filter Workers
+          </h3>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+          <select className="form-select-sm">
+            <option>All Districts</option>
+            <option>Lucknow</option>
+            <option>Kanpur</option>
+            <option>Varanasi</option>
+            <option>Agra</option>
+          </select>
+          <select className="form-select-sm">
+            <option>All Categories</option>
+            <option>Manual Scavenger</option>
+            <option>Sewer Worker</option>
+            <option>Hazardous SK</option>
+            <option>Other SKs</option>
+          </select>
+          <select className="form-select-sm">
+            <option>All Years</option>
+            <option>2024</option>
+            <option>2023</option>
+            <option>2022</option>
+          </select>
+          <select className="form-select-sm">
+            <option>All Incidents</option>
+            <option>Yes</option>
+            <option>No</option>
+          </select>
+          <select className="form-select-sm">
+            <option>All FIR Status</option>
+            <option>Filed</option>
+            <option>Not Filed</option>
+          </select>
+          <select className="form-select-sm">
+            <option>All Compensation</option>
+            <option>Paid</option>
+            <option>Sanctioned</option>
+            <option>Pending</option>
+          </select>
+        </div>
+        <div className="flex items-center justify-start mt-4 pt-4 border-t border-gradient-to-r from-blue-200/50 via-purple-200/50 to-pink-200/50">
+          <div className="flex items-center gap-3">
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 lg:px-6 py-2 sm:py-2.5 lg:py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300"
+            >
+              <Filter size={14} className="sm:hidden" />
+              <Filter size={16} className="hidden sm:block" />
+              <span className="hidden sm:inline">Apply Filters</span>
+              <span className="sm:hidden">Filter</span>
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.02, rotate: 180 }}
+              whileTap={{ scale: 0.98 }}
+              className="p-2 sm:p-2.5 lg:p-3 bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+              onClick={handleResetFilters}
+            >
+              <RefreshCw size={14} className="sm:hidden" />
+              <RefreshCw size={16} className="hidden sm:block lg:hidden" />
+              <RefreshCw size={18} className="hidden lg:block" />
+            </motion.button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -305,7 +339,11 @@ const SummaryCards = () => (
  * @param {object} props
  * @param {function} props.onViewDetails - Function to call when "View Details" is clicked.
  */
-const WorkersTable = ({ onViewDetails }: { onViewDetails: (worker: typeof mockWorkers[0]) => void }) => {
+const WorkersTable = ({ onViewDetails, searchTerm, setSearchTerm }: { 
+  onViewDetails: (worker: typeof mockWorkers[0]) => void;
+  searchTerm: string;
+  setSearchTerm: (value: string) => void;
+}) => {
   /**
    * Helper to get badge color based on status.
    */
@@ -329,11 +367,64 @@ const WorkersTable = ({ onViewDetails }: { onViewDetails: (worker: typeof mockWo
     }
   };
 
+  const filteredWorkers = useMemo(() => {
+    if (!searchTerm) return mockWorkers;
+    
+    const searchLower = searchTerm.toLowerCase();
+    return mockWorkers.filter(worker => 
+      worker.name.toLowerCase().includes(searchLower) ||
+      worker.category.toLowerCase().includes(searchLower) ||
+      worker.contractor.toLowerCase().includes(searchLower) ||
+      worker.district.toLowerCase().includes(searchLower) ||
+      worker.incidentLinked.toLowerCase().includes(searchLower) ||
+      (worker.incidentType && worker.incidentType.toLowerCase().includes(searchLower)) ||
+      worker.firFiled.toLowerCase().includes(searchLower) ||
+      (worker.firNumber && worker.firNumber.toLowerCase().includes(searchLower)) ||
+      (worker.policeStation && worker.policeStation.toLowerCase().includes(searchLower)) ||
+      (worker.chargesheetStatus && worker.chargesheetStatus.toLowerCase().includes(searchLower)) ||
+      (worker.incidentDate && worker.incidentDate.toLowerCase().includes(searchLower)) ||
+      (worker.location && worker.location.toLowerCase().includes(searchLower)) ||
+      worker.compensationStatus.toLowerCase().includes(searchLower) ||
+      (worker.compensationAmount && worker.compensationAmount.toLowerCase().includes(searchLower))
+    );
+  }, [searchTerm]);
+
   return (
-    <div className="rounded-lg bg-white shadow-sm border border-gray-200 overflow-hidden">
+    <div className="rounded-2xl bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30 backdrop-blur-xl border border-blue-200/50 shadow-xl shadow-blue-500/20 overflow-hidden">
+      {/* Search Bar Above Table */}
+      <div className="p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-gray-200/80">
+        <div className="relative flex-grow sm:flex-grow-0">
+          <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Search workers..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full sm:w-72 pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+          />
+        </div>
+        <div className="flex items-center gap-3">
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="flex items-center gap-2 px-4 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-semibold shadow-lg transition-all duration-300"
+          >
+            <FileDown size={16} />
+            Export PDF
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="flex items-center gap-2 px-4 py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-lg text-sm font-semibold shadow-lg transition-all duration-300"
+          >
+            <FileSpreadsheet size={16} />
+            Export Excel
+          </motion.button>
+        </div>
+      </div>
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+          <thead className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white sticky top-0 backdrop-blur-sm">
             <tr>
               {[
                 'Sl. No.', 'Worker Name', 'Category', 'Contractor', 'District',
@@ -342,7 +433,7 @@ const WorkersTable = ({ onViewDetails }: { onViewDetails: (worker: typeof mockWo
                 <th
                   key={header}
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider font-bold"
                 >
                   {header}
                 </th>
@@ -350,8 +441,18 @@ const WorkersTable = ({ onViewDetails }: { onViewDetails: (worker: typeof mockWo
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {mockWorkers.map((worker, index) => (
-              <tr key={worker.id} className="hover:bg-gray-50">
+            {filteredWorkers.map((worker, index) => (
+              <motion.tr 
+                key={worker.id} 
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.05 }}
+                whileHover={{ 
+                  backgroundColor: 'rgba(59, 130, 246, 0.05)', 
+                  scale: 1.005,
+                }}
+                className="cursor-pointer transition-all duration-300 hover:bg-blue-50/50"
+              >
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{index + 1}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{worker.name}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">
@@ -378,7 +479,7 @@ const WorkersTable = ({ onViewDetails }: { onViewDetails: (worker: typeof mockWo
                     View Details
                   </button>
                 </td>
-              </tr>
+              </motion.tr>
             ))}
           </tbody>
         </table>
@@ -530,6 +631,7 @@ const Pagination = () => (
 export default function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedWorker, setSelectedWorker] = useState<typeof mockWorkers[0] | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleViewDetails = (worker: typeof mockWorkers[0]) => {
     setSelectedWorker(worker);
@@ -541,13 +643,17 @@ export default function App() {
     setSelectedWorker(null);
   };
 
+  const handleResetFilters = () => {
+    setSearchTerm('');
+  };
+
   return (
-    <div className="min-h-screen bg-gray-100 p-4 sm:p-6 lg:p-8 font-inter">
+    <div className="min-h-screen p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 font-inter">
       <div className="max-w-screen-2xl mx-auto">
         <Header />
-        <FilterPanel />
         <SummaryCards />
-        <WorkersTable onViewDetails={handleViewDetails} />
+        <FilterPanel searchTerm={searchTerm} setSearchTerm={setSearchTerm} handleResetFilters={handleResetFilters} />
+        <WorkersTable onViewDetails={handleViewDetails} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         <Pagination />
         <div className="mt-6 text-center text-xs text-gray-500">
           Data verified by DGP Office
@@ -558,6 +664,40 @@ export default function App() {
         onClose={handleCloseModal}
         worker={selectedWorker}
       />
+
+      {/* --- Global Styles --- */}
+      <style jsx global>{`
+        /* Form Input Styling */
+        .form-input, .form-select, .form-input-sm, .form-select-sm {
+          width: 100%;
+          font-size: 0.9rem;
+          border-radius: 0.5rem;
+          border: 1px solid #cbd5e1;
+          background-color: #ffffff;
+          box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+          transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-input, .form-select {
+           padding: 0.65rem 1rem;
+        }
+        .form-input-sm, .form-select-sm {
+           padding: 0.5rem 0.75rem;
+           font-size: 0.8rem;
+        }
+        .form-input:focus, .form-select:focus, .form-input-sm:focus, .form-select-sm:focus {
+          outline: none;
+          border-color: #2563eb;
+          box-shadow: 0 0 0 3px rgb(37 99 235 / 0.2);
+        }
+        .form-select, .form-select-sm {
+          appearance: none;
+          background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+          background-position: right 0.5rem center;
+          background-repeat: no-repeat;
+          background-size: 1.5em 1.5em;
+          padding-right: 2.5rem;
+        }
+      `}</style>
     </div>
   );
 }

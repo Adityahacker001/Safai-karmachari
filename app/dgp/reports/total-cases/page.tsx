@@ -9,6 +9,7 @@ import {
   Shield,
   ListFilter,
   RotateCcw,
+  RefreshCw,
   FileDown,
   Users,
   Briefcase,
@@ -410,7 +411,25 @@ export default function TotalCasesReport() {
       .filter(c => filters.status === "All Statuses" || c.investigationStatus === filters.status)
       .filter(c => filters.chargeSheet === "All" || (filters.chargeSheet === "Filed" && c.chargeSheetFiled) || (filters.chargeSheet === "Not Filed" && !c.chargeSheetFiled))
       .filter(c => filters.compensation === "All" || c.compensationPaid === filters.compensation)
-      .filter(c => c.firNo.toLowerCase().includes(searchTerm.toLowerCase()) || c.id.toLowerCase().includes(searchTerm.toLowerCase()) || c.policeStation.toLowerCase().includes(searchTerm.toLowerCase()));
+      .filter(c => {
+        if (!searchTerm) return true;
+        const searchLower = searchTerm.toLowerCase();
+        return (
+          c.id.toLowerCase().includes(searchLower) ||
+          c.incidentId.toLowerCase().includes(searchLower) ||
+          c.district.toLowerCase().includes(searchLower) ||
+          c.policeStation.toLowerCase().includes(searchLower) ||
+          c.firNo.toLowerCase().includes(searchLower) ||
+          c.investigationStatus.toLowerCase().includes(searchLower) ||
+          c.compensationPaid.toLowerCase().includes(searchLower) ||
+          c.workerName.toLowerCase().includes(searchLower) ||
+          c.incidentDate.toLowerCase().includes(searchLower) ||
+          c.incidentType.toLowerCase().includes(searchLower) ||
+          (c.compensationAmount && c.compensationAmount.toLowerCase().includes(searchLower)) ||
+          (c.paymentDate && c.paymentDate.toLowerCase().includes(searchLower)) ||
+          (c.pendingReason && c.pendingReason.toLowerCase().includes(searchLower))
+        );
+      });
   }, [filters, searchTerm]);
   
   const paginatedCases = useMemo(() => {
@@ -423,7 +442,7 @@ export default function TotalCasesReport() {
 
   if (!hasMounted) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-white via-sky-50 to-slate-100">
+      <div className="min-h-screen flex items-center justify-center">
         <Loader2 size={48} className="animate-spin text-blue-700" />
       </div>
     );
@@ -434,91 +453,37 @@ export default function TotalCasesReport() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen p-6 lg:p-10 bg-gradient-to-br from-white via-sky-50 to-slate-100"
+      className="min-h-screen p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8"
     >
-      {/* --- Header --- */}
-      <header className="max-w-7xl mx-auto mb-8">
-        {/* Breadcrumb */}
-        <nav className="flex items-center text-sm font-medium text-slate-500" aria-label="Breadcrumb">
-          <a href="#" className="hover:text-slate-700">DGP Dashboard</a>
-          <ChevronRight size={16} className="mx-1.5" />
-          <a href="#" className="hover:text-slate-700">Reports & Analytics</a>
-          <ChevronRight size={16} className="mx-1.5" />
-          <span className="text-slate-800 font-semibold">Total Cases Report</span>
-        </nav>
-        {/* Title */}
-        <div className="flex items-center justify-between mt-3">
-          <div className="flex items-center gap-4">
-            <div className="flex-shrink-0 w-14 h-14 flex items-center justify-center rounded-full bg-navy-700 text-gold-400 shadow-lg shadow-navy-500/30 border-2 border-white/50">
-              <FileBadge size={32} />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-navy-900">Total Cases Report</h1>
-              <p className="text-sm text-slate-600">State-wide law enforcement actions on Safai Karmachari incidents.</p>
-            </div>
+      {/* --- Enhanced Header --- */}
+      <header className="max-w-7xl mx-auto mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 rounded-xl sm:rounded-2xl"></div>
+        <div className="relative p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col gap-3 sm:gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
+          <div className="flex-1">
+            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-black text-white drop-shadow-2xl leading-tight">
+              Total Cases Report
+            </h1>
+            <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-white/90 font-bold mt-1 sm:mt-2 lg:mt-3 drop-shadow-lg">
+              State-wide law enforcement actions on Safai Karmachari incidents
+            </p>
           </div>
-          <span className="info-chip bg-navy-100 text-navy-800 border-navy-200">
-            <Shield size={14} className="text-navy-600" />
-            DGP State View — Full Access
-          </span>
+          <nav className="text-xs sm:text-sm font-bold text-white" aria-label="Breadcrumb">
+            <ol className="flex items-center space-x-2 sm:space-x-3 bg-white/20 backdrop-blur-lg rounded-xl sm:rounded-2xl px-3 sm:px-4 lg:px-6 py-2 sm:py-3 border border-white/30 shadow-lg">
+              <li><a href="#" className="hover:text-yellow-300 transition-colors drop-shadow-md">DGP Dashboard</a></li>
+              <li><ChevronRight size={14} className="sm:hidden text-white/70" /></li>
+              <li><ChevronRight size={18} className="hidden sm:block text-white/70 drop-shadow-md" /></li>
+              <li><a href="#" className="hover:text-yellow-300 transition-colors drop-shadow-md">Reports & Analytics</a></li>
+              <li><ChevronRight size={14} className="sm:hidden text-white/70" /></li>
+              <li><ChevronRight size={18} className="hidden sm:block text-white/70 drop-shadow-md" /></li>
+              <li className="font-black text-yellow-300 drop-shadow-md">Total Cases Report</li>
+            </ol>
+          </nav>
         </div>
       </header>
-      
-      {/* --- Filter Panel --- */}
-      <GlassCard className="max-w-7xl mx-auto mb-8" noHover>
-        <div className="flex items-center gap-3 px-6 py-4 border-b border-sky-100">
-          <ListFilter size={18} className="text-blue-700" />
-          <h3 className="text-base font-semibold text-navy-800">Filter Cases</h3>
-        </div>
-        <div className="p-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
-            <select name="district" value={filters.district} onChange={handleFilterChange} className="form-select-sm">
-              {filterOptions.districts.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-            </select>
-            <select name="status" value={filters.status} onChange={handleFilterChange} className="form-select-sm">
-              {filterOptions.statuses.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-            </select>
-            <select name="chargeSheet" value={filters.chargeSheet} onChange={handleFilterChange} className="form-select-sm">
-              {filterOptions.chargeSheet.map(opt => <option key={opt} value={opt}>{opt === "All" ? "Charge Sheet (All)" : opt}</option>)}
-            </select>
-            <select name="compensation" value={filters.compensation} onChange={handleFilterChange} className="form-select-sm">
-              {filterOptions.compensation.map(opt => <option key={opt} value={opt}>{opt === "All" ? "Compensation (All)" : opt}</option>)}
-            </select>
-             <select name="timePeriod" value={filters.timePeriod} onChange={handleFilterChange} className="form-select-sm">
-              {filterOptions.timePeriods.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-            </select>
-            <div className="relative col-span-2 lg:col-span-1">
-              <input 
-                type="text" 
-                placeholder="Search Case ID, FIR..." 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="form-input-sm pl-9 w-full" 
-              />
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-            </div>
-            <StyledButton onClick={() => {}} variant="primary" className="h-full">
-              <Filter size={16} /> Apply
-            </StyledButton>
-          </div>
-          <div className="flex justify-between items-center mt-4 pt-4 border-t border-sky-100">
-             <StyledButton onClick={handleResetFilters} variant="secondary" className="px-3 py-1.5">
-              <RotateCcw size={16} /> Reset Filters
-            </StyledButton>
-             <div className="flex gap-2">
-              <StyledButton onClick={() => {}} variant="exportPdf">
-                <FileDown size={16} /> PDF
-              </StyledButton>
-              <StyledButton onClick={() => {}} variant="exportExcel">
-                <FileSpreadsheet size={16} /> Excel
-              </StyledButton>
-            </div>
-          </div>
-        </div>
-      </GlassCard>
 
       {/* --- KPI Metrics --- */}
-      <section className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6 mb-8">
+      <section className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3 md:gap-4 lg:gap-6 mb-4 sm:mb-6 lg:mb-8">
         <StatCard title="Total Cases" value={mockKpis.totalCases.value} icon={FileText} color="blue" />
         <StatCard title="In Progress" value={mockKpis.inProgress.value} icon={Loader} color="amber" />
         <StatCard title="Charge Sheets Filed" value={mockKpis.chargeSheetsField.value} icon={FileCheck2} color="indigo" />
@@ -526,9 +491,110 @@ export default function TotalCasesReport() {
         <StatCard title="Compensation Pending" value={mockKpis.compensationPending.value} icon={AlertOctagon} color="red" />
       </section>
       
-      {/* --- Main Table --- */}
-      <GlassCard className="max-w-7xl mx-auto" noHover>
-        <div className="overflow-x-auto">
+      {/* --- Enhanced Filter Panel --- */}
+      <GlassCard className="max-w-7xl mx-auto mb-3 sm:mb-4 md:mb-6 lg:mb-8 bg-white/95 backdrop-blur-xl border border-gray-200/50 shadow-lg" noHover>
+        <div className="p-2 sm:p-3 md:p-4 lg:p-6 relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-pink-500/5 rounded-2xl"></div>
+          <div className="relative">
+            <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4 md:mb-6">
+              <h3 className="text-base sm:text-lg md:text-xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                Filter Cases
+              </h3>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3 md:gap-4">
+              <select name="district" value={filters.district} onChange={handleFilterChange} className="form-select-sm">
+                {filterOptions.districts.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+              </select>
+              <select name="status" value={filters.status} onChange={handleFilterChange} className="form-select-sm">
+                {filterOptions.statuses.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+              </select>
+              <select name="chargeSheet" value={filters.chargeSheet} onChange={handleFilterChange} className="form-select-sm">
+                {filterOptions.chargeSheet.map(opt => <option key={opt} value={opt}>{opt === "All" ? "Charge Sheet (All)" : opt}</option>)}
+              </select>
+              <select name="compensation" value={filters.compensation} onChange={handleFilterChange} className="form-select-sm">
+                {filterOptions.compensation.map(opt => <option key={opt} value={opt}>{opt === "All" ? "Compensation (All)" : opt}</option>)}
+              </select>
+              <select name="timePeriod" value={filters.timePeriod} onChange={handleFilterChange} className="form-select-sm">
+                {filterOptions.timePeriods.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+              </select>
+            </div>
+            <div className="flex items-center justify-between mt-4 pt-4 border-t border-gradient-to-r from-blue-200/50 via-purple-200/50 to-pink-200/50">
+              <div className="flex items-center gap-3">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 lg:px-6 py-2 sm:py-2.5 lg:py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300"
+                >
+                  <Filter size={14} className="sm:hidden" />
+                  <Filter size={16} className="hidden sm:block" />
+                  <span className="hidden sm:inline">Apply Filters</span>
+                  <span className="sm:hidden">Filter</span>
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.02, rotate: 180 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="p-2 sm:p-2.5 lg:p-3 bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                  onClick={handleResetFilters}
+                >
+                  <RefreshCw size={14} className="sm:hidden" />
+                  <RefreshCw size={16} className="hidden sm:block lg:hidden" />
+                  <RefreshCw size={18} className="hidden lg:block" />
+                </motion.button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </GlassCard>
+      
+      {/* --- Enhanced Main Worker Table --- */}
+      <GlassCard className="max-w-7xl mx-auto bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30 backdrop-blur-xl border border-blue-200/50 shadow-xl shadow-blue-500/20" noHover>
+        {/* Global Search Bar */}
+        <div className="p-3 sm:p-4 md:p-6 border-b border-slate-200/50">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center justify-between">
+            <div className="flex-1 max-w-md">
+              <div className="relative">
+                <input 
+                  type="text" 
+                  placeholder="Search cases, incidents, workers..." 
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2.5 bg-white/80 backdrop-blur-sm border border-slate-300/50 rounded-lg text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200" 
+                />
+                <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                {searchTerm && (
+                  <button
+                    onClick={() => setSearchTerm("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                  >
+                    <X size={16} />
+                  </button>
+                )}
+              </div>
+            </div>
+            <div className="flex gap-2 sm:gap-3">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+              >
+                <FileDown size={16} />
+                <span className="hidden sm:inline">Export PDF</span>
+                <span className="sm:hidden">PDF</span>
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-emerald-600 to-green-700 text-white rounded-lg text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+              >
+                <FileSpreadsheet size={16} />
+                <span className="hidden sm:inline">Export Excel</span>
+                <span className="sm:hidden">Excel</span>
+              </motion.button>
+            </div>
+          </div>
+        </div>
+        
+        <div className="overflow-x-auto rounded-b-lg sm:rounded-b-xl">
           <table className="table-auto w-full">
             <thead className="sticky top-0 bg-slate-100/80 backdrop-blur-sm z-10">
               <tr>
@@ -544,16 +610,20 @@ export default function TotalCasesReport() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-slate-100">
-              {paginatedCases.map((c) => (
+              {paginatedCases.map((c, index) => (
                 <motion.tr
                   key={c.id}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.05 }}
-                  className={
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  whileHover={{ 
+                    backgroundColor: 'rgba(59, 130, 246, 0.05)', 
+                    scale: 1.005,
+                  }}
+                  className={`cursor-pointer transition-all duration-300 ${
                     c.investigationStatus !== "Completed" ? 'bg-amber-50/70 hover:bg-amber-100/70' : 
-                    'hover:bg-sky-50/50'
-                  }
+                    'bg-white hover:bg-blue-50/50'
+                  }`}
                 >
                   <td className="td-cell font-medium text-navy-800">{c.id}</td>
                   <td className="td-cell">{c.incidentId}</td>
@@ -575,36 +645,36 @@ export default function TotalCasesReport() {
         </div>
         
         {/* Pagination */}
-        <div className="p-4 flex flex-col md:flex-row justify-between items-center border-t border-sky-100">
-          <div className="flex items-center gap-2 mb-3 md:mb-0">
-            <span className="text-sm text-slate-600">Rows per page:</span>
+        <div className="p-2 sm:p-3 md:p-4 flex flex-col sm:flex-row justify-between items-center border-t border-sky-100">
+          <div className="flex flex-col sm:flex-row items-center gap-2 mb-3 sm:mb-0">
+            <span className="text-xs sm:text-sm text-slate-600">Rows per page:</span>
             <select className="form-select-sm p-1.5" defaultValue="10">
               <option>10</option>
               <option>25</option>
               <option>50</option>
             </select>
-            <span className="text-sm text-slate-600">
+            <span className="text-xs sm:text-sm text-slate-600 text-center sm:text-left">
               Showing {paginatedCases.length} of {filteredCases.length} results
             </span>
           </div>
-          <div className="flex gap-2">
-            <StyledButton onClick={() => setCurrentPage(p => Math.max(p - 1, 1))} disabled={currentPage === 1} variant="secondary" className="px-3 py-1.5">
-              <ArrowLeft size={16} /> Previous
+          <div className="flex flex-wrap gap-1 sm:gap-2">
+            <StyledButton onClick={() => setCurrentPage(p => Math.max(p - 1, 1))} disabled={currentPage === 1} variant="secondary" className="px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm">
+              <ArrowLeft size={14} className="sm:h-4 sm:w-4" /> <span className="hidden sm:inline">Previous</span><span className="sm:hidden">Prev</span>
             </StyledButton>
-            <span className="px-4 py-1.5 text-sm font-medium text-slate-700">
+            <span className="px-2 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm font-medium text-slate-700">
               Page {currentPage} of {totalPages}
             </span>
-            <StyledButton onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))} disabled={currentPage === totalPages} variant="secondary" className="px-3 py-1.5">
-              Next <ArrowRight size={16} />
+            <StyledButton onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))} disabled={currentPage === totalPages} variant="secondary" className="px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm">
+              <span className="hidden sm:inline">Next</span><span className="sm:hidden">Next</span> <ArrowRight size={14} className="sm:h-4 sm:w-4" />
             </StyledButton>
           </div>
         </div>
       </GlassCard>
 
       {/* --- Footer --- */}
-      <footer className="text-center text-slate-500 text-sm mt-12 pb-6 max-w-7xl mx-auto">
-        <p className="italic">“Data verified by DGP Office. Ensuring law enforcement accountability.”</p>
-        <div className="flex items-center justify-center gap-4 mt-2">
+      <footer className="text-center text-slate-500 text-xs sm:text-sm mt-8 sm:mt-12 pb-4 sm:pb-6 max-w-7xl mx-auto px-2 sm:px-4">
+        <p className="italic">"Data verified by DGP Office. Ensuring law enforcement accountability."</p>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mt-2">
           <a href="#" className="flex items-center gap-1.5 text-xs text-slate-600 hover:text-navy-700 transition-colors">
             <HelpCircle size={14} /> Help & Support
           </a>

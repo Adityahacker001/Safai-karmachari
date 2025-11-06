@@ -20,10 +20,24 @@ import {
   XCircle,
   File as FileIcon,
   AlertTriangle,
-  TowerControl
+  TowerControl,
+  FileDown,
+  FileSpreadsheet,
+  Users,
+  X
 } from 'lucide-react';
+import StatCard from '@/components/ui/stat-card';
 
 // --- MOCK DATA & OPTIONS ---
+
+const mockMetrics = {
+  totalDistricts: 12,
+  onboardedDistricts: 9,
+  totalIncidents: 443,
+  totalCases: 347,
+  averageCompliance: 78.5,
+  syncHealthy: 7
+};
 
 const mockDistrictData = [
   { id: 'D-01', district: 'Mumbai City', type: 'CP', onboarded: 'Yes', lastSync: '2025-10-30T10:00:00Z', incidents: 150, cases: 120, compliance: 95 },
@@ -265,7 +279,37 @@ export default function DGPOnboardingReport() {
   // Data Processing
   const filteredData = useMemo(() => {
     return mockDistrictData.filter(d => {
-      const matchesSearch = d.district.toLowerCase().includes(searchTerm.toLowerCase());
+      if (!searchTerm) {
+        const matchesDistrict = filters.district === 'All' || d.district === filters.district;
+        const matchesJurisdiction = filters.jurisdiction === 'All' || d.type === filters.jurisdiction;
+        const matchesOnboarded = filters.onboarded === 'All' || d.onboarded === filters.onboarded;
+        
+        const syncStatus = getSyncStatus(d.lastSync).status;
+        const matchesSync = filters.syncStatus === 'All'
+          || (filters.syncStatus === 'OK' && syncStatus === 'OK')
+          || (filters.syncStatus === 'Delayed' && syncStatus === 'Delayed')
+          || (filters.syncStatus === 'Failed' && syncStatus === 'Failed')
+          || (filters.syncStatus === 'N/A' && syncStatus === 'N/A');
+
+        return matchesDistrict && matchesJurisdiction && matchesOnboarded && matchesSync;
+      }
+      
+      // Global search across all fields
+      const searchLower = searchTerm.toLowerCase();
+      const globalMatch = (
+        d.id.toLowerCase().includes(searchLower) ||
+        d.district.toLowerCase().includes(searchLower) ||
+        d.type.toLowerCase().includes(searchLower) ||
+        d.onboarded.toLowerCase().includes(searchLower) ||
+        d.incidents.toString().includes(searchLower) ||
+        d.cases.toString().includes(searchLower) ||
+        d.compliance.toString().includes(searchLower) ||
+        (d.lastSync && d.lastSync.toLowerCase().includes(searchLower)) ||
+        getSyncStatus(d.lastSync).status.toLowerCase().includes(searchLower)
+      );
+      
+      if (!globalMatch) return false;
+      
       const matchesDistrict = filters.district === 'All' || d.district === filters.district;
       const matchesJurisdiction = filters.jurisdiction === 'All' || d.type === filters.jurisdiction;
       const matchesOnboarded = filters.onboarded === 'All' || d.onboarded === filters.onboarded;
@@ -277,7 +321,7 @@ export default function DGPOnboardingReport() {
         || (filters.syncStatus === 'Failed' && syncStatus === 'Failed')
         || (filters.syncStatus === 'N/A' && syncStatus === 'N/A');
 
-      return matchesSearch && matchesDistrict && matchesJurisdiction && matchesOnboarded && matchesSync;
+      return matchesDistrict && matchesJurisdiction && matchesOnboarded && matchesSync;
     });
   }, [searchTerm, filters]);
 
@@ -315,79 +359,184 @@ export default function DGPOnboardingReport() {
  
   return (
     <>
-      {/* Background elements */}
-      <div className="absolute inset-0 -z-20 h-full w-full bg-gradient-to-br from-white via-blue-50 to-gray-100" />
-      <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#e0f2fe_1px,transparent_1px),linear-gradient(to_bottom,#e0f2fe_1px,transparent_1px)] bg-[size:32px_32px] opacity-30" />
-      
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="min-h-screen p-6 lg:p-10 font-sans text-navy-900"
+        className="min-h-screen p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 font-sans text-navy-900"
       >
         <main className="max-w-8xl mx-auto">
-          {/* --- Header --- */}
-          <header className="mb-8">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <div className="flex-shrink-0 w-16 h-16 flex items-center justify-center rounded-2xl bg-navy-700 text-gold-400 shadow-lg shadow-navy-500/30 border-2 border-white/50">
-                  <TowerControl size={36} />
-                </div>
-                <div>
-                  <h1 className="text-3xl font-bold text-navy-900">District SP/CP Onboarding Report</h1>
-                  <p className="text-base text-gray-600">Compliance & system reporting status of all districts</p>
-                </div>
+          {/* --- Enhanced Header --- */}
+          <header className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 rounded-xl sm:rounded-2xl"></div>
+            <div className="relative p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col gap-3 sm:gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
+              <div className="flex-1">
+                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-black text-white drop-shadow-2xl leading-tight">
+                  District SP/CP Onboarding Report
+                </h1>
+                <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-white/90 font-bold mt-1 sm:mt-2 lg:mt-3 drop-shadow-lg">
+                  Compliance & system reporting status of all districts
+                </p>
               </div>
-              <nav className="text-sm font-medium text-gray-500" aria-label="Breadcrumb">
-                <ol className="flex items-center space-x-2">
-                  <li><a href="#" className="hover:text-blue-600">Dashboard</a></li>
-                  <li><ChevronRightIcon size={16} /></li>
-                  <li><a href="#" className="hover:text-blue-600">Reports</a></li>
-                  <li><ChevronRightIcon size={16} /></li>
-                  <li className="font-semibold text-gray-700">Onboarding</li>
+              <nav className="text-xs sm:text-sm font-bold text-white" aria-label="Breadcrumb">
+                <ol className="flex items-center space-x-2 sm:space-x-3 bg-white/20 backdrop-blur-lg rounded-xl sm:rounded-2xl px-3 sm:px-4 lg:px-6 py-2 sm:py-3 border border-white/30 shadow-lg">
+                  <li><a href="#" className="hover:text-yellow-300 transition-colors drop-shadow-md">Dashboard</a></li>
+                  <li><ChevronRightIcon size={14} className="sm:hidden text-white/70" /></li>
+                  <li><ChevronRightIcon size={18} className="hidden sm:block text-white/70 drop-shadow-md" /></li>
+                  <li><a href="#" className="hover:text-yellow-300 transition-colors drop-shadow-md">Reports</a></li>
+                  <li><ChevronRightIcon size={14} className="sm:hidden text-white/70" /></li>
+                  <li><ChevronRightIcon size={18} className="hidden sm:block text-white/70 drop-shadow-md" /></li>
+                  <li className="font-black text-yellow-300 drop-shadow-md">Onboarding</li>
                 </ol>
               </nav>
             </div>
           </header>
 
-          {/* --- Filter Bar --- */}
-          <GlassCard className="mb-8 bg-gradient-to-r from-blue-50/50 via-white/80 to-blue-50/50" noHover>
-            <div className="p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 flex-grow">
-                <SelectInput label="District" name="district" value={filters.district} onChange={handleFilterChange} options={districtOptions} />
-                <SelectInput label="Jurisdiction Type" name="jurisdiction" value={filters.jurisdiction} onChange={handleFilterChange} options={jurisdictionOptions} />
-                <SelectInput label="Onboard Status" name="onboarded" value={filters.onboarded} onChange={handleFilterChange} options={onbardedOptions} />
-                <SelectInput label="Sync Status" name="syncStatus" value={filters.syncStatus} onChange={handleFilterChange} options={syncStatusOptions} />
-              </div>
-              <div className="flex items-center gap-3 pt-4 md:pt-0 border-t md:border-t-0 md:border-l border-gray-200/80 md:pl-5">
-                <AppButton variant="primary" icon={Filter} onClick={() => {}}>Apply</AppButton>
-                <AppButton variant="secondary" icon={RefreshCw} className="px-3" onClick={handleResetFilters}>
-                  <span className="sr-only">Reset</span>
-                </AppButton>
+          {/* --- Enhanced Metric Cards --- */}
+          <section className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 lg:gap-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              <StatCard title="Total Districts" value={mockMetrics.totalDistricts.toString()} icon={Building} color="blue" />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <StatCard title="Onboarded" value={mockMetrics.onboardedDistricts.toString()} icon={CheckCircle2} color="green" />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <StatCard title="Total Incidents" value={mockMetrics.totalIncidents.toString()} icon={AlertTriangle} color="orange" />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              <StatCard title="Avg Compliance" value={`${mockMetrics.averageCompliance}%`} icon={TowerControl} color="purple" />
+            </motion.div>
+          </section>
+
+          {/* --- Enhanced Filter Bar --- */}
+          <GlassCard className="mb-4 sm:mb-6 lg:mb-8 bg-white/95 backdrop-blur-xl border border-gray-200/50 shadow-lg" noHover>
+            <div className="p-3 sm:p-4 lg:p-6 relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-pink-500/5 rounded-2xl"></div>
+              <div className="relative">
+                <div className="flex items-center gap-3 mb-4 sm:mb-6">
+                  <h3 className="text-lg sm:text-xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                    Filter District Status
+                  </h3>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
+                  <select name="district" value={filters.district} onChange={handleFilterChange} className="form-select-sm">
+                    {districtOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                  </select>
+                  <select name="jurisdiction" value={filters.jurisdiction} onChange={handleFilterChange} className="form-select-sm">
+                    {jurisdictionOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                  </select>
+                  <select name="onboarded" value={filters.onboarded} onChange={handleFilterChange} className="form-select-sm">
+                    {onbardedOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                  </select>
+                  <select name="syncStatus" value={filters.syncStatus} onChange={handleFilterChange} className="form-select-sm">
+                    {syncStatusOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                  </select>
+                  {/* <div className="relative">
+                    <input 
+                      type="text" 
+                      placeholder="Global search..." 
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="form-input-sm pl-9 w-full" 
+                    />
+                    <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                  </div> */}
+                </div>
+                <div className="flex items-center justify-between mt-4 pt-4 border-t border-gradient-to-r from-blue-200/50 via-purple-200/50 to-pink-200/50">
+                  <div className="flex items-center gap-3">
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 lg:px-6 py-2 sm:py-2.5 lg:py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300"
+                    >
+                      <Filter size={14} className="sm:hidden" />
+                      <Filter size={16} className="hidden sm:block" />
+                      <span className="hidden sm:inline">Apply Filters</span>
+                      <span className="sm:hidden">Filter</span>
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.02, rotate: 180 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="p-2 sm:p-2.5 lg:p-3 bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                      onClick={handleResetFilters}
+                    >
+                      <RefreshCw size={14} className="sm:hidden" />
+                      <RefreshCw size={16} className="hidden sm:block lg:hidden" />
+                      <RefreshCw size={18} className="hidden lg:block" />
+                    </motion.button>
+                  </div>
+                 
+                </div>
               </div>
             </div>
           </GlassCard>
 
-          {/* --- Contractor Table --- */}
-          <GlassCard noHover className="bg-white/90">
-            <div className="p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-gray-200/80">
-              <div className="relative flex-grow sm:flex-grow-0">
-                <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search by District..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full sm:w-72 pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                />
-              </div>
-              <div className="flex items-center gap-3">
-                <AppButton variant="exportPdf" icon={FileText} onClick={() => {}}>Export PDF</AppButton>
-                <AppButton variant="exportExcel" icon={FileIcon} onClick={() => {}}>Export Excel</AppButton>
+          {/* --- District Status Table --- */}
+          <GlassCard noHover className="bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30 backdrop-blur-xl border border-blue-200/50 shadow-xl shadow-blue-500/20">
+            {/* Global Search Bar */}
+            <div className="p-3 sm:p-4 md:p-6 border-b border-slate-200/50">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center justify-between">
+                <div className="flex-1 max-w-md">
+                  <div className="relative">
+                    <input 
+                      type="text" 
+                      placeholder="Search districts, SP/CP names..." 
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="w-full pl-10 pr-4 py-2.5 bg-white/80 backdrop-blur-sm border border-slate-300/50 rounded-lg text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200" 
+                    />
+                    <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                    {searchTerm && (
+                      <button
+                        onClick={() => setSearchTerm("")}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                      >
+                        <X size={12} />
+                      </button>
+                    )}
+                  </div>
+                </div>
+                <div className="flex gap-2 sm:gap-3">
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                  >
+                    <FileDown size={16} />
+                    <span className="hidden sm:inline">Export PDF</span>
+                    <span className="sm:hidden">PDF</span>
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-emerald-600 to-green-700 text-white rounded-lg text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                  >
+                    <FileSpreadsheet size={16} />
+                    <span className="hidden sm:inline">Export Excel</span>
+                    <span className="sm:hidden">Excel</span>
+                  </motion.button>
+                </div>
               </div>
             </div>
             
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto rounded-b-lg sm:rounded-b-xl">
               <table className="w-full min-w-[1400px] text-sm text-left">
                 <thead className="bg-blue-100/70 sticky top-0 backdrop-blur-sm">
                   <tr>
@@ -401,14 +550,17 @@ export default function DGPOnboardingReport() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200/50">
-                  {paginatedData.map((d) => (
+                  {paginatedData.map((d, index) => (
                     <motion.tr
                       key={d.id}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      whileHover={{ backgroundColor: 'rgba(239, 246, 255, 0.8)' }} // bg-blue-50/80
-                      transition={{ duration: 0.2 }}
-                      className="cursor-pointer"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                      whileHover={{ 
+                        backgroundColor: 'rgba(59, 130, 246, 0.05)', 
+                        scale: 1.005,
+                      }}
+                      className="cursor-pointer transition-all duration-300"
                     >
                       <td className="px-5 py-4 whitespace-nowrap font-semibold text-navy-800">{d.district}</td>
                       <td className="px-5 py-4 whitespace-nowrap text-gray-700 font-medium">
@@ -477,6 +629,52 @@ export default function DGPOnboardingReport() {
         </main>
 
       </motion.div>
+
+      {/* --- Global Styles --- */}
+      <style jsx global>{`
+        /* Define custom colors */
+        .bg-navy-700 { background-color: #1e3a8a; }
+        .hover\\:bg-navy-800:hover { background-color: #1c357a; }
+        .text-navy-800 { color: #1e3a8a; }
+        .text-navy-900 { color: #172554; }
+        .shadow-navy-500\\/30 { box-shadow: 0 10px 15px -3px rgb(30 58 138 / 0.3), 0 4px 6px -4px rgb(30 58 138 / 0.3); }
+        .text-gold-400 { color: #facc15; }
+        .border-sky-100 { border-color: #e0f2fe; }
+        .bg-sky-50 { background-color: #f0f9ff; }
+        .via-sky-50 { --tw-gradient-stops: var(--tw-gradient-from), #f0f9ff, var(--tw-gradient-to); }
+        .to-slate-100 { --tw-gradient-to: #f1f5f9; }
+
+        /* Form Input Styling */
+        .form-input, .form-select, .form-input-sm, .form-select-sm {
+          width: 100%;
+          font-size: 0.9rem;
+          border-radius: 0.5rem;
+          border: 1px solid #cbd5e1;
+          background-color: #ffffff;
+          box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+          transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-input, .form-select {
+           padding: 0.65rem 1rem;
+        }
+        .form-input-sm, .form-select-sm {
+           padding: 0.5rem 0.75rem;
+           font-size: 0.8rem;
+        }
+        .form-input:focus, .form-select:focus, .form-input-sm:focus, .form-select-sm:focus {
+          outline: none;
+          border-color: #2563eb;
+          box-shadow: 0 0 0 3px rgb(37 99 235 / 0.2);
+        }
+        .form-select, .form-select-sm {
+          appearance: none;
+          background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+          background-position: right 0.5rem center;
+          background-repeat: no-repeat;
+          background-size: 1.5em 1.5em;
+          padding-right: 2.5rem;
+        }
+      `}</style>
     </>
   );
 }

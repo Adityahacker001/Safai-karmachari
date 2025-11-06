@@ -9,6 +9,7 @@ import {
   ShieldCheck,
   ListFilter,
   RotateCcw,
+  RefreshCw,
   FileDown,
   Users,
   Briefcase,
@@ -307,28 +308,31 @@ const DirectionDetailModal = ({ direction, onClose }: { direction: Direction | n
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.9, opacity: 0, y: 50 }}
           transition={{ type: "spring", stiffness: 300, damping: 25 }}
-          className="bg-white rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden"
+          className="bg-white rounded-lg sm:rounded-xl md:rounded-2xl shadow-xl w-full max-w-sm sm:max-w-lg md:max-w-2xl lg:max-w-4xl max-h-[90vh] flex flex-col overflow-hidden mx-2 sm:mx-4"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Modal Header */}
-          <div className="flex items-center justify-between p-5 border-b border-slate-200 bg-slate-50">
-            <div className="flex items-center gap-3">
-              <span className="p-2 bg-navy-100 text-navy-700 rounded-full"><FileText size={20} /></span>
-              <h3 className="text-lg font-semibold text-navy-900">Direction Details</h3>
-              <span className="px-3 py-0.5 rounded-full bg-sky-100 text-sky-800 text-xs font-bold border border-sky-200">
-                {direction.id}
-              </span>
+          <div className="flex items-center justify-between p-3 sm:p-4 md:p-5 border-b border-slate-200 bg-slate-50">
+            <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+              <span className="p-1.5 sm:p-2 bg-navy-100 text-navy-700 rounded-full"><FileText size={16} className="sm:hidden" /><FileText size={20} className="hidden sm:block" /></span>
+              <div className="min-w-0 flex-1">
+                <h3 className="text-sm sm:text-base md:text-lg font-semibold text-navy-900 truncate">Direction Details</h3>
+                <span className="inline-block mt-1 sm:mt-0 sm:ml-2 px-2 sm:px-3 py-0.5 rounded-full bg-sky-100 text-sky-800 text-xs font-bold border border-sky-200 truncate max-w-full">
+                  {direction.id}
+                </span>
+              </div>
             </div>
-            <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition-colors">
-              <X size={24} />
+            <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition-colors p-1 sm:p-2 -mr-1 sm:-mr-2">
+              <X size={20} className="sm:hidden" />
+              <X size={24} className="hidden sm:block" />
             </button>
           </div>
           
           {/* Modal Content */}
-          <div className="p-6 overflow-y-auto">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="p-3 sm:p-4 md:p-6 overflow-y-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
               {/* Left Column (Meta) */}
-              <div className="md:col-span-1 bg-slate-50/80 p-4 rounded-xl border border-slate-200 space-y-4">
+              <div className="lg:col-span-1 bg-slate-50/80 p-3 sm:p-4 rounded-xl border border-slate-200 space-y-3 sm:space-y-4">
                 <InfoItem label="Status" value={<StatusBadge status={direction.status} />} icon={<AlertTriangle size={14} />} />
                 <InfoItem label="Days Pending" value={<DaysPendingBadge days={direction.daysPending} />} icon={<Clock size={14} />} />
                 <InfoItem label="Issuing Authority" value={direction.issuedBy} icon={<Landmark size={14} />} />
@@ -339,7 +343,7 @@ const DirectionDetailModal = ({ direction, onClose }: { direction: Direction | n
               </div>
 
               {/* Right Column (Details) */}
-              <div className="md:col-span-2 space-y-5">
+              <div className="lg:col-span-2 space-y-4 sm:space-y-5">
                 <div>
                   <h4 className="text-sm font-medium text-slate-500 mb-1">Full Directive Summary</h4>
                   <p className="text-slate-700 leading-relaxed">{direction.fullDescription}</p>
@@ -366,12 +370,16 @@ const DirectionDetailModal = ({ direction, onClose }: { direction: Direction | n
           </div>
           
           {/* Modal Footer */}
-          <div className="p-4 flex justify-end gap-3 bg-slate-50 border-t border-slate-200">
-            <StyledButton onClick={onClose} variant="secondary">
-              <X size={16} /> Close
+          <div className="p-3 sm:p-4 flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 bg-slate-50 border-t border-slate-200">
+            <StyledButton onClick={onClose} variant="secondary" className="text-xs sm:text-sm py-2 sm:py-2.5">
+              <X size={14} className="sm:hidden" />
+              <X size={16} className="hidden sm:block" />
+              Close
             </StyledButton>
-            <StyledButton onClick={() => {}} variant="primary">
-              <Printer size={16} /> Download Case Detail
+            <StyledButton onClick={() => {}} variant="primary" className="text-xs sm:text-sm py-2 sm:py-2.5">
+              <Printer size={14} className="sm:hidden" />
+              <Printer size={16} className="hidden sm:block" />
+              Download Case Detail
             </StyledButton>
           </div>
         </motion.div>
@@ -433,7 +441,19 @@ export default function DirectionReport() {
       .filter(d => filters.district === "All Districts" || d.district === filters.district)
       .filter(d => filters.issuedBy === "All Authorities" || d.issuedBy === filters.issuedBy)
       .filter(d => filters.status === "All Statuses" || d.status === filters.status)
-      .filter(d => d.summary.toLowerCase().includes(searchTerm.toLowerCase()) || d.id.toLowerCase().includes(searchTerm.toLowerCase()));
+      .filter(d => {
+        if (!searchTerm) return true;
+        const searchLower = searchTerm.toLowerCase();
+        return (
+          d.id.toLowerCase().includes(searchLower) ||
+          d.summary.toLowerCase().includes(searchLower) ||
+          d.district.toLowerCase().includes(searchLower) ||
+          d.issuedBy.toLowerCase().includes(searchLower) ||
+          d.status.toLowerCase().includes(searchLower) ||
+          d.dateReceived.toLowerCase().includes(searchLower) ||
+          (d.complianceDate ?? "").toLowerCase().includes(searchLower)
+        );
+      });
   }, [filters, searchTerm]);
   
   const paginatedDirections = useMemo(() => {
@@ -446,7 +466,7 @@ export default function DirectionReport() {
 
   if (!hasMounted) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-white via-sky-50 to-slate-100">
+      <div className="min-h-screen flex items-center justify-center">
         <Loader2 size={48} className="animate-spin text-blue-700" />
       </div>
     );
@@ -457,97 +477,158 @@ export default function DirectionReport() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen p-6 lg:p-10 bg-gradient-to-br from-white via-sky-50 to-slate-100"
+      className="min-h-screen p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8"
     >
-      {/* --- Header --- */}
-      <header className="max-w-7xl mx-auto mb-8">
-        {/* Breadcrumb */}
-        <nav className="flex items-center text-sm font-medium text-slate-500" aria-label="Breadcrumb">
-          <a href="#" className="hover:text-slate-700">DGP Dashboard</a>
-          <ChevronRight size={16} className="mx-1.5" />
-          <a href="#" className="hover:text-slate-700">Reports & Analytics</a>
-          <ChevronRight size={16} className="mx-1.5" />
-          <span className="text-slate-800 font-semibold">Direction Report</span>
-        </nav>
-        {/* Title */}
-        <div className="flex items-center justify-between mt-3">
-          <div className="flex items-center gap-4">
-            <div className="flex-shrink-0 w-14 h-14 flex items-center justify-center rounded-full bg-navy-700 text-gold-400 shadow-lg shadow-navy-500/30 border-2 border-white/50">
-              <ClipboardCheck size={32} />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-navy-900">Direction Report</h1>
-              <p className="text-sm text-slate-600">State-wide monitoring of directives & compliance.</p>
-            </div>
+      {/* --- Enhanced Header --- */}
+      <header className="max-w-7xl mx-auto mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 rounded-xl sm:rounded-2xl"></div>
+        <div className="relative p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col gap-3 sm:gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
+          <div className="flex-1">
+            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-black text-white drop-shadow-2xl leading-tight">
+              Direction Report
+            </h1>
+            <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-white/90 font-bold mt-1 sm:mt-2 lg:mt-3 drop-shadow-lg">
+              State-wide monitoring of directives & compliance
+            </p>
           </div>
+          <nav className="text-xs sm:text-sm font-bold text-white w-full lg:w-auto" aria-label="Breadcrumb">
+            <ol className="flex items-center space-x-1 sm:space-x-2 lg:space-x-3 bg-white/20 backdrop-blur-lg rounded-lg sm:rounded-xl px-2 sm:px-3 lg:px-6 py-2 sm:py-2.5 lg:py-3 border border-white/30 shadow-lg overflow-x-auto">
+              <li><a href="#" className="hover:text-yellow-300 transition-colors drop-shadow-md whitespace-nowrap">DGP Dashboard</a></li>
+              <li><ChevronRight size={12} className="md:hidden text-white/70" /></li>
+              <li><ChevronRight size={14} className="hidden md:block lg:hidden text-white/70" /></li>
+              <li><ChevronRight size={16} className="hidden lg:block text-white/70 drop-shadow-md" /></li>
+              <li><a href="#" className="hover:text-yellow-300 transition-colors drop-shadow-md whitespace-nowrap">Reports & Analytics</a></li>
+              <li><ChevronRight size={12} className="md:hidden text-white/70" /></li>
+              <li><ChevronRight size={14} className="hidden md:block lg:hidden text-white/70" /></li>
+              <li><ChevronRight size={16} className="hidden lg:block text-white/70 drop-shadow-md" /></li>
+              <li className="font-black text-yellow-300 drop-shadow-md whitespace-nowrap">Direction Report</li>
+            </ol>
+          </nav>
         </div>
       </header>
       
-      {/* --- Filter Panel --- */}
-      <GlassCard className="max-w-7xl mx-auto mb-8" noHover>
-        <div className="flex items-center gap-3 px-6 py-4 border-b border-sky-100">
-          <ListFilter size={18} className="text-blue-700" />
-          <h3 className="text-base font-semibold text-navy-800">Filter Directions</h3>
-        </div>
-        <div className="p-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
-            <select name="district" value={filters.district} onChange={handleFilterChange} className="form-select-sm">
-              {filterOptions.districts.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-            </select>
-            <select name="issuedBy" value={filters.issuedBy} onChange={handleFilterChange} className="form-select-sm">
-              {filterOptions.issuedBy.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-            </select>
-            <select name="status" value={filters.status} onChange={handleFilterChange} className="form-select-sm">
-              {filterOptions.statuses.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-            </select>
-            <select name="timePeriod" value={filters.timePeriod} onChange={handleFilterChange} className="form-select-sm">
-              {filterOptions.timePeriods.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-            </select>
-            <div className="relative col-span-2 lg:col-span-1">
-              <input 
-                type="text" 
-                placeholder="Search ID or summary..." 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="form-input-sm pl-9 w-full" 
-              />
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-            </div>
-            <StyledButton onClick={() => {}} variant="primary" className="h-full">
-              <Filter size={16} /> Apply
-            </StyledButton>
-             <StyledButton onClick={handleResetFilters} variant="secondary" className="h-full">
-              <RotateCcw size={16} /> Reset
-            </StyledButton>
-          </div>
-          <div className="flex justify-end items-center mt-4 pt-4 border-t border-sky-100">
-             <div className="flex gap-2">
-              <StyledButton onClick={() => {}} variant="exportPdf">
-                <FileDown size={16} /> PDF
-              </StyledButton>
-              <StyledButton onClick={() => {}} variant="exportExcel">
-                <FileSpreadsheet size={16} /> Excel
-              </StyledButton>
-            </div>
-          </div>
-        </div>
-      </GlassCard>
-
       {/* --- KPI Metrics --- */}
-      <section className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+      <section className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 lg:gap-6 mb-4 sm:mb-6 lg:mb-8">
         <StatCard title="Total Directions" value={mockKpis.totalDirections.value} icon={ClipboardCheck} color="blue" />
         <StatCard title="Complied" value={mockKpis.complied.value} icon={CheckCircle} color="green" />
         <StatCard title="Pending" value={mockKpis.pending.value} icon={Clock} color="amber" />
         <StatCard title="Avg. Pending Days" value={mockKpis.avgPendingDays.value} icon={AlertTriangle} color="red" />
       </section>
-      
+
+      {/* --- Enhanced Filter Panel --- */}
+      <GlassCard className="max-w-7xl mx-auto mb-3 sm:mb-4 md:mb-6 lg:mb-8 bg-white/95 backdrop-blur-xl border border-gray-200/50 shadow-lg" noHover>
+        <div className="p-3 sm:p-4 md:p-5 lg:p-6 relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-pink-500/5 rounded-2xl"></div>
+          <div className="relative">
+            <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4 md:mb-6">
+              <h3 className="text-base sm:text-lg md:text-xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                Filter Directions
+              </h3>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
+              <select name="district" value={filters.district} onChange={handleFilterChange} className="form-select-sm">
+                {filterOptions.districts.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+              </select>
+              <select name="issuedBy" value={filters.issuedBy} onChange={handleFilterChange} className="form-select-sm">
+                {filterOptions.issuedBy.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+              </select>
+              <select name="status" value={filters.status} onChange={handleFilterChange} className="form-select-sm">
+                {filterOptions.statuses.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+              </select>
+              <select name="timePeriod" value={filters.timePeriod} onChange={handleFilterChange} className="form-select-sm">
+                {filterOptions.timePeriods.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+              </select>
+            </div>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gradient-to-r from-blue-200/50 via-purple-200/50 to-pink-200/50 gap-3 sm:gap-0">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 lg:px-6 py-2 sm:py-2.5 lg:py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300"
+                >
+                  <Filter size={14} className="sm:hidden" />
+                  <Filter size={16} className="hidden sm:block" />
+                  <span className="hidden sm:inline">Apply Filters</span>
+                  <span className="sm:hidden">Filter</span>
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.02, rotate: 180 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="p-2 sm:p-2.5 lg:p-3 bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                  onClick={handleResetFilters}
+                >
+                  <RefreshCw size={14} className="sm:hidden" />
+                  <RefreshCw size={16} className="hidden sm:block lg:hidden" />
+                  <RefreshCw size={18} className="hidden lg:block" />
+                </motion.button>
+              </div>
+              {/* <div className="flex gap-2 sm:gap-3 w-full sm:w-auto justify-stretch sm:justify-end">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg text-xs sm:text-sm font-semibold shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40 transition-all duration-300 flex-1 sm:flex-initial"
+                >
+                  <FileDown size={14} className="sm:hidden" />
+                  <FileDown size={16} className="hidden sm:block" />
+                  PDF
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-emerald-600 to-green-700 text-white rounded-lg text-xs sm:text-sm font-semibold shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/40 transition-all duration-300 flex-1 sm:flex-initial"
+                >
+                  <FileSpreadsheet size={14} className="sm:hidden" />
+                  <FileSpreadsheet size={16} className="hidden sm:block" />
+                  Excel
+                </motion.button>
+              </div> */}
+            </div>
+          </div>
+        </div>
+      </GlassCard>
+
       {/* --- Main Content (Table) --- */}
       <div className="max-w-7xl mx-auto">
         
-        {/* --- Main Table --- */}
-        <GlassCard noHover>
-          <div className="overflow-x-auto">
-            <table className="table-auto w-full">
+        {/* --- Enhanced Main Table --- */}
+        <GlassCard className="bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30 backdrop-blur-xl border border-blue-200/50 shadow-xl shadow-blue-500/20" noHover>
+          {/* Search Bar Above Table */}
+          <div className="p-3 sm:p-4 md:p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 border-b border-gray-200/80">
+            <div className="relative w-full sm:w-auto sm:flex-grow-0">
+              <Search size={16} className="sm:hidden absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search size={18} className="hidden sm:block absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search directions..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full sm:w-64 md:w-72 pl-9 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-2.5 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              />
+            </div>
+            <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="flex items-center justify-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-lg text-xs sm:text-sm font-semibold shadow-lg transition-all duration-300 flex-1 sm:flex-initial"
+              >
+                <FileDown size={14} className="sm:hidden" />
+                <FileDown size={16} className="hidden sm:block" />
+                <span className="hidden sm:inline">Export </span>PDF
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="flex items-center justify-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-lg text-xs sm:text-sm font-semibold shadow-lg transition-all duration-300 flex-1 sm:flex-initial"
+              >
+                <FileSpreadsheet size={14} className="sm:hidden" />
+                <FileSpreadsheet size={16} className="hidden sm:block" />
+                <span className="hidden sm:inline">Export </span>Excel
+              </motion.button>
+            </div>
+          </div>
+          <div className="overflow-x-auto -mx-3 sm:-mx-4 md:-mx-5 px-3 sm:px-4 md:px-5">
+            <table className="table-auto w-full min-w-[800px]">
               <thead className="sticky top-0 bg-slate-100/80 backdrop-blur-sm z-10">
                 <tr>
                   <th className="th-cell">Direction ID</th>
@@ -562,17 +643,21 @@ export default function DirectionReport() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-slate-100">
-                {paginatedDirections.map((d) => (
+                {paginatedDirections.map((d, index) => (
                   <motion.tr
                     key={d.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.05 }}
-                    className={
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    whileHover={{ 
+                      backgroundColor: 'rgba(59, 130, 246, 0.05)', 
+                      scale: 1.005,
+                    }}
+                    className={`cursor-pointer transition-all duration-300 ${
                       d.status === "Pending" ? 'bg-red-50/70 hover:bg-red-100/70' : 
                       d.status === "In-Process" ? 'bg-amber-50/70 hover:bg-amber-100/70' :
-                      'hover:bg-sky-50/50'
-                    }
+                      'bg-white hover:bg-blue-50/50'
+                    }`}
                   >
                     <td className="td-cell font-medium text-navy-800">{d.id}</td>
                     <td className="td-cell">{d.issuedBy}</td>
@@ -600,27 +685,33 @@ export default function DirectionReport() {
           </div>
           
           {/* Pagination */}
-          <div className="p-4 flex flex-col md:flex-row justify-between items-center border-t border-sky-100">
-            <div className="flex items-center gap-2 mb-3 md:mb-0">
-              <span className="text-sm text-slate-600">Rows per page:</span>
-              <select className="form-select-sm p-1.5" defaultValue="10">
-                <option>10</option>
-                <option>25</option>
-                <option>50</option>
-              </select>
-              <span className="text-sm text-slate-600">
+          <div className="p-3 sm:p-4 flex flex-col sm:flex-row justify-between items-center border-t border-sky-100 gap-3 sm:gap-4">
+            <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 text-center sm:text-left">
+              <div className="flex items-center gap-2">
+                <span className="text-xs sm:text-sm text-slate-600 whitespace-nowrap">Rows per page:</span>
+                <select className="form-select-sm p-1.5 text-xs sm:text-sm" defaultValue="10">
+                  <option>10</option>
+                  <option>25</option>
+                  <option>50</option>
+                </select>
+              </div>
+              <span className="text-xs sm:text-sm text-slate-600 whitespace-nowrap">
                 Showing {paginatedDirections.length} of {filteredDirections.length} results
               </span>
             </div>
-            <div className="flex gap-2">
-              <StyledButton onClick={() => setCurrentPage(p => Math.max(p - 1, 1))} disabled={currentPage === 1} variant="secondary" className="px-3 py-1.5">
-                <ArrowLeft size={16} /> Previous
+            <div className="flex items-center gap-1 sm:gap-2">
+              <StyledButton onClick={() => setCurrentPage(p => Math.max(p - 1, 1))} disabled={currentPage === 1} variant="secondary" className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm">
+                <ArrowLeft size={14} className="sm:hidden" />
+                <ArrowLeft size={16} className="hidden sm:block" />
+                <span className="hidden sm:inline">Previous</span>
               </StyledButton>
-              <span className="px-4 py-1.5 text-sm font-medium text-slate-700">
+              <span className="px-2 sm:px-4 py-1.5 text-xs sm:text-sm font-medium text-slate-700 whitespace-nowrap">
                 Page {currentPage} of {totalPages}
               </span>
-              <StyledButton onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))} disabled={currentPage === totalPages} variant="secondary" className="px-3 py-1.5">
-                Next <ArrowRight size={16} />
+              <StyledButton onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))} disabled={currentPage === totalPages} variant="secondary" className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm">
+                <span className="hidden sm:inline">Next</span>
+                <ArrowRight size={14} className="sm:hidden" />
+                <ArrowRight size={16} className="hidden sm:block" />
               </StyledButton>
             </div>
           </div>
@@ -629,11 +720,13 @@ export default function DirectionReport() {
       </div>
 
       {/* --- Footer --- */}
-      <footer className="text-center text-slate-500 text-sm mt-12 pb-6 max-w-7xl mx-auto">
-        <p className="italic">“Data monitored by DGP Office — Compliance Governance System”</p>
-        <div className="flex items-center justify-center gap-4 mt-2">
-          <a href="#" className="flex items-center gap-1.5 text-xs text-slate-600 hover:text-navy-700 transition-colors">
-            <HelpCircle size={14} /> Help & Support
+      <footer className="text-center text-slate-500 text-xs sm:text-sm mt-8 sm:mt-10 lg:mt-12 pb-4 sm:pb-6 max-w-7xl mx-auto">
+        <p className="italic px-4">"Data monitored by DGP Office — Compliance Governance System"</p>
+        <div className="flex items-center justify-center gap-3 sm:gap-4 mt-2 px-4">
+          <a href="#" className="flex items-center gap-1 sm:gap-1.5 text-xs text-slate-600 hover:text-navy-700 transition-colors">
+            <HelpCircle size={12} className="sm:hidden" />
+            <HelpCircle size={14} className="hidden sm:block" />
+            Help & Support
           </a>
         </div>
       </footer>

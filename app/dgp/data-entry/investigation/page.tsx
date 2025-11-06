@@ -418,7 +418,7 @@ export default function InvestigationProgressEntry() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
-      className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50"
+      className="min-h-screen p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8"
     >
       {/* --- Enhanced Sticky Header --- */}
       <header className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 border-b-4 border-gradient-to-r from-yellow-400 to-orange-500 shadow-2xl px-3 sm:px-4 md:px-6 lg:px-10 overflow-hidden">

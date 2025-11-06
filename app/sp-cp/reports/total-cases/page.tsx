@@ -85,16 +85,22 @@ const initialTableData: CaseData[] = [
     { slNo: 5, caseId: 'CASE005', incidentId: 'INC035', policeStation: 'Kolkata South', firNo: 'FIR-111/2025', investigationStatus: 'Completed', chargeSheetFiled: 'Yes', compensationPaid: 'Yes' },
 ];
 
-const initialChartPieData: PieChartEntry[] = [
+const chargeSheetChartData: PieChartEntry[] = [
     { name: 'Charge Sheet Filed', value: 98 },
     { name: 'Charge Sheet Pending', value: 147 },
+];
+
+const compensationChartData: PieChartEntry[] = [
     { name: 'Compensation Paid', value: 165 },
     { name: 'Compensation Pending', value: 80 },
 ];
 
-const COLORS: { [key: string]: string } = {
+const CHARGE_SHEET_COLORS: { [key: string]: string } = {
     'Charge Sheet Filed': '#10B981', // green-500
     'Charge Sheet Pending': '#F59E0B', // amber-500
+};
+
+const COMPENSATION_COLORS: { [key: string]: string } = {
     'Compensation Paid': '#34D399', // emerald-400
     'Compensation Pending': '#EF4444', // red-500
 };
@@ -134,7 +140,8 @@ export default function TotalCasesReportPage() {
     // --- State ---
     const [summaryMetrics, setSummaryMetrics] = useState(initialSummaryMetrics);
     const [tableData, setTableData] = useState(initialTableData);
-    const [chartPieData, setChartPieData] = useState(initialChartPieData);
+    const [chargeSheetData, setChargeSheetData] = useState(chargeSheetChartData);
+    const [compensationData, setCompensationData] = useState(compensationChartData);
 
     // Filter State
     const [searchQuery, setSearchQuery] = useState("");
@@ -158,7 +165,8 @@ export default function TotalCasesReportPage() {
     const handleRefresh = () => {
         alert("Refreshing data (simulation)...");
         setSummaryMetrics(initialSummaryMetrics);
-        setChartPieData(initialChartPieData);
+        setChargeSheetData(chargeSheetChartData);
+        setCompensationData(compensationChartData);
         resetFilters();
     };
 
@@ -408,22 +416,22 @@ export default function TotalCasesReportPage() {
             </div>
 
             {/* 4️⃣ Dashboard Visualization & Analytics */}
-            <div className="grid grid-cols-1 gap-8">
-                {/* Donut Chart */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Charge Sheet Status Chart */}
                 <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
                    <h3 className="text-xl font-bold mb-6 text-slate-800 dark:text-slate-200 flex items-center gap-3">
-                       <LucidePieChart className="text-emerald-600" size={22} /> {/* Use PieChart icon */}
-                       Charge Sheet vs Compensation Status
+                       <LucidePieChart className="text-green-600" size={22} />
+                       Charge Sheet Status
                    </h3>
-                    <div className="h-[350px]">
+                    <div className="h-[300px]">
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
                                 <Pie
-                                    data={chartPieData}
+                                    data={chargeSheetData}
                                     cx="50%"
                                     cy="50%"
-                                    innerRadius={70}
-                                    outerRadius={110}
+                                    innerRadius={60}
+                                    outerRadius={100}
                                     fill="#8884d8"
                                     paddingAngle={3}
                                     dataKey="value"
@@ -431,11 +439,59 @@ export default function TotalCasesReportPage() {
                                     label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
                                     className="text-xs focus:outline-none"
                                 >
-                                    {chartPieData.map((entry, index) => (
+                                    {chargeSheetData.map((entry, index) => (
                                         <Cell
-                                            key={`cell-${index}`}
-                                            fill={COLORS[entry.name as keyof typeof COLORS]}
-                                            stroke={"#FFF"} // White stroke
+                                            key={`charge-cell-${index}`}
+                                            fill={CHARGE_SHEET_COLORS[entry.name as keyof typeof CHARGE_SHEET_COLORS]}
+                                            stroke={"#FFF"}
+                                            strokeWidth={2}
+                                            className="focus:outline-none transition-opacity duration-200 hover:opacity-80"
+                                        />
+                                    ))}
+                                </Pie>
+                                <Tooltip
+                                     contentStyle={{
+                                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                                        border: '1px solid #cbd5e1',
+                                        borderRadius: '0.75rem',
+                                        boxShadow: '0 8px 16px rgba(0,0,0,0.1)',
+                                    }}
+                                     labelStyle={{ fontWeight: 'bold', color: '#1e293b' }}
+                                     itemStyle={{ fontSize: '12px' }}
+                                />
+                                <Legend iconType="circle" wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+
+                {/* Compensation Status Chart */}
+                <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+                   <h3 className="text-xl font-bold mb-6 text-slate-800 dark:text-slate-200 flex items-center gap-3">
+                       <LucidePieChart className="text-emerald-600" size={22} />
+                       Compensation Status
+                   </h3>
+                    <div className="h-[300px]">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                                <Pie
+                                    data={compensationData}
+                                    cx="50%"
+                                    cy="50%"
+                                    innerRadius={60}
+                                    outerRadius={100}
+                                    fill="#8884d8"
+                                    paddingAngle={3}
+                                    dataKey="value"
+                                    labelLine={false}
+                                    label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
+                                    className="text-xs focus:outline-none"
+                                >
+                                    {compensationData.map((entry, index) => (
+                                        <Cell
+                                            key={`compensation-cell-${index}`}
+                                            fill={COMPENSATION_COLORS[entry.name as keyof typeof COMPENSATION_COLORS]}
+                                            stroke={"#FFF"}
                                             strokeWidth={2}
                                             className="focus:outline-none transition-opacity duration-200 hover:opacity-80"
                                         />

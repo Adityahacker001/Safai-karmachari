@@ -325,7 +325,7 @@ export default function App() {
   return (
     <>
       {/* --- Main Container --- */}
-      <div className="min-h-screen w-full bg-gradient-to-br from-blue-50 via-white to-purple-50 p-3 sm:p-4 md:p-6 lg:p-8 text-slate-800 font-sans">
+      <div className="min-h-screen w-full p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 text-slate-800 font-sans">
         
         {/* --- Main Content with Fade-in Animation --- */}
         <motion.div
