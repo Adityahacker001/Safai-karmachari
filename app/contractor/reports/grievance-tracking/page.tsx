@@ -122,23 +122,34 @@ export default function GrievanceTrackingReportPage() {
     };
 
     return (
-        <div className="min-h-screen w-full max-w-full sm:max-w-full md:max-w-7xl mx-auto p-4 sm:p-6 md:p-12 space-y-6 sm:space-y-8 md:space-y-10">
-            <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
-                <div className="text-center sm:text-left">
-                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Grievance Tracking Report</h1>
-                    <p className="text-gray-600 mt-2 sm:mt-3 text-base sm:text-lg md:text-xl">A historical log and analytical overview of all worker grievances.</p>
+        <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">
+            {/* Enhanced Header */}
+            <header className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 rounded-xl sm:rounded-2xl"></div>
+                <div className="relative p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col space-y-2 sm:space-y-3 md:space-y-4">
+                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
+                        <div>
+                            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-black text-white drop-shadow-2xl leading-tight">
+                                Grievance Tracking Report
+                            </h1>
+                            <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-white/90 font-bold drop-shadow-lg">
+                                A historical log and analytical overview of all worker grievances
+                            </p>
+                        </div>
+                        <div className="flex items-center space-x-4">
+                            <Button
+                                variant="outline"
+                                className="bg-white/20 text-white border-white/30 hover:bg-white/30 px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl transition-all duration-200 text-sm sm:text-base backdrop-blur-sm"
+                            >
+                                <Download className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" />
+                                <span className="hidden sm:inline">Export History (CSV)</span>
+                                <span className="sm:hidden">Export</span>
+                            </Button>
+                        </div>
+                    </div>
                 </div>
-                <div className="flex items-center space-x-4">
-                    <Button
-                        variant="outline"
-                        className="text-gray-700 border-gray-300 hover:bg-gray-100 px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl transition-all duration-200 text-sm sm:text-base"
-                    >
-                        <Download className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" />
-                        <span className="hidden sm:inline">Export History (CSV)</span>
-                        <span className="sm:hidden">Export</span>
-                    </Button>
-                </div>
-            </div>
+            </header>
 
             {/* Grievance Analytics KPIs */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">

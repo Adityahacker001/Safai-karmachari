@@ -3,6 +3,7 @@
 import { contractorTheme } from '@/lib/theme';
 import { cn } from '@/lib/utils';
 import DashboardLayout from '@/components/layout/dashboard-layout';
+import StatCard from '@/components/ui/stat-card';
 import {
   Shield,
   AlertTriangle,
@@ -99,68 +100,87 @@ const pieChartConfig = {
 
 export default function NodalDashboard() {
   return (
-    <div className="min-h-screen p-3 sm:p-4 md:p-6 lg:p-8 bg-gray-50">
+    <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">
       <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6 lg:space-y-8">
-        <h1 className="text-2xl sm:text-3xl font-bold text-slate-800">Nodal Officer Dashboard</h1>
+        {/* Enhanced Header */}
+        <header className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 rounded-xl sm:rounded-2xl"></div>
+          <div className="relative p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col space-y-2 sm:space-y-3 md:space-y-4">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
+              <div className="flex-1 flex items-center gap-4">
+                <Shield className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-white drop-shadow-2xl" />
+                <div>
+                  <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-black text-white drop-shadow-2xl leading-tight">
+                    Nodal Officer Dashboard
+                  </h1>
+                  <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/90 font-bold drop-shadow-lg">
+                    Comprehensive oversight and management platform
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
 
         {/* Dashboard Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 mb-4 sm:mb-6">
-          {/* Row 1: 3 Cards */}
-          <div className={cn(contractorTheme.kpiCard.base, 'bg-gradient-to-br from-blue-500 to-blue-700')}>
-            <Building className={cn(contractorTheme.kpiCard.icon)} strokeWidth={1} />
-            <p className="text-base font-medium text-white/80">Total Contractors</p>
-            <p className="text-4xl font-bold">28</p>
-            <p className="text-sm text-white/80 mt-1">Registered contractors</p>
-          </div>
-          <div className={cn(contractorTheme.kpiCard.base, 'bg-gradient-to-br from-green-500 to-emerald-600')}>
-            <Award className={cn(contractorTheme.kpiCard.icon)} strokeWidth={1} />
-            <p className="text-base font-medium text-white/80">Total Workers</p>
-            <p className="text-4xl font-bold">1,247</p>
-            <p className="text-sm text-white/80 mt-1">Registered workers</p>
-          </div>
-          <div className={cn(contractorTheme.kpiCard.base, 'bg-gradient-to-br from-amber-500 to-yellow-600')}>
-            <FileSearch className={cn(contractorTheme.kpiCard.icon)} strokeWidth={1} />
-            <p className="text-base font-medium text-white/80">Total Grievances</p>
-            <p className="text-4xl font-bold">47</p>
-            <p className="text-sm text-white/80 mt-1">Resolved: 35 | Pending: 8 | Escalated: 4</p>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
+          <StatCard
+            title="Total Contractors"
+            value="28"
+            subtitle="Registered contractors"
+            icon={Building}
+            color="blue"
+          />
+          <StatCard
+            title="Total Workers"
+            value="1,247"
+            subtitle="Registered workers"
+            icon={Award}
+            color="green"
+          />
+          <StatCard
+            title="Total Grievances"
+            value="47"
+            subtitle="Resolved: 35 | Pending: 8 | Escalated: 4"
+            icon={FileSearch}
+            color="amber"
+          />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Row 2: 3 Cards */}
-          <div className={cn(contractorTheme.kpiCard.base, 'bg-gradient-to-br from-teal-500 to-cyan-600')}>
-            <Users className={cn(contractorTheme.kpiCard.icon)} strokeWidth={1} />
-            <p className="text-base font-medium text-white/80">Today's Attendance</p>
-            <p className="text-4xl font-bold">1125/1,247</p>
-            <p className="text-sm text-white/80 mt-1">90%</p>
-          </div>
-          <div className={cn(contractorTheme.kpiCard.base, 'bg-gradient-to-br from-fuchsia-600 to-pink-600')}>
-            <Award className={cn(contractorTheme.kpiCard.icon)} strokeWidth={1} />
-            <p className="text-base font-medium text-white/80">Recognition Pending</p>
-            <p className="text-4xl font-bold">12</p>
-            <p className="text-sm text-white/80 mt-1">Nominations to review</p>
-          </div>
-          {/* Police Case Tracker card (replaces Contractors Monitored) */}
-          <div>
-            <GradientCard sx={{ background: 'linear-gradient(135deg, #d32f2f 0%, #ff7043 100%)' }}>
-              <CardContent>
-                <CardIcon>
-                  <LocalPoliceIcon sx={{ fontSize: 'inherit' }} />
-                </CardIcon>
-                <Typography variant="h4" component="div" fontWeight="bold">
-                  15
-                </Typography>
-                <Typography>Total Cases</Typography>
-                <Typography variant="caption">FIR Lodged: 12 | Pending: 3</Typography>
-              </CardContent>
-            </GradientCard>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
+          <StatCard
+            title="Today's Attendance"
+            value="1125/1,247"
+            subtitle="90%"
+            icon={Users}
+            color="sky"
+          />
+          <StatCard
+            title="Recognition Pending"
+            value="12"
+            subtitle="Nominations to review"
+            icon={Award}
+            color="pink"
+          />
+          <StatCard
+            title="Total Cases"
+            value="15"
+            subtitle="FIR Lodged: 12 | Pending: 3"
+            icon={Shield}
+            color="red"
+          />
         </div>
 
         {/* Secondary Metrics */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-          <div className={cn(contractorTheme.card.container, 'lg:col-span-3 bg-white')}>
-            <div className={cn(contractorTheme.card.content, 'p-6')}>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Grievance Resolution Trends</h3>
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 sm:gap-6">
+          <div className="lg:col-span-3 bg-white/95 backdrop-blur-xl shadow-xl border border-white/20 rounded-2xl sm:rounded-3xl overflow-hidden">
+            <div className="bg-gradient-to-r from-emerald-600/90 to-teal-600/90 text-white p-4 sm:p-6 md:p-8">
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold flex items-center gap-3">
+                <BarChart3 className="h-6 w-6 sm:h-8 sm:w-8"/>
+                Grievance Resolution Trends
+              </h3>
+            </div>
+            <div className="p-4 sm:p-6">
               <ChartContainer config={barChartConfig} className="min-h-[200px] w-full">
                 <BarChart accessibilityLayer data={barChartData}>
                   <CartesianGrid vertical={false} />
@@ -180,9 +200,14 @@ export default function NodalDashboard() {
               </ChartContainer>
             </div>
           </div>
-          <div className={cn(contractorTheme.card.container, 'lg:col-span-2 bg-white')}>
-            <div className={cn(contractorTheme.card.content, 'p-6')}>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Compliance Status Distribution</h3>
+          <div className="lg:col-span-2 bg-white/95 backdrop-blur-xl shadow-xl border border-white/20 rounded-2xl sm:rounded-3xl overflow-hidden">
+            <div className="bg-gradient-to-r from-purple-600/90 to-violet-600/90 text-white p-4 sm:p-6 md:p-8">
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold flex items-center gap-3">
+                <TrendingUp className="h-6 w-6 sm:h-8 sm:w-8"/>
+                Compliance Status
+              </h3>
+            </div>
+            <div className="p-4 sm:p-6">
               <ChartContainer config={pieChartConfig} className="min-h-[200px] w-full">
                 <PieChart>
                   <ChartTooltip content={<ChartTooltipContent nameKey="status" />} />

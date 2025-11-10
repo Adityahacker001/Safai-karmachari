@@ -31,27 +31,33 @@ export default function GrievanceEntryPage() {
   ];
 
   return (
-    // Main container
-    <div className="min-h-screen w-full max-w-full sm:max-w-full md:max-w-7xl mx-auto p-4 sm:p-6 md:p-12 space-y-6 sm:space-y-8 md:space-y-10">
-      <div className="text-center sm:text-left">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-          Log a New Grievance
-        </h2>
-        <p className="text-gray-600 mt-2 sm:mt-3 text-base sm:text-lg md:text-xl">Submit a new grievance on behalf of a worker.</p>
-      </div>
+    <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">
+      {/* Enhanced Header */}
+      <header className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 rounded-xl sm:rounded-2xl"></div>
+        <div className="relative p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col gap-2 sm:gap-3">
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-black text-white drop-shadow-2xl leading-tight">
+            Log a New Grievance
+          </h1>
+          <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-white/90 font-bold drop-shadow-lg">
+            Submit a new grievance on behalf of a worker.
+          </p>
+        </div>
+      </header>
 
-      <Card className="w-full max-w-full sm:max-w-full md:max-w-6xl mx-auto bg-white/95 backdrop-blur-sm shadow-2xl border border-gray-100 rounded-2xl sm:rounded-3xl overflow-hidden transform transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1">
-        <CardHeader className="p-4 sm:p-6 md:p-8 lg:p-10 bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg">
-          <CardTitle className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold">
+      <Card className="w-full bg-white/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl overflow-hidden">
+        <CardHeader className="p-4 sm:p-6 bg-gradient-to-r from-red-600/90 to-orange-600/90 text-white">
+          <CardTitle className="text-lg sm:text-xl md:text-2xl font-bold">
             <span className="break-words">New Grievance Form</span>
           </CardTitle>
-          <CardDescription className="text-indigo-100 mt-2 sm:mt-3 text-sm sm:text-base md:text-lg">
+          <CardDescription className="text-white/90 mt-2 text-sm sm:text-base">
             Fill in the details below to formally record a worker's grievance. This will generate a new Case ID.
           </CardDescription>
         </CardHeader>
-        <CardContent className="p-4 sm:p-6 md:p-8 lg:p-10">
+        <CardContent className="p-4 sm:p-6">
           <form className="space-y-6 sm:space-y-8">
-            <div className="p-4 sm:p-6 md:p-8 border border-gray-200 rounded-xl sm:rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:border-blue-300">
+            <div className="p-4 sm:p-6 border border-gray-200 rounded-xl bg-white/95 backdrop-blur-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:border-blue-300">
               <div className="flex items-center space-x-3 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-gray-200">
                 <FileText className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600"/>
                 <h3 className="text-lg sm:text-xl font-semibold text-gray-800">Grievance Details</h3>
@@ -115,7 +121,7 @@ export default function GrievanceEntryPage() {
             </div>
           </form>
         </CardContent>
-        <CardFooter className="flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4 p-4 sm:p-6 md:p-8 lg:p-10 pt-4 sm:pt-6 border-t border-gray-200">
+        <CardFooter className="flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4 p-4 sm:p-6 pt-4 border-t border-gray-200">
           <Button type="submit" className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold text-lg sm:text-xl py-2.5 sm:py-3.5 px-8 sm:px-10 rounded-lg sm:rounded-xl shadow-xl transition-all duration-400 ease-in-out transform hover:scale-105 hover:shadow-2xl order-1">
             <MessageSquarePlus className="h-5 w-5 sm:h-6 sm:w-6 mr-2 sm:mr-3" />
             Submit Grievance

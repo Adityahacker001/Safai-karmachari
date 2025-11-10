@@ -13,37 +13,82 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Calendar, UploadCloud, ShieldCheck } from "lucide-react";
+import StatCard from '@/components/ui/stat-card';
+import { Calendar, UploadCloud, ShieldCheck, FileText, Clock, CheckCircle2, AlertCircle } from "lucide-react";
 
 export default function GrievanceResolutionForm() {
   const [status, setStatus] = useState("");
 
+  // Mock data for statistics
+  const grievanceStats = {
+    total: 47,
+    pending: 12,
+    resolved: 28,
+    escalated: 7
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 p-8">
-      {/* Header at the very top, full width */}
-  <div className="mb-20">
-        <h1 className="text-3xl font-extrabold bg-gradient-to-r from-indigo-600 via-pink-600 to-yellow-500 bg-clip-text text-transparent">Grievance Resolution Form</h1>
-        <p className="text-gray-600 mt-1 text-base sm:text-lg">Nodal Officer panel for verifying, documenting, and resolving grievances</p>
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
+      {/* Header Card */}
+      <div className="bg-gradient-to-r from-blue-500 via-blue-600 to-purple-600 rounded-2xl p-6 sm:p-8 mb-6 text-white">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
+          Grievance Resolution Form
+        </h1>
+        <p className="text-blue-100 mt-2 text-sm sm:text-base lg:text-lg">
+          Nodal Officer panel for verifying, documenting, and resolving grievances
+        </p>
       </div>
-  <Card className="w-full max-w-5xl mx-auto shadow-xl border border-gray-200 rounded-xl bg-white">
-  <CardContent className="space-y-4 py-4">
+
+      {/* Summary Cards - Using StatCard Component */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6">
+        <StatCard
+          title="Total Grievances"
+          value={grievanceStats.total}
+          subtitle="This month"
+          icon={FileText}
+          color="blue"
+        />
+        <StatCard
+          title="Pending Review"
+          value={grievanceStats.pending}
+          subtitle="Awaiting action"
+          icon={Clock}
+          color="amber"
+        />
+        <StatCard
+          title="Resolved"
+          value={grievanceStats.resolved}
+          subtitle="Successfully closed"
+          icon={CheckCircle2}
+          color="green"
+        />
+        <StatCard
+          title="Escalated"
+          value={grievanceStats.escalated}
+          subtitle="Higher authority"
+          icon={AlertCircle}
+          color="red"
+        />
+      </div>
+      <Card className="w-full max-w-5xl mx-auto shadow-lg rounded-2xl bg-white">
+        <CardContent className="space-y-6 p-6 sm:p-8">
 
           {/* Case Information */}
           <section>
             <h3 className="text-lg font-semibold text-blue-700 mb-4">Case Information</h3>
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div>
-                <Label htmlFor="grievanceId">Grievance ID</Label>
-                <Input id="grievanceId" placeholder="e.g., GRV-2024-001" />
+                <Label htmlFor="grievanceId" className="text-sm font-semibold text-slate-700">Grievance ID</Label>
+                <Input id="grievanceId" placeholder="e.g., GRV-2024-001" className="mt-1" />
               </div>
               <div>
-                <Label htmlFor="date">Date of Submission</Label>
-                <Input id="date" type="date" />
+                <Label htmlFor="date" className="text-sm font-semibold text-slate-700">Date of Submission</Label>
+                <Input id="date" type="date" className="mt-1" />
               </div>
               <div>
-                <Label htmlFor="category">Category of Grievance</Label>
+                <Label htmlFor="category" className="text-sm font-semibold text-slate-700">Category of Grievance</Label>
                 <Select>
-                  <SelectTrigger>
+                  <SelectTrigger className="mt-1">
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
                   <SelectContent>
@@ -56,8 +101,8 @@ export default function GrievanceResolutionForm() {
                 </Select>
               </div>
               <div>
-                <Label htmlFor="zone">Zone / Location</Label>
-                <Input id="zone" placeholder="e.g., East Delhi Zone" />
+                <Label htmlFor="zone" className="text-sm font-semibold text-slate-700">Zone / Location</Label>
+                <Input id="zone" placeholder="e.g., East Delhi Zone" className="mt-1" />
               </div>
             </div>
           </section>
@@ -65,14 +110,14 @@ export default function GrievanceResolutionForm() {
           {/* Reporter Details */}
           <section>
             <h3 className="text-lg font-semibold text-purple-700 mb-4">Reporter Details</h3>
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div>
-                <Label htmlFor="workerName">Worker Name</Label>
-                <Input id="workerName" placeholder="Enter name if not anonymous" />
+                <Label htmlFor="workerName" className="text-sm font-semibold text-slate-700">Worker Name</Label>
+                <Input id="workerName" placeholder="Enter name if not anonymous" className="mt-1" />
               </div>
               <div>
-                <Label htmlFor="workerId">Worker ID</Label>
-                <Input id="workerId" placeholder="e.g., WRK-1234" />
+                <Label htmlFor="workerId" className="text-sm font-semibold text-slate-700">Worker ID</Label>
+                <Input id="workerId" placeholder="e.g., WRK-1234" className="mt-1" />
               </div>
             </div>
           </section>
@@ -80,20 +125,20 @@ export default function GrievanceResolutionForm() {
           {/* Incident Verification */}
           <section>
             <h3 className="text-lg font-semibold text-green-700 mb-4">Incident Verification</h3>
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div>
-                <Label htmlFor="verifyDate">Verification Date</Label>
-                <Input id="verifyDate" type="date" />
+                <Label htmlFor="verifyDate" className="text-sm font-semibold text-slate-700">Verification Date</Label>
+                <Input id="verifyDate" type="date" className="mt-1" />
               </div>
               <div>
-                <Label htmlFor="officerName">Verification Officer</Label>
-                <Input id="officerName" placeholder="Officer Name & ID" />
+                <Label htmlFor="officerName" className="text-sm font-semibold text-slate-700">Verification Officer</Label>
+                <Input id="officerName" placeholder="Officer Name & ID" className="mt-1" />
               </div>
             </div>
             <div className="mt-4">
-              <Label htmlFor="evidence">Evidence Upload</Label>
-              <div className="flex items-center space-x-2 mt-2">
-                <Button variant="outline" className="flex items-center space-x-2">
+              <Label htmlFor="evidence" className="text-sm font-semibold text-slate-700">Evidence Upload</Label>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2 mt-2">
+                <Button variant="outline" className="flex items-center gap-2 w-full sm:w-auto">
                   <UploadCloud className="w-4 h-4" />
                   <span>Upload Files</span>
                 </Button>
@@ -105,15 +150,15 @@ export default function GrievanceResolutionForm() {
           {/* Resolution Workflow */}
           <section>
             <h3 className="text-lg font-semibold text-indigo-700 mb-4">Resolution Workflow</h3>
-            <div>
-              <Label htmlFor="actionNotes">Resolution Notes</Label>
-              <Textarea id="actionNotes" placeholder="Document findings, corrective actions..." />
+            <div className="mb-4">
+              <Label htmlFor="actionNotes" className="text-sm font-semibold text-slate-700">Resolution Notes</Label>
+              <Textarea id="actionNotes" placeholder="Document findings, corrective actions..." className="mt-1" rows={4} />
             </div>
-            <div className="grid md:grid-cols-2 gap-6 mt-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div>
-                <Label htmlFor="status">Final Status</Label>
+                <Label htmlFor="status" className="text-sm font-semibold text-slate-700">Final Status</Label>
                 <Select onValueChange={(val) => setStatus(val)}>
-                  <SelectTrigger>
+                  <SelectTrigger className="mt-1">
                     <SelectValue placeholder="Set status" />
                   </SelectTrigger>
                   <SelectContent>
@@ -125,16 +170,16 @@ export default function GrievanceResolutionForm() {
                 </Select>
               </div>
               <div>
-                <Label htmlFor="resolutionDate">Resolution Date</Label>
-                <Input id="resolutionDate" type="date" />
+                <Label htmlFor="resolutionDate" className="text-sm font-semibold text-slate-700">Resolution Date</Label>
+                <Input id="resolutionDate" type="date" className="mt-1" />
               </div>
             </div>
           </section>
 
           {/* Submit */}
-          <div className="flex justify-end pt-6">
-            <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-indigo-700 hover:to-purple-700 px-6 py-3 text-base font-semibold shadow-lg">
-              <ShieldCheck className="w-5 h-5 mr-2" />
+          <div className="flex justify-end pt-6 border-t border-gray-200">
+            <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-indigo-700 hover:to-purple-700 px-6 py-3 text-sm sm:text-base font-semibold shadow-lg">
+              <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
               Submit Resolution
             </Button>
           </div>

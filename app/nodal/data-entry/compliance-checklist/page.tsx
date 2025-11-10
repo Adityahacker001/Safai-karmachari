@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import StatCard from '@/components/ui/stat-card';
 import {
   Table,
   TableBody,
@@ -13,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ShieldCheck, Building2, Shield, ArrowLeft } from "lucide-react";
+import { ShieldCheck, Building2, Shield, ArrowLeft, Users, CheckCircle, AlertTriangle, FileCheck } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import React, { useState } from "react";
@@ -34,7 +35,7 @@ export default function ComplianceChecklistPage() {
     ];
 
   return (
-    <div className={cn("min-h-screen p-6 md:p-12 space-y-10", contractorTheme.page.formBackground)}>
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
       {selectedContractor ? (
         <div>
           <Button
@@ -105,41 +106,95 @@ export default function ComplianceChecklistPage() {
         </div>
       ) : (
         <div>
-          <div>
-            <h2 className="text-3xl font-extrabold bg-gradient-to-r from-indigo-600 via-pink-600 to-yellow-500 bg-clip-text text-transparent">
-Contractor Compliance Audit</h2>
-            <p className="text-gray-500 mt-3 text-xl">Select a contractor from the list to begin an audit.</p>
+          {/* Header Card */}
+          <div className="bg-gradient-to-r from-blue-500 via-blue-600 to-purple-600 rounded-2xl p-6 sm:p-8 mb-6 text-white">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
+              Contractor Compliance Audit
+            </h2>
+            <p className="text-blue-100 mt-2 text-sm sm:text-base lg:text-lg">Select a contractor from the list to begin an audit.</p>
           </div>
-          <Card className={cn("mt-10", contractorTheme.table.container)}>
-            <CardHeader className={cn(contractorTheme.table.header)}>
-              <CardTitle className={cn(contractorTheme.table.headerTitle)}>Contractor List</CardTitle>
-              <CardDescription className={cn(contractorTheme.table.headerDescription)}>List of all contractors in your zone.</CardDescription>
+
+          {/* Summary Cards - Using StatCard Component */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6">
+            <StatCard
+              title="Total Contractors"
+              value={contractors.length}
+              subtitle={`${contractors.filter(c => c.status === 'Compliant').length} Compliant`}
+              icon={Users}
+              color="blue"
+            />
+            <StatCard
+              title="Compliant"
+              value={contractors.filter(c => c.status === 'Compliant').length}
+              subtitle="Fully compliant"
+              icon={CheckCircle}
+              color="green"
+            />
+            <StatCard
+              title="Action Required"
+              value={contractors.filter(c => c.status === 'Action Required').length}
+              subtitle="Need attention"
+              icon={AlertTriangle}
+              color="amber"
+            />
+            <StatCard
+              title="Recent Audits"
+              value={contractors.filter(c => new Date(c.lastAudit) > new Date('2025-07-01')).length}
+              subtitle="This month"
+              icon={FileCheck}
+              color="purple"
+            />
+          </div>
+          <Card className="bg-white shadow-lg rounded-2xl overflow-hidden">
+            <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+              <CardTitle className="text-xl font-bold">Contractor List</CardTitle>
+              <CardDescription className="text-blue-100">List of all contractors in your zone</CardDescription>
             </CardHeader>
             <CardContent className="p-0">
               <Table>
                 <TableHeader>
-                  <TableRow className="border-b-0">
-                    <TableHead className="text-gray-600">Contractor Name</TableHead>
-                    <TableHead className="text-gray-600">Last Audit</TableHead>
-                    <TableHead className="text-gray-600">Status</TableHead>
-                    <TableHead className="text-right text-gray-600">Actions</TableHead>
+                  <TableRow className="bg-gradient-to-r from-gray-50 to-gray-100 border-b-2 border-blue-200">
+                    <TableHead className="text-gray-700 font-semibold py-4 px-6">Contractor Name</TableHead>
+                    <TableHead className="text-gray-700 font-semibold py-4 px-6">Last Audit</TableHead>
+                    <TableHead className="text-gray-700 font-semibold py-4 px-6">Status</TableHead>
+                    <TableHead className="text-right text-gray-700 font-semibold py-4 px-6">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody className="bg-white">
-                  {contractors.map((contractor) => (
-                    <TableRow key={contractor.id} className="hover:bg-gray-50">
-                      <TableCell className="font-medium">{contractor.name}</TableCell>
-                      <TableCell>{contractor.lastAudit}</TableCell>
-                      <TableCell>
+                  {contractors.map((contractor, index) => (
+                    <TableRow key={contractor.id} className={cn(
+                      "hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-200 border-l-4",
+                      contractor.status === 'Compliant' 
+                        ? "border-l-green-400 hover:border-l-green-500" 
+                        : "border-l-red-400 hover:border-l-red-500",
+                      index % 2 === 0 ? "bg-white" : "bg-gray-50/30"
+                    )}>
+                      <TableCell className="font-medium text-gray-900 py-4 px-6">
+                        <div className="flex items-center space-x-3">
+                          <div className={cn(
+                            "w-3 h-3 rounded-full",
+                            contractor.status === 'Compliant' ? "bg-green-400" : "bg-red-400"
+                          )}></div>
+                          <span>{contractor.name}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-gray-600 py-4 px-6">{contractor.lastAudit}</TableCell>
+                      <TableCell className="py-4 px-6">
                         <Badge className={cn(
-                          'text-white',
-                          contractor.status === 'Compliant' ? 'bg-green-500' : 'bg-red-500'
+                          'text-white font-medium px-3 py-1 rounded-full shadow-sm',
+                          contractor.status === 'Compliant' 
+                            ? 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700' 
+                            : 'bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700'
                         )}>
                           {contractor.status}
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-right">
-                        <Button className={cn(contractorTheme.button.primary, "text-sm py-2 px-4")} onClick={() => setSelectedContractor(contractor)}>
+                      <TableCell className="text-right py-4 px-6">
+                        <Button 
+                          className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200" 
+                          onClick={() => setSelectedContractor(contractor)}
+                        >
+                          <ShieldCheck className="w-4 h-4 mr-2" />
                           Start Audit
                         </Button>
                       </TableCell>

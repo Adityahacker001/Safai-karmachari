@@ -51,74 +51,76 @@ const ChangeIndicator = ({ type, text }: ChangeIndicatorProps) => {
 
 export default function ContractorDashboard() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/40">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10 space-y-6 sm:space-y-8">
-        
-        {/* Header Section */}
-        <div className="text-center sm:text-left">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent mb-2">
+    <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">
+      {/* Enhanced Header */}
+      <header className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 rounded-xl sm:rounded-2xl"></div>
+        <div className="relative p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col gap-2 sm:gap-3">
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-black text-white drop-shadow-2xl leading-tight">
             Contractor Overview
           </h1>
-          <p className="text-sm sm:text-base text-slate-600 font-medium">
+          <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-white/90 font-bold drop-shadow-lg">
             Monitor and manage your workforce efficiently
           </p>
         </div>
+      </header>
 
-        {/* KPI Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          <DashboardCard
-            title="Total Workers"
-            value="60"
-            icon={Users}
-            color="blue"
-          />
-          <DashboardCard
-            title="Today's Attendance"
-            value="48/60 (80%)"
-            change="12 not checked in"
-            icon={UserCheck}
-            color="green"
-          />
-          <DashboardCard
-            title="Grievances Assigned"
-            value="15"
-            change="10 Resolved | 5 Pending"
-            icon={AlertTriangle}
-            color="red"
-          />
-          <DashboardCard
-            title="PPE Coverage"
-            value="70%"
-            change="42 of 60 workers"
-            icon={Shield}
-            color="orange"
-          />
-          <DashboardCard
-            title="Training Completion"
-            value="60%"
-            change="36 of 60 workers"
-            icon={Activity}
-            color="purple"
-          />
-          <DashboardCard
-            title="Scheme Enrolment"
-            value="55%"
-            change="33 of 60 workers"
-            icon={MapPin}
-            color="indigo"
-          />
-        </div>
+      {/* KPI Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+        <DashboardCard
+          title="Total Workers"
+          value="60"
+          icon={Users}
+          color="blue"
+        />
+        <DashboardCard
+          title="Today's Attendance"
+          value="48/60 (80%)"
+          change="12 not checked in"
+          icon={UserCheck}
+          color="green"
+        />
+        <DashboardCard
+          title="Grievances Assigned"
+          value="15"
+          change="10 Resolved | 5 Pending"
+          icon={AlertTriangle}
+          color="red"
+        />
+        <DashboardCard
+          title="PPE Coverage"
+          value="70%"
+          change="42 of 60 workers"
+          icon={Shield}
+          color="orange"
+        />
+        <DashboardCard
+          title="Training Completion"
+          value="60%"
+          change="36 of 60 workers"
+          icon={Activity}
+          color="purple"
+        />
+        <DashboardCard
+          title="Scheme Enrolment"
+          value="55%"
+          change="33 of 60 workers"
+          icon={MapPin}
+          color="indigo"
+        />
+      </div>
 
-        {/* Graphs Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Attendance Trend Graph */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/50 p-4 sm:p-6 flex flex-col hover:shadow-2xl transition-all duration-300 hover:scale-[1.02]">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6">
-              <h2 className="text-lg sm:text-xl font-bold text-slate-800 mb-1 sm:mb-0">Attendance Trend</h2>
-              <span className="text-xs sm:text-sm text-slate-500 font-medium bg-slate-100 px-3 py-1 rounded-full">Last 6 Months</span>
-            </div>
-            <div className="flex-1 flex items-center justify-center min-h-[200px] sm:min-h-[240px] lg:min-h-[280px] p-2 sm:p-4">
-              <svg width="320" height="180" viewBox="0 0 320 180" className="w-full h-full max-w-md mx-auto sm:max-w-none drop-shadow-sm">
+      {/* Graphs Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 my-6 sm:my-8">
+        {/* Attendance Trend Graph */}
+        <div className="bg-white/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-1 sm:mb-0">Attendance Trend</h3>
+            <span className="text-xs sm:text-sm text-gray-500 font-medium bg-gray-100 px-3 py-1 rounded-full">Last 6 Months</span>
+          </div>
+          <div className="h-48 sm:h-64 flex items-center justify-center">
+            <svg width="320" height="180" viewBox="0 0 320 180" className="w-full h-full max-w-md mx-auto sm:max-w-none drop-shadow-sm">
                 {/* Gradient definition */}
                 <defs>
                   <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -183,17 +185,17 @@ export default function ContractorDashboard() {
                   <text x="260" y="165">Sep</text>
                 </g>
               </svg>
-            </div>
           </div>
-          
-          {/* Grievance Status Graph */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/50 p-4 sm:p-6 flex flex-col hover:shadow-2xl transition-all duration-300 hover:scale-[1.02]">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6">
-              <h2 className="text-lg sm:text-xl font-bold text-slate-800 mb-1 sm:mb-0">Grievance Status</h2>
-              <span className="text-xs sm:text-sm text-slate-500 font-medium bg-slate-100 px-3 py-1 rounded-full">Current Month</span>
-            </div>
-            <div className="flex-1 flex items-center justify-center min-h-[200px] sm:min-h-[240px] lg:min-h-[280px]">
-              <div className="flex flex-col sm:flex-row items-center space-y-6 sm:space-y-0 sm:space-x-6 lg:space-x-8">
+        </div>
+        
+        {/* Grievance Status Graph */}
+        <div className="bg-white/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-1 sm:mb-0">Grievance Status</h3>
+            <span className="text-xs sm:text-sm text-gray-500 font-medium bg-gray-100 px-3 py-1 rounded-full">Current Month</span>
+          </div>
+          <div className="h-48 sm:h-64 flex items-center justify-center">
+            <div className="flex flex-col sm:flex-row items-center space-y-6 sm:space-y-0 sm:space-x-6 lg:space-x-8">
                 <svg width="120" height="120" viewBox="0 0 42 42" className="drop-shadow-lg sm:w-32 sm:h-32 lg:w-40 lg:h-40">
                   <defs>
                     <linearGradient id="resolvedGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -247,65 +249,58 @@ export default function ContractorDashboard() {
                   <div className="flex items-center space-x-3 sm:space-x-4">
                     <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-md"></div>
                     <div>
-                      <div className="text-sm sm:text-base font-bold text-slate-800">Resolved</div>
-                      <div className="text-xs sm:text-sm text-slate-500 font-medium">10 cases (67%)</div>
+                      <div className="text-sm sm:text-base font-bold text-gray-800">Resolved</div>
+                      <div className="text-xs sm:text-sm text-gray-500 font-medium">10 cases (67%)</div>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3 sm:space-x-4">
                     <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 shadow-md"></div>
                     <div>
-                      <div className="text-sm sm:text-base font-bold text-slate-800">Pending</div>
-                      <div className="text-xs sm:text-sm text-slate-500 font-medium">5 cases (33%)</div>
+                      <div className="text-sm sm:text-base font-bold text-gray-800">Pending</div>
+                      <div className="text-xs sm:text-sm text-gray-500 font-medium">5 cases (33%)</div>
                     </div>
                   </div>
                 </div>
-              </div>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Quick Actions */}
-        <div className="bg-white/90 backdrop-blur-sm p-4 sm:p-6 lg:p-8 rounded-2xl shadow-2xl border border-slate-200/60 hover:shadow-3xl transition-all duration-500">
-          <div className="text-center sm:text-left mb-6 sm:mb-8">
-            <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-900 mb-2">Quick Actions</h3>
-            <p className="text-sm sm:text-base text-slate-600">Streamline your daily operations</p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* Action 1 */}
-            <button className="group text-left p-4 sm:p-5 lg:p-6 bg-gradient-to-br from-slate-50 to-blue-50/30 hover:from-white hover:to-blue-50 rounded-2xl border border-slate-200/80 hover:border-blue-400/60 hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 active:scale-95">
-              <div className="p-3 sm:p-4 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl inline-block group-hover:from-blue-500 group-hover:to-blue-600 transition-all duration-500 shadow-lg group-hover:shadow-xl">
-                <Users className="h-6 w-6 sm:h-7 sm:w-7 text-blue-600 group-hover:text-white transition-colors duration-300" />
-              </div>
-              <p className="font-bold text-slate-800 mt-3 sm:mt-4 text-sm sm:text-base">Register Worker</p>
-              <p className="text-xs sm:text-sm text-slate-500 mt-1">Add new worker to system</p>
-            </button>
-            
-            {/* Action 2 */}
-            <button className="group text-left p-4 sm:p-5 lg:p-6 bg-gradient-to-br from-slate-50 to-green-50/30 hover:from-white hover:to-green-50 rounded-2xl border border-slate-200/80 hover:border-green-400/60 hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 active:scale-95">
-              <div className="p-3 sm:p-4 bg-gradient-to-br from-green-100 to-green-200 rounded-xl inline-block group-hover:from-green-500 group-hover:to-green-600 transition-all duration-500 shadow-lg group-hover:shadow-xl">
-                <Clock className="h-6 w-6 sm:h-7 sm:w-7 text-green-600 group-hover:text-white transition-colors duration-300" />
-              </div>
-              <p className="font-bold text-slate-800 mt-3 sm:mt-4 text-sm sm:text-base">Mark Attendance</p>
-              <p className="text-xs sm:text-sm text-slate-500 mt-1">Record daily attendance</p>
-            </button>
-            
-            {/* Action 3 */}
-            <button className="group text-left p-4 sm:p-5 lg:p-6 bg-gradient-to-br from-slate-50 to-orange-50/30 hover:from-white hover:to-orange-50 rounded-2xl border border-slate-200/80 hover:border-orange-400/60 hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 active:scale-95">
-              <div className="p-3 sm:p-4 bg-gradient-to-br from-orange-100 to-orange-200 rounded-xl inline-block group-hover:from-orange-500 group-hover:to-orange-600 transition-all duration-500 shadow-lg group-hover:shadow-xl">
-                <AlertTriangle className="h-6 w-6 sm:h-7 sm:w-7 text-orange-600 group-hover:text-white transition-colors duration-300" />
-              </div>
-              <p className="font-bold text-slate-800 mt-3 sm:mt-4 text-sm sm:text-base">Report Issue</p>
-              <p className="text-xs sm:text-sm text-slate-500 mt-1">Log grievance or incident</p>
-            </button>
-            
-            {/* Action 4 */}
-            <button className="group text-left p-4 sm:p-5 lg:p-6 bg-gradient-to-br from-slate-50 to-purple-50/30 hover:from-white hover:to-purple-50 rounded-2xl border border-slate-200/80 hover:border-purple-400/60 hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 active:scale-95">
-              <div className="p-3 sm:p-4 bg-gradient-to-br from-purple-100 to-purple-200 rounded-xl inline-block group-hover:from-purple-500 group-hover:to-purple-600 transition-all duration-500 shadow-lg group-hover:shadow-xl">
-                <Shield className="h-6 w-6 sm:h-7 sm:w-7 text-purple-600 group-hover:text-white transition-colors duration-300" />
-              </div>
-              <p className="font-bold text-slate-800 mt-3 sm:mt-4 text-sm sm:text-base">Safety Check</p>
-              <p className="text-xs sm:text-sm text-slate-500 mt-1">PPE compliance audit</p>
-            </button>
+      {/* Quick Actions Section */}
+      <div className="grid grid-cols-1 gap-6 sm:gap-8 mt-6">
+        <div className="space-y-6">
+          {/* Quick Actions */}
+          <div className="bg-white/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl p-4 sm:p-6">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+              {/* Action 1 */}
+              <button className="bg-blue-50/80 hover:bg-blue-100/80 border border-blue-200/50 rounded-lg sm:rounded-xl p-4 text-left text-sm w-full transition-all duration-200 hover:shadow-lg">
+                <Users className="h-6 w-6 text-blue-600 mb-2" />
+                <p className="font-medium text-blue-900">Register Worker</p>
+                <p className="text-sm text-blue-700">Add new worker to system</p>
+              </button>
+              
+              {/* Action 2 */}
+              <button className="bg-green-50/80 hover:bg-green-100/80 border border-green-200/50 rounded-lg sm:rounded-xl p-4 text-left text-sm w-full transition-all duration-200 hover:shadow-lg">
+                <Clock className="h-6 w-6 text-green-600 mb-2" />
+                <p className="font-medium text-green-900">Mark Attendance</p>
+                <p className="text-sm text-green-700">Record daily attendance</p>
+              </button>
+              
+              {/* Action 3 */}
+              <button className="bg-orange-50/80 hover:bg-orange-100/80 border border-orange-200/50 rounded-lg sm:rounded-xl p-4 text-left text-sm w-full transition-all duration-200 hover:shadow-lg">
+                <AlertTriangle className="h-6 w-6 text-orange-600 mb-2" />
+                <p className="font-medium text-orange-900">Report Issue</p>
+                <p className="text-sm text-orange-700">Log grievance or incident</p>
+              </button>
+              
+              {/* Action 4 */}
+              <button className="bg-purple-50/80 hover:bg-purple-100/80 border border-purple-200/50 rounded-lg sm:rounded-xl p-4 text-left text-sm w-full transition-all duration-200 hover:shadow-lg">
+                <Shield className="h-6 w-6 text-purple-600 mb-2" />
+                <p className="font-medium text-purple-900">Safety Check</p>
+                <p className="text-sm text-purple-700">PPE compliance audit</p>
+              </button>
+            </div>
           </div>
         </div>
       </div>

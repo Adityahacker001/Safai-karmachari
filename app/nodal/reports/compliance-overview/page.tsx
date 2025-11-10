@@ -28,42 +28,57 @@ export default function ComplianceOverviewReportPage() {
     ];
 
  return (
-    // UPDATED: Added padding here to ensure the background covers the full page with content spacing
-    <div className={cn("min-h-screen w-full p-6 md:p-12", theme.page.gradientBackground)}>
-        {/* UPDATED: Removed vertical padding from this inner container to prevent doubling up */}
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
+      {/* Header Card */}
+      <div className="bg-gradient-to-r from-blue-500 via-blue-600 to-purple-600 rounded-2xl p-6 sm:p-8 mb-6 text-white">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div>
-              <h2 className="text-4xl font-extrabold bg-gradient-to-r from-indigo-600 via-pink-600 to-yellow-500 bg-clip-text text-transparent">Compliance Overview</h2>
-              <p className="text-gray-600 mt-1">Analyze contractor audit results and daily safety checklist data.</p>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
+              Compliance Overview
+            </h1>
+            <p className="text-blue-100 mt-2 text-sm sm:text-base lg:text-lg">
+              Analyze contractor audit results and daily safety checklist data
+            </p>
           </div>
-          <div className="flex items-center space-x-2 mt-4 sm:mt-0">
-            <Button className={theme.button.secondary}><Download className="h-4 w-4 mr-2" />Export Summary</Button>
-          </div>
+          <Button className="mt-4 sm:mt-0 bg-white text-blue-600 hover:bg-blue-50 font-semibold">
+            <Download className="h-4 w-4 mr-2" />
+            Export Summary
+          </Button>
         </div>
+      </div>
 
-        {/* Two-Column Layout for Tables */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
-          {/* Left Column: Official Audit Log */}
-          <Card className={cn(theme.card.container, "flex flex-col min-h-[420px]")}> 
-            <div className="rounded-t-3xl bg-gradient-to-r from-indigo-600 via-purple-600 to-fuchsia-500 px-8 py-7">
-              <h3 className="text-3xl font-extrabold text-white mb-1">Official Audit Log</h3>
-              <p className="text-white/80 text-lg">History of compliance audits conducted by the Nodal Officer.</p>
-            </div>
-            <CardContent className="p-0 flex-1 flex flex-col justify-end">
+      {/* Two-Column Layout for Tables */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+        {/* Left Column: Official Audit Log */}
+        <Card className="bg-white shadow-lg rounded-2xl overflow-hidden"> 
+          <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+            <CardTitle className="text-xl font-bold">Official Audit Log</CardTitle>
+            <CardDescription className="text-blue-100">History of compliance audits conducted by the Nodal Officer</CardDescription>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
               <Table>
-                <TableHeader><TableRow><TableHead className="px-6 py-4 text-sm font-semibold text-gray-500 uppercase">Contractor</TableHead><TableHead className="px-6 py-4 text-sm font-semibold text-gray-500 uppercase">Audit Date</TableHead><TableHead className="px-6 py-4 text-sm font-semibold text-gray-500 uppercase">Status</TableHead></TableRow></TableHeader>
+                <TableHeader>
+                  <TableRow className="bg-gradient-to-r from-gray-50 to-gray-100 border-b-2 border-blue-200">
+                    <TableHead className="text-gray-700 font-semibold py-4 px-6">Contractor</TableHead>
+                    <TableHead className="text-gray-700 font-semibold py-4 px-6">Audit Date</TableHead>
+                    <TableHead className="text-gray-700 font-semibold py-4 px-6">Status</TableHead>
+                  </TableRow>
+                </TableHeader>
                 <TableBody>
-                  {auditLog.map((log) => (
-                    <TableRow key={log.contractor} className="border-t border-gray-100">
-                      <TableCell className="px-6 py-4 font-medium text-gray-800">{log.contractor}</TableCell>
-                      <TableCell className="px-6 py-4 text-gray-600">{log.auditDate}</TableCell>
-                      <TableCell className="px-6 py-4">
+                  {auditLog.map((log, index) => (
+                    <TableRow key={log.contractor} className={`hover:bg-gray-50 transition-colors border-l-4 ${
+                      log.status === 'Fully Compliant' ? 'border-l-green-400' :
+                      log.status === 'Partially Compliant' ? 'border-l-yellow-400' : 'border-l-red-400'
+                    } ${index % 2 === 0 ? "bg-white" : "bg-gray-50/30"}`}>
+                      <TableCell className="font-medium text-gray-900 py-4 px-6">{log.contractor}</TableCell>
+                      <TableCell className="text-gray-600 py-4 px-6">{log.auditDate}</TableCell>
+                      <TableCell className="py-4 px-6">
                         <Badge 
                             className={cn("font-semibold text-xs py-1 px-3 rounded-full",
-                                log.status === 'Fully Compliant' ? "bg-green-100 text-green-800 border border-green-200" :
-                                log.status === 'Partially Compliant' ? "bg-yellow-100 text-yellow-800 border border-yellow-200" :
-                                "bg-red-100 text-red-800 border border-red-200"
+                                log.status === 'Fully Compliant' ? "bg-green-100 text-green-800 hover:bg-green-200" :
+                                log.status === 'Partially Compliant' ? "bg-yellow-100 text-yellow-800 hover:bg-yellow-200" :
+                                "bg-red-100 text-red-800 hover:bg-red-200"
                             )}
                         >
                             {log.status}
@@ -73,30 +88,42 @@ export default function ComplianceOverviewReportPage() {
                   ))}
                 </TableBody>
               </Table>
-            </CardContent>
-          </Card>
-
-          {/* Right Column: Top Violations from Daily Checklists */}
-          <Card className={cn(theme.card.container, "flex flex-col min-h-[420px]")}> 
-            <div className="rounded-t-3xl bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-500 px-8 py-7">
-              <h3 className="text-3xl font-extrabold text-white mb-1">Top 5 Daily Violations</h3>
-              <p className="text-white/80 text-lg">Aggregated from all daily worker safety submissions.</p>
             </div>
-            <CardContent className="p-0 flex-1 flex flex-col justify-end">
+          </CardContent>
+        </Card>
+
+        {/* Right Column: Top Violations from Daily Checklists */}
+        <Card className="bg-white shadow-lg rounded-2xl overflow-hidden"> 
+          <CardHeader className="bg-gradient-to-r from-purple-500 to-purple-600 text-white">
+            <CardTitle className="text-xl font-bold">Top 5 Daily Violations</CardTitle>
+            <CardDescription className="text-purple-100">Aggregated from all daily worker safety submissions</CardDescription>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
               <Table>
-                <TableHeader><TableRow><TableHead className="px-6 py-4 text-sm font-semibold text-gray-500 uppercase">Violation Item</TableHead><TableHead className="px-6 py-4 text-sm font-semibold text-gray-500 uppercase">Frequency</TableHead><TableHead className="px-6 py-4 text-sm font-semibold text-gray-500 uppercase">Severity</TableHead></TableRow></TableHeader>
+                <TableHeader>
+                  <TableRow className="bg-gradient-to-r from-gray-50 to-gray-100 border-b-2 border-purple-200">
+                    <TableHead className="text-gray-700 font-semibold py-4 px-6">Violation Item</TableHead>
+                    <TableHead className="text-gray-700 font-semibold py-4 px-6">Frequency</TableHead>
+                    <TableHead className="text-gray-700 font-semibold py-4 px-6">Severity</TableHead>
+                  </TableRow>
+                </TableHeader>
                 <TableBody>
-                  {topViolations.map((v) => (
-                    <TableRow key={v.item} className="border-t border-gray-100">
-                      <TableCell className="px-6 py-4 font-medium text-gray-800">{v.item}</TableCell>
-                      <TableCell className="px-6 py-4 font-bold text-gray-700">{v.count}</TableCell>
-                      <TableCell className="px-6 py-4">
+                  {topViolations.map((v, index) => (
+                    <TableRow key={v.item} className={`hover:bg-gray-50 transition-colors border-l-4 ${
+                      v.severity === 'Critical' ? 'border-l-red-400' :
+                      v.severity === 'High' ? 'border-l-orange-400' :
+                      v.severity === 'Medium' ? 'border-l-yellow-400' : 'border-l-blue-400'
+                    } ${index % 2 === 0 ? "bg-white" : "bg-gray-50/30"}`}>
+                      <TableCell className="font-medium text-gray-900 py-4 px-6">{v.item}</TableCell>
+                      <TableCell className="font-bold text-gray-700 py-4 px-6">{v.count}</TableCell>
+                      <TableCell className="py-4 px-6">
                         <Badge 
                             className={cn("font-semibold text-xs py-1 px-3 rounded-full",
-                                v.severity === 'Critical' ? "bg-red-100 text-red-800 border border-red-200" :
-                                v.severity === 'High' ? "bg-orange-100 text-orange-800 border border-orange-200" :
-                                v.severity === 'Medium' ? "bg-yellow-100 text-yellow-800 border border-yellow-200" :
-                                "bg-blue-100 text-blue-800 border border-blue-200"
+                                v.severity === 'Critical' ? "bg-red-100 text-red-800 hover:bg-red-200" :
+                                v.severity === 'High' ? "bg-orange-100 text-orange-800 hover:bg-orange-200" :
+                                v.severity === 'Medium' ? "bg-yellow-100 text-yellow-800 hover:bg-yellow-200" :
+                                "bg-blue-100 text-blue-800 hover:bg-blue-200"
                             )}
                         >
                             {v.severity}
@@ -106,9 +133,9 @@ export default function ComplianceOverviewReportPage() {
                   ))}
                 </TableBody>
               </Table>
-            </CardContent>
-          </Card>
-        </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

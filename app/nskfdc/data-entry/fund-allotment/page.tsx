@@ -2,7 +2,7 @@
 // Ise run karne ke liye, aapke project mein React, TailwindCSS, 
 // aur lucide-react (npm install lucide-react) install hona zaroori hai.
 
-'use client'; // Next.js App Router ke liye
+'use client';
 
 import React, { useState, useMemo } from 'react';
 import {
@@ -416,9 +416,16 @@ const FundAllotmentPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-sky-50 to-indigo-50 p-4 md:p-8 font-sans">
-      <div className="max-w-6xl mx-auto">
-        
+    <div className="min-h-screen bg-slate-50 font-sans">
+      <div className="max-w-screen-2xl mx-auto p-4 md:p-8">
+        {/* Header with gradient card */}
+        <div className="rounded-2xl bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-6 mb-8 shadow-lg">
+          <h1 className="text-3xl font-bold text-white mb-1">Fund Allotment</h1>
+          <p className="text-white/90 text-base">
+            Enter sanctioned and released fund details for the selected scheme.
+          </p>
+        </div>
+
         {/* --- 1. Header Section --- */}
         <header className="mb-6">
           <nav className="flex items-center text-sm font-medium text-slate-500" aria-label="Breadcrumb">
@@ -430,19 +437,6 @@ const FundAllotmentPage = () => {
             <ChevronRight className="w-4 h-4 mx-1" />
             <span className="font-semibold text-indigo-600">Fund Allotment Entry</span>
           </nav>
-          <div className="mt-4 flex items-center space-x-3">
-             <span className="p-2 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full text-white shadow-lg">
-               <Banknote className="w-8 h-8" />
-             </span>
-             <div>
-                <h1 className="text-3xl font-bold text-slate-800">
-                  Fund Allotment Entry
-                </h1>
-                <p className="text-slate-500 mt-1">
-                  Enter sanctioned and released fund details for the selected scheme.
-                </p>
-             </div>
-          </div>
         </header>
 
         {/* --- 2. Form --- */}

@@ -176,23 +176,16 @@ const getHeatmapColor = (util: number) => {
 // --- 4. Main Page Component ---
 const NskfdcDashboardPage = () => {
   return (
-    <div className="min-h-screen p-4 md:p-8 bg-gradient-to-b from-white via-sky-50 to-indigo-50 font-sans">
-      <div className="max-w-screen-2xl mx-auto">
-        
-        {/* --- PAGE HEADER --- */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-800 mb-4">
-              NSKFDC Dashboard
-            </h1>
-            <p className="text-slate-500 mt-1">
-              Welcome back! Here's your financial empowerment overview.
-            </p>
-          </div>
+    <div className="min-h-screen bg-slate-50 font-sans">
+      <div className="max-w-screen-2xl mx-auto p-4 md:p-8">
+        {/* Header with gradient card */}
+        <div className="rounded-2xl bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-6 mb-8 shadow-lg">
+          <h1 className="text-3xl font-bold text-white mb-1">NSKFDC Dashboard</h1>
+          <p className="text-white/90 text-base">Welcome back! Here's your financial empowerment overview.</p>
         </div>
 
         {/* --- METRIC CARDS SECTION --- */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
           <StatCard title="Total Schemes" value="48" icon={Target} color="blue" />
           <StatCard title="Total Applications" value="12,450" icon={FileText} color="indigo" />
           <StatCard title="Sanctions Issued" value="9,820" icon={CheckSquare} color="green" />
@@ -203,23 +196,9 @@ const NskfdcDashboardPage = () => {
           <StatCard title="Directions Received" value="35" icon={AlertCircle} color="purple" />
         </div>
 
-        {/* --- QUICK ACTIONS SECTION --- */}
-        {/* <div className="mb-8 p-4 bg-white/70 backdrop-blur-sm rounded-xl shadow-lg border border-slate-100">
-          <div className="flex flex-col md:flex-row flex-wrap gap-3">
-            <ActionButton title="Add New Scheme" icon={PlusCircle} gradient="from-indigo-500 to-blue-500" glow="hover:shadow-indigo-500/40" />
-            <ActionButton title="Sanction Funds" icon={Send} gradient="from-green-500 to-emerald-500" glow="hover:shadow-green-500/40" />
-            <ActionButton title="Submit Grievance" icon={MessageSquareWarning} gradient="from-amber-500 to-orange-500" glow="hover:shadow-amber-500/40" />
-            <ActionButton title="Reply to Direction" icon={Clock} gradient="from-sky-500 to-cyan-500" glow="hover:shadow-sky-500/40" />
-            <ActionButton title="View Exception Alerts" icon={FileWarning} gradient="from-red-500 to-rose-500" glow="hover:shadow-red-500/40" />
-            <ActionButton title="Generate Annual Report" icon={BookCopy} gradient="from-purple-500 to-violet-500" glow="hover:shadow-purple-500/40" />
-            <ActionButton title="Contact NSKC" icon={Contact} gradient="from-slate-600 to-gray-700" glow="hover:shadow-slate-600/40" />
-          </div>
-        </div> */}
-
         {/* --- REPORTS & ANALYTICS SECTION --- */}
-        {/* District-wise Performance Table */}
         <div className="mb-8 bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden">
-          <div className="p-4 border-b border-slate-200 bg-slate-50/50">
+          <div className="p-4 border-b border-slate-200 bg-slate-50">
             <h3 className="flex items-center text-lg font-semibold text-slate-700">
               <Building className="w-5 h-5 mr-2.5 text-indigo-500" />
               District-Wise Performance
@@ -239,7 +218,7 @@ const NskfdcDashboardPage = () => {
               </thead>
               <tbody className="bg-white divide-y divide-slate-100">
                 {districtPerfData.map((row) => (
-                  <tr key={row.id} className="hover:bg-sky-50/50 transition-colors">
+                  <tr key={row.id} className="hover:bg-sky-50 transition-colors">
                     <td className="px-5 py-4 whitespace-nowrap text-sm font-medium text-slate-900">{row.district}</td>
                     <td className="px-5 py-4 whitespace-nowrap text-sm text-slate-600">{row.shgs}</td>
                     <td className="px-5 py-4 whitespace-nowrap text-sm text-slate-600">{row.apps}</td>
@@ -254,15 +233,15 @@ const NskfdcDashboardPage = () => {
         </div>
 
         {/* --- CHARTS & REPORTS ROW --- */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
           
           {/* Exception Reports */}
-          <div className="bg-white rounded-xl shadow-lg border border-slate-100 p-5">
+          <div className="flex flex-col h-full bg-white rounded-2xl shadow-lg border border-slate-100 p-6 justify-between">
             <h3 className="flex items-center text-lg font-semibold text-red-600 mb-4">
               <FileWarning className="w-5 h-5 mr-2.5" />
               Exception Reports
             </h3>
-            <ul className="space-y-2.5">
+            <ul className="space-y-2.5 flex-1">
               {[
                 'Pending Disbursement (12)',
                 'Rejected Applications (45)',
@@ -279,12 +258,12 @@ const NskfdcDashboardPage = () => {
           </div>
 
           {/* Annual Report Sections */}
-          <div className="bg-white rounded-xl shadow-lg border border-slate-100 p-5">
+          <div className="flex flex-col h-full bg-white rounded-2xl shadow-lg border border-slate-100 p-6 justify-between">
             <h3 className="flex items-center text-lg font-semibold text-indigo-700 mb-4">
               <BookOpen className="w-5 h-5 mr-2.5" />
               Annual Report Sections
             </h3>
-            <ul className="space-y-2 text-sm text-slate-600">
+            <ul className="space-y-2 text-sm text-slate-600 flex-1">
               {[
                 'Executive Summary', 'Scheme Performance', 'Beneficiary Impact',
                 'Financial Summary', 'Compliance Summary', 'Challenges & Recs.'
@@ -298,30 +277,26 @@ const NskfdcDashboardPage = () => {
           </div>
 
           {/* Scheme Distribution Chart */}
-          <ChartCard 
-            title="Scheme Distribution" 
-            icon={PieChartIcon}
-            filters={<>
-              <FilterSelect options={['All Groups', 'Individual', 'SHG']} />
-              <FilterSelect options={['All India', 'State', 'District']} />
-            </>}
-            className="h-auto"
-          >
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie data={pieData01} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
-                  {pieData01.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={PIE_COLORS_01[index % PIE_COLORS_01.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
-          </ChartCard>
-
+          <div className="flex flex-col h-full bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
+            <h3 className="flex items-center text-lg font-semibold text-indigo-700 mb-4">
+              <PieChartIcon className="w-5 h-5 mr-2.5" />
+              Scheme Distribution
+            </h3>
+            <div className="flex-1 min-h-[200px]">
+              <ResponsiveContainer width="100%" height={220}>
+                <PieChart>
+                  <Pie data={pieData01} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
+                    {pieData01.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={PIE_COLORS_01[index % PIE_COLORS_01.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
         </div>
-        
       </div>
     </div>
   );

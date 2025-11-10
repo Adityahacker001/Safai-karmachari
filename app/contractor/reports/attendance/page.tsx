@@ -92,13 +92,29 @@ export default function WorkerAttendance() {
     }, [searchQuery]);
 
     return (
-        <div className="min-h-screen w-full max-w-full sm:max-w-full md:max-w-7xl mx-auto p-4 sm:p-6 md:p-12 space-y-6 sm:space-y-8 md:space-y-10">
-            <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent text-center sm:text-left">Worker Attendance</h1>
-                <Button className="bg-blue-600 text-white px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg sm:rounded-xl hover:bg-blue-700 transition-colors text-sm sm:text-base font-medium">
-                    Mark Attendance
-                </Button>
-            </div>
+        <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">
+            {/* Enhanced Header */}
+            <header className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 rounded-xl sm:rounded-2xl"></div>
+                <div className="relative p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col space-y-2 sm:space-y-3 md:space-y-4">
+                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
+                        <div>
+                            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-black text-white drop-shadow-2xl leading-tight">
+                                Worker Attendance
+                            </h1>
+                            <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-white/90 font-bold drop-shadow-lg">
+                                Track and manage worker attendance records
+                            </p>
+                        </div>
+                        <div className="flex items-center space-x-4">
+                            <Button className="bg-white/20 text-white border-white/30 hover:bg-white/30 px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl transition-all duration-200 text-sm sm:text-base backdrop-blur-sm">
+                                Mark Attendance
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            </header>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                 <StatCard
@@ -131,22 +147,22 @@ export default function WorkerAttendance() {
                 />
             </div>
 
-            <div>
-                <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-900 mb-4 sm:mb-6">
-                    Worker-wise Attendance
-                </h2>
-                <Card className="w-full max-w-full sm:max-w-full md:max-w-6xl mx-auto bg-white/95 backdrop-blur-sm shadow-2xl border border-gray-100 rounded-2xl sm:rounded-3xl overflow-hidden">
-                    <CardHeader className="p-4 sm:p-6 md:p-8 bg-blue-800 rounded-t-2xl sm:rounded-t-3xl">
-                        <div className="relative w-full">
-                            <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-300" />
-                            <Input
-                                placeholder="Search by name or ID..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full sm:max-w-md pl-10 sm:pl-12 pr-4 py-2 sm:py-2.5 text-sm sm:text-base text-gray-900 placeholder:text-gray-400 border-blue-600 focus:border-blue-400 focus:ring-2 focus:ring-blue-300/50 rounded-lg sm:rounded-xl bg-white"
-                            />
-                        </div>
-                    </CardHeader>
+            <Card className="bg-white/95 backdrop-blur-xl shadow-xl border border-white/20 rounded-3xl overflow-hidden">
+                <CardHeader className="bg-gradient-to-r from-emerald-600/90 to-teal-600/90 text-white p-4 sm:p-6 md:p-8">
+                    <CardTitle className="text-xl sm:text-2xl md:text-3xl font-bold flex items-center gap-3 mb-4">
+                        <Clock className="h-6 w-6 sm:h-8 sm:w-8" />
+                        Worker-wise Attendance
+                    </CardTitle>
+                    <div className="relative w-full">
+                        <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-white/70" />
+                        <Input
+                            placeholder="Search by name or ID..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full sm:max-w-md pl-10 sm:pl-12 pr-4 py-2 sm:py-2.5 text-sm sm:text-base bg-white/20 text-white placeholder:text-white/70 border-white/30 focus:border-white focus:ring-2 focus:ring-white/30 rounded-lg sm:rounded-xl"
+                        />
+                    </div>
+                </CardHeader>
                     <CardContent className="p-0 overflow-x-auto">
                         <Table className="w-full min-w-[600px]">
                             <TableHeader className="bg-slate-50">
@@ -226,7 +242,6 @@ export default function WorkerAttendance() {
                         </Table>
                     </CardContent>
                 </Card>
-            </div>
         </div>
     );
 }

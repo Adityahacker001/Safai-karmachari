@@ -2,7 +2,7 @@
 // Ise run karne ke liye, aapke project mein React, TailwindCSS, 
 // aur lucide-react (npm install lucide-react) install hona zaroori hai.
 
-'use client'; // Next.js App Router ke liye
+'use client';
 
 import React, { useState } from 'react';
 import {
@@ -402,42 +402,21 @@ const NewSchemeEntryPage = () => {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-sky-50 to-indigo-50 p-4 md:p-8 font-sans">
-      <div className="max-w-5xl mx-auto">
-        
-        {/* --- 1. Header Section --- */}
-        <header className="mb-6">
-          {/* Breadcrumb */}
-          <nav className="flex items-center text-sm font-medium text-slate-500" aria-label="Breadcrumb">
-            <LayoutDashboard className="w-4 h-4 mr-1.5" />
-            Dashboard
-            <ChevronRight className="w-4 h-4 mx-1" />
-            <ClipboardList className="w-4 h-4 mr-1.5" />
-            Data Entry
-            <ChevronRight className="w-4 h-4 mx-1" />
-            <span className="font-semibold text-indigo-600">New Scheme Entry</span>
-          </nav>
-          
-          {/* Page Title */}
-          <div className="mt-4 flex items-center space-x-3">
-             <span className="p-2 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-full text-white shadow-lg">
-               <PlusCircle className="w-8 h-8" />
-             </span>
-             <div>
-                <h1 className="text-3xl font-bold text-slate-800">
-                  Add New Scheme Entry
-                </h1>
-                <p className="text-slate-500 mt-1">
-                  Enter details of the new government scheme for approval and listing under active programs.
-                </p>
-             </div>
+    <div className="min-h-screen bg-slate-50 font-sans">
+      <div className="max-w-5xl mx-auto p-2 sm:p-4 md:p-8">
+        {/* Gradient Header Card */}
+        <div className="rounded-2xl bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-6 sm:p-8 mb-8 shadow-lg flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <span className="p-2 bg-white/20 rounded-full text-white shadow-lg">
+            <PlusCircle className="w-8 h-8" />
+          </span>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-white mb-1">Add New Scheme Entry</h1>
+            <p className="text-white/90 text-base">Enter details of the new government scheme for approval and listing under active programs.</p>
           </div>
-        </header>
-
-        {/* --- 2. Form Section --- */}
+        </div>
+        {/* Responsive Form Section */}
         <form onSubmit={handleSubmit} noValidate>
-          <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-100">
-            {/* Form Grid */}
+          <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-6 md:p-8 border border-slate-100">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
               
               <FormInput
@@ -558,8 +537,7 @@ const NewSchemeEntryPage = () => {
 
             </div>
           </div>
-
-          {/* --- 3. Buttons Section --- */}
+          {/* Buttons Section */}
           <div className="mt-8 pt-6 border-t border-slate-200">
             <div className="flex flex-col md:flex-row items-center justify-end space-y-3 md:space-y-0 md:space-x-4">
               <button
@@ -569,7 +547,6 @@ const NewSchemeEntryPage = () => {
               >
                 Cancel
               </button>
-              
               <button
                 type="button"
                 disabled={isSubmitting}
@@ -578,7 +555,6 @@ const NewSchemeEntryPage = () => {
                 <Save className="w-5 h-5 mr-2" />
                 Save as Draft
               </button>
-
               <button
                 type="submit"
                 disabled={isSubmitting}
@@ -594,8 +570,7 @@ const NewSchemeEntryPage = () => {
             </div>
           </div>
         </form>
-
-        {/* --- 4. Footer --- */}
+        {/* Footer */}
         <footer className="text-center mt-8">
           <p className="text-xs text-slate-500">
             Last Edited By: <strong>Ravi Sharma</strong> • Last Updated: <strong>25 Oct 2025, 10:30 AM</strong>

@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import StatCard from "@/components/ui/stat-card";
 import { Trophy, Star, BarChart2, Award, Users, Building } from "lucide-react";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
@@ -41,14 +42,6 @@ export default function RecognitionLeaderboardPage() {
         { category: "Most Improved State", winner: "State of West Bengal" },
         { category: "Best District (Innovation)", winner: "Pune District, Maharashtra" },
         { category: "National Safai Karmachari of the Year", winner: "Ram Singh (East Delhi)" },
-    ];
-
-    // --- Data for the new KPI Cards ---
-    const kpiData = [
-        { title: "Total Awards Granted", value: "532", description: "Nationwide this year", Icon: Trophy, color: "from-yellow-400 to-orange-500", iconColor: "text-yellow-400" },
-        { title: "Recognized Workers", value: "350+", description: "Individuals awarded", Icon: Users, color: "from-sky-400 to-blue-500", iconColor: "text-sky-400" },
-        { title: "Recognized Contractors", value: "85", description: "Companies awarded", Icon: Building, color: "from-purple-400 to-indigo-500", iconColor: "text-purple-400" },
-        { title: "States with Programs", value: "28", description: "Actively participating", Icon: BarChart2, color: "from-green-400 to-emerald-500", iconColor: "text-green-400" }
     ];
 
     // --- Logic for Chart Gradient ---
@@ -91,119 +84,127 @@ export default function RecognitionLeaderboardPage() {
     };
 
     return (
-        <div className="space-y-8 p-4 md:p-6 bg-slate-50 dark:bg-gray-900 rounded-lg">
-            <div>
-                <h2 className="text-4xl font-extrabold mb-2 bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-                    Recognition & Leaderboards
-                </h2>
-                <p className="text-lg text-gray-500 dark:text-gray-400">Analytics and rankings for worker, contractor, and state recognition programs.</p>
-            </div>
+        <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">
+            {/* Enhanced Header */}
+            <header className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 rounded-xl sm:rounded-2xl"></div>
+                <div className="relative p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col space-y-2 sm:space-y-3 md:space-y-4">
+                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
+                        <div className="flex-1 flex items-center gap-4">
+                            <Trophy className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-white drop-shadow-2xl" />
+                            <div>
+                                <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-black text-white drop-shadow-2xl leading-tight">
+                                    Recognition & Leaderboards
+                                </h1>
+                                <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/90 font-bold drop-shadow-lg">
+                                    Analytics and rankings for worker, contractor, and state recognition programs
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
 
             {/* Recognition KPIs -- Now Activated and Styled */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {kpiData.map((kpi, index) => (
-                    <Card key={index} className={`rounded-xl shadow-lg border-0 text-white overflow-hidden bg-gradient-to-br ${kpi.color} transform hover:scale-105 hover:shadow-2xl transition-all duration-300`}>
-                        <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
-                            <CardTitle className="text-sm font-medium text-white/80">{kpi.title}</CardTitle>
-                            <div className="p-2 bg-white/20 rounded-full">
-                                <kpi.Icon className={`h-5 w-5 ${kpi.iconColor} drop-shadow-lg`} />
-                            </div>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-4xl font-bold drop-shadow-md">{kpi.value}</div>
-                            <p className="text-xs text-white/70">{kpi.description}</p>
-                        </CardContent>
-                    </Card>
-                ))}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                <StatCard
+                    title="Total Awards Granted"
+                    value="532"
+                    subtitle="Nationwide this year"
+                    icon={Trophy}
+                    color="amber"
+                />
+                <StatCard
+                    title="Recognized Workers"
+                    value="350+"
+                    subtitle="Individuals awarded"
+                    icon={Users}
+                    color="blue"
+                />
+                <StatCard
+                    title="Recognized Contractors"
+                    value="85"
+                    subtitle="Companies awarded"
+                    icon={Building}
+                    color="purple"
+                />
+                <StatCard
+                    title="States with Programs"
+                    value="28"
+                    subtitle="Actively participating"
+                    icon={BarChart2}
+                    color="green"
+                />
             </div>
 
             {/* Custom 4 Cards Row (from image) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-2">
-                {/* Top State */}
-                <Card className="rounded-xl border-0 bg-gradient-to-br from-yellow-50 via-yellow-100 to-yellow-200 flex flex-col justify-between">
-                    <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
-                        <CardTitle className="text-sm font-medium text-yellow-800">Top State</CardTitle>
-                        <div className="p-2 bg-yellow-100 rounded-full">
-                            <Trophy className="h-5 w-5 text-yellow-500" />
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-extrabold text-yellow-900">West Bengal</div>
-                    </CardContent>
-                </Card>
-                {/* Top District */}
-                <Card className="rounded-xl border-0 bg-gradient-to-br from-blue-50 via-blue-100 to-blue-200 flex flex-col justify-between">
-                    <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
-                        <CardTitle className="text-sm font-medium text-blue-800">Top District</CardTitle>
-                        <div className="p-2 bg-blue-100 rounded-full">
-                            <Award className="h-5 w-5 text-blue-500" />
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-extrabold text-blue-900">Hooghly</div>
-                    </CardContent>
-                </Card>
-                {/* Gold Tier */}
-                <Card className="rounded-xl border-0 bg-gradient-to-br from-yellow-100 via-yellow-200 to-yellow-300 flex flex-col justify-between">
-                    <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
-                        <CardTitle className="text-sm font-medium text-yellow-800">Gold Tier Users</CardTitle>
-                        <div className="p-2 bg-yellow-50 rounded-full">
-                            <Trophy className="h-5 w-5 text-yellow-700" />
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-3xl font-extrabold text-yellow-900">1,247</div>
-                        <p className="text-sm text-yellow-800">Total users with exceptional performance</p>
-                    </CardContent>
-                </Card>
-                {/* Silver Tier */}
-                <Card className="rounded-xl border-0 bg-gradient-to-br from-blue-100 via-blue-200 to-gray-100 flex flex-col justify-between">
-                    <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
-                        <CardTitle className="text-sm font-medium text-blue-900">Silver Tier Users</CardTitle>
-                        <div className="p-2 bg-blue-50 rounded-full">
-                            <Award className="h-5 w-5 text-blue-500" />
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-3xl font-extrabold text-blue-900">2,389</div>
-                        <p className="text-sm text-blue-900">Total users with high performance</p>
-                    </CardContent>
-                </Card>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                <StatCard
+                    title="Top State"
+                    value="West Bengal"
+                    icon={Trophy}
+                    color="amber"
+                />
+                <StatCard
+                    title="Top District"
+                    value="Hooghly"
+                    icon={Award}
+                    color="blue"
+                />
+                <StatCard
+                    title="Gold Tier Users"
+                    value="1,247"
+                    subtitle="Total users with exceptional performance"
+                    icon={Trophy}
+                    color="amber"
+                />
+                <StatCard
+                    title="Silver Tier Users"
+                    value="2,389"
+                    subtitle="Total users with high performance"
+                    icon={Award}
+                    color="blue"
+                />
             </div>
 
             {/* National Awards Roster */}
-            <Card className="shadow-2xl border-0 rounded-2xl overflow-hidden">
-                <CardHeader className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white">
-                    <CardTitle className="flex items-center text-2xl drop-shadow">
-                        <Trophy className="h-7 w-7 mr-3 text-yellow-300"/>National Award Winners
+            <Card className="bg-white/95 backdrop-blur-xl shadow-xl border border-white/20 rounded-2xl sm:rounded-3xl overflow-hidden">
+                <CardHeader className="bg-gradient-to-r from-indigo-600/90 to-purple-600/90 text-white p-4 sm:p-6 md:p-8">
+                    <CardTitle className="flex items-center text-xl sm:text-2xl font-bold gap-3">
+                        <Trophy className="h-6 w-6 sm:h-8 sm:w-8 text-yellow-300"/>
+                        National Award Winners
                     </CardTitle>
-                    <CardDescription className="text-white/80">Official roster of the highest national-level awards for the current year.</CardDescription>
+                    <CardDescription className="text-white/80 text-sm sm:text-base">Official roster of the highest national-level awards for the current year.</CardDescription>
                 </CardHeader>
-                <CardContent className="p-0">
-                    <Table>
-                        <TableHeader className="bg-slate-100 dark:bg-slate-800">
-                            <TableRow>
-                                <TableHead className="text-slate-700 dark:text-slate-300 font-semibold text-base">Award Category</TableHead>
-                                <TableHead className="text-slate-700 dark:text-slate-300 font-semibold text-base">Winner</TableHead>
+                <CardContent className="p-0 overflow-x-auto">
+                    <Table className="w-full min-w-[600px]">
+                        <TableHeader className="bg-slate-50">
+                            <TableRow className="border-b border-gray-200">
+                                <TableHead className="py-3 sm:py-4 px-3 sm:px-6 text-slate-600 font-bold text-sm sm:text-base">Award Category</TableHead>
+                                <TableHead className="py-3 sm:py-4 px-3 sm:px-6 text-slate-600 font-bold text-sm sm:text-base">Winner</TableHead>
                             </TableRow>
                         </TableHeader>
-                        <TableBody className="bg-white dark:bg-gray-800">
+                        <TableBody>
                             {nationalAwards.map(award => (
-                                <TableRow key={award.category} className="hover:bg-purple-50/60 dark:hover:bg-purple-900/20 transition-colors duration-200 border-b dark:border-gray-700">
-                                    <TableCell className="font-medium text-gray-800 dark:text-gray-200">{award.category}</TableCell>
-                                    <TableCell className="font-bold text-purple-700 dark:text-purple-300">{award.winner}</TableCell>
+                                <TableRow key={award.category} className="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-150">
+                                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6 font-semibold text-gray-800 text-sm sm:text-base">{award.category}</TableCell>
+                                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6 font-bold text-purple-700 text-sm sm:text-base">{award.winner}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
                     </Table>
                 </CardContent>
             </Card>
-<div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
                 {/* Top Recognized Workers */}
-                <Card className="shadow-2xl border-0 rounded-2xl overflow-hidden">
-                    <CardHeader className="bg-gradient-to-r from-blue-500 to-cyan-400 text-white">
-                        <CardTitle className="flex items-center text-2xl drop-shadow"><Star className="h-7 w-7 mr-3 text-yellow-200"/>State Leaderboard</CardTitle>
-                        <CardDescription className="text-white/80">Top workers with the most awards nationwide.</CardDescription>
+                <Card className="bg-white/95 backdrop-blur-xl shadow-xl border border-white/20 rounded-2xl sm:rounded-3xl overflow-hidden">
+                    <CardHeader className="bg-gradient-to-r from-emerald-600/90 to-teal-600/90 text-white p-4 sm:p-6 md:p-8">
+                        <CardTitle className="flex items-center text-xl sm:text-2xl font-bold gap-3">
+                            <Star className="h-6 w-6 sm:h-8 sm:w-8 text-yellow-200"/>
+                            State Leaderboard
+                        </CardTitle>
+                        <CardDescription className="text-white/80 text-sm sm:text-base">Top workers with the most awards nationwide.</CardDescription>
                     </CardHeader>
                     <CardContent className="p-0">
                         <Table>
@@ -228,10 +229,13 @@ export default function RecognitionLeaderboardPage() {
                 </Card>
 
                 {/* Top Performing Contractors */}
-                <Card className="shadow-2xl border-0 rounded-2xl overflow-hidden">
-                    <CardHeader className="bg-gradient-to-r from-purple-600 to-violet-500 text-white">
-                        <CardTitle className="flex items-center text-2xl drop-shadow"><Award className="h-7 w-7 mr-3 text-purple-200"/>District Leaderboard</CardTitle>
-                        <CardDescription className="text-white/80">Top contractors with the most awards nationwide.</CardDescription>
+                <Card className="bg-white/95 backdrop-blur-xl shadow-xl border border-white/20 rounded-2xl sm:rounded-3xl overflow-hidden">
+                    <CardHeader className="bg-gradient-to-r from-purple-600/90 to-violet-600/90 text-white p-4 sm:p-6 md:p-8">
+                        <CardTitle className="flex items-center text-xl sm:text-2xl font-bold gap-3">
+                            <Award className="h-6 w-6 sm:h-8 sm:w-8 text-purple-200"/>
+                            District Leaderboard
+                        </CardTitle>
+                        <CardDescription className="text-white/80 text-sm sm:text-base">Top contractors with the most awards nationwide.</CardDescription>
                     </CardHeader>
                     <CardContent className="p-0">
                         <Table>
@@ -256,12 +260,15 @@ export default function RecognitionLeaderboardPage() {
                 </Card>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
                 {/* Top Recognized Workers */}
-                <Card className="shadow-2xl border-0 rounded-2xl overflow-hidden">
-                    <CardHeader className="bg-gradient-to-r from-blue-500 to-cyan-400 text-white">
-                        <CardTitle className="flex items-center text-2xl drop-shadow"><Star className="h-7 w-7 mr-3 text-yellow-200"/>Worker Leaderboard</CardTitle>
-                        <CardDescription className="text-white/80">Top workers with the most awards nationwide.</CardDescription>
+                <Card className="bg-white/95 backdrop-blur-xl shadow-xl border border-white/20 rounded-2xl sm:rounded-3xl overflow-hidden">
+                    <CardHeader className="bg-gradient-to-r from-emerald-600/90 to-teal-600/90 text-white p-4 sm:p-6 md:p-8">
+                        <CardTitle className="flex items-center text-xl sm:text-2xl font-bold gap-3">
+                            <Star className="h-6 w-6 sm:h-8 sm:w-8 text-yellow-200"/>
+                            Worker Leaderboard
+                        </CardTitle>
+                        <CardDescription className="text-white/80 text-sm sm:text-base">Top workers with the most awards nationwide.</CardDescription>
                     </CardHeader>
                     <CardContent className="p-0">
                         <Table>
@@ -286,10 +293,13 @@ export default function RecognitionLeaderboardPage() {
                 </Card>
 
                 {/* Top Performing Contractors */}
-                <Card className="shadow-2xl border-0 rounded-2xl overflow-hidden">
-                    <CardHeader className="bg-gradient-to-r from-purple-600 to-violet-500 text-white">
-                        <CardTitle className="flex items-center text-2xl drop-shadow"><Award className="h-7 w-7 mr-3 text-purple-200"/>Contractor Leaderboard</CardTitle>
-                        <CardDescription className="text-white/80">Top contractors with the most awards nationwide.</CardDescription>
+                <Card className="bg-white/95 backdrop-blur-xl shadow-xl border border-white/20 rounded-2xl sm:rounded-3xl overflow-hidden">
+                    <CardHeader className="bg-gradient-to-r from-purple-600/90 to-violet-600/90 text-white p-4 sm:p-6 md:p-8">
+                        <CardTitle className="flex items-center text-xl sm:text-2xl font-bold gap-3">
+                            <Award className="h-6 w-6 sm:h-8 sm:w-8 text-purple-200"/>
+                            Contractor Leaderboard
+                        </CardTitle>
+                        <CardDescription className="text-white/80 text-sm sm:text-base">Top contractors with the most awards nationwide.</CardDescription>
                     </CardHeader>
                     <CardContent className="p-0">
                         <Table>
@@ -315,12 +325,15 @@ export default function RecognitionLeaderboardPage() {
             </div>
 
         {/* Awards Distribution Chart */}
-        <Card className="shadow-2xl border-0 rounded-2xl overflow-hidden bg-gradient-to-br from-pink-100 via-blue-100 to-emerald-100">
-            <CardHeader className="bg-gradient-to-r from-fuchsia-500 via-blue-600 to-emerald-500 text-white">
-                <CardTitle className="flex items-center text-2xl drop-shadow"><BarChart2 className="h-7 w-7 mr-3"/>Monthly Awards Distribution</CardTitle>
-                <CardDescription className="text-white/80">Number of awards granted nationwide per month.</CardDescription>
+        <Card className="bg-white/95 backdrop-blur-xl shadow-xl border border-white/20 rounded-2xl sm:rounded-3xl overflow-hidden">
+            <CardHeader className="bg-gradient-to-r from-emerald-600/90 to-teal-600/90 text-white p-4 sm:p-6 md:p-8">
+                <CardTitle className="flex items-center text-xl sm:text-2xl font-bold gap-3">
+                    <BarChart2 className="h-6 w-6 sm:h-8 sm:w-8"/>
+                    Monthly Awards Distribution
+                </CardTitle>
+                <CardDescription className="text-white/80 text-sm sm:text-base">Number of awards granted nationwide per month.</CardDescription>
             </CardHeader>
-            <CardContent className="bg-gradient-to-br from-white via-blue-50 to-emerald-50 dark:bg-gray-800 p-4">
+            <CardContent className="p-4 sm:p-6">
                 <div className="h-80 relative">
                     <Bar
                         ref={chartRef}

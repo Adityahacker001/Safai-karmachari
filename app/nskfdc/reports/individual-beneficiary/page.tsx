@@ -265,8 +265,8 @@ const BeneficiaryReportPage = () => {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-sky-50 to-indigo-50 p-4 md:p-8 font-sans">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen p-2 sm:p-4 md:p-8 font-sans">
+      <div className="w-full mx-auto">
         
         {/* --- 1. Header Section --- */}
         <header className="mb-6">
@@ -280,51 +280,27 @@ const BeneficiaryReportPage = () => {
             <span className="font-semibold text-indigo-600">Individual Beneficiary Report</span>
           </nav>
 
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            {/* Title */}
-            <div className="flex items-center space-x-3">
-              <span className="p-2 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-full text-white shadow-lg">
-                <UserSearch className="w-8 h-8" />
+          {/* Title Card Responsive and Styled */}
+          <div className="w-full">
+            <div className="w-full rounded-2xl px-6 py-6 flex flex-col sm:flex-row items-center gap-4 shadow-lg"
+              style={{
+                background: 'linear-gradient(90deg, #4f6ef7 0%, #7c4fe6 50%, #f15b9c 100%)',
+                color: 'white',
+                boxShadow: '0 4px 24px 0 rgba(80, 80, 180, 0.10)',
+              }}>
+              <span className="p-4 bg-white/20 rounded-full mb-2 sm:mb-0">
+                <UserSearch className="w-10 h-10 text-white" />
               </span>
-              <div>
-                <h1 className="text-3xl font-bold text-slate-800">
-                  Individual Beneficiary Report
-                </h1>
-                <p className="text-slate-500 mt-1">
-                  View and analyze detailed beneficiary-level data.
-                </p>
+              <div className="flex flex-col items-center sm:items-start">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold drop-shadow-sm text-center sm:text-left">Individual Beneficiary Report</h1>
+                <p className="text-base sm:text-lg md:text-xl font-medium opacity-90 text-center sm:text-left">View and analyze detailed beneficiary-level data.</p>
               </div>
-            </div>
-
-            {/* Actions: Search & Export */}
-            <div className="flex items-center gap-2 w-full md:w-auto">
-              {/* Search Bar */}
-              <div className="relative flex-grow md:flex-grow-0">
-                <input
-                  type="text"
-                  placeholder="Search by Name, ID, Mobile..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full md:w-64 p-2.5 pl-10 rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/50 sm:text-sm"
-                />
-                <Search className="w-5 h-5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-              </div>
-              {/* Export Buttons */}
-              <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors shadow-sm" title="Export as Excel">
-                <FileSpreadsheet className="w-5 h-5 text-green-600" />
-              </button>
-              <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors shadow-sm" title="Export as PDF">
-                <FileDown className="w-5 h-5 text-red-600" />
-              </button>
-              <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors shadow-sm" title="Refresh Data">
-                <RefreshCcw className="w-5 h-5 text-blue-600" />
-              </button>
             </div>
           </div>
         </header>
 
-        {/* --- 2. Filters Panel --- */}
-        <div className="bg-white rounded-2xl shadow-xl p-6 border border-slate-100 mb-6">
+  {/* --- 2. Filters Panel --- */}
+  <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-6 border border-slate-100 mb-6">
           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-slate-800">
             <Filter className="w-5 h-5 text-indigo-600" />
             Filters
@@ -362,30 +338,44 @@ const BeneficiaryReportPage = () => {
               <FormInput label="To Date" type="date" name="dateTo" value={filters.dateTo} onChange={handleFilterChange} />
             </div>
           </div>
-          {/* Filter Buttons */}
-          <div className="flex justify-end gap-3 mt-5 border-t border-slate-200 pt-5">
-            <button
-              onClick={clearFilters}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all duration-200 hover:scale-[1.02]"
-            >
-              <X className="w-4 h-4" />
-              Clear Filters
-            </button>
-            <button
-              onClick={applyFilters}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all duration-200 hover:scale-[1.02] shadow-md hover:shadow-lg"
-            >
-              <Search className="w-4 h-4" />
-              Apply Filters
-            </button>
+          {/* Filter Buttons and Export/Reload Section */}
+          <div className="flex flex-col sm:flex-row justify-between gap-3 mt-5 border-t border-slate-200 pt-5">
+            <div className="flex gap-3">
+              <button
+                onClick={clearFilters}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all duration-200 hover:scale-[1.02]"
+              >
+                <X className="w-4 h-4" />
+                Clear Filters
+              </button>
+              <button
+                onClick={applyFilters}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all duration-200 hover:scale-[1.02] shadow-md hover:shadow-lg"
+              >
+                <Search className="w-4 h-4" />
+                Apply Filters
+              </button>
+            </div>
+            {/* Export/Reload Section under Filters */}
+            <div className="flex items-center gap-2 justify-end">
+              <button className="p-2.5 bg-white border border-slate-200 rounded-xl text-green-600 hover:bg-green-50 transition-colors shadow" title="Export as Excel">
+                <FileSpreadsheet className="w-5 h-5" />
+              </button>
+              <button className="p-2.5 bg-white border border-slate-200 rounded-xl text-red-600 hover:bg-red-50 transition-colors shadow" title="Export as PDF">
+                <FileDown className="w-5 h-5" />
+              </button>
+              <button className="p-2.5 bg-white border border-slate-200 rounded-xl text-blue-600 hover:bg-blue-50 transition-colors shadow" title="Refresh Data">
+                <RefreshCcw className="w-5 h-5" />
+              </button>
+            </div>
           </div>
         </div>
 
         {/* --- 3. Beneficiary Data Table --- */}
-        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-x-auto">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-indigo-100 text-indigo-800 font-semibold sticky top-0 z-10">
+              <thead className="bg-gradient-to-r from-indigo-200 via-pink-100 to-yellow-100 text-indigo-900 font-bold sticky top-0 z-10">
                 <tr>
                   <SortableHeader colKey="id" title="Beneficiary ID" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[150px]" />
                   <SortableHeader colKey="name" title="Name" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[180px]" />
@@ -401,42 +391,48 @@ const BeneficiaryReportPage = () => {
                   <SortableHeader colKey="amtSanctioned" title="Amt Sanctioned (₹)" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[160px]" />
                   <SortableHeader colKey="amtDisbursed" title="Amt Disbursed (₹)" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[160px]" />
                   <th className="px-4 py-3 text-left min-w-[200px]">Agency</th>
-                  {/* <SortableHeader colKey="status" title="Status" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px]" /> */}
+                  <th className="px-4 py-3 text-left min-w-[140px]">Status</th>
                   <th className="px-4 py-3 text-left min-w-[200px]">Remarks</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200">
-                {paginatedData.map((item) => (
-                  <tr key={item.id} className="hover:bg-indigo-50/70 transition-colors">
-                    <td className="px-4 py-3 text-slate-700 font-medium whitespace-nowrap">{item.id}</td>
-                    <td className="px-4 py-3 text-indigo-700 font-semibold whitespace-nowrap cursor-pointer hover:underline">{item.name}</td>
-                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{item.gender}</td>
-                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{item.caste}</td>
-                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{item.state}</td>
-                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{item.district}</td>
-                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{item.mobile}</td>
-                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{item.email}</td>
-                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{item.schemeName}</td>
-                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{item.schemeType}</td>
-                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap">
+              <tbody>
+                {paginatedData.map((item, idx) => (
+                  <tr
+                    key={item.id}
+                    className={
+                      `transition-colors ${idx % 2 === 0 ? 'bg-indigo-50/30' : 'bg-white'} hover:bg-pink-50/60`
+                    }
+                  >
+                    <td className="px-4 py-3 text-slate-700 font-medium whitespace-nowrap border-r border-slate-100">{item.id}</td>
+                    <td className="px-4 py-3 text-indigo-700 font-semibold whitespace-nowrap cursor-pointer hover:underline border-r border-slate-100">{item.name}</td>
+                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap border-r border-slate-100">{item.gender}</td>
+                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap border-r border-slate-100">{item.caste}</td>
+                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap border-r border-slate-100">{item.state}</td>
+                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap border-r border-slate-100">{item.district}</td>
+                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap border-r border-slate-100">{item.mobile}</td>
+                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap border-r border-slate-100">{item.email}</td>
+                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap border-r border-slate-100">{item.schemeName}</td>
+                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap border-r border-slate-100">{item.schemeType}</td>
+                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap border-r border-slate-100">
                       {new Date(item.regDate).toLocaleDateString('en-GB')}
                     </td>
-                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap text-right font-medium">
+                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap text-right font-medium border-r border-slate-100">
                       {item.amtSanctioned.toLocaleString('en-IN')}
                     </td>
-                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap text-right font-bold text-green-700">
+                    <td className="px-4 py-3 text-green-700 whitespace-nowrap text-right font-bold border-r border-slate-100">
                       {item.amtDisbursed.toLocaleString('en-IN')}
                     </td>
-                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{item.agency}</td>
-                    {/* <td className="px-4 py-3 text-slate-700 whitespace-nowrap">
+                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap border-r border-slate-100">{item.agency}</td>
+                    {/* Status Badge - now visible and colored */}
+                    <td className="px-4 py-3 whitespace-nowrap border-r border-slate-100">
                       <StatusBadge status={item.status as Status} />
-                    </td> */}
+                    </td>
                     <td className="px-4 py-3 text-slate-500 text-xs truncate max-w-xs">{item.remarks}</td>
                   </tr>
                 ))}
                 {paginatedData.length === 0 && (
                   <tr>
-                    <td colSpan={15} className="text-center py-10 text-slate-500">
+                    <td colSpan={16} className="text-center py-10 text-slate-500">
                       No beneficiaries found matching your criteria.
                     </td>
                   </tr>
@@ -446,7 +442,7 @@ const BeneficiaryReportPage = () => {
           </div>
           {/* --- Pagination Controls --- */}
           {totalPages > 1 && (
-            <div className="flex justify-between items-center p-4 border-t border-slate-200 bg-slate-50">
+            <div className="flex flex-col sm:flex-row justify-between items-center p-4 border-t border-slate-200 bg-gradient-to-r from-indigo-50 via-pink-50 to-yellow-50">
               {/* Rows per page */}
               <div className="flex items-center gap-2">
                 <label htmlFor="rowsPerPage" className="text-xs text-slate-600">Rows per page:</label>

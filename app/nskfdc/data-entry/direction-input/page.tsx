@@ -2,7 +2,7 @@
 // Ise run karne ke liye, aapke project mein React, TailwindCSS, 
 // aur lucide-react (npm install lucide-react) install hona zaroori hai.
 
-'use client'; // Next.js App Router ke liye
+'use client';
 
 import React, { useState, useMemo } from 'react';
 import {
@@ -35,6 +35,22 @@ import {
   BadgeAlert,
   ListChecks,
 } from 'lucide-react';
+import StatCard from '@/components/ui/stat-card';
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  Cell,
+} from 'recharts';
 
 // --- Mock Data ---
 const mockIssuingAuthority = ['MSJE', 'NSKFDC HQ', 'State Office', 'District Office'];
@@ -383,44 +399,15 @@ const DirectionInputPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-sky-50 to-indigo-50 p-4 md:p-8 font-sans">
-      <div className="max-w-6xl mx-auto">
-        
-        {/* --- 1. Header Section --- */}
-        <header className="mb-6">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-            {/* Breadcrumb & Title */}
-            <div>
-              <nav className="flex items-center text-sm font-medium text-slate-500" aria-label="Breadcrumb">
-                <LayoutDashboard className="w-4 h-4 mr-1.5" />
-                Dashboard
-                <ChevronRight className="w-4 h-4 mx-1" />
-                <ClipboardList className="w-4 h-4 mr-1.5" />
-                Data Entry
-                <ChevronRight className="w-4 h-4 mx-1" />
-                <span className="font-semibold text-indigo-600">Direction Input</span>
-              </nav>
-              <div className="mt-4 flex items-center space-x-3">
-                <span className="p-2 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-full text-white shadow-lg">
-                  <FileText className="w-8 h-8" />
-                </span>
-                <div>
-                  <h1 className="text-3xl font-bold text-slate-800">
-                    Direction Input
-                  </h1>
-                  <p className="text-slate-500 mt-1">
-                    Record and manage official directions received from MSJE or HQ.
-                  </p>
-                </div>
-              </div>
-            </div>
-            {/* Action Button */}
-            <button className="mt-4 md:mt-0 flex items-center justify-center px-4 py-2.5 rounded-lg font-semibold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5">
-              <BookOpen className="w-5 h-5 mr-2" />
-              View All Directions
-            </button>
-          </div>
-        </header>
+    <div className="min-h-screen bg-slate-50 font-sans">
+      <div className="max-w-screen-2xl mx-auto p-4 md:p-8">
+        {/* Header with gradient card */}
+        <div className="rounded-2xl bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-6 mb-8 shadow-lg">
+          <h1 className="text-3xl font-bold text-white mb-1">Direction Input</h1>
+          <p className="text-white/90 text-base">
+            Record and manage official directions received from MSJE or HQ.
+          </p>
+        </div>
 
         {/* --- 2. Form --- */}
         <form onSubmit={handleSubmit} noValidate className="space-y-6">

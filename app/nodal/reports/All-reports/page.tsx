@@ -308,25 +308,34 @@ export default function PerformanceReportsPage() {
     };
 
     return (
-        <div className="space-y-8 p-4 md:p-6 bg-slate-100 dark:bg-gray-900 min-h-screen">
-            <div className="flex flex-wrap justify-between items-center gap-4">
-                <div>
-                    <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Performance Reports Hub</h1>
-                    <p className="text-lg text-gray-500 dark:text-gray-400">Comprehensive analysis of all stakeholders.</p>
+        <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
+            {/* Header Card */}
+            <div className="bg-gradient-to-r from-blue-500 via-blue-600 to-purple-600 rounded-2xl p-6 sm:p-8 mb-6 text-white">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
+                            Performance Reports Hub
+                        </h1>
+                        <p className="text-blue-100 mt-2 text-sm sm:text-base lg:text-lg">
+                            Comprehensive analysis of all stakeholders
+                        </p>
+                    </div>
+                    <div className="mt-4 sm:mt-0 text-blue-100 text-sm">
+                        Last updated: {new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
+                    </div>
                 </div>
-                <p className="text-sm text-gray-400 dark:text-gray-500">Last updated: {new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
             </div>
 
-            <Card className="shadow-2xl border-0 rounded-2xl overflow-hidden bg-white dark:bg-gray-800">
-                <CardHeader className="p-0 border-b border-slate-200 dark:border-gray-700">
-                     <div className="flex flex-wrap items-center gap-2 p-3 bg-slate-50 dark:bg-gray-900/50">
+            <Card className="bg-white shadow-lg rounded-2xl overflow-hidden">
+                <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+                     <div className="flex flex-wrap items-center gap-2">
                         {mainTabs.map(tab => {
                             const Icon = tab.icon;
-                            return ( <Button key={tab.id} variant="ghost" onClick={() => setActiveMainTab(tab.id)} className={cn("flex-auto justify-center text-center h-11 px-3 text-sm font-medium transition-all duration-300 rounded-lg", activeMainTab === tab.id ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold shadow-md' : 'text-gray-600 dark:text-gray-300 hover:bg-slate-200 dark:hover:bg-gray-700')}><Icon className="mr-2 h-5 w-5" /> {tab.label}</Button> );
+                            return ( <Button key={tab.id} variant="ghost" onClick={() => setActiveMainTab(tab.id)} className={cn("flex-auto justify-center text-center h-11 px-3 text-sm font-medium transition-all duration-300 rounded-lg", activeMainTab === tab.id ? 'bg-white/20 text-white font-bold shadow-md backdrop-blur-sm' : 'text-blue-100 hover:bg-white/10')}><Icon className="mr-2 h-5 w-5" /> {tab.label}</Button> );
                         })}
                     </div>
                 </CardHeader>
-                <CardContent className="p-6 md:p-8">
+                <CardContent className="p-4 sm:p-6 lg:p-8">
                     {renderContent()}
                 </CardContent>
             </Card>

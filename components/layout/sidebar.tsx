@@ -86,7 +86,20 @@ interface SidebarProps {
   role: "contractor" | "nodal" | "district" | "state" | "national" | "sp-cp" | "organizational-nodal" | "nskfdc" | "dgp" | "shg"; // Added 'shg'
 }
 
-const roleConfig = {
+// Update the type definition for roleConfig to include 'Exception reports'
+interface RoleConfig {
+  title: string;
+  icon: React.ElementType;
+  color: string;
+  bgColor: string;
+  dataEntry?: Array<{ name: string; icon: React.ElementType; href: string }>;
+  reports?: Array<{ name: string; icon: React.ElementType; href: string }>;
+  "Exception reports"?: Array<{ name: string; icon: React.ElementType; href: string }>;
+
+  dashboard: string;
+}
+
+const roleConfig: Record<string, RoleConfig> = {
   contractor: {
     title: "Contractor Dashboard",
     icon: Users,
@@ -156,7 +169,8 @@ const roleConfig = {
     color: "text-lime-400",
     bgColor: "from-lime-900/30 to-slate-900",
     dataEntry: [ { name: "New Scheme Entry", icon: ClipboardPlus, href: "/nskfdc/data-entry/new-scheme" }, { name: "Fund Allotment Entry", icon: Banknote, href: "/nskfdc/data-entry/fund-allotment" }, { name: "Direction Input", icon: FilePenLine, href: "/nskfdc/data-entry/direction-input" }, { name: "Direction Compliance Input", icon: ClipboardCheck, href: "/nskfdc/data-entry/direction-compliance" }, { name: "Grievance Feedback Input", icon: MessagesSquare, href: "/nskfdc/data-entry/grievance" }, { name: "General Feedback Input", icon: Inbox, href: "/nskfdc/data-entry/feedback" }, ],
-    reports: [ { name: "Scheme Master Report", icon: Library, href: "/nskfdc/reports/scheme-master" }, { name: "Individual Beneficiary Report", icon: UserSquare, href: "/nskfdc/reports/individual-beneficiary" }, { name: "SHG Beneficiary Report", icon: Group, href: "/nskfdc/reports/shg-beneficiary" }, { name: "Fund Disbursement Report", icon: Receipt, href: "/nskfdc/reports/fund-disbursement" }, { name: "Direction Compliance Report", icon: CheckCheck, href: "/nskfdc/reports/direction-compliance" }, { name: "Grievance Feedback Report", icon: MessageSquareWarning, href: "/nskfdc/reports/grievance-feedback" }, { name: "General Feedback Report", icon: ClipboardList, href: "/nskfdc/reports/general-feedback" }, { name: "Scheme Utilization Summary", icon: ListOrdered, href: "/nskfdc/reports/scheme-utilization" }, { name: "District-Wise Performance", icon: MapIcon, href: "/nskfdc/reports/district-performance" }, { name: "Annual Report Summary", icon: Book, href: "/nskfdc/reports/annual-summary" }, { name: "Pending Disbursement Report", icon: FileClock, href: "/nskfdc/reports/pending-disbursement" }, { name: "Rejected Applications Report", icon: FileX, href: "/nskfdc/reports/rejected-applications" }, { name: "Delayed Compliance Report", icon: FileClock, href: "/nskfdc/reports/delayed-compliance" }, { name: "Unresolved Grievance Report", icon: FileWarning, href: "/nskfdc/reports/unresolved-grievances" }, { name: "Low Utilization Districts", icon: TrendingDown, href: "/nskfdc/reports/low-utilization-districts" }, ],
+    "Exception reports": [{ name: "Rejected Applications Report", icon: FileX, href: "/nskfdc/reports/rejected-applications" }, { name: "Delayed Compliance Report", icon: FileClock, href: "/nskfdc/reports/delayed-compliance" }, { name: "Unresolved Grievance Report", icon: FileWarning, href: "/nskfdc/reports/unresolved-grievances" }, { name: "Low Utilization Districts", icon: TrendingDown, href: "/nskfdc/reports/low-utilization-districts" },],
+    reports: [ { name: "Scheme Master Report", icon: Library, href: "/nskfdc/reports/scheme-master" }, { name: "Individual Beneficiary Report", icon: UserSquare, href: "/nskfdc/reports/individual-beneficiary" }, { name: "SHG Beneficiary Report", icon: Group, href: "/nskfdc/reports/shg-beneficiary" }, { name: "Fund Disbursement Report", icon: Receipt, href: "/nskfdc/reports/fund-disbursement" }, { name: "Direction Compliance Report", icon: CheckCheck, href: "/nskfdc/reports/direction-compliance" }, { name: "Grievance Feedback Report", icon: MessageSquareWarning, href: "/nskfdc/reports/grievance-feedback" }, { name: "General Feedback Report", icon: ClipboardList, href: "/nskfdc/reports/general-feedback" }, { name: "Scheme Utilization Summary", icon: ListOrdered, href: "/nskfdc/reports/scheme-utilization" }, { name: "District-Wise Performance", icon: MapIcon, href: "/nskfdc/reports/district-performance" }, { name: "Annual Report Summary", icon: Book, href: "/nskfdc/reports/annual-summary" }, { name: "Pending Disbursement Report", icon: FileClock, href: "/nskfdc/reports/pending-disbursement" } ],
     dashboard: "/nskfdc/nskfdc-dashboard",
   },
   "dgp": {
@@ -239,6 +253,7 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
   const RoleIcon = config.icon;
   const [isDataEntryOpen, setIsDataEntryOpen] = useState(true);
   const [isReportsOpen, setIsReportsOpen] = useState(true);
+  const [isExceptionReportsOpen, setIsExceptionReportsOpen] = useState(true); // State for Exception Reports
 
   const searchParams = useSearchParams();
   const spcpQuery = searchParams ? searchParams.get("role") : null;
@@ -294,6 +309,16 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
       </button>
     );
   };
+
+  // Update all Exception Reports routes to point to /nskfdc/exception-report/
+  if (role === "nskfdc" && config["Exception reports"]) {
+    config["Exception reports"] = config["Exception reports"].map((report) => {
+      return {
+        ...report,
+        href: report.href.replace("/nskfdc/reports/", "/nskfdc/exception-report/"),
+      };
+    });
+  }
 
   // Define which roles should have the Profile link
   const showProfileLink = [
@@ -412,7 +437,7 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
               </button>
               {isDataEntryOpen && (
                 <div className="space-y-1 pt-1 pl-4">
-                  {config.dataEntry.map((item) => (
+                  {config.dataEntry?.map((item) => (
                     <NavLink
                       key={item.href}
                       href={item.href}
@@ -459,12 +484,44 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
               </button>
               {isReportsOpen && (
                 <div className="space-y-1 pt-1 pl-4">
-                  {config.reports.map((item) => (
+                  {config.reports?.map((item) => (
                     <NavLink
                       key={item.href}
                       href={item.href}
                       icon={item.icon}
                       activeClass="bg-gradient-to-r from-pink-500 to-red-600 text-white shadow-lg scale-[1.03] border border-pink-400/50"
+                      inactiveClass="text-white/80 hover:text-white hover:scale-[1.02]"
+                    >
+                      {item.name}
+                    </NavLink>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Add Exception Reports section for NSKFDC role */}
+          {role === "nskfdc" && config["Exception reports"] && (
+            <div key="exception-reports" className="space-y-2">
+              <button
+                onClick={() => setIsExceptionReportsOpen(!isExceptionReportsOpen)}
+                className="w-full flex items-center justify-between px-4 py-2 text-sm font-bold text-white/90 bg-white/5 rounded-lg hover:bg-white/10 transition-all"
+              >
+                <span>Exception Reports</span>
+                {isExceptionReportsOpen ? (
+                  <ChevronDown className="h-4 w-4" />
+                ) : (
+                  <ChevronRight className="h-4 w-4" />
+                )}
+              </button>
+              {isExceptionReportsOpen && (
+                <div className="space-y-1 pt-1 pl-4">
+                  {config["Exception reports"].map((item) => (
+                    <NavLink
+                      key={item.href}
+                      href={item.href}
+                      icon={item.icon}
+                      activeClass="bg-gradient-to-r from-yellow-500 to-orange-600 text-white shadow-lg scale-[1.03] border border-yellow-400/50"
                       inactiveClass="text-white/80 hover:text-white hover:scale-[1.02]"
                     >
                       {item.name}

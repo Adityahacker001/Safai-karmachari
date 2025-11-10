@@ -107,34 +107,35 @@ const AuditLogs = () => {
   ];
 
   return (
-    <div className="space-y-6 bg-gradient-to-br from-gray-50 via-white to-gray-100 p-6 rounded-xl shadow-inner">
-      <div className="mb-6">
-        <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent text-left">Audit Logs</h1>
-        <p className="text-gray-700 mt-2 text-left">Track system activities and user actions in real-time</p>
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
+      {/* Header Card */}
+      <div className="bg-gradient-to-r from-blue-500 via-blue-600 to-purple-600 rounded-2xl p-6 sm:p-8 mb-6 text-white">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">Audit Logs</h1>
+        <p className="text-blue-100 mt-2 text-sm sm:text-base lg:text-lg">Track system activities and user actions in real-time</p>
       </div>
 
       {/* Activity Statistics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6">
         {activityStats.map((stat, index) => (
-          <div key={index} className={`p-6 rounded-xl shadow-md text-white bg-gradient-to-r ${stat.color}`}>
+          <div key={index} className={`p-4 sm:p-6 rounded-xl shadow-lg text-white bg-gradient-to-r ${stat.color} hover:scale-105 transition-transform duration-200`}>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium opacity-90">{stat.title}</p>
-                <p className="text-3xl font-bold">{stat.value}</p>
+                <p className="text-xs sm:text-sm font-medium opacity-90">{stat.title}</p>
+                <p className="text-2xl sm:text-3xl font-bold">{stat.value}</p>
               </div>
-              <stat.icon className="w-10 h-10 opacity-90" />
+              <stat.icon className="w-8 h-8 sm:w-10 sm:h-10 opacity-90" />
             </div>
           </div>
         ))}
       </div>
 
       {/* Filters and Search */}
-      <div className="bg-gradient-to-r from-indigo-50 via-white to-indigo-50 rounded-xl shadow-lg p-6 border border-indigo-100">
-        <h3 className="text-lg font-semibold text-indigo-700 mb-4">Filter Audit Logs</h3>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 border mb-6">
+        <h3 className="text-lg font-semibold text-gray-700 mb-4">Filter Audit Logs</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Date Range</label>
-            <select className="w-full p-2 border border-indigo-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+            <select className="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
               <option>Last 24 hours</option>
               <option>Last 7 days</option>
               <option>Last 30 days</option>
@@ -143,7 +144,7 @@ const AuditLogs = () => {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Action Type</label>
-            <select className="w-full p-2 border border-indigo-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+            <select className="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
               <option>All actions</option>
               <option>User Login</option>
               <option>Data Update</option>
@@ -153,7 +154,7 @@ const AuditLogs = () => {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">User Role</label>
-            <select className="w-full p-2 border border-indigo-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+            <select className="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
               <option>All roles</option>
               <option>Administrator</option>
               <option>Contractor</option>
@@ -165,19 +166,19 @@ const AuditLogs = () => {
             <input
               type="text"
               placeholder="Search logs..."
-              className="w-full p-2 border border-indigo-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
         </div>
       </div>
 
       {/* Activity Breakdown */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-gradient-to-r from-blue-50 via-white to-blue-50 p-6 rounded-xl shadow-lg border border-blue-100">
-          <h3 className="text-lg font-semibold text-blue-700 mb-4">Activity Breakdown (Last 7 Days)</h3>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6">
+        <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-lg border">
+          <h3 className="text-lg font-semibold text-gray-700 mb-4">Activity Breakdown (Last 7 Days)</h3>
           <div className="space-y-3">
             {actionTypes.map((action, index) => (
-              <div key={index} className="flex items-center justify-between">
+              <div key={index} className="flex items-center justify-between p-2 hover:bg-gray-50 rounded-lg transition-colors">
                 <div className="flex items-center">
                   <div className={`w-3 h-3 rounded-full ${action.color} mr-3`}></div>
                   <span className="text-sm text-gray-700">{action.type}</span>
@@ -188,53 +189,57 @@ const AuditLogs = () => {
           </div>
         </div>
 
-        <div className="bg-gradient-to-r from-pink-50 via-white to-pink-50 p-6 rounded-xl shadow-lg border border-pink-100">
-          <h3 className="text-lg font-semibold text-pink-700 mb-4">Most Active Users</h3>
+        <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-lg border">
+          <h3 className="text-lg font-semibold text-gray-700 mb-4">Most Active Users</h3>
           <div className="space-y-3">
-            <div className="flex items-center justify-between p-2 bg-pink-100 rounded">
-              <span className="text-sm font-medium text-pink-900">Abishek Kumar</span>
-              <span className="text-sm text-pink-800">18 actions</span>
+            <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border-l-4 border-blue-400">
+              <span className="text-sm font-medium text-gray-800">Abishek Kumar</span>
+              <span className="text-sm font-semibold text-blue-600">18 actions</span>
             </div>
-            <div className="flex items-center justify-between p-2 bg-pink-100 rounded">
-              <span className="text-sm font-medium text-pink-900">Priya Sharma</span>
-              <span className="text-sm text-pink-800">15 actions</span>
+            <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border-l-4 border-green-400">
+              <span className="text-sm font-medium text-gray-800">Priya Sharma</span>
+              <span className="text-sm font-semibold text-green-600">15 actions</span>
             </div>
-            <div className="flex items-center justify-between p-2 bg-pink-100 rounded">
-              <span className="text-sm font-medium text-pink-900">System Admin</span>
-              <span className="text-sm text-pink-800">12 actions</span>
+            <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg border-l-4 border-purple-400">
+              <span className="text-sm font-medium text-gray-800">System Admin</span>
+              <span className="text-sm font-semibold text-purple-600">12 actions</span>
             </div>
-            <div className="flex items-center justify-between p-2 bg-pink-100 rounded">
-              <span className="text-sm font-medium text-pink-900">Amit Singh</span>
-              <span className="text-sm text-pink-800">9 actions</span>
+            <div className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg border-l-4 border-yellow-400">
+              <span className="text-sm font-medium text-gray-800">Amit Singh</span>
+              <span className="text-sm font-semibold text-yellow-600">9 actions</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Audit Logs Table */}
-      <div className="bg-white p-6 rounded-xl shadow-xl border border-gray-300">
-        <h3 className="text-lg font-bold text-gray-800 mb-4">Recent Activity Logs</h3>
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse border border-gray-400 text-sm">
-            <thead>
-              <tr className="bg-green-500 text-white text-center">
-                {logColumns.map((col, idx) => (
-                  <th key={idx} className="border border-gray-400 px-4 py-2">{col.header}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {auditLogs.map((row, rIdx) => (
-                <tr key={rIdx} className={rIdx % 2 === 0 ? "bg-white" : "bg-gray-100"}>
-                  {logColumns.map((col, cIdx) => (
-                    <td key={cIdx} className="border border-gray-400 px-4 py-2 text-center">
-                      {col.render ? col.render((row as any)[col.key]) : (row as any)[col.key]}
-                    </td>
+      <div className="bg-white rounded-2xl shadow-lg overflow-hidden border">
+        <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-4 sm:p-6">
+          <h3 className="text-lg font-bold text-white">Recent Activity Logs</h3>
+        </div>
+        <div className="p-0">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-gradient-to-r from-gray-50 to-gray-100 border-b-2 border-blue-200">
+                  {logColumns.map((col, idx) => (
+                    <th key={idx} className="text-gray-700 font-semibold py-4 px-6 text-left">{col.header}</th>
                   ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {auditLogs.map((row, rIdx) => (
+                  <tr key={rIdx} className={`hover:bg-gray-50 transition-colors border-l-4 border-l-blue-400 ${rIdx % 2 === 0 ? "bg-white" : "bg-gray-50/30"}`}>
+                    {logColumns.map((col, cIdx) => (
+                      <td key={cIdx} className="py-4 px-6 border-b border-gray-200">
+                        {col.render ? col.render((row as any)[col.key]) : (row as any)[col.key]}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

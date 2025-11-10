@@ -1,293 +1,188 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  Box,
-  Container,
-  Typography,
-  Tabs,
-  Tab,
-  Grid,
-  Card,
-  CardContent,
-  TableContainer,
-  Paper,
   Table,
-  TableHead,
-  TableRow,
-  TableCell,
   TableBody,
-  Chip,
-  Avatar,
-} from "@mui/material";
-import { styled, keyframes } from "@mui/material/styles";
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import StatCard from "@/components/ui/stat-card";
 
 // Icons
-import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
-import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
-import PriceCheckIcon from '@mui/icons-material/PriceCheck';
-import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
-import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
-import DomainVerificationIcon from '@mui/icons-material/DomainVerification';
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import {
+  BookOpen,
+  Wallet,
+  DollarSign,
+  Clock,
+  CheckCircle,
+  Shield,
+  TrendingUp,
+  Download
+} from "lucide-react";
 
-// --- Styles ---
-const fadeIn = keyframes`
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-`;
-
-const GradientCard = styled(Card)(({ theme }) => ({
-  color: theme.palette.common.white,
-  borderRadius: (theme.shape.borderRadius as number) * 2,
-  overflow: 'hidden',
-  animation: `${fadeIn} 450ms ease-out`,
-}));
-
-const CardIconWrap = styled(Avatar)({
-  width: 44,
-  height: 44,
-  marginRight: 12,
-  boxShadow: 'rgba(0,0,0,0.08) 0px 4px 10px',
-});
-
-const Title = styled(Typography)(({ theme }) => ({
-  fontWeight: 700,
-  background: 'linear-gradient(90deg,#673ab7,#2196f3)',
-  WebkitBackgroundClip: 'text',
-  WebkitTextFillColor: 'transparent',
-}));
-
-// --- Mock Data ---
-type CompensationRow = {
-  id: string;
-  worker: string;
-  category: string;
-  fir: string;
-  amount: string;
-  status: 'Paid' | 'Pending' | 'Delayed';
-  date: string;
-  delay: string;
-};
-
-const compensationData: CompensationRow[] = [
-  { id: 'INC-001', worker: 'Ramesh Kumar', category: 'Sewer Death', fir: 'FIR-123 / Closed', amount: '₹10 Lakh', status: 'Paid', date: '2025-09-15', delay: 'N/A' },
-  { id: 'INC-002', worker: 'Sita Devi', category: 'Injury', fir: 'FIR-124 / Pending', amount: '₹5 Lakh', status: 'Pending', date: 'N/A', delay: 'Awaiting FIR Closure' },
-  { id: 'INC-003', worker: 'Anil Singh', category: 'Sewer Death', fir: 'FIR-125 / Pending', amount: '₹10 Lakh', status: 'Delayed', date: 'N/A', delay: 'Document Mismatch' },
+// Mock Data
+const compensationData = [
+  { id: "INC-001", worker: "Ramesh Kumar", category: "Sewer Death", fir: "FIR-123 / Closed", amount: "₹10 Lakh", status: "Paid", date: "2025-09-15", delay: "N/A" },
+  { id: "INC-002", worker: "Sita Devi", category: "Injury", fir: "FIR-124 / Pending", amount: "₹5 Lakh", status: "Pending", date: "N/A", delay: "Awaiting FIR Closure" },
+  { id: "INC-003", worker: "Anil Singh", category: "Sewer Death", fir: "FIR-125 / Pending", amount: "₹10 Lakh", status: "Delayed", date: "N/A", delay: "Document Mismatch" },
 ];
 
-type SchemeRow = {
-  worker: string;
-  scheme: string;
-  status: 'Approved' | 'Pending' | 'Rejected';
-  amount: string;
-  date: string;
-  remarks: string;
-};
-
-const schemeData: SchemeRow[] = [
-  { worker: 'Anil Singh', scheme: 'Skill Loan', status: 'Approved', amount: '₹50,000', date: '2025-08-20', remarks: 'For mechanization training' },
-  { worker: 'Sunita Bai', scheme: 'Rehab Grant', status: 'Pending', amount: 'N/A', date: 'N/A', remarks: 'Document verification ongoing' },
-  { worker: 'Aditya Kumar', scheme: 'Skill Loan', status: 'Rejected', amount: 'N/A', date: 'N/A', remarks: 'Ineligible criteria' },
+const schemeData = [
+  { worker: "Anil Singh", scheme: "Skill Loan", status: "Approved", amount: "₹50,000", date: "2025-08-20", remarks: "For mechanization training" },
+  { worker: "Sunita Bai", scheme: "Rehab Grant", status: "Pending", amount: "N/A", date: "N/A", remarks: "Document verification ongoing" },
+  { worker: "Aditya Kumar", scheme: "Skill Loan", status: "Rejected", amount: "N/A", date: "N/A", remarks: "Ineligible criteria" },
 ];
-
-// --- Helper for chips ---
-function StatusChip({ status }: { status: CompensationRow['status'] }) {
-  const common = { size: 'small' } as const;
-  if (status === 'Paid') return <Chip label="Paid" color="success" {...common} />;
-  if (status === 'Pending') return <Chip label="Pending" color="warning" {...common} />;
-  return <Chip label="Delayed" color="error" {...common} />;
-}
-
-function SchemeStatusChip({ status }: { status: SchemeRow['status'] }) {
-  const common = { size: 'small' } as const;
-  if (status === 'Approved') return <Chip label="Approved" color="success" {...common} />;
-  if (status === 'Pending') return <Chip label="Pending" color="warning" {...common} />;
-  return <Chip label="Rejected" color="error" {...common} />;
-}
-
-// --- Gradient helpers ---
-const gradients = {
-  blue: 'linear-gradient(135deg,#5c6bc0 0%,#2196f3 100%)',
-  green: 'linear-gradient(135deg,#26a69a 0%,#66bb6a 100%)',
-  purple: 'linear-gradient(135deg,#7e57c2 0%,#ab47bc 100%)',
-  orange: 'linear-gradient(135deg,#ff7043 0%,#ffca28 100%)',
-};
 
 export default function FinancialTrackerPage() {
-  const [tab, setTab] = React.useState(0);
+  const [tab, setTab] = useState(0);
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4, backgroundColor: '#f7f9fc', minHeight: '100vh' }}>
-      <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={3} flexWrap="wrap">
-        <Box>
-          <Title variant="h4">Financial Tracker</Title>
-          <Typography variant="subtitle1" color="text.secondary">Monitor worker compensation and scheme utilization across your jurisdiction.</Typography>
-        </Box>
-      </Box>
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
+      {/* Header Card */}
+      <div className="bg-gradient-to-r from-blue-500 via-blue-600 to-purple-600 rounded-2xl p-6 sm:p-8 mb-6 text-white">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
+              Financial Tracker
+            </h1>
+            <p className="text-blue-100 mt-2 text-sm sm:text-base lg:text-lg">
+              Monitor worker compensation and scheme utilization across your jurisdiction
+            </p>
+          </div>
+          <Button className="mt-4 sm:mt-0 bg-white text-blue-600 hover:bg-blue-50 font-semibold">
+            <Download className="h-4 w-4 mr-2" />
+            Export Report
+          </Button>
+        </div>
+      </div>
 
-      <Paper sx={{ p: 2, mb: 4 }}>
-        <Tabs value={tab} onChange={(e, v) => setTab(v)} textColor="primary" indicatorColor="primary">
-          <Tab label="Compensation Status" />
-          <Tab label="Scheme Utilization" />
-        </Tabs>
-      </Paper>
+      {/* Tabs */}
+      <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-6">
+        <div className="flex space-x-4">
+          <button
+            className={`px-4 py-2 rounded-lg font-semibold ${tab === 0 ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+            onClick={() => setTab(0)}
+          >
+            Compensation Status
+          </button>
+          <button
+            className={`px-4 py-2 rounded-lg font-semibold ${tab === 1 ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+            onClick={() => setTab(1)}
+          >
+            Scheme Utilization
+          </button>
+        </div>
+      </div>
 
       {tab === 0 && (
-        <Box>
-          <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: { xs: '1fr', sm: 'repeat(2,1fr)', md: 'repeat(4,1fr)' }, mb: 3 }}>
-            <GradientCard sx={{ background: gradients.blue }}>
-              <CardContent sx={{ display: 'flex', alignItems: 'center' }}>
-                <CardIconWrap sx={{ bgcolor: 'rgba(255,255,255,0.12)' }}><LibraryBooksIcon /></CardIconWrap>
-                <Box>
-                  <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.95)', fontWeight: 700 }}>Total Incidents Reported</Typography>
-                  <Typography variant="h5">15</Typography>
-                </Box>
-              </CardContent>
-            </GradientCard>
+        <div>
+          {/* Stat Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6">
+            <StatCard title="Total Incidents Reported" value="15" icon={BookOpen} color="blue" />
+            <StatCard title="Total Compensation Sanctioned" value="₹75 Lakh" icon={Wallet} color="green" />
+            <StatCard title="Total Compensation Paid" value="₹50 Lakh" icon={DollarSign} color="purple" />
+            <StatCard title="Pending Payment Cases" value="5" icon={Clock} color="orange" />
+          </div>
 
-            <GradientCard sx={{ background: gradients.green }}>
-              <CardContent sx={{ display: 'flex', alignItems: 'center' }}>
-                <CardIconWrap sx={{ bgcolor: 'rgba(255,255,255,0.12)' }}><AccountBalanceWalletIcon /></CardIconWrap>
-                <Box>
-                  <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.95)', fontWeight: 700 }}>Total Compensation Sanctioned</Typography>
-                  <Typography variant="h5">₹75 Lakh</Typography>
-                </Box>
-              </CardContent>
-            </GradientCard>
-
-            <GradientCard sx={{ background: gradients.purple }}>
-              <CardContent sx={{ display: 'flex', alignItems: 'center' }}>
-                <CardIconWrap sx={{ bgcolor: 'rgba(255,255,255,0.12)' }}><PriceCheckIcon /></CardIconWrap>
-                <Box>
-                  <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.95)', fontWeight: 700 }}>Total Compensation Paid</Typography>
-                  <Typography variant="h5">₹50 Lakh</Typography>
-                </Box>
-              </CardContent>
-            </GradientCard>
-
-            <GradientCard sx={{ background: gradients.orange }}>
-              <CardContent sx={{ display: 'flex', alignItems: 'center' }}>
-                <CardIconWrap sx={{ bgcolor: 'rgba(255,255,255,0.12)' }}><HourglassEmptyIcon /></CardIconWrap>
-                <Box>
-                  <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.95)', fontWeight: 700 }}>Pending Payment Cases</Typography>
-                  <Typography variant="h5">5</Typography>
-                </Box>
-              </CardContent>
-            </GradientCard>
-          </Box>
-
-          <Paper sx={{ p: 2 }}>
-            <Typography variant="h6" sx={{ mb: 2 }}>Incident-wise Compensation Report</Typography>
-            <TableContainer component={Paper} sx={{ borderRadius: 2 }}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Incident ID</TableCell>
-                    <TableCell>Worker(s) Involved</TableCell>
-                    <TableCell>Incident Category</TableCell>
-                    <TableCell>FIR No. & Status</TableCell>
-                    <TableCell>Compensation Amount Sanctioned</TableCell>
-                    <TableCell>Payment Status</TableCell>
-                    <TableCell>Date Paid</TableCell>
-                    <TableCell>Reason for Delay</TableCell>
+          {/* Table */}
+          <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6">
+            <h2 className="text-lg font-bold text-gray-700 mb-4">Incident-wise Compensation Report</h2>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Incident ID</TableHead>
+                  <TableHead>Worker(s) Involved</TableHead>
+                  <TableHead>Incident Category</TableHead>
+                  <TableHead>FIR No. & Status</TableHead>
+                  <TableHead>Compensation Amount Sanctioned</TableHead>
+                  <TableHead>Payment Status</TableHead>
+                  <TableHead>Date Paid</TableHead>
+                  <TableHead>Reason for Delay</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {compensationData.map((r) => (
+                  <TableRow key={r.id}>
+                    <TableCell>{r.id}</TableCell>
+                    <TableCell>{r.worker}</TableCell>
+                    <TableCell>{r.category}</TableCell>
+                    <TableCell>{r.fir}</TableCell>
+                    <TableCell>{r.amount}</TableCell>
+                    <TableCell>
+                      <Badge
+                        className={`font-semibold text-xs py-1 px-3 rounded-full ${
+                          r.status === "Paid" ? "bg-green-100 text-green-800" :
+                          r.status === "Pending" ? "bg-yellow-100 text-yellow-800" : "bg-red-100 text-red-800"
+                        }`}
+                      >
+                        {r.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{r.date}</TableCell>
+                    <TableCell>{r.delay}</TableCell>
                   </TableRow>
-                </TableHead>
-                <TableBody>
-                  {compensationData.map((r) => (
-                    <TableRow key={r.id} hover>
-                      <TableCell>{r.id}</TableCell>
-                      <TableCell>{r.worker}</TableCell>
-                      <TableCell>{r.category}</TableCell>
-                      <TableCell>{r.fir}</TableCell>
-                      <TableCell>{r.amount}</TableCell>
-                      <TableCell><StatusChip status={r.status} /></TableCell>
-                      <TableCell>{r.date}</TableCell>
-                      <TableCell>{r.delay}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Paper>
-        </Box>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
       )}
 
       {tab === 1 && (
-        <Box>
-          <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: { xs: '1fr', sm: 'repeat(2,1fr)', md: 'repeat(4,1fr)' }, mb: 3 }}>
-            <GradientCard sx={{ background: gradients.blue }}>
-              <CardContent sx={{ display: 'flex', alignItems: 'center' }}>
-                <CardIconWrap sx={{ bgcolor: 'rgba(255,255,255,0.12)' }}><LibraryBooksIcon /></CardIconWrap>
-                <Box>
-                  <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.95)', fontWeight: 700 }}>Total Scheme Applications</Typography>
-                  <Typography variant="h5">45</Typography>
-                </Box>
-              </CardContent>
-            </GradientCard>
+        <div>
+          {/* Stat Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6">
+            <StatCard title="Total Scheme Applications" value="45" icon={BookOpen} color="blue" />
+            <StatCard title="Applications Approved" value="32" icon={CheckCircle} color="green" />
+            <StatCard title="Applications Pending" value="13" icon={Shield} color="orange" />
+            <StatCard title="Total Funds Disbursed" value="₹12 Lakh" icon={TrendingUp} color="purple" />
+          </div>
 
-            <GradientCard sx={{ background: gradients.green }}>
-              <CardContent sx={{ display: 'flex', alignItems: 'center' }}>
-                <CardIconWrap sx={{ bgcolor: 'rgba(255,255,255,0.12)' }}><PlaylistAddCheckIcon /></CardIconWrap>
-                <Box>
-                  <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.95)', fontWeight: 700 }}>Applications Approved</Typography>
-                  <Typography variant="h5">32</Typography>
-                </Box>
-              </CardContent>
-            </GradientCard>
-
-            <GradientCard sx={{ background: gradients.orange }}>
-              <CardContent sx={{ display: 'flex', alignItems: 'center' }}>
-                <CardIconWrap sx={{ bgcolor: 'rgba(255,255,255,0.12)' }}><DomainVerificationIcon /></CardIconWrap>
-                <Box>
-                  <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.95)', fontWeight: 700 }}>Applications Pending</Typography>
-                  <Typography variant="h5">13</Typography>
-                </Box>
-              </CardContent>
-            </GradientCard>
-
-            <GradientCard sx={{ background: gradients.purple }}>
-              <CardContent sx={{ display: 'flex', alignItems: 'center' }}>
-                <CardIconWrap sx={{ bgcolor: 'rgba(255,255,255,0.12)' }}><MonetizationOnIcon /></CardIconWrap>
-                <Box>
-                  <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.95)', fontWeight: 700 }}>Total Funds Disbursed</Typography>
-                  <Typography variant="h5">₹12 Lakh</Typography>
-                </Box>
-              </CardContent>
-            </GradientCard>
-          </Box>
-
-          <Paper sx={{ p: 2 }}>
-            <Typography variant="h6" sx={{ mb: 2 }}>Worker-wise Benefits Report</Typography>
-            <TableContainer component={Paper} sx={{ borderRadius: 2 }}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Worker Name</TableCell>
-                    <TableCell>Scheme Name</TableCell>
-                    <TableCell>Application Status</TableCell>
-                    <TableCell>Amount Disbursed</TableCell>
-                    <TableCell>Disbursement Date</TableCell>
-                    <TableCell>Remarks</TableCell>
+          {/* Table */}
+          <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6">
+            <h2 className="text-lg font-bold text-gray-700 mb-4">Worker-wise Benefits Report</h2>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Worker Name</TableHead>
+                  <TableHead>Scheme Name</TableHead>
+                  <TableHead>Application Status</TableHead>
+                  <TableHead>Amount Disbursed</TableHead>
+                  <TableHead>Disbursement Date</TableHead>
+                  <TableHead>Remarks</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {schemeData.map((r, idx) => (
+                  <TableRow key={idx}>
+                    <TableCell>{r.worker}</TableCell>
+                    <TableCell>{r.scheme}</TableCell>
+                    <TableCell>
+                      <Badge
+                        className={`font-semibold text-xs py-1 px-3 rounded-full ${
+                          r.status === "Approved" ? "bg-green-100 text-green-800" :
+                          r.status === "Pending" ? "bg-yellow-100 text-yellow-800" : "bg-red-100 text-red-800"
+                        }`}
+                      >
+                        {r.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{r.amount}</TableCell>
+                    <TableCell>{r.date}</TableCell>
+                    <TableCell>{r.remarks}</TableCell>
                   </TableRow>
-                </TableHead>
-                <TableBody>
-                  {schemeData.map((r, idx) => (
-                    <TableRow key={idx} hover>
-                      <TableCell>{r.worker}</TableCell>
-                      <TableCell>{r.scheme}</TableCell>
-                      <TableCell><SchemeStatusChip status={r.status} /></TableCell>
-                      <TableCell>{r.amount}</TableCell>
-                      <TableCell>{r.date}</TableCell>
-                      <TableCell>{r.remarks}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Paper>
-        </Box>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
       )}
-    </Container>
+    </div>
   );
 }

@@ -78,13 +78,20 @@ const Directives = () => {
   ];
 
   return (
-    <div className="min-h-screen w-full max-w-full sm:max-w-full md:max-w-7xl mx-auto p-4 sm:p-6 md:p-12 space-y-6 sm:space-y-8 md:space-y-10">
-      <div className="text-center sm:text-left">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-          Directives Management
-        </h1>
-        <p className="text-gray-600 mt-2 sm:mt-3 text-base sm:text-lg md:text-xl">Track directives received from Nodal Officers</p>
-      </div>
+    <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">
+      {/* Enhanced Header */}
+      <header className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 rounded-xl sm:rounded-2xl"></div>
+        <div className="relative p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col gap-2 sm:gap-3">
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-black text-white drop-shadow-2xl leading-tight">
+            Directives Management
+          </h1>
+          <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-white/90 font-bold drop-shadow-lg">
+            Track directives received from Nodal Officers
+          </p>
+        </div>
+      </header>
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex flex-col gap-4">
@@ -138,7 +145,7 @@ const Directives = () => {
       </div>
 
       {/* Summary Cards */}
-      <div className="w-full max-w-full sm:max-w-full md:max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
         <StatCard
           title="Received Directives"
           value={receivedDirectives.length}
@@ -157,14 +164,17 @@ const Directives = () => {
       </div>
 
       {/* Table */}
-      <div className="w-full max-w-full sm:max-w-full md:max-w-6xl mx-auto bg-white/95 backdrop-blur-sm shadow-2xl border border-gray-100 rounded-2xl sm:rounded-3xl overflow-hidden transform transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1">
-        <div className="border-b border-gray-200 bg-gradient-to-r from-indigo-600 to-purple-700 text-white shadow-lg">
-          <div className="py-3 sm:py-4 px-4 sm:px-6 text-sm sm:text-base font-medium">
-            Directives Received from Nodal Officer
+      <div className="bg-white/95 backdrop-blur-xl shadow-xl border border-white/20 rounded-3xl overflow-hidden">
+        <div className="border-b border-gray-200/20 bg-gradient-to-r from-indigo-600/90 to-purple-600/90 text-white">
+          <div className="py-4 sm:py-6 px-4 sm:px-6 md:px-8">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold flex items-center gap-3">
+              <Inbox className="h-5 w-5 sm:h-6 sm:w-6" />
+              Directives Received from Nodal Officer
+            </h2>
           </div>
         </div>
 
-        <div className="p-4 sm:p-6">
+        <div className="p-3 sm:p-4 md:p-6">
             <DataTable
               title="Received Directives"
               columns={receivedColumns}

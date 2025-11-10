@@ -6,7 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { Award, Send, User, Building, FileUp } from "lucide-react";
+import StatCard from '@/components/ui/stat-card';
+import { Award, Send, User, Building, FileUp, Users, Trophy, Star, CheckCircle } from "lucide-react";
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { contractorTheme } from "@/lib/theme";
@@ -34,14 +35,59 @@ export default function RecognitionNominationPage() {
         { id: "A-04", name: "Best Performing Contractor" },
     ];
 
+  // Mock data for statistics
+  const nominationStats = {
+    totalWorkers: workers.length,
+    totalContractors: contractors.length,
+    totalAwards: awards.length,
+    thisMonth: 8
+  };
+
   return (
-    <div className={cn("min-h-screen p-6 md:p-12 space-y-10", contractorTheme.page.formBackground)}>
-      <div>
-        <h2 className="text-5xl font-extrabold bg-gradient-to-r from-indigo-600 via-pink-600 to-yellow-500 bg-clip-text text-transparent">Nominate for Recognition</h2>
-        <p className="text-gray-500 mt-3 text-xl">Submit a nomination for an outstanding worker or contractor.</p>
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
+      {/* Header Card */}
+      <div className="bg-gradient-to-r from-blue-500 via-blue-600 to-purple-600 rounded-2xl p-6 sm:p-8 mb-6 text-white">
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
+          Nominate for Recognition
+        </h2>
+        <p className="text-blue-100 mt-2 text-sm sm:text-base lg:text-lg">
+          Submit a nomination for an outstanding worker or contractor.
+        </p>
       </div>
 
-      <Card className={cn(contractorTheme.card.container, "max-w-4xl mx-auto")}>
+      {/* Summary Cards - Using StatCard Component */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6">
+        <StatCard
+          title="Total Workers"
+          value={nominationStats.totalWorkers}
+          subtitle="Eligible for nomination"
+          icon={Users}
+          color="blue"
+        />
+        <StatCard
+          title="Total Contractors"
+          value={nominationStats.totalContractors}
+          subtitle="Active contractors"
+          icon={Building}
+          color="green"
+        />
+        <StatCard
+          title="Award Categories"
+          value={nominationStats.totalAwards}
+          subtitle="Available awards"
+          icon={Trophy}
+          color="amber"
+        />
+        <StatCard
+          title="This Month"
+          value={nominationStats.thisMonth}
+          subtitle="Nominations submitted"
+          icon={Star}
+          color="purple"
+        />
+      </div>
+
+      <Card className="max-w-4xl mx-auto bg-white shadow-lg rounded-2xl">
         <CardHeader className={cn(contractorTheme.card.header)}>
           <CardTitle className={cn(contractorTheme.card.title, "flex items-center space-x-4")}>
             <Award className="h-9 w-9" />

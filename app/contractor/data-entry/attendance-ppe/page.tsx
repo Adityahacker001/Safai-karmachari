@@ -12,15 +12,23 @@ import { Textarea } from "@/components/ui/textarea";
 
 export default function AttendancePpePage() {
     return (
-        // Main container
-        <div className="min-h-screen w-full max-w-full sm:max-w-full md:max-w-7xl mx-auto p-4 sm:p-6 md:p-12 space-y-6 sm:space-y-8 md:space-y-10">
-            <div className="text-center sm:text-left">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Attendance & PPE Log</h2>
-                <p className="text-gray-600 mt-2 sm:mt-3 text-base sm:text-lg md:text-xl">Log daily worker attendance and record the distribution of safety equipment.</p>
-            </div>
+        <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">
+            {/* Enhanced Header */}
+            <header className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 rounded-xl sm:rounded-2xl"></div>
+                <div className="relative p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col gap-2 sm:gap-3">
+                    <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-black text-white drop-shadow-2xl leading-tight">
+                        Attendance & PPE Log
+                    </h1>
+                    <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-white/90 font-bold drop-shadow-lg">
+                        Log daily worker attendance and record the distribution of safety equipment.
+                    </p>
+                </div>
+            </header>
 
-            <Tabs defaultValue="attendance" className="w-full max-w-full sm:max-w-full md:max-w-6xl mx-auto">
-                <TabsList className="grid w-full grid-cols-2 h-12 sm:h-14 p-1 bg-gray-100 rounded-lg sm:rounded-xl shadow-lg">
+            <Tabs defaultValue="attendance" className="w-full">
+                <TabsList className="grid w-full grid-cols-2 h-12 sm:h-14 p-1 bg-white/95 backdrop-blur-xl rounded-xl border border-white/20 shadow-xl">
                     <TabsTrigger
                         value="attendance"
                         className="flex items-center justify-center space-x-1 sm:space-x-2 text-xs sm:text-sm md:text-lg font-medium sm:font-semibold text-gray-700 data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-md data-[state=active]:rounded-md sm:data-[state=active]:rounded-lg transition-all duration-300 ease-in-out py-2 px-2 sm:px-3 md:px-4"
@@ -41,8 +49,8 @@ export default function AttendancePpePage() {
 
                 {/* Attendance Log Tab Content */}
                 <TabsContent value="attendance" className="mt-6 sm:mt-8">
-                    <Card className="w-full max-w-full sm:max-w-full md:max-w-5xl mx-auto bg-white/95 backdrop-blur-sm shadow-2xl border border-gray-100 rounded-2xl sm:rounded-3xl overflow-hidden transform transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1">
-                        <CardHeader className="p-4 sm:p-6 md:p-8 bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg">
+                    <Card className="w-full bg-white/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl overflow-hidden">
+                        <CardHeader className="p-4 sm:p-6 bg-gradient-to-r from-blue-600/90 to-indigo-600/90 text-white">
                             <CardTitle className="text-xl sm:text-2xl md:text-3xl font-bold">
                                 <span className="break-words">Log Worker Attendance</span>
                             </CardTitle>
@@ -50,10 +58,10 @@ export default function AttendancePpePage() {
                                 Manually log a worker's check-in and check-out times for a specific day.
                             </CardDescription>
                         </CardHeader>
-                        <CardContent className="p-4 sm:p-6 md:p-8">
+                        <CardContent className="p-4 sm:p-6">
                             <form className="space-y-6 sm:space-y-8">
                                 {/* Attendance Form */}
-                                <div className="p-4 sm:p-6 border border-gray-200 rounded-xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:border-blue-300">
+                                <div className="p-4 sm:p-6 border border-gray-200 rounded-xl bg-white/95 backdrop-blur-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:border-blue-300">
                                     <div className="flex items-center space-x-3 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-gray-200">
                                         <UserRound className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600"/>
                                         <h3 className="text-lg sm:text-xl font-semibold text-gray-800">Attendance Details</h3>
@@ -118,8 +126,8 @@ export default function AttendancePpePage() {
 
                 {/* PPE Log Tab Content */}
                 <TabsContent value="ppe" className="mt-6 sm:mt-8">
-                    <Card className="w-full max-w-full sm:max-w-full md:max-w-5xl mx-auto bg-white/95 backdrop-blur-sm shadow-2xl border border-gray-100 rounded-2xl sm:rounded-3xl overflow-hidden transform transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1">
-                        <CardHeader className="p-4 sm:p-6 md:p-8 bg-gradient-to-r from-purple-600 to-pink-700 text-white shadow-lg">
+                    <Card className="w-full bg-white/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl overflow-hidden">
+                        <CardHeader className="p-4 sm:p-6 bg-gradient-to-r from-purple-600/90 to-pink-600/90 text-white">
                             <CardTitle className="text-xl sm:text-2xl md:text-3xl font-bold">
                                 <span className="break-words">Log PPE Distribution</span>
                             </CardTitle>
@@ -127,9 +135,9 @@ export default function AttendancePpePage() {
                                 Record the issuance of new or replacement safety gear to a worker. This creates an auditable safety record.
                             </CardDescription>
                         </CardHeader>
-                        <CardContent className="p-4 sm:p-6 md:p-8">
+                        <CardContent className="p-4 sm:p-6">
                             <form className="space-y-6 sm:space-y-8">
-                                <div className="p-4 sm:p-6 border border-gray-200 rounded-xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:border-purple-300">
+                                <div className="p-4 sm:p-6 border border-gray-200 rounded-xl bg-white/95 backdrop-blur-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:border-purple-300">
                                     <div className="flex items-center space-x-3 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-gray-200">
                                         <BriefcaseBusiness className="h-5 w-5 sm:h-6 sm:w-6 text-purple-700"/>
                                         <h3 className="text-lg sm:text-xl font-semibold text-gray-800">PPE Distribution Details</h3>

@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import { Plus, Check, X, Edit2, UserPlus, Users, Clock } from 'lucide-react';
+import StatCard from "@/components/ui/stat-card";
 
 // --- Self-contained placeholder components to ensure functionality ---
 
@@ -15,26 +16,6 @@ const TableBody = ({ children, ...props }: { children: ReactNode } & HTMLAttribu
 const TableRow = ({ children, ...props }: { children: ReactNode } & HTMLAttributes<HTMLTableRowElement>) => <tr {...props}>{children}</tr>;
 const TableCell = ({ children, ...props }: { children: ReactNode } & HTMLAttributes<HTMLTableCellElement>) => <td {...props}>{children}</td>;
 const TableHead = ({ children, ...props }: { children: ReactNode } & HTMLAttributes<HTMLTableCellElement>) => <th {...props}>{children}</th>;
-
-
-// --- Custom Styled Components ---
-
-
-interface StatCardProps {
-    title: string;
-    value: string | number;
-    icon: React.ElementType;
-    gradient: string;
-}
-const StatCard = ({ title, value, icon: Icon, gradient }: StatCardProps) => (
-    <div className={`relative bg-gradient-to-br ${gradient} p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl shadow-lg text-white overflow-hidden transition-transform transform hover:-translate-y-1.5 duration-300`}>
-        <Icon className="absolute -right-2 sm:-right-4 -bottom-2 sm:-bottom-4 h-16 sm:h-20 lg:h-24 w-16 sm:w-20 lg:w-24 text-white/10" />
-        <div className="relative">
-            <p className="font-semibold text-sm sm:text-base lg:text-lg text-white/90">{title}</p>
-            <p className="text-2xl sm:text-3xl lg:text-5xl font-bold mt-1 sm:mt-2">{value}</p>
-        </div>
-    </div>
-);
 
 
 interface RoleBreakdownStats {
@@ -102,21 +83,36 @@ export default function UserManagement() {
     const Pill = ({ text, gradient }: { text: string; gradient: string }) => <span className={`px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs font-bold text-white shadow-sm bg-gradient-to-r ${gradient}`}>{text}</span>;
 
     return (
-        <div className="space-y-4 sm:space-y-6 lg:space-y-8 p-3 sm:p-4 md:p-6 lg:p-8 min-h-screen">
-            {/* Header */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-4">
-                <div>
-                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-800">User Management</h1>
-                    <p className="mt-1 text-sm sm:text-md text-slate-500">Manage all system users and their roles.</p>
+        <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">
+            {/* Enhanced Header */}
+            <header className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 rounded-xl sm:rounded-2xl"></div>
+                <div className="relative p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col space-y-2 sm:space-y-3 md:space-y-4">
+                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
+                        <div className="flex-1 flex items-center gap-4">
+                            <Users className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-white drop-shadow-2xl" />
+                            <div>
+                                <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-black text-white drop-shadow-2xl leading-tight">
+                                    User Management
+                                </h1>
+                                <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/90 font-bold drop-shadow-lg">
+                                    Manage all system users and their roles
+                                </p>
+                            </div>
+                        </div>
+                        <div className="flex items-center space-x-4">
+                            <button
+                                onClick={() => setShowCreateModal(v => !v)}
+                                className="px-4 sm:px-6 py-2 sm:py-3 bg-white/20 text-white border-white/30 hover:bg-white/30 transition-all duration-200 text-sm sm:text-base backdrop-blur-sm rounded-lg sm:rounded-xl flex items-center gap-2 shadow-xl hover:shadow-2xl transform hover:scale-105 font-bold"
+                            >
+                                <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
+                                <span>Add New User</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <button
-                    onClick={() => setShowCreateModal(v => !v)}
-                    className="w-full sm:w-auto px-4 sm:px-5 py-2.5 sm:py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm sm:text-base"
-                >
-                    <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
-                    <span className="font-semibold">Add New User</span>
-                </button>
-            </div>
+            </header>
 
             {/* Add User Form as Modal Overlay */}
             {showCreateModal && (
@@ -174,38 +170,66 @@ export default function UserManagement() {
                 </div>
             )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-                <StatCard title="Total Users" value={roleStats.total} icon={Users} gradient="from-blue-500 to-indigo-600" />
-                <StatCard title="Active Users" value={roleStats.active} icon={Check} gradient="from-green-500 to-teal-600" />
-                <StatCard title="Pending Approval" value={roleStats.pending} icon={Clock} gradient="from-amber-500 to-orange-600" />
-                <RoleBreakdownCard stats={roleStats.byRole} />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                <StatCard
+                    title="Total Users"
+                    value={roleStats.total}
+                    icon={Users}
+                    color="blue"
+                />
+                <StatCard
+                    title="Active Users"
+                    value={roleStats.active}
+                    icon={Check}
+                    color="green"
+                />
+                <StatCard
+                    title="Pending Approval"
+                    value={roleStats.pending}
+                    icon={Clock}
+                    color="amber"
+                />
+                <StatCard
+                    title="State Officers"
+                    value={roleStats.byRole.state}
+                    subtitle={`District: ${roleStats.byRole.district} | Nodal: ${roleStats.byRole.nodal}`}
+                    icon={Users}
+                    color="purple"
+                />
             </div>
 
-            {/* Users Table - Excel Style */}
-            <div className="bg-white rounded-lg shadow-md border border-gray-300 overflow-hidden">
-                <div className="overflow-x-auto">
-                    <Table className="w-full border-collapse">
-                        <TableHeader>
-                            <TableRow className="bg-gray-100 border-b-2 border-gray-300">
-                                <TableHead className="p-3 text-left text-sm font-semibold text-gray-700 border-r border-gray-300">ID</TableHead>
-                                <TableHead className="p-3 text-left text-sm font-semibold text-gray-700 border-r border-gray-300">Name</TableHead>
-                                <TableHead className="p-3 text-left text-sm font-semibold text-gray-700 border-r border-gray-300">Email</TableHead>
-                                <TableHead className="p-3 text-left text-sm font-semibold text-gray-700 border-r border-gray-300">Role</TableHead>
-                                <TableHead className="p-3 text-left text-sm font-semibold text-gray-700 border-r border-gray-300">State</TableHead>
-                                <TableHead className="p-3 text-left text-sm font-semibold text-gray-700 border-r border-gray-300">District</TableHead>
-                                <TableHead className="p-3 text-left text-sm font-semibold text-gray-700 border-r border-gray-300">Status</TableHead>
-                                <TableHead className="p-3 text-left text-sm font-semibold text-gray-700 border-r border-gray-300">Last Login</TableHead>
-                                <TableHead className="p-3 text-center text-sm font-semibold text-gray-700">Actions</TableHead>
+            {/* Users Table */}
+            <div className="bg-white/95 backdrop-blur-xl shadow-xl border border-white/20 rounded-2xl sm:rounded-3xl overflow-hidden">
+                <div className="bg-gradient-to-r from-emerald-600/90 to-teal-600/90 text-white p-4 sm:p-6 md:p-8">
+                    <h3 className="text-xl sm:text-2xl font-bold flex items-center gap-3">
+                        <Users className="h-6 w-6 sm:h-8 sm:w-8" />
+                        System Users
+                    </h3>
+                    <p className="text-white/80 text-sm sm:text-base mt-1">Manage all registered users and their permissions</p>
+                </div>
+                <div className="p-0 overflow-x-auto">
+                    <Table className="w-full min-w-[900px] border-collapse">
+                        <TableHeader className="bg-slate-50">
+                            <TableRow className="border-b border-gray-200">
+                                <TableHead className="py-3 sm:py-4 px-3 sm:px-6 text-slate-600 font-bold text-sm sm:text-base text-left">ID</TableHead>
+                                <TableHead className="py-3 sm:py-4 px-3 sm:px-6 text-slate-600 font-bold text-sm sm:text-base text-left">Name</TableHead>
+                                <TableHead className="py-3 sm:py-4 px-3 sm:px-6 text-slate-600 font-bold text-sm sm:text-base text-left">Email</TableHead>
+                                <TableHead className="py-3 sm:py-4 px-3 sm:px-6 text-slate-600 font-bold text-sm sm:text-base text-left">Role</TableHead>
+                                <TableHead className="py-3 sm:py-4 px-3 sm:px-6 text-slate-600 font-bold text-sm sm:text-base text-left">State</TableHead>
+                                <TableHead className="py-3 sm:py-4 px-3 sm:px-6 text-slate-600 font-bold text-sm sm:text-base text-left">District</TableHead>
+                                <TableHead className="py-3 sm:py-4 px-3 sm:px-6 text-slate-600 font-bold text-sm sm:text-base text-left">Status</TableHead>
+                                <TableHead className="py-3 sm:py-4 px-3 sm:px-6 text-slate-600 font-bold text-sm sm:text-base text-left">Last Login</TableHead>
+                                <TableHead className="py-3 sm:py-4 px-3 sm:px-6 text-slate-600 font-bold text-sm sm:text-base text-center">Actions</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {userData.map((row, index) => (
-                                <TableRow key={row.id} className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} border-b border-gray-200 hover:bg-blue-50 transition-colors`}>
-                                    <TableCell className="p-3 text-sm text-gray-900 border-r border-gray-200 font-medium">{row.id}</TableCell>
-                                    <TableCell className="p-3 text-sm text-gray-900 border-r border-gray-200 font-medium">{row.name}</TableCell>
-                                    <TableCell className="p-3 text-sm text-gray-700 border-r border-gray-200">{row.email}</TableCell>
-                                    <TableCell className="p-3 text-sm border-r border-gray-200">
-                                        <span className={`px-2 py-1 rounded text-xs font-medium ${
+                                <TableRow key={row.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-150">
+                                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6 font-semibold text-gray-800 text-sm sm:text-base">{row.id}</TableCell>
+                                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6 font-semibold text-gray-800 text-sm sm:text-base">{row.name}</TableCell>
+                                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6 text-gray-700 text-sm sm:text-base">{row.email}</TableCell>
+                                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6">
+                                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                                             row.role === 'State' ? 'bg-blue-100 text-blue-800' :
                                             row.role === 'District' ? 'bg-green-100 text-green-800' : 
                                             'bg-purple-100 text-purple-800'
@@ -213,30 +237,30 @@ export default function UserManagement() {
                                             {row.role}
                                         </span>
                                     </TableCell>
-                                    <TableCell className="p-3 text-sm text-gray-700 border-r border-gray-200">{row.state}</TableCell>
-                                    <TableCell className="p-3 text-sm text-gray-700 border-r border-gray-200">{row.district}</TableCell>
-                                    <TableCell className="p-3 text-sm border-r border-gray-200">
-                                        <span className={`px-2 py-1 rounded text-xs font-medium ${
+                                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6 text-gray-700 text-sm sm:text-base">{row.state}</TableCell>
+                                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6 text-gray-700 text-sm sm:text-base">{row.district}</TableCell>
+                                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6">
+                                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                                             row.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
                                         }`}>
                                             {row.status}
                                         </span>
                                     </TableCell>
-                                    <TableCell className="p-3 text-sm text-gray-700 border-r border-gray-200">{row.lastLogin}</TableCell>
-                                    <TableCell className="p-3 text-center">
-                                        <div className="flex justify-center space-x-2">
+                                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6 text-gray-700 text-sm sm:text-base">{row.lastLogin}</TableCell>
+                                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6 text-center">
+                                        <div className="flex justify-center space-x-1 sm:space-x-2">
                                             {row.status === 'Pending' && (
                                                 <>
                                                     <button className="p-1 text-green-600 hover:bg-green-100 rounded" title="Approve">
-                                                        <Check className="w-4 h-4" />
+                                                        <Check className="w-3 h-3 sm:w-4 sm:h-4" />
                                                     </button>
                                                     <button className="p-1 text-red-600 hover:bg-red-100 rounded" title="Reject">
-                                                        <X className="w-4 h-4" />
+                                                        <X className="w-3 h-3 sm:w-4 sm:h-4" />
                                                     </button>
                                                 </>
                                             )}
                                             <button className="p-1 text-blue-600 hover:bg-blue-100 rounded" title="Edit">
-                                                <Edit2 className="w-4 h-4" />
+                                                <Edit2 className="w-3 h-3 sm:w-4 sm:h-4" />
                                             </button>
                                         </div>
                                     </TableCell>

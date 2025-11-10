@@ -65,15 +65,24 @@ const Reports: React.FC = () => {
     const solidCardStyle = "bg-white/95 border border-slate-200/80 shadow-2xl rounded-2xl";
 
     return (
-       
-            <div className="min-h-screen w-full max-w-full sm:max-w-full md:max-w-7xl mx-auto p-4 sm:p-6 md:p-12 space-y-6 sm:space-y-8 md:space-y-10 overflow-hidden">
-
-                {/* --- HEADER WITH GRADIENT TEXT --- */}
-                <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
-                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent text-center sm:text-left">
-                        Reports & Analytics
-                    </h1>
+        <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">
+            {/* Enhanced Header */}
+            <header className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 rounded-xl sm:rounded-2xl"></div>
+                <div className="relative p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col space-y-2 sm:space-y-3 md:space-y-4">
+                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
+                        <div>
+                            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-black text-white drop-shadow-2xl leading-tight">
+                                Reports & Analytics
+                            </h1>
+                            <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-white/90 font-bold drop-shadow-lg">
+                                Generate and download comprehensive reports
+                            </p>
+                        </div>
+                    </div>
                 </div>
+            </header>
 
                 {/* --- VIBRANT GLOWING STATS --- */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -88,8 +97,8 @@ const Reports: React.FC = () => {
                     ))}
                 </div>
 
-                {/* --- AVAILABLE REPORTS (SOLID CARD) --- */}
-                <div className="w-full max-w-full sm:max-w-full md:max-w-6xl mx-auto bg-white/95 backdrop-blur-sm border border-slate-200/80 shadow-2xl rounded-xl sm:rounded-2xl">
+                {/* Available Reports */}
+                <div className="bg-white/95 backdrop-blur-xl shadow-xl border border-white/20 rounded-3xl overflow-hidden">
                     <div className="p-4 sm:p-5 border-b border-slate-200">
                         <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-slate-800">Available Reports</h2>
                         <p className="text-xs sm:text-sm text-slate-500 mt-1">Generate and download standard reports in your preferred format.</p>

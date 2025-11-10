@@ -1,80 +1,39 @@
 "use client";
 
 import React, { useState } from 'react';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+// Removed duplicate import of StatCard
 import {
-    Box,
-    Container,
-    Typography,
-    Card,
-    CardContent,
-    Paper,
-    Table,
-    TableContainer,
-    TableHead,
-    TableRow,
-    TableCell,
-    TableBody,
-    Chip,
-    IconButton,
-    Tooltip,
-    Modal,
-    Divider,
-    Button
-} from '@mui/material';
-import { styled, keyframes } from '@mui/material/styles';
-
-// --- ICONS ---
-import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CancelIcon from '@mui/icons-material/Cancel';
-import ReportProblemIcon from '@mui/icons-material/ReportProblem';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import ThumbDownIcon from '@mui/icons-material/ThumbDown';
-import DescriptionIcon from '@mui/icons-material/Description';
-
-// --- ANIMATIONS & STYLES ---
-const fadeIn = keyframes`from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); }`;
-
-const GradientCard = styled(Card)(({ theme }) => ({
-    color: theme.palette.common.white,
-    position: 'relative',
-    overflow: 'hidden',
-    borderRadius: (theme.shape.borderRadius as number) * 2,
-    animation: `${fadeIn} 0.5s ease-out`,
-    transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
-    '&:hover': { transform: 'translateY(-5px)', boxShadow: theme.shadows[10] },
-}));
-
-const CardIcon = styled(Box)({
-    position: 'absolute',
-    top: '50%',
-    right: '16px',
-    transform: 'translateY(-50%)',
-    opacity: 0.2,
-    fontSize: '4rem',
-});
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    fontWeight: 'bold',
-    color: theme.palette.text.secondary,
-    backgroundColor: theme.palette.grey[50],
-    borderBottom: `1px solid ${theme.palette.divider}`,
-}));
-
-const ModalBox = styled(Box)(({ theme }) => ({
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '90%',
-    maxWidth: 600,
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[24],
-    borderRadius: (theme.shape.borderRadius as number) * 2,
-    padding: theme.spacing(3),
-    outline: 'none',
-}));
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { 
+  Clock, 
+  CheckCircle, 
+  X, 
+  AlertTriangle, 
+  Eye, 
+  ThumbsUp, 
+  ThumbsDown, 
+  FileText,
+  Users,
+  Building2
+} from "lucide-react";
+import StatCard from "@/components/ui/stat-card";
 
 // --- TYPESCRIPT INTERFACES ---
 interface CertificationRequest {
@@ -98,54 +57,6 @@ const certificationRequests: CertificationRequest[] = [
     { id: 'WO-2025-003', org: 'City Hospital', title: 'Bio-waste Disposal', by: 'Gupta & Sons', date: '2025-10-13', status: 'Overdue', details: { workers: 10, startDate: '2025-10-05', endDate: '2025-10-12' } },
 ];
 
-// --- MODAL COMPONENT ---
-const ViewDetailsModal = ({ open, handleClose, request }: { open: boolean, handleClose: () => void, request: CertificationRequest | null }) => (
-    <Modal open={open} onClose={handleClose} closeAfterTransition>
-        <ModalBox>
-            <Typography variant="h6" component="h2">Work Request Details</Typography>
-            <Typography variant="body2" color="text.secondary">{request?.id}</Typography>
-            <Divider sx={{ my: 2 }} />
-            {request && (
-                <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
-                    <Box>
-                        <Typography variant="subtitle2" color="text.secondary">Organization</Typography>
-                        <Typography fontWeight="bold">{request.org}</Typography>
-                    </Box>
-                    <Box>
-                        <Typography variant="subtitle2" color="text.secondary">Work Title</Typography>
-                        <Typography fontWeight="bold">{request.title}</Typography>
-                    </Box>
-                    <Box>
-                        <Typography variant="subtitle2" color="text.secondary">Executed By</Typography>
-                        <Typography fontWeight="bold">{request.by}</Typography>
-                    </Box>
-                    <Box>
-                        <Typography variant="subtitle2" color="text.secondary">Workers Deployed</Typography>
-                        <Typography fontWeight="bold">{request.details?.workers}</Typography>
-                    </Box>
-                    <Box>
-                        <Typography variant="subtitle2" color="text.secondary">Work Start Date</Typography>
-                        <Typography fontWeight="bold">{request.details?.startDate}</Typography>
-                    </Box>
-                    <Box>
-                        <Typography variant="subtitle2" color="text.secondary">Work End Date</Typography>
-                        <Typography fontWeight="bold">{request.details?.endDate}</Typography>
-                    </Box>
-                    <Box sx={{ gridColumn: '1 / -1' }}>
-                        <Typography variant="subtitle2" color="text.secondary" gutterBottom>Submitted Documents/Photos</Typography>
-                        <Button variant="outlined" startIcon={<DescriptionIcon />} size="small">View Attachment.pdf</Button>
-                    </Box>
-                </Box>
-            )}
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, mt: 3 }}>
-                <Button variant="outlined" onClick={handleClose}>Close</Button>
-                <Button variant="contained" color="error" startIcon={<ThumbDownIcon />}>Reject</Button>
-                <Button variant="contained" color="success" startIcon={<ThumbUpIcon />}>Approve</Button>
-            </Box>
-        </ModalBox>
-    </Modal>
-);
-
 // --- MAIN PAGE COMPONENT ---
 export default function WorkCertificationPage() {
     const [modalOpen, setModalOpen] = useState(false);
@@ -157,92 +68,176 @@ export default function WorkCertificationPage() {
     };
     const handleCloseModal = () => setModalOpen(false);
 
-    const statusChip = (status: 'Pending' | 'Overdue') => (
-        <Chip
-            label={status}
-            size="small"
-            sx={{
-                backgroundColor: status === 'Overdue' ? '#ffebee' : '#fff8e1',
-                color: status === 'Overdue' ? '#c62828' : '#f57f17',
-                fontWeight: 'bold',
-            }}
-        />
+    const statusBadge = (status: 'Pending' | 'Overdue') => (
+        <Badge 
+            variant={status === 'Overdue' ? 'destructive' : 'secondary'}
+            className={status === 'Overdue' ? '' : 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'}
+        >
+            {status}
+        </Badge>
     );
 
     return (
-        <Container maxWidth="xl" sx={{ py: 4, backgroundColor: '#f7f9fc', minHeight: '100vh' }}>
-            <ViewDetailsModal open={modalOpen} handleClose={handleCloseModal} request={selectedRequest} />
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
+        {/* Modal */}
+        <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+            <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                    <DialogTitle>Work Request Details</DialogTitle>
+                    <DialogDescription>{selectedRequest?.id}</DialogDescription>
+                </DialogHeader>
+                {selectedRequest && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
+                        <div>
+                            <p className="text-sm text-gray-600">Organization</p>
+                            <p className="font-semibold">{selectedRequest.org}</p>
+                        </div>
+                        <div>
+                            <p className="text-sm text-gray-600">Work Title</p>
+                            <p className="font-semibold">{selectedRequest.title}</p>
+                        </div>
+                        <div>
+                            <p className="text-sm text-gray-600">Executed By</p>
+                            <p className="font-semibold">{selectedRequest.by}</p>
+                        </div>
+                        <div>
+                            <p className="text-sm text-gray-600">Workers Deployed</p>
+                            <p className="font-semibold">{selectedRequest.details?.workers}</p>
+                        </div>
+                        <div>
+                            <p className="text-sm text-gray-600">Work Start Date</p>
+                            <p className="font-semibold">{selectedRequest.details?.startDate}</p>
+                        </div>
+                        <div>
+                            <p className="text-sm text-gray-600">Work End Date</p>
+                            <p className="font-semibold">{selectedRequest.details?.endDate}</p>
+                        </div>
+                        <div className="col-span-full">
+                            <p className="text-sm text-gray-600 mb-2">Submitted Documents/Photos</p>
+                            <Button variant="outline" size="sm">
+                                <FileText className="w-4 h-4 mr-2" />
+                                View Attachment.pdf
+                            </Button>
+                        </div>
+                    </div>
+                )}
+                <DialogFooter className="gap-2">
+                    <Button variant="outline" onClick={handleCloseModal}>Close</Button>
+                    <Button variant="destructive">
+                        <ThumbsDown className="w-4 h-4 mr-2" />
+                        Reject
+                    </Button>
+                    <Button className="bg-green-600 hover:bg-green-700">
+                        <ThumbsUp className="w-4 h-4 mr-2" />
+                        Approve
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
 
-            <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', background: 'linear-gradient(90deg, #673ab7, #2196f3)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+        {/* Header Card */}
+        <div className="bg-gradient-to-r from-blue-500 via-blue-600 to-purple-600 rounded-2xl p-6 sm:p-8 mb-6 text-white">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
                 Work Certification Queue
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
+            </h1>
+            <p className="text-blue-100 mt-2 text-sm sm:text-base lg:text-lg">
                 Review and approve/reject work completion requests from various organizations.
-            </Typography>
+            </p>
+        </div>
 
-            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: 'repeat(4, 1fr)' }, gap: 3, mb: 4 }}>
-                <GradientCard sx={{ background: "linear-gradient(135deg, #ffa726 0%, #ffca28 100%)" }}>
-                    <CardContent>
-                        <CardIcon><HourglassEmptyIcon /></CardIcon>
-                        <Typography variant="h5" fontWeight="bold">8</Typography>
-                        <Typography>Pending Requests</Typography>
-                    </CardContent>
-                </GradientCard>
-                <GradientCard sx={{ background: "linear-gradient(135deg, #26a69a 0%, #66bb6a 100%)" }}>
-                    <CardContent>
-                        <CardIcon><CheckCircleIcon /></CardIcon>
-                        <Typography variant="h5" fontWeight="bold">42</Typography>
-                        <Typography>Approved This Month</Typography>
-                    </CardContent>
-                </GradientCard>
-                <GradientCard sx={{ background: "linear-gradient(135deg, #ef5350 0%, #e57373 100%)" }}>
-                    <CardContent>
-                        <CardIcon><CancelIcon /></CardIcon>
-                        <Typography variant="h5" fontWeight="bold">5</Typography>
-                        <Typography>Rejected This Month</Typography>
-                    </CardContent>
-                </GradientCard>
-                <GradientCard sx={{ background: "linear-gradient(135deg, #d32f2f 0%, #ff7043 100%)" }}>
-                    <CardContent>
-                        <CardIcon><ReportProblemIcon /></CardIcon>
-                        <Typography variant="h5" fontWeight="bold">2</Typography>
-                        <Typography>Overdue Requests (&gt;48h)</Typography>
-                    </CardContent>
-                </GradientCard>
-            </Box>
-            
-            <TableContainer component={Paper} sx={{ borderRadius: 2, animation: `${fadeIn} 0.8s ease-out` }}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <StyledTableCell>Work Order ID</StyledTableCell>
-                            <StyledTableCell>Organization Name</StyledTableCell>
-                            <StyledTableCell>Work Title</StyledTableCell>
-                            <StyledTableCell>Contractor / SHG</StyledTableCell>
-                            <StyledTableCell>Date Submitted</StyledTableCell>
-                            <StyledTableCell align="center">Status</StyledTableCell>
-                            <StyledTableCell align="center">Actions</StyledTableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {certificationRequests.map(row => (
-                            <TableRow key={row.id} hover>
-                                <TableCell sx={{ fontWeight: 500 }}>{row.id}</TableCell>
-                                <TableCell>{row.org}</TableCell>
-                                <TableCell>{row.title}</TableCell>
-                                <TableCell>{row.by}</TableCell>
-                                <TableCell>{row.date}</TableCell>
-                                <TableCell align="center">{statusChip(row.status)}</TableCell>
-                                <TableCell align="center">
-                                    <Tooltip title="View Details"><IconButton color="primary" onClick={() => handleOpenModal(row)}><VisibilityIcon /></IconButton></Tooltip>
-                                    <Tooltip title="Approve"><IconButton color="success"><ThumbUpIcon /></IconButton></Tooltip>
-                                    <Tooltip title="Reject"><IconButton color="error"><ThumbDownIcon /></IconButton></Tooltip>
-                                </TableCell>
+        {/* Summary Cards - Using StatCard Component */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6">
+            <StatCard
+                title="Pending Requests"
+                value={8}
+                subtitle="Awaiting review"
+                icon={Clock}
+                color="amber"
+            />
+            <StatCard
+                title="Approved This Month"
+                value={42}
+                subtitle="Successfully approved"
+                icon={CheckCircle}
+                color="green"
+            />
+            <StatCard
+                title="Rejected This Month"
+                value={5}
+                subtitle="Did not meet criteria"
+                icon={X}
+                color="red"
+            />
+            <StatCard
+                title="Overdue Requests"
+                value={2}
+                subtitle="More than 48h"
+                icon={AlertTriangle}
+                color="purple"
+            />
+        </div>
+        
+        {/* Table */}
+        <Card className="bg-white shadow-lg rounded-2xl">
+                <CardHeader>
+                    <CardTitle>Work Certification Requests</CardTitle>
+                </CardHeader>
+                <CardContent className="p-0">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Work Order ID</TableHead>
+                                <TableHead>Organization</TableHead>
+                                <TableHead>Work Title</TableHead>
+                                <TableHead>Contractor/SHG</TableHead>
+                                <TableHead>Date Submitted</TableHead>
+                                <TableHead>Status</TableHead>
+                                <TableHead className="text-center">Actions</TableHead>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </Container>
+                        </TableHeader>
+                        <TableBody>
+                            {certificationRequests.map(row => (
+                                <TableRow key={row.id} className="hover:bg-gray-50">
+                                    <TableCell className="font-medium">{row.id}</TableCell>
+                                    <TableCell>{row.org}</TableCell>
+                                    <TableCell>{row.title}</TableCell>
+                                    <TableCell>{row.by}</TableCell>
+                                    <TableCell>{row.date}</TableCell>
+                                    <TableCell>{statusBadge(row.status)}</TableCell>
+                                    <TableCell className="text-center">
+                                        <div className="flex justify-center gap-1">
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={() => handleOpenModal(row)}
+                                                title="View Details"
+                                            >
+                                                <Eye className="w-4 h-4" />
+                                            </Button>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="text-green-600 hover:text-green-700 hover:bg-green-50"
+                                                title="Approve"
+                                            >
+                                                <ThumbsUp className="w-4 h-4" />
+                                            </Button>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                                                title="Reject"
+                                            >
+                                                <ThumbsDown className="w-4 h-4" />
+                                            </Button>
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </CardContent>
+            </Card>
+        </div>
     );
 }

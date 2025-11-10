@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import DataTable from '@/components/ui/data-table';
+import StatCard from '@/components/ui/stat-card';
 import { FileText, Send, Inbox, Plus } from 'lucide-react';
 
 interface Directive {
@@ -72,19 +73,65 @@ const Directives = () => {
   ];
 
   const receivedColumns = [
-    { key: 'directiveId', header: 'Directive ID' },
-    { key: 'from', header: 'From' },
-    { key: 'subject', header: 'Subject' },
-    { key: 'date', header: 'Date' },
+    { 
+      key: 'directiveId', 
+      header: 'Directive ID',
+      render: (value: string) => (
+        <span className="font-mono text-sm font-semibold text-slate-700 bg-slate-50 px-2 py-1 rounded border">
+          {value}
+        </span>
+      )
+    },
+    { 
+      key: 'from', 
+      header: 'From',
+      render: (value: string) => (
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xs font-semibold">
+            {value?.split(' ').map(word => word[0]).join('').slice(0, 2)}
+          </div>
+          <span className="text-sm font-medium text-slate-700">{value}</span>
+        </div>
+      )
+    },
+    { 
+      key: 'subject', 
+      header: 'Subject',
+      render: (value: string) => (
+        <div className="max-w-xs">
+          <span className="text-sm text-slate-800 font-medium line-clamp-2">{value}</span>
+        </div>
+      )
+    },
+    { 
+      key: 'date', 
+      header: 'Date',
+      render: (value: string) => (
+        <div className="text-sm text-slate-600">
+          {new Date(value).toLocaleDateString('en-IN', { 
+            day: '2-digit', 
+            month: 'short', 
+            year: 'numeric' 
+          })}
+        </div>
+      )
+    },
     {
       key: 'priority',
       header: 'Priority',
       render: (value: string) => (
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-          value === 'High' ? 'bg-red-200 text-red-800' :
-          value === 'Medium' ? 'bg-yellow-200 text-yellow-900' :
-          'bg-green-200 text-green-800'
+        <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm border-2 ${
+          value === 'High' 
+            ? 'bg-red-50 text-red-700 border-red-200' :
+          value === 'Medium' 
+            ? 'bg-amber-50 text-amber-700 border-amber-200' :
+            'bg-emerald-50 text-emerald-700 border-emerald-200'
         }`}>
+          <div className={`w-2 h-2 rounded-full mr-2 ${
+            value === 'High' ? 'bg-red-500' :
+            value === 'Medium' ? 'bg-amber-500' :
+            'bg-emerald-500'
+          }`}></div>
           {value}
         </span>
       )
@@ -93,11 +140,18 @@ const Directives = () => {
       key: 'status',
       header: 'Status',
       render: (value: string) => (
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-          value === 'Active' ? 'bg-blue-200 text-blue-800' :
-          value === 'Completed' ? 'bg-green-200 text-green-800' :
-          'bg-yellow-200 text-yellow-800'
+        <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm border-2 ${
+          value === 'Active' 
+            ? 'bg-blue-50 text-blue-700 border-blue-200' :
+          value === 'Completed' 
+            ? 'bg-green-50 text-green-700 border-green-200' :
+            'bg-orange-50 text-orange-700 border-orange-200'
         }`}>
+          <div className={`w-2 h-2 rounded-full mr-2 ${
+            value === 'Active' ? 'bg-blue-500' :
+            value === 'Completed' ? 'bg-green-500' :
+            'bg-orange-500'
+          }`}></div>
           {value}
         </span>
       )
@@ -105,19 +159,65 @@ const Directives = () => {
   ];
 
   const issuedColumns = [
-    { key: 'directiveId', header: 'Directive ID' },
-    { key: 'to', header: 'To' },
-    { key: 'subject', header: 'Subject' },
-    { key: 'date', header: 'Date' },
+    { 
+      key: 'directiveId', 
+      header: 'Directive ID',
+      render: (value: string) => (
+        <span className="font-mono text-sm font-semibold text-slate-700 bg-slate-50 px-2 py-1 rounded border">
+          {value}
+        </span>
+      )
+    },
+    { 
+      key: 'to', 
+      header: 'To',
+      render: (value: string) => (
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center text-white text-xs font-semibold">
+            {value?.split(' ').map(word => word[0]).join('').slice(0, 2)}
+          </div>
+          <span className="text-sm font-medium text-slate-700">{value}</span>
+        </div>
+      )
+    },
+    { 
+      key: 'subject', 
+      header: 'Subject',
+      render: (value: string) => (
+        <div className="max-w-xs">
+          <span className="text-sm text-slate-800 font-medium line-clamp-2">{value}</span>
+        </div>
+      )
+    },
+    { 
+      key: 'date', 
+      header: 'Date',
+      render: (value: string) => (
+        <div className="text-sm text-slate-600">
+          {new Date(value).toLocaleDateString('en-IN', { 
+            day: '2-digit', 
+            month: 'short', 
+            year: 'numeric' 
+          })}
+        </div>
+      )
+    },
     {
       key: 'priority',
       header: 'Priority',
       render: (value: string) => (
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-          value === 'High' ? 'bg-red-200 text-red-800' :
-          value === 'Medium' ? 'bg-yellow-200 text-yellow-900' :
-          'bg-green-200 text-green-800'
+        <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm border-2 ${
+          value === 'High' 
+            ? 'bg-red-50 text-red-700 border-red-200' :
+          value === 'Medium' 
+            ? 'bg-amber-50 text-amber-700 border-amber-200' :
+            'bg-emerald-50 text-emerald-700 border-emerald-200'
         }`}>
+          <div className={`w-2 h-2 rounded-full mr-2 ${
+            value === 'High' ? 'bg-red-500' :
+            value === 'Medium' ? 'bg-amber-500' :
+            'bg-emerald-500'
+          }`}></div>
           {value}
         </span>
       )
@@ -126,11 +226,18 @@ const Directives = () => {
       key: 'status',
       header: 'Status',
       render: (value: string) => (
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-          value === 'Active' ? 'bg-blue-200 text-blue-800' :
-          value === 'Completed' ? 'bg-green-200 text-green-800' :
-          'bg-yellow-200 text-yellow-800'
+        <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm border-2 ${
+          value === 'Active' 
+            ? 'bg-blue-50 text-blue-700 border-blue-200' :
+          value === 'Completed' 
+            ? 'bg-green-50 text-green-700 border-green-200' :
+            'bg-orange-50 text-orange-700 border-orange-200'
         }`}>
+          <div className={`w-2 h-2 rounded-full mr-2 ${
+            value === 'Active' ? 'bg-blue-500' :
+            value === 'Completed' ? 'bg-green-500' :
+            'bg-orange-500'
+          }`}></div>
           {value}
         </span>
       )
@@ -138,153 +245,234 @@ const Directives = () => {
   ];
 
   return (
-    <div className="space-y-8 p-6 bg-gradient-to-br from-indigo-50 via-pink-50 to-yellow-50 rounded-xl shadow-lg">
-      <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-extrabold bg-gradient-to-r from-indigo-600 via-pink-600 to-yellow-500 bg-clip-text text-transparent">
-            Directives Management
-          </h1>
-          <p className="text-gray-700 mt-2">Track received and issued directives</p>
-        </div>
-        <div className="flex flex-col gap-4">
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
+      {/* Header Card - District Dashboard Style */}
+      <div className="bg-gradient-to-r from-blue-500 via-blue-600 to-purple-600 rounded-2xl p-6 sm:p-8 mb-6 text-white">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
+              Directives Management
+            </h1>
+            <p className="text-blue-100 mt-2 text-sm sm:text-base lg:text-lg">
+              Track received and issued directives
+            </p>
+          </div>
           <button
-            className="flex items-center gap-2 px-6 py-2 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold shadow-lg hover:scale-105 transition-all"
+            className="flex items-center justify-center gap-2 px-4 py-2 sm:px-6 sm:py-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 text-white font-semibold shadow-lg hover:bg-white/30 transition-all duration-300 w-full sm:w-auto"
             onClick={() => setShowModal(true)}
           >
-            <Plus className="w-5 h-5" />
-            Issue New Directive
+            <Plus className="w-4 h-4" />
+            <span className="text-sm sm:text-base">Issue New Directive</span>
           </button>
-          {showModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
-              <div className="w-full max-w-xl bg-white rounded-2xl shadow-xl p-8 relative">
-                <div className="-mx-8 -mt-8 mb-8 rounded-t-2xl px-8 py-4" style={{background: 'linear-gradient(90deg, #e0c3fc 0%, #8ec5fc 100%)'}}>
-                  <h2 className="text-2xl font-bold text-black text-center">Issue New Directive</h2>
-                </div>
-                <form className="space-y-5">
-                  <div>
-                    <label className="block text-gray-700 font-medium mb-1">Recipients</label>
-                    <select className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200">
-                      <option>All contractors</option>
-                      <option>contractor 1</option>
-                      <option>contractor 2</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-gray-700 font-medium mb-1">Title</label>
-                    <input type="text" className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" placeholder="Enter directive title" />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700 font-medium mb-1">Message</label>
-                    <textarea className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" rows={4} placeholder="Enter directive message" />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700 font-medium mb-1">Priority</label>
-                    <select className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200">
-                      <option>High</option>
-                      <option>Medium</option>
-                      <option>Low</option>
-                    </select>
-                  </div>
-                  <div className="flex justify-end gap-3 pt-2">
-                    <button type="button" className="px-5 py-2 rounded-md border border-gray-300 bg-white text-gray-700 font-medium hover:bg-gray-100" onClick={() => setShowModal(false)}>Cancel</button>
-                    <button type="submit" className="px-5 py-2 rounded-md bg-gradient-to-r from-blue-400 to-blue-600 text-white font-semibold shadow hover:from-blue-500 hover:to-blue-700">Send Directive</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          )}
         </div>
       </div>
 
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <div className="bg-gradient-to-r from-blue-500 to-indigo-500 p-6 rounded-xl shadow-lg text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium">Received Directives</p>
-              <p className="text-3xl font-bold">{receivedDirectives.length}</p>
-              <p className="text-sm opacity-90">
-                Active: {receivedDirectives.filter(d => d.status === 'Active').length}
-              </p>
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden mx-4">
+            {/* Modal Header */}
+            <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 px-8 py-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                    <Plus className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-white">Issue New Directive</h2>
+                    <p className="text-indigo-100 text-sm">Send directive to contractors and stakeholders</p>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setShowModal(false)}
+                  className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition-colors"
+                >
+                  ×
+                </button>
+              </div>
             </div>
-            <Inbox className="w-10 h-10 opacity-90" />
-          </div>
-        </div>
 
-        <div className="bg-gradient-to-r from-green-500 to-emerald-500 p-6 rounded-xl shadow-lg text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium">Issued Directives</p>
-              <p className="text-3xl font-bold">{issuedDirectives.length}</p>
-              <p className="text-sm opacity-90">
-                Pending: {issuedDirectives.filter(d => d.status === 'Pending').length}
-              </p>
-            </div>
-            <Send className="w-10 h-10 opacity-90" />
-          </div>
-        </div>
+            {/* Modal Body */}
+            <form className="p-8 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-slate-700 font-semibold mb-2">Recipients</label>
+                  <select className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-colors">
+                    <option>All contractors</option>
+                    <option>Contractor 1</option>
+                    <option>Contractor 2</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-slate-700 font-semibold mb-2">Priority Level</label>
+                  <select className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-colors">
+                    <option>High</option>
+                    <option>Medium</option>
+                    <option>Low</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-slate-700 font-semibold mb-2">Directive Title</label>
+                <input 
+                  type="text" 
+                  className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-colors" 
+                  placeholder="Enter a clear and concise directive title" 
+                />
+              </div>
+              
+              <div>
+                <label className="block text-slate-700 font-semibold mb-2">Message Content</label>
+                <textarea 
+                  className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-colors resize-none" 
+                  rows={5} 
+                  placeholder="Provide detailed instructions and requirements for the directive..." 
+                />
+              </div>
 
-        <div className="bg-gradient-to-r from-yellow-500 to-orange-500 p-6 rounded-xl shadow-lg text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium">High Priority</p>
-              <p className="text-3xl font-bold">
-                {[...receivedDirectives, ...issuedDirectives].filter(d => d.priority === 'High').length}
-              </p>
-              <p className="text-sm opacity-90">Requiring attention</p>
-            </div>
-            <FileText className="w-10 h-10 opacity-90" />
+              {/* Action Buttons */}
+              <div className="flex justify-end gap-4 pt-4 border-t border-gray-100">
+                <button 
+                  type="button" 
+                  className="px-6 py-3 rounded-xl border-2 border-gray-200 bg-white text-slate-700 font-semibold hover:bg-gray-50 hover:border-gray-300 transition-colors"
+                  onClick={() => setShowModal(false)}
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit" 
+                  className="px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold shadow-lg hover:from-indigo-700 hover:to-purple-700 hover:shadow-xl transition-all duration-300"
+                >
+                  Send Directive
+                </button>
+              </div>
+            </form>
           </div>
         </div>
+      )}
+
+      {/* Stats Cards - Using StatCard Component */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
+        <StatCard
+          title="Received Directives"
+          value={receivedDirectives.length}
+          subtitle={`Active: ${receivedDirectives.filter(d => d.status === 'Active').length} | Completed: ${receivedDirectives.filter(d => d.status === 'Completed').length}`}
+          icon={Inbox}
+          color="blue"
+        />
+        <StatCard
+          title="Issued Directives"
+          value={issuedDirectives.length}
+          subtitle={`Active: ${issuedDirectives.filter(d => d.status === 'Active').length} | Pending: ${issuedDirectives.filter(d => d.status === 'Pending').length}`}
+          icon={Send}
+          color="green"
+        />
+        <StatCard
+          title="High Priority"
+          value={[...receivedDirectives, ...issuedDirectives].filter(d => d.priority === 'High').length}
+          subtitle={`Medium: ${[...receivedDirectives, ...issuedDirectives].filter(d => d.priority === 'Medium').length} | Total: ${[...receivedDirectives, ...issuedDirectives].length}`}
+          icon={FileText}
+          color="red"
+        />
       </div>
 
       {/* Tabs and Tables */}
-      <div className="bg-white rounded-xl shadow-xl overflow-hidden">
-        <div className="border-b border-gray-200 bg-gradient-to-r from-indigo-100 to-pink-100">
-          <nav className="-mb-px flex">
+      <div className="bg-white shadow-lg rounded-2xl overflow-hidden">
+        {/* Tab Navigation */}
+        <div className="border-b border-gray-200 bg-gray-50">
+          <nav className="flex">
             <button
               onClick={() => setActiveTab('received')}
-              className={`py-4 px-6 text-sm font-medium border-b-4 transition-all ${
+              className={`relative flex-1 py-4 px-6 text-sm font-semibold transition-all duration-300 ${
                 activeTab === 'received'
-                  ? 'border-indigo-500 text-indigo-700 bg-indigo-50'
-                  : 'border-transparent text-gray-600 hover:text-indigo-600 hover:bg-indigo-50'
+                  ? 'text-indigo-700 bg-white shadow-lg border-b-2 border-indigo-500'
+                  : 'text-slate-600 hover:text-slate-800 hover:bg-slate-50'
               }`}
             >
-              Directives Received from higher Authorities
+              <div className="flex items-center justify-center gap-2">
+                <Inbox className="w-4 h-4" />
+                <span className="hidden sm:inline">Received Directives</span>
+                <span className="sm:hidden">Received</span>
+                <span className={`ml-2 px-2 py-1 rounded-full text-xs font-bold ${
+                  activeTab === 'received' 
+                    ? 'bg-indigo-100 text-indigo-700' 
+                    : 'bg-slate-100 text-slate-600'
+                }`}>
+                  {receivedDirectives.length}
+                </span>
+              </div>
+              {activeTab === 'received' && (
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-indigo-500 to-purple-500"></div>
+              )}
             </button>
             <button
               onClick={() => setActiveTab('issued')}
-              className={`py-4 px-6 text-sm font-medium border-b-4 transition-all ${
+              className={`relative flex-1 py-4 px-6 text-sm font-semibold transition-all duration-300 ${
                 activeTab === 'issued'
-                  ? 'border-pink-500 text-pink-700 bg-pink-50'
-                  : 'border-transparent text-gray-600 hover:text-pink-600 hover:bg-pink-50'
+                  ? 'text-indigo-700 bg-white shadow-lg border-b-2 border-indigo-500'
+                  : 'text-slate-600 hover:text-slate-800 hover:bg-slate-50'
               }`}
             >
-              Directives Issued to Contractors
+              <div className="flex items-center justify-center gap-2">
+                <Send className="w-4 h-4" />
+                <span className="hidden sm:inline">Issued Directives</span>
+                <span className="sm:hidden">Issued</span>
+                <span className={`ml-2 px-2 py-1 rounded-full text-xs font-bold ${
+                  activeTab === 'issued' 
+                    ? 'bg-indigo-100 text-indigo-700' 
+                    : 'bg-slate-100 text-slate-600'
+                }`}>
+                  {issuedDirectives.length}
+                </span>
+              </div>
+              {activeTab === 'issued' && (
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-indigo-500 to-purple-500"></div>
+              )}
             </button>
           </nav>
         </div>
 
-        <div className="p-4">
+        {/* Table Container with Enhanced Styling */}
+        <div className="bg-white">
           {activeTab === 'received' && (
-            <DataTable
-              title="Received Directives"
-              columns={receivedColumns}
-              data={receivedDirectives}
-              actions={true}
-              onView={(row: Directive) => console.log('View directive:', row.directiveId)}
-            />
+            <div className="p-6">
+              <div className="mb-4 flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-bold text-slate-800">Received Directives</h3>
+                  <p className="text-sm text-slate-600 mt-1">
+                    Directives received from higher authorities
+                  </p>
+                </div>
+              </div>
+              <DataTable
+                title="Received Directives"
+                columns={receivedColumns}
+                data={receivedDirectives}
+                actions={true}
+                onView={(row: Directive) => console.log('View directive:', row.directiveId)}
+              />
+            </div>
           )}
           
           {activeTab === 'issued' && (
-            <DataTable
-              title="Issued Directives"
-              columns={issuedColumns}
-              data={issuedDirectives}
-              actions={true}
-              onView={(row: Directive) => console.log('View directive:', row.directiveId)}
-              onEdit={(row: Directive) => console.log('Edit directive:', row.directiveId)}
-            />
+            <div className="p-6">
+              <div className="mb-4 flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-bold text-slate-800">Issued Directives</h3>
+                  <p className="text-sm text-slate-600 mt-1">
+                    Directives issued to contractors and stakeholders
+                  </p>
+                </div>
+              </div>
+              <DataTable
+                title="Issued Directives"
+                columns={issuedColumns}
+                data={issuedDirectives}
+                actions={true}
+                onView={(row: Directive) => console.log('View directive:', row.directiveId)}
+                onEdit={(row: Directive) => console.log('Edit directive:', row.directiveId)}
+              />
+            </div>
           )}
         </div>
       </div>
