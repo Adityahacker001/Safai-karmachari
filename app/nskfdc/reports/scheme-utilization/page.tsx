@@ -296,27 +296,20 @@ const SchemeUtilizationPage = () => {
   const closeModal = () => setIsModalOpen(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-sky-50 to-indigo-50 p-4 md:p-8 font-sans">
+    <div className="min-h-screen p-4 md:p-8 font-sans">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <header className="mb-6">
            <nav className="flex items-center text-sm font-medium text-slate-500 mb-2"> <LayoutDashboard className="w-4 h-4 mr-1.5" /> Dashboard <ChevronRightIcon className="w-4 h-4 mx-1" /> Reports & Analytics <ChevronRightIcon className="w-4 h-4 mx-1" /> <span className="font-semibold text-indigo-600">Scheme Utilization Summary</span> </nav>
            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-             <div className="flex items-center space-x-3">
-               <span className="p-2 bg-gradient-to-br from-emerald-500 to-green-500 rounded-full text-white shadow-lg"><TrendingUp className="w-8 h-8" /></span>
-               <div> <h1 className="text-3xl font-bold text-slate-800">Scheme Utilization Summary</h1> <p className="text-slate-500 mt-1">Track and analyze utilization of funds across all NSKFDC schemes.</p> </div>
-             </div>
-             <div className="flex items-center gap-2">
-               <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all hover:scale-[1.03] shadow-md hover:shadow-lg" onClick={() => setIsInsightsOpen(true)}> <BarChart3 className="w-4 h-4" /> View Insights </button>
-               <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export CSV"><FileDown className="w-5 h-5 text-green-600" /></button>
-               <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export PDF"><FileDown className="w-5 h-5 text-red-600" /></button>
-               <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Refresh"><RefreshCcw className="w-5 h-5 text-blue-600" /></button>
+             <div className="flex items-center space-x-3 rounded-xl px-6 py-4 w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-lg">
+               <div> <h1 className="text-3xl font-bold text-white drop-shadow">Scheme Utilization Summary</h1> <p className="text-indigo-100 mt-1 font-medium">Track and analyze utilization of funds across all NSKFDC schemes.</p> </div>
              </div>
            </div>
          </header>
         {/* Filters */}
-        <div className="bg-white rounded-2xl shadow-xl p-6 border border-slate-100 mb-6">
-           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-slate-800"><Filter className="w-5 h-5 text-indigo-600" /> Filters</h2>
+        <div className="bg-white rounded-2xl shadow-xl p-6 border border-slate-100 mb-4">
+           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-slate-800">Filters</h2>
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">
              <FormSelect label="Scheme Name" name="schemeName" value={filters.schemeName} onChange={handleFilterChange}><option value="">All Schemes</option>{mockSchemes.map(s=><option key={s} value={s}>{s}</option>)}</FormSelect>
              <FormSelect label="State" name="state" value={filters.state} onChange={handleFilterChange}><option value="">All States</option>{mockStates.map(s=><option key={s} value={s}>{s}</option>)}</FormSelect>
@@ -328,18 +321,32 @@ const SchemeUtilizationPage = () => {
                <input type="text" id="search" placeholder="Scheme ID/Name..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="block w-full p-2 pl-9 rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/50 sm:text-sm"/>
                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-[37px]" />
              </div>
-             {/* <div className="grid grid-cols-2 gap-2 col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1"><FormInput label="From Date" type="date" name="dateFrom" value={filters.dateFrom} onChange={handleFilterChange} /><FormInput label="To Date" type="date" name="dateTo" value={filters.dateTo} onChange={handleFilterChange} /></div> */}
            </div>
            <div className="flex justify-end gap-3 mt-5 border-t border-slate-200 pt-5">
              <button onClick={clearFilters} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all hover:scale-[1.02]"><X className="w-4 h-4" /> Clear Filters</button>
              <button onClick={applyFilters} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all hover:scale-[1.02] shadow-md hover:shadow-lg"><Search className="w-4 h-4" /> Apply Filters</button>
            </div>
-         </div>
+        </div>
+        {/* Export/Reload Section - moved below Filters */}
+        <div className="flex flex-wrap gap-2 mb-6">
+           <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all hover:scale-[1.03] shadow-md hover:shadow-lg" onClick={() => setIsInsightsOpen(true)}>
+             <BarChart3 className="w-4 h-4" /> View Insights
+           </button>
+           <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export CSV">
+             <FileDown className="w-5 h-5 text-green-600" />
+           </button>
+           <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export PDF">
+             <FileDown className="w-5 h-5 text-red-600" />
+           </button>
+           <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Refresh">
+             <RefreshCcw className="w-5 h-5 text-blue-600" />
+           </button>
+        </div>
         {/* Table */}
-        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden w-full">
            <div className="overflow-x-auto">
              <table className="w-full text-sm">
-               <thead className="bg-indigo-100 text-indigo-800 font-semibold sticky top-0 z-10">
+               <thead className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-semibold">
                  <tr>
                    <th className="px-4 py-3 text-left">Sl.</th>
                    <SortableHeader colKey="schemeName" title="Scheme Name" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[180px]" />
@@ -350,15 +357,13 @@ const SchemeUtilizationPage = () => {
                    <SortableHeader colKey="amtReleased" title="Released (₹)" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px] text-right" />
                    <SortableHeader colKey="amtUtilized" title="Utilized (₹)" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px] text-right" />
                    <SortableHeader colKey="balance" title="Balance (₹)" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px] text-right" />
-                   {/* <SortableHeader colKey="percent" title="Util %" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[100px] text-right" /> */}
-                   {/* <SortableHeader colKey="status" title="Status" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px]" /> */}
                    <SortableHeader colKey="lastUpdated" title="Last Updated" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
                    <th className="px-4 py-3 text-center">Action</th>
                  </tr>
                </thead>
-               <tbody className="divide-y divide-slate-200">
+               <tbody>
                  {paginatedData.map((item, index) => (
-                   <tr key={item.id} className="hover:bg-indigo-50/70 transition-colors">
+                   <tr key={item.id} className={index % 2 === 0 ? "bg-white hover:bg-indigo-50/70 transition-colors" : "bg-indigo-50/40 hover:bg-indigo-100 transition-colors"}>
                      <td className="px-4 py-3 text-slate-500">{(currentPage-1)*rowsPerPage+index+1}</td>
                      <td className="px-4 py-3 text-indigo-700 font-semibold">{item.schemeName}</td>
                      <td className="px-4 py-3 text-slate-700">{item.schemeId}</td>
@@ -368,8 +373,6 @@ const SchemeUtilizationPage = () => {
                      <td className="px-4 py-3 text-green-700 font-bold text-right">{formatCurrency(item.amtReleased)}</td>
                      <td className="px-4 py-3 text-emerald-700 font-bold text-right">{formatCurrency(item.amtUtilized)}</td>
                      <td className="px-4 py-3 text-orange-700 font-bold text-right">{formatCurrency(item.balance)}</td>
-                     {/* <td className="px-4 py-3 text-slate-700 font-bold text-right">{item.percent}%</td> */}
-                     {/* <td className="px-4 py-3"><UtilizationStatusBadge status={item.status} /></td> */}
                      <td className="px-4 py-3 text-slate-700">{new Date(item.lastUpdated).toLocaleDateString('en-GB')}</td>
                      <td className="px-4 py-3 text-center"><button onClick={()=>openModal(item)} className="p-1.5 rounded-md text-indigo-600 hover:bg-indigo-100" title="View Details"><Eye className="w-5 h-5" /></button></td>
                    </tr>

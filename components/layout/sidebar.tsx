@@ -235,6 +235,20 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
     setIsMobileMenuOpen(false);
   }, [pathname]);
 
+  // --- Sidebar scroll position persistence ---
+  // Use a ref for the scrollable container
+  const scrollableRef = React.useRef<HTMLDivElement>(null);
+
+
+
+  // Restore scroll position after navigation
+  useEffect(() => {
+    const saved = sessionStorage.getItem('sidebarScroll');
+    if (scrollableRef.current && saved) {
+      scrollableRef.current.scrollTop = Number(saved);
+    }
+  }, [pathname]);
+
   // Prevent body scrolling when mobile menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -242,8 +256,6 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
     } else {
       document.body.style.overflow = 'unset';
     }
-    
-    // Cleanup function to reset overflow when component unmounts
     return () => {
       document.body.style.overflow = 'unset';
     };
@@ -285,10 +297,12 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
 
     const handleClick = (e: React.MouseEvent) => {
       e.preventDefault();
-      
+      // Store scroll position before navigation
+      if (scrollableRef.current) {
+        sessionStorage.setItem('sidebarScroll', String(scrollableRef.current.scrollTop));
+      }
       // Close mobile menu before navigation
       setIsMobileMenuOpen(false);
-      
       // Navigate using router
       router.push(href);
     };
@@ -395,7 +409,7 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
             Dashboard
           </NavLink>
 
-      <div className="flex-1 overflow-y-auto relative z-10">
+  <div className="flex-1 overflow-y-auto relative z-10" ref={scrollableRef}>
         <nav className="p-4 space-y-4">
           {/* Conditionally render Profile Link */}
           {showProfileLink && (

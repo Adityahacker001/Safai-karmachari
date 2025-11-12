@@ -304,36 +304,32 @@ const LowUtilizationPage = () => {
   const closeModal = () => setIsModalOpen(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-sky-50 to-indigo-50 p-4 md:p-8 font-sans">
+    <div className="min-h-screen p-4 md:p-8 font-sans">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
-         <header className="mb-6">
-           <nav className="flex items-center text-sm font-medium text-slate-500 mb-2"> <LayoutDashboard className="w-4 h-4 mr-1.5" /> Dashboard <ChevronRight className="w-4 h-4 mx-1" /> Reports & Analytics <ChevronRight className="w-4 h-4 mx-1" /> <span className="font-semibold text-indigo-600">Low Utilization Districts</span> </nav>
-           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-             <div className="flex items-center space-x-3">
-               <span className="p-2 bg-gradient-to-br from-red-500 to-orange-500 rounded-full text-white shadow-lg"><TrendingDown className="w-8 h-8" /></span>
-               <div> <h1 className="text-3xl font-bold text-slate-800">Low Utilization Districts</h1> <p className="text-slate-500 mt-1">Analyze districts with below-average fund utilization.</p> </div>
-             </div>
-             <div className="flex items-center gap-2">
-               <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all hover:scale-[1.03] shadow-md" onClick={() => setIsInsightsOpen(true)}> <BarChart3 className="w-4 h-4" /> View Insights </button>
-               <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export CSV"><FileDown className="w-5 h-5 text-green-600" /></button>
-               <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export PDF"><FileDown className="w-5 h-5 text-red-600" /></button>
-               <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Refresh"><RefreshCcw className="w-5 h-5 text-blue-600" /></button>
-             </div>
-           </div>
-         </header>
-        {/* Filters */}
-        <div className="bg-white rounded-2xl shadow-xl p-6 border border-slate-100 mb-6">
-           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-slate-800"><Filter className="w-5 h-5 text-indigo-600" /> Filters</h2>
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8 gap-4"> {/* More cols */}
-             <FormSelect label="FY" name="financialYear" value={filters.financialYear} onChange={handleFilterChange}><option value="">All</option>{mockFinancialYears.map(y=><option key={y} value={y}>{y}</option>)}</FormSelect>
-             <FormSelect label="State" name="state" value={filters.state} onChange={handleFilterChange}><option value="">All</option>{mockStates.map(s=><option key={s} value={s}>{s}</option>)}</FormSelect>
-             <FormSelect label="District" name="district" value={filters.district} onChange={handleFilterChange}><option value="">All</option>{mockDistricts.filter((d) => filters.state ? MOCK_LOW_UTILIZATION_DATA.find(data => data.state === filters.state && data.district === d) : true).map((s: string) => (
+        {/* Title Section - Remove icon, keep text in place, apply gradient background */}
+        <header className="mb-6">
+          <nav className="flex items-center text-sm font-medium text-slate-500 mb-2"> Dashboard <ChevronRightIcon className="w-4 h-4 mx-1" /> Exception Reports <ChevronRightIcon className="w-4 h-4 mx-1" /> <span className="font-semibold text-indigo-600">Low Utilization Districts</span> </nav>
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="flex items-center space-x-3 rounded-xl px-6 py-4 w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-lg">
+              <div>
+                <h1 className="text-3xl font-bold text-white drop-shadow">Low Utilization Districts Report</h1>
+                <p className="text-indigo-100 mt-1 font-medium">Monitor districts with low fund utilization and take corrective action.</p>
+              </div>
+            </div>
+          </div>
+        </header>
+        {/* Filters Section */}
+        <div className="bg-white rounded-2xl shadow-xl p-6 border border-slate-100 mb-4">
+          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-slate-800">Filters</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4">
+            <FormSelect label="FY" name="financialYear" value={filters.financialYear} onChange={handleFilterChange}><option value="">All</option>{mockFinancialYears.map(y=><option key={y} value={y}>{y}</option>)}</FormSelect>
+            <FormSelect label="State" name="state" value={filters.state} onChange={handleFilterChange}><option value="">All</option>{mockStates.map(s=><option key={s} value={s}>{s}</option>)}</FormSelect>
+            <FormSelect label="District" name="district" value={filters.district} onChange={handleFilterChange}><option value="">All</option>{mockDistricts.filter((d) => filters.state ? MOCK_LOW_UTILIZATION_DATA.find(data => data.state === filters.state && data.district === d) : true).map((s: string) => (
   <option key={s} value={s}>{s}</option>
 ))}</FormSelect>
-             <FormSelect label="Scheme" name="schemeName" value={filters.schemeName} onChange={handleFilterChange}><option value="">All</option>{mockSchemes.map(s=><option key={s} value={s}>{s}</option>)}</FormSelect>
-             <FormSelect label="Utilization Range" name="utilRange" value={filters.utilRange} onChange={handleFilterChange}><option value="">All</option>{mockUtilizationRanges.map(r=><option key={r} value={r}>{r}</option>)}</FormSelect>
-             <FormSelect label="Performance Status" name="perfStatus" value={filters.perfStatus} onChange={handleFilterChange}><option value="">All</option>{mockPerformanceStatus.map(s=><option key={s} value={s}>{s}</option>)}</FormSelect>
+            <FormSelect label="Scheme" name="schemeName" value={filters.schemeName} onChange={handleFilterChange}><option value="">All</option>{mockSchemes.map(s=><option key={s} value={s}>{s}</option>)}</FormSelect>
+            <FormSelect label="Utilization Range" name="utilRange" value={filters.utilRange} onChange={handleFilterChange}><option value="">All</option>{mockUtilizationRanges.map(r=><option key={r} value={r}>{r}</option>)}</FormSelect>
+            <FormSelect label="Performance Status" name="perfStatus" value={filters.perfStatus} onChange={handleFilterChange}><option value="">All</option>{mockPerformanceStatus.map(s=><option key={s} value={s}>{s}</option>)}</FormSelect>
              {/* <div className="grid grid-cols-2 gap-2"><FormInput label="From Date" type="date" name="dateFrom" value={filters.dateFrom} onChange={handleFilterChange} /><FormInput label="To Date" type="date" name="dateTo" value={filters.dateTo} onChange={handleFilterChange} /></div> */}
              <div className="relative col-span-2">
                <label htmlFor="search" className="block text-sm font-medium text-slate-600 mb-1">Search</label>
@@ -346,52 +342,59 @@ const LowUtilizationPage = () => {
              <button onClick={applyFilters} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all hover:scale-[1.02] shadow-md hover:shadow-lg"><Search className="w-4 h-4" /> Apply Filters</button>
            </div>
          </div>
-        {/* Table */}
-        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+         {/* Export/Reload Section - moved below Filters */}
+         <div className="flex flex-wrap gap-2 mb-6">
+      <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all hover:scale-[1.03] shadow-md hover:shadow-lg" onClick={() => setIsInsightsOpen(true)}>
+        <BarChart3 className="w-4 h-4" /> View Insights
+      </button>
+      <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export CSV">
+        <FileDown className="w-5 h-5 text-green-600" />
+      </button>
+      <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export PDF">
+        <FileDown className="w-5 h-5 text-red-600" />
+      </button>
+      <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Refresh">
+        <RefreshCcw className="w-5 h-5 text-blue-600" />
+      </button>
+    </div>
+         {/* Table Section - colorful header, striped rows, hover, rounded corners, shadow */}
+         <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden w-full">
            <div className="overflow-x-auto">
              <table className="w-full text-sm">
-               <thead className="bg-indigo-100 text-indigo-800 font-semibold sticky top-0 z-10">
+               <thead className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-semibold">
                  <tr>
                    <th className="px-4 py-3 text-left">Sl.</th>
-                   <SortableHeader colKey="state" title="State" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
-                   <SortableHeader colKey="district" title="District" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
-                   <SortableHeader colKey="schemeName" title="Scheme" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[180px]" />
-                   <SortableHeader colKey="fy" title="FY" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[100px]" />
-                   <SortableHeader colKey="fundSanctioned" title="Sanctioned (₹)" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px] text-right" />
-                   <SortableHeader colKey="fundUtilized" title="Utilized (₹)" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px] text-right" />
-                   {/* <SortableHeader colKey="utilizationPercent" title="Util %" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[100px] text-right" /> */}
-                   <th className="px-4 py-3 text-center min-w-[100px]">Target Ben.</th>
-                   <th className="px-4 py-3 text-center min-w-[100px]">Achieved Ben.</th>
-                   {/* <SortableHeader colKey="achievementPercent" title="Achieve %" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[110px] text-right" /> */}
-                   {/* <SortableHeader colKey="rating" title="Rating" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[180px]" /> */}
-                   <th className="px-4 py-3 text-left min-w-[200px]">Reason</th>
-                   <th className="px-4 py-3 text-left min-w-[200px]">Remarks</th>
-                   <SortableHeader colKey="lastUpdated" title="Last Updated" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
+                   <th className="px-4 py-3 text-left min-w-[150px]">State</th>
+                   <th className="px-4 py-3 text-left min-w-[150px]">District</th>
+                   <th className="px-4 py-3 text-left min-w-[200px]">Scheme Name</th>
+                   <th className="px-4 py-3 text-left min-w-[100px]">FY</th>
+                   <th className="px-4 py-3 text-left min-w-[140px]">Sanctioned (₹)</th>
+                   <th className="px-4 py-3 text-left min-w-[140px]">Utilized (₹)</th>
+                   <th className="px-4 py-3 text-left min-w-[100px]">Utilization %</th>
+                   <th className="px-4 py-3 text-left min-w-[100px]">Target Ben.</th>
+                   <th className="px-4 py-3 text-left min-w-[100px]">Achieved Ben.</th>
+                   <th className="px-4 py-3 text-left min-w-[120px]">Last Updated</th>
                    <th className="px-4 py-3 text-center">Action</th>
                  </tr>
                </thead>
-               <tbody className="divide-y divide-slate-200">
+               <tbody>
                  {paginatedData.map((item, index) => (
-                   <tr key={item.id} className="hover:bg-indigo-50/70 transition-colors">
-                     <td className="px-4 py-3 text-slate-500">{(currentPage-1)*rowsPerPage+index+1}</td>
+                   <tr key={item.id} className={index % 2 === 0 ? "bg-white hover:bg-indigo-50/70 transition-colors" : "bg-indigo-50/40 hover:bg-indigo-100 transition-colors"}>
+                     <td className="px-4 py-3 text-slate-500">{(currentPage - 1) * rowsPerPage + index + 1}</td>
                      <td className="px-4 py-3 text-slate-700">{item.state}</td>
-                     <td className="px-4 py-3 text-slate-700 font-semibold">{item.district}</td>
-                     <td className="px-4 py-3 text-indigo-700">{item.schemeName}</td>
+                     <td className="px-4 py-3 text-slate-700">{item.district}</td>
+                     <td className="px-4 py-3 text-slate-700">{item.schemeName}</td>
                      <td className="px-4 py-3 text-slate-700">{item.fy}</td>
-                     <td className="px-4 py-3 text-slate-700 font-medium text-right">{formatCurrency(item.fundSanctioned)}</td>
-                     <td className="px-4 py-3 text-emerald-700 font-bold text-right">{formatCurrency(item.fundUtilized)}</td>
-                     {/* <td className={`px-4 py-3 font-bold text-right ${item.utilizationPercent < 60 ? 'text-red-600' : 'text-green-600'}`}>{item.utilizationPercent}%</td> */}
-                     <td className="px-4 py-3 text-slate-700 text-center">{item.targetBen}</td>
-                     <td className="px-4 py-3 text-green-700 font-bold text-center">{item.achievedBen}</td>
-                     {/* <td className={`px-4 py-3 font-bold text-right ${item.achievementPercent < 60 ? 'text-red-600' : 'text-green-600'}`}>{item.achievementPercent}%</td> */}
-                     {/* <td className="px-4 py-3"><PerformanceRatingBadge rating={item.rating} /></td> */}
-                     <td className="px-4 py-3 text-slate-600 text-xs truncate max-w-[150px]">{item.reason}</td>
-                     <td className="px-4 py-3 text-slate-500 text-xs truncate max-w-[150px]">{item.remarks}</td>
+                     <td className="px-4 py-3 text-slate-700 text-right">{item.fundSanctioned.toLocaleString('en-IN')}</td>
+                     <td className="px-4 py-3 text-slate-700 text-right">{item.fundUtilized.toLocaleString('en-IN')}</td>
+                     <td className="px-4 py-3 text-blue-700 font-semibold">{item.utilizationPercent}%</td>
+                     <td className="px-4 py-3 text-slate-700">{item.targetBen}</td>
+                     <td className="px-4 py-3 text-slate-700">{item.achievedBen}</td>
                      <td className="px-4 py-3 text-slate-700">{new Date(item.lastUpdated).toLocaleDateString('en-GB')}</td>
                      <td className="px-4 py-3 text-center"><button onClick={()=>openModal(item)} className="p-1.5 rounded-md text-indigo-600 hover:bg-indigo-100" title="View Details"><Eye className="w-5 h-5" /></button></td>
                    </tr>
                  ))}
-                 {paginatedData.length === 0 && (<tr><td colSpan={13} className="text-center py-10 text-slate-500">No low utilization records found.</td></tr>)}
+                 {paginatedData.length === 0 && (<tr><td colSpan={12} className="text-center py-10 text-slate-500">No low utilization districts found.</td></tr>)}
                </tbody>
              </table>
            </div>

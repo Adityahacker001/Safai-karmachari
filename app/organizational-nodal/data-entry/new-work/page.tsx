@@ -209,18 +209,21 @@ export default function NewWorkAssignmentPage() {
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8 bg-gradient-to-br from-gray-50 via-teal-50 to-indigo-100 min-h-screen">
       {/* 🔹 Header */}
+      {/* Title Section - add gradient background color to match reference image */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="mb-8"
       >
-        <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-teal-600 via-cyan-600 to-blue-600 bg-clip-text text-transparent">
-          New Work Assignment
-        </h1>
-        <p className="text-sm text-gray-600 mt-1">
-          Register a new work assignment for NSKC-verified contractors or SHGs.
-        </p>
+        <div className="rounded-2xl shadow-lg px-8 py-7 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 flex flex-col gap-2">
+          <h1 className="text-3xl lg:text-4xl font-bold text-white drop-shadow">
+            New Work Assignment
+          </h1>
+          <p className="text-lg text-indigo-100 font-medium">
+            Register a new work assignment for NSKC-verified contractors or SHGs.
+          </p>
+        </div>
       </motion.div>
 
       {/* 🔹 Main Form Card */}

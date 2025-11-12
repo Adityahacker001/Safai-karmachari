@@ -369,9 +369,8 @@ const GrievanceReportPage = () => {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-sky-50 to-indigo-50 p-4 md:p-8 font-sans">
+    <div className="min-h-screen bg-white p-4 md:p-8 font-sans">
       <div className="max-w-7xl mx-auto">
-        
         {/* --- 1. Header Section --- */}
         <header className="mb-6">
           {/* Breadcrumb */}
@@ -381,44 +380,16 @@ const GrievanceReportPage = () => {
             Reports & Analytics <ChevronRightIcon className="w-4 h-4 mx-1" />
             <span className="font-semibold text-indigo-600">Grievance Feedback Report</span>
           </nav>
-
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            {/* Title */}
-            <div className="flex items-center space-x-3">
-              <span className="p-2 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-full text-white shadow-lg">
-                <MessageSquare className="w-8 h-8" />
-              </span>
-              <div>
-                <h1 className="text-3xl font-bold text-slate-800">
-                  Grievance Feedback Report
-                </h1>
-                <p className="text-slate-500 mt-1">
-                  Monitor, review, and analyze grievances and feedback.
-                </p>
-              </div>
-            </div>
-
-            {/* Actions: Export, Refresh, Insights */}
-            <div className="flex items-center gap-2">
-              <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all duration-200 hover:scale-[1.03] shadow-md hover:shadow-lg"
-                      onClick={() => setIsInsightsOpen(true)}>
-                <BarChart3 className="w-4 h-4" /> View Insights
-              </button>
-              <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors shadow-sm" title="Export as CSV">
-                <FileDown className="w-5 h-5 text-green-600" />
-              </button>
-              <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors shadow-sm" title="Export as PDF">
-                <FileDown className="w-5 h-5 text-red-600" />
-              </button>
-              <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors shadow-sm" title="Refresh Data">
-                <RefreshCcw className="w-5 h-5 text-blue-600" />
-              </button>
+          <div className="w-full">
+            <div className="rounded-xl px-6 py-4 bg-gradient-to-r from-indigo-500 via-blue-500 to-sky-500 shadow-lg w-full">
+              <h1 className="text-3xl font-bold text-white tracking-tight">Grievance Feedback Report</h1>
+              <p className="text-white/80 mt-1 font-medium">Monitor, review, and analyze grievances and feedback.</p>
             </div>
           </div>
         </header>
 
-        {/* --- 2. Filters Panel --- */}
-        <div className="bg-white rounded-2xl shadow-xl p-6 border border-slate-100 mb-6">
+  {/* --- 2. Filters Panel --- */}
+  <div className="bg-white rounded-2xl shadow-xl p-6 border border-slate-100 mb-2">
           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-slate-800">
             <Filter className="w-5 h-5 text-indigo-600" /> Filters
           </h2>
@@ -465,11 +436,18 @@ const GrievanceReportPage = () => {
           </div>
         </div>
 
+        {/* --- Export/Reload/Insights Section (moved below filters) --- */}
+        <div className="flex flex-wrap gap-2 mb-6 w-full">
+          <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all hover:scale-[1.03] shadow-md hover:shadow-lg" onClick={() => setIsInsightsOpen(true)}> <BarChart3 className="w-4 h-4" /> View Insights </button>
+          <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export CSV"><FileDown className="w-5 h-5 text-green-600" /></button>
+          <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export PDF"><FileDown className="w-5 h-5 text-red-600" /></button>
+          <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Refresh"><RefreshCcw className="w-5 h-5 text-blue-600" /></button>
+        </div>
         {/* --- 3. Grievance Data Table --- */}
-        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden w-full">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-indigo-100 text-indigo-800 font-semibold sticky top-0 z-10">
+              <thead className="bg-gradient-to-r from-indigo-200 via-sky-100 to-blue-100 text-indigo-900 font-semibold sticky top-0 z-10">
                 <tr>
                   <th className="px-4 py-3 text-left min-w-[50px]">Sl.</th>
                   <SortableHeader colKey="grievanceId" title="Grievance ID" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[150px]" />
@@ -483,9 +461,11 @@ const GrievanceReportPage = () => {
                   <th className="px-4 py-3 text-left">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200">
+              <tbody>
                 {paginatedData.map((item, index) => (
-                  <tr key={item.id} className="hover:bg-indigo-50/70 transition-colors">
+                  <tr key={item.id} className={
+                    `${index % 2 === 0 ? 'bg-white' : 'bg-sky-50'} hover:bg-indigo-50/70 transition-colors rounded-lg`}
+                  >
                     <td className="px-4 py-3 text-slate-500 whitespace-nowrap">{(currentPage - 1) * rowsPerPage + index + 1}</td>
                     <td className="px-4 py-3 text-slate-700 font-medium whitespace-nowrap">{item.grievanceId}</td>
                     <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{item.source}</td>
@@ -493,7 +473,6 @@ const GrievanceReportPage = () => {
                     <td className="px-4 py-3 text-slate-500 text-xs truncate max-w-xs">{item.description}</td>
                     <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{new Date(item.dateReceived).toLocaleDateString('en-GB')}</td>
                     <td className="px-4 py-3 text-slate-500 text-xs truncate max-w-xs">{item.actionTaken}</td>
-                    {/* <td className="px-4 py-3 whitespace-nowrap"><GrievanceStatusBadge status={item.status as Status} /></td> */}
                     <td className={`px-4 py-3 whitespace-nowrap ${item.escalatedTo ? 'text-red-600 font-medium' : 'text-slate-400'}`}>{item.escalatedTo || '—'}</td>
                     <td className="px-4 py-3 whitespace-nowrap">
                       <button onClick={() => openModal(item)} className="flex items-center gap-1 text-indigo-600 hover:underline hover:text-indigo-800">

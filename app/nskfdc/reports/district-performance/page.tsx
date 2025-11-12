@@ -308,95 +308,180 @@ const DistrictPerformanceReportPage = () => {
   const closeModal = () => setIsModalOpen(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-sky-50 to-indigo-50 p-4 md:p-8 font-sans">
+    <div className="min-h-screen p-4 md:p-8 font-sans">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
          <header className="mb-6">
            <nav className="flex items-center text-sm font-medium text-slate-500 mb-2"> <LayoutDashboard className="w-4 h-4 mr-1.5" /> Dashboard <ChevronRightIcon className="w-4 h-4 mx-1" /> Reports & Analytics <ChevronRightIcon className="w-4 h-4 mx-1" /> <span className="font-semibold text-indigo-600">District-Wise Performance</span> </nav>
            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-             <div className="flex items-center space-x-3">
-               <span className="p-2 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full text-white shadow-lg"><MapPin className="w-8 h-8" /></span>
-               <div> <h1 className="text-3xl font-bold text-slate-800">District-Wise Performance Report</h1> <p className="text-slate-500 mt-1">Analyze district-level scheme performance, utilization, and achievement.</p> </div>
-             </div>
-             <div className="flex items-center gap-2">
-               <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all hover:scale-[1.03] shadow-md hover:shadow-lg" onClick={() => setIsInsightsOpen(true)}> <BarChart3 className="w-4 h-4" /> View Insights </button>
-               <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export CSV"><FileDown className="w-5 h-5 text-green-600" /></button>
-               <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export PDF"><FileDown className="w-5 h-5 text-red-600" /></button>
-               <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Refresh"><RefreshCcw className="w-5 h-5 text-blue-600" /></button>
+             <div className="flex items-center space-x-3 rounded-xl px-6 py-4 w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-lg">
+               <div>
+                 <h1 className="text-3xl font-bold text-white drop-shadow">District-Wise Performance Report</h1>
+                 <p className="text-indigo-100 mt-1 font-medium">Analyze district-level scheme performance, utilization, and achievement.</p>
+               </div>
              </div>
            </div>
          </header>
         {/* Filters */}
-        <div className="bg-white rounded-2xl shadow-xl p-6 border border-slate-100 mb-6">
-           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-slate-800"><Filter className="w-5 h-5 text-indigo-600" /> Filters</h2>
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4">
-             <FormSelect label="State" name="state" value={filters.state} onChange={handleFilterChange}><option value="">All States</option>{mockStates.map(s=><option key={s} value={s}>{s}</option>)}</FormSelect>
-             <FormSelect label="District" name="district" value={filters.district} onChange={handleFilterChange}><option value="">All Districts</option>{mockDistricts.filter(d=> filters.state ? MOCK_DISTRICT_PERFORMANCE_DATA.find(data => data.state === filters.state && data.district === d) : true).map(d=><option key={d} value={d}>{d}</option>)}</FormSelect>
-             <FormSelect label="Scheme Name" name="schemeName" value={filters.schemeName} onChange={handleFilterChange}><option value="">All Schemes</option>{mockSchemes.map(s=><option key={s} value={s}>{s}</option>)}</FormSelect>
-             <FormSelect label="Financial Year" name="financialYear" value={filters.financialYear} onChange={handleFilterChange}><option value="">All Years</option>{mockFinancialYears.map(y=><option key={y} value={y}>{y}</option>)}</FormSelect>
-             <FormSelect label="Performance Type" name="performanceType" value={filters.performanceType} onChange={handleFilterChange}><option value="">All Types</option>{mockPerformanceTypes.map(t=><option key={t} value={t}>{t}</option>)}</FormSelect>
-             <div className="grid grid-cols-2 gap-2"><FormInput label="From Date" type="date" name="dateFrom" value={filters.dateFrom} onChange={handleFilterChange} /><FormInput label="To Date" type="date" name="dateTo" value={filters.dateTo} onChange={handleFilterChange} /></div>
-             <div className="relative">
-               <label htmlFor="search" className="block text-sm font-medium text-slate-600 mb-1">Search</label>
-               <input type="text" id="search" placeholder="District/Scheme..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="block w-full p-2 pl-9 rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/50 sm:text-sm"/>
-               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-[37px]" />
-             </div>
-           </div>
-           <div className="flex justify-end gap-3 mt-5 border-t border-slate-200 pt-5">
-             <button onClick={clearFilters} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all hover:scale-[1.02]"><X className="w-4 h-4" /> Clear Filters</button>
-             <button onClick={applyFilters} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all hover:scale-[1.02] shadow-md hover:shadow-lg"><Search className="w-4 h-4" /> Apply Filters</button>
-           </div>
-         </div>
+        <div className="bg-white rounded-2xl shadow-xl p-6 border border-slate-100 mb-4">
+          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-slate-800">
+            Filters
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4">
+            {/* Filter Inputs */}
+            <FormSelect label="State" name="state" value={filters.state} onChange={handleFilterChange}>
+              <option value="">All States</option>
+              {mockStates.map(s => <option key={s} value={s}>{s}</option>)}
+            </FormSelect>
+            <FormSelect label="District" name="district" value={filters.district} onChange={handleFilterChange}>
+              <option value="">All Districts</option>
+              {mockDistricts.filter(d => filters.state ? MOCK_DISTRICT_PERFORMANCE_DATA.find(data => data.state === filters.state && data.district === d) : true).map(d => <option key={d} value={d}>{d}</option>)}
+            </FormSelect>
+            <FormSelect label="Scheme Name" name="schemeName" value={filters.schemeName} onChange={handleFilterChange}>
+              <option value="">All Schemes</option>
+              {mockSchemes.map(s => <option key={s} value={s}>{s}</option>)}
+            </FormSelect>
+            <FormSelect label="Financial Year" name="financialYear" value={filters.financialYear} onChange={handleFilterChange}>
+              <option value="">All Years</option>
+              {mockFinancialYears.map(y => <option key={y} value={y}>{y}</option>)}
+            </FormSelect>
+            <FormSelect label="Performance Type" name="performanceType" value={filters.performanceType} onChange={handleFilterChange}>
+              <option value="">All Types</option>
+              {mockPerformanceTypes.map(t => <option key={t} value={t}>{t}</option>)}
+            </FormSelect>
+            <div className="grid grid-cols-2 gap-2">
+              <FormInput label="From Date" type="date" name="dateFrom" value={filters.dateFrom} onChange={handleFilterChange} />
+              <FormInput label="To Date" type="date" name="dateTo" value={filters.dateTo} onChange={handleFilterChange} />
+            </div>
+            <div className="relative">
+              <label htmlFor="search" className="block text-sm font-medium text-slate-600 mb-1">Search</label>
+              <input
+                type="text"
+                id="search"
+                placeholder="District/Scheme..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="block w-full p-2 pl-9 rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/50 sm:text-sm"
+              />
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-[37px]" />
+            </div>
+          </div>
+          <div className="flex justify-end gap-3 mt-5 border-t border-slate-200 pt-5">
+            <button
+              onClick={clearFilters}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all hover:scale-[1.02]"
+            >
+              <X className="w-4 h-4" /> Clear Filters
+            </button>
+            <button
+              onClick={applyFilters}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all hover:scale-[1.02] shadow-md hover:shadow-lg"
+            >
+              <Search className="w-4 h-4" /> Apply Filters
+            </button>
+          </div>
+        </div>
+        {/* Export/Reload Section - moved below Filters */}
+        <div className="flex flex-wrap gap-2 mb-6">
+          <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all hover:scale-[1.03] shadow-md hover:shadow-lg" onClick={() => setIsInsightsOpen(true)}>
+            <BarChart3 className="w-4 h-4" /> View Insights
+          </button>
+          <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export CSV">
+            <FileDown className="w-5 h-5 text-green-600" />
+          </button>
+          <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export PDF">
+            <FileDown className="w-5 h-5 text-red-600" />
+          </button>
+          <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Refresh">
+            <RefreshCcw className="w-5 h-5 text-blue-600" />
+          </button>
+        </div>
         {/* Table */}
-        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
-           <div className="overflow-x-auto">
-             <table className="w-full text-sm">
-               <thead className="bg-indigo-100 text-indigo-800 font-semibold sticky top-0 z-10">
-                 <tr>
-                   <th className="px-4 py-3 text-left">Sl.</th>
-                   <SortableHeader colKey="state" title="State" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[150px]" />
-                   <SortableHeader colKey="district" title="District" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[150px]" />
-                   <SortableHeader colKey="schemeName" title="Scheme Name" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[200px]" />
-                   <SortableHeader colKey="fy" title="FY" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[100px]" />
-                   <SortableHeader colKey="fundSanctioned" title="Sanctioned (₹)" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px] text-right" />
-                   <SortableHeader colKey="fundUtilized" title="Utilized (₹)" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px] text-right" />
-                   {/* <SortableHeader colKey="utilizationPercent" title="Util %" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[100px] text-right" /> */}
-                   <th className="px-4 py-3 text-left min-w-[100px]">Target Ben.</th>
-                   <th className="px-4 py-3 text-left min-w-[100px]">Achieved Ben.</th>
-                   {/* <SortableHeader colKey="achievementPercent" title="Achieve %" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[110px] text-right" /> */}
-                   {/* <SortableHeader colKey="rating" title="Rating" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[180px]" /> */}
-                   <SortableHeader colKey="lastUpdated" title="Last Updated" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
-                   <th className="px-4 py-3 text-center">Action</th>
-                 </tr>
-               </thead>
-               <tbody className="divide-y divide-slate-200">
-                 {paginatedData.map((item, index) => (
-                   <tr key={item.id} className="hover:bg-indigo-50/70 transition-colors">
-                     <td className="px-4 py-3 text-slate-500">{(currentPage-1)*rowsPerPage+index+1}</td>
-                     <td className="px-4 py-3 text-slate-700">{item.state}</td>
-                     <td className="px-4 py-3 text-slate-700 font-semibold">{item.district}</td>
-                     <td className="px-4 py-3 text-indigo-700">{item.schemeName}</td>
-                     <td className="px-4 py-3 text-slate-700">{item.fy}</td>
-                     <td className="px-4 py-3 text-slate-700 font-medium text-right">{formatCurrency(item.fundSanctioned)}</td>
-                     <td className="px-4 py-3 text-emerald-700 font-bold text-right">{formatCurrency(item.fundUtilized)}</td>
-                     {/* <td className="px-4 py-3 text-slate-700 font-bold text-right">{item.utilizationPercent}%</td> */}
-                     <td className="px-4 py-3 text-slate-700 text-center">{item.targetBen}</td>
-                     <td className="px-4 py-3 text-green-700 font-bold text-center">{item.achievedBen}</td>
-                     {/* <td className="px-4 py-3 text-slate-700 font-bold text-right">{item.achievementPercent}%</td> */}
-                     {/* <td className="px-4 py-3"><PerformanceRatingBadge rating={item.rating} /></td> */}
-                     <td className="px-4 py-3 text-slate-700">{new Date(item.lastUpdated).toLocaleDateString('en-GB')}</td>
-                     <td className="px-4 py-3 text-center"><button onClick={()=>openModal(item)} className="p-1.5 rounded-md text-indigo-600 hover:bg-indigo-100" title="View Details"><Eye className="w-5 h-5" /></button></td>
-                   </tr>
-                 ))}
-                 {paginatedData.length === 0 && (<tr><td colSpan={11} className="text-center py-10 text-slate-500">No records found.</td></tr>)}
-               </tbody>
-             </table>
-           </div>
+        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden w-full">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-semibold">
+                <tr>
+                  <th className="px-4 py-3 text-left">Sl.</th>
+                  <SortableHeader colKey="state" title="State" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[150px]" />
+                  <SortableHeader colKey="district" title="District" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[150px]" />
+                  <SortableHeader colKey="schemeName" title="Scheme Name" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[200px]" />
+                  <SortableHeader colKey="fy" title="FY" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[100px]" />
+                  <SortableHeader colKey="fundSanctioned" title="Sanctioned (₹)" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px] text-right" />
+                  <SortableHeader colKey="fundUtilized" title="Utilized (₹)" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px] text-right" />
+                  <th className="px-4 py-3 text-left min-w-[100px]">Target Ben.</th>
+                  <th className="px-4 py-3 text-left min-w-[100px]">Achieved Ben.</th>
+                  <SortableHeader colKey="lastUpdated" title="Last Updated" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
+                  <th className="px-4 py-3 text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {paginatedData.map((item, index) => (
+                  <tr key={item.id} className={index % 2 === 0 ? "bg-white hover:bg-indigo-50/70 transition-colors" : "bg-indigo-50/40 hover:bg-indigo-100 transition-colors"}>
+                    <td className="px-4 py-3 text-slate-500">{(currentPage - 1) * rowsPerPage + index + 1}</td>
+                    <td className="px-4 py-3 text-slate-700">{item.state}</td>
+                    <td className="px-4 py-3 text-slate-700 font-semibold">{item.district}</td>
+                    <td className="px-4 py-3 text-indigo-700">{item.schemeName}</td>
+                    <td className="px-4 py-3 text-slate-700">{item.fy}</td>
+                    <td className="px-4 py-3 text-slate-700 font-medium text-right">{formatCurrency(item.fundSanctioned)}</td>
+                    <td className="px-4 py-3 text-emerald-700 font-bold text-right">{formatCurrency(item.fundUtilized)}</td>
+                    <td className="px-4 py-3 text-slate-700 text-center">{item.targetBen}</td>
+                    <td className="px-4 py-3 text-green-700 font-bold text-center">{item.achievedBen}</td>
+                    <td className="px-4 py-3 text-slate-700">{new Date(item.lastUpdated).toLocaleDateString('en-GB')}</td>
+                    <td className="px-4 py-3 text-center">
+                      <button
+                        onClick={() => openModal(item)}
+                        className="p-1.5 rounded-md text-indigo-600 hover:bg-indigo-100 shadow-sm"
+                        title="View Details"
+                      >
+                        <Eye className="w-5 h-5" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+                {paginatedData.length === 0 && (
+                  <tr>
+                    <td colSpan={11} className="text-center py-10 text-slate-500">No records found.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
            {/* Pagination */}
            {totalPages > 1 && (
              <div className="flex justify-between items-center p-4 border-t border-slate-200 bg-slate-50">
-               <div className="flex items-center gap-2"><label htmlFor="rowsPerPage" className="text-xs text-slate-600">Rows:</label><select id="rowsPerPage" value={rowsPerPage} onChange={(e)=>{setRowsPerPage(Number(e.target.value));setCurrentPage(1);}} className="p-1.5 rounded-md border-slate-300 text-xs focus:ring-indigo-500"><option value={10}>10</option><option value={20}>20</option><option value={50}>50</option></select></div>
-               <div className="flex items-center gap-3"><span className="text-xs text-slate-600">Page {currentPage} of {totalPages} (Total: {filteredData.length})</span><div className="flex items-center gap-1"><button onClick={()=>setCurrentPage(p=>Math.max(p-1,1))} disabled={currentPage===1} className="p-2 rounded-md disabled:opacity-50 hover:bg-indigo-100"><ChevronLeft className="w-4 h-4"/></button><button onClick={()=>setCurrentPage(p=>Math.min(p+1,totalPages))} disabled={currentPage===totalPages} className="p-2 rounded-md disabled:opacity-50 hover:bg-indigo-100"><ChevronRightIcon className="w-4 h-4"/></button></div></div>
+               <div className="flex items-center gap-2">
+                 <label htmlFor="rowsPerPage" className="text-xs text-slate-600">Rows:</label>
+                 <select
+                   id="rowsPerPage"
+                   value={rowsPerPage}
+                   onChange={(e) => { setRowsPerPage(Number(e.target.value)); setCurrentPage(1); }}
+                   className="p-1.5 rounded-md border-slate-300 text-xs focus:ring-indigo-500"
+                 >
+                   <option value={10}>10</option>
+                   <option value={20}>20</option>
+                   <option value={50}>50</option>
+                 </select>
+               </div>
+               <div className="flex items-center gap-3">
+                 <span className="text-xs text-slate-600">Page {currentPage} of {totalPages} (Total: {filteredData.length})</span>
+                 <div className="flex items-center gap-1">
+                   <button
+                     onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
+                     disabled={currentPage === 1}
+                     className="p-2 rounded-md disabled:opacity-50 hover:bg-indigo-100"
+                   >
+                     <ChevronLeft className="w-4 h-4" />
+                   </button>
+                   <button
+                     onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
+                     disabled={currentPage === totalPages}
+                     className="p-2 rounded-md disabled:opacity-50 hover:bg-indigo-100"
+                   >
+                     <ChevronRightIcon className="w-4 h-4" />
+                   </button>
+                 </div>
+               </div>
              </div>
            )}
          </div>

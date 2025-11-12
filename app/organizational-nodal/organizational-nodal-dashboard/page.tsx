@@ -101,25 +101,38 @@ export default function OrganizationalNodalDashboardPage() {
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-8 bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 min-h-screen">
-      {/* 🔹 Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-teal-600 via-cyan-600 to-blue-600 bg-clip-text text-transparent">
-          Organizational Nodal Dashboard
-        </h1>
-        <p className="text-sm text-gray-600 mt-1">
-          Monitor deployments, manage compliance, and track worker performance for your organization.
-        </p>
-      </div>
-
-      {/* 🔹 1. Summary Metrics */}
+    <div className="min-h-screen p-4 sm:p-6 lg:p-8 font-sans">
+      {/* Title Section - add gradient background color to match reference image */}
+      <header className="mb-8">
+        <div className="rounded-2xl shadow-lg px-8 py-7 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 flex flex-col gap-2">
+          <h1 className="text-3xl lg:text-4xl font-bold text-white drop-shadow">
+            Organizational Nodal Dashboard
+          </h1>
+          <p className="text-lg text-indigo-100 font-medium">
+            Monitor deployments, manage compliance, and track worker performance for your organization.
+          </p>
+        </div>
+      </header>
+      {/* Summary Metrics */}
       <SummaryCards data={summaryData} />
-
-      {/* 🔹 2. Quick Action Buttons */}
+      {/* Export/Reload Section - moved below SummaryCards for hierarchy */}
+      <div className="flex flex-wrap gap-2 mb-6">
+        <Button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all hover:scale-[1.03] shadow-md hover:shadow-lg">
+          <FileText className="w-5 h-5" /> Export CSV
+        </Button>
+        <Button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-pink-600 hover:bg-pink-700 transition-all hover:scale-[1.03] shadow-md hover:shadow-lg">
+          <FileText className="w-5 h-5" /> Export PDF
+        </Button>
+        <Button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-all hover:scale-[1.03] shadow-md hover:shadow-lg">
+          Reload
+        </Button>
+      </div>
+      {/* Quick Action Buttons */}
       <QuickActions onActionClick={handleQuickAction} />
-
-      {/* 🔹 3. Worker Performance Snapshot */}
-      <PerformanceSnapshot topWorkers={topWorkers} bottomWorkers={bottomWorkers} />
+      {/* Add extra margin before Worker Performance Snapshot */}
+      <div className="mt-10">
+        <PerformanceSnapshot topWorkers={topWorkers} bottomWorkers={bottomWorkers} />
+      </div>
     </div>
   );
 }
@@ -195,56 +208,54 @@ function PerformanceSnapshot({ topWorkers, bottomWorkers }: {
 }) {
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold text-gray-800">🏆 Worker Performance Snapshot</h2>
+      <h2 className="text-xl font-semibold text-slate-800">🏆 Worker Performance Snapshot</h2>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        
         {/* Top 5 Workers */}
-        <Card className="shadow-lg border border-gray-100 rounded-lg bg-white">
-          <CardHeader className="bg-gradient-to-r from-green-50 to-blue-50 border-b p-4">
-            <CardTitle className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-              <ArrowUp className="w-5 h-5 text-green-600" /> Top 5 Workers
+        <Card className="shadow-lg border border-slate-100 rounded-lg bg-white">
+          <CardHeader className="bg-gradient-to-r from-green-400 via-blue-400 to-indigo-400 border-b p-4 rounded-t-lg">
+            <CardTitle className="text-lg font-semibold text-white flex items-center gap-2">
+              Top 5 Workers
             </CardTitle>
           </CardHeader>
           <CardContent className="overflow-x-auto p-0">
             <Table>
-              <TableHeader className="bg-gray-50/70">
+              <TableHeader className="bg-gradient-to-r from-green-100 via-blue-100 to-indigo-100 text-slate-800 font-semibold">
                 <TableRow>
                   <TableHead className="w-[50px]">Rank</TableHead>
                   <TableHead>Name</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {topWorkers.map((w) => (
-                  <TableRow key={w.rank} className="hover:bg-green-50/50">
-                    <TableCell className="font-bold">{w.rank}</TableCell>
-                    <TableCell className="font-medium">{w.name}</TableCell>
+                {topWorkers.map((w, idx) => (
+                  <TableRow key={w.rank} className={idx % 2 === 0 ? "bg-white hover:bg-green-50/70 transition-colors" : "bg-blue-50/40 hover:bg-blue-100 transition-colors"}>
+                    <TableCell className="font-bold text-green-700">{w.rank}</TableCell>
+                    <TableCell className="font-medium text-indigo-700">{w.name}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </CardContent>
         </Card>
-
         {/* Bottom 5 Workers */}
-        <Card className="shadow-lg border border-gray-100 rounded-lg bg-white">
-          <CardHeader className="bg-gradient-to-r from-red-50 to-orange-50 border-b p-4">
-            <CardTitle className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-              <ArrowDown className="w-5 h-5 text-red-600" /> Bottom 5 Workers
+        <Card className="shadow-lg border border-slate-100 rounded-lg bg-white">
+          <CardHeader className="bg-gradient-to-r from-red-400 via-orange-400 to-pink-400 border-b p-4 rounded-t-lg">
+            <CardTitle className="text-lg font-semibold text-white flex items-center gap-2">
+              Bottom 5 Workers
             </CardTitle>
           </CardHeader>
           <CardContent className="overflow-x-auto p-0">
              <Table>
-              <TableHeader className="bg-gray-50/70">
+              <TableHeader className="bg-gradient-to-r from-red-100 via-orange-100 to-pink-100 text-slate-800 font-semibold">
                 <TableRow>
                   <TableHead className="w-[50px]">Rank</TableHead>
                   <TableHead>Name</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {bottomWorkers.map((w) => (
-                  <TableRow key={w.rank} className="hover:bg-red-50/50">
-                    <TableCell className="font-bold">{w.rank}</TableCell>
-                    <TableCell className="font-medium">{w.name}</TableCell>
+                {bottomWorkers.map((w, idx) => (
+                  <TableRow key={w.rank} className={idx % 2 === 0 ? "bg-white hover:bg-red-50/70 transition-colors" : "bg-orange-50/40 hover:bg-pink-100 transition-colors"}>
+                    <TableCell className="font-bold text-red-700">{w.rank}</TableCell>
+                    <TableCell className="font-medium text-orange-700">{w.name}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

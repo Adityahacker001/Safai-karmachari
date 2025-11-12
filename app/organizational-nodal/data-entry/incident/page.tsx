@@ -391,42 +391,39 @@ export default function IncidentInputPage() {
       
       <div className="max-w-7xl mx-auto p-6">
 
-        <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
-          <div className="flex items-center gap-4">
-             <div className="flex-shrink-0 w-16 h-16 flex items-center justify-center rounded-2xl bg-navy-700 text-gold-400 shadow-lg shadow-navy-500/30 border-2 border-white/50">
-               <AlertCircle size={36} />
-             </div>
-             <div>
-               <h1 className="text-3xl font-bold text-navy-900">Report New Incident</h1>
-                <p className="text-base text-gray-600">Organizational Nodal Input Form</p>
-             </div>
-          </div>
-          <div className="flex-shrink-0 flex items-center gap-2">
-            <AppButton
-              onClick={saveDraft}
-              variant="secondary"
-              icon={Save}
-              isLoading={savingDraft}
-              disabled={submitting}
-            >
-              Save Draft
-            </AppButton>
-            <AppButton
-              onClick={loadDraft}
-              variant="secondary"
-              icon={FileDown}
-              disabled={savingDraft || submitting}
-            >
-              Load Draft
-            </AppButton>
+        <header className="mb-8">
+          <div className="w-full rounded-2xl bg-gradient-to-r from-blue-600 via-purple-500 to-pink-400 shadow-lg px-6 py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-bold text-white drop-shadow">Report New Incident</h1>
+              <p className="text-base text-white/90 mt-1">Organizational Nodal Input Form</p>
+            </div>
+            <div className="flex-shrink-0 flex items-center gap-2 mt-4 sm:mt-0">
+              <AppButton
+                onClick={saveDraft}
+                variant="secondary"
+                icon={Save}
+                isLoading={savingDraft}
+                disabled={submitting}
+              >
+                Save Draft
+              </AppButton>
+              <AppButton
+                onClick={loadDraft}
+                variant="secondary"
+                icon={FileDown}
+                disabled={savingDraft || submitting}
+              >
+                Load Draft
+              </AppButton>
+            </div>
           </div>
         </header>
 
         <GlassCard className="overflow-hidden">
           <form onSubmit={handleSubmit}>
             {/* Section 1: Core Details */}
-            <section className="p-6 md:p-8">
-               <h2 className="text-xl font-bold text-navy-900 mb-6 flex items-center gap-3">
+            <section className="p-6 md:p-8 rounded-2xl mb-6 bg-gradient-to-br from-blue-50 via-blue-100 to-blue-200 border border-blue-200 shadow-lg">
+               <h2 className="text-xl font-bold text-blue-700 mb-6 flex items-center gap-3">
                  <FileText className="text-blue-500" />
                  1. Incident Details
                </h2>
@@ -470,9 +467,9 @@ export default function IncidentInputPage() {
             </section>
 
             {/* Section 2: Location Details */}
-            <section className="p-6 md:p-8 bg-blue-50/50 border-y border-blue-100">
-              <h2 className="text-xl font-bold text-navy-900 mb-6 flex items-center gap-3">
-                <MapPin className="text-blue-500" />
+            <section className="p-6 md:p-8 rounded-2xl mb-6 bg-gradient-to-br from-cyan-50 via-blue-100 to-blue-200 border border-cyan-200 shadow-lg">
+              <h2 className="text-xl font-bold text-cyan-700 mb-6 flex items-center gap-3">
+                <MapPin className="text-cyan-500" />
                 2. Location & Asset Details
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -492,8 +489,8 @@ export default function IncidentInputPage() {
             </section>
 
             {/* Section 3: Description & Vitals */}
-            <section className="p-6 md:p-8 bg-green-50/50 border-y border-green-100">
-               <h2 className="text-xl font-bold text-navy-900 mb-6 flex items-center gap-3">
+            <section className="p-6 md:p-8 rounded-2xl mb-6 bg-gradient-to-br from-green-50 via-green-100 to-green-200 border border-green-200 shadow-lg">
+               <h2 className="text-xl font-bold text-green-700 mb-6 flex items-center gap-3">
                  <HeartPulse className="text-green-500" />
                  3. Description & Vitals
                </h2>
@@ -510,15 +507,15 @@ export default function IncidentInputPage() {
                    </FormInputGroup>
                    <label className="flex items-center gap-2 mt-10">
                      <input id="ppe" type="checkbox" checked={ppeProvided} onChange={(e) => setPpeProvided(e.target.checked)} className="form-checkbox" />
-                     <span className="text-sm font-semibold text-navy-800">PPE Provided?</span>
+                     <span className="text-sm font-semibold text-green-700">PPE Provided?</span>
                    </label>
                 </div>
             </section>
             
             {/* Section 4: Victims */}
-            <section className="p-6 md:p-8 bg-orange-50/50 border-y border-orange-100">
+            <section className="p-6 md:p-8 rounded-2xl mb-6 bg-gradient-to-br from-orange-50 via-orange-100 to-yellow-100 border border-orange-200 shadow-lg">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold text-navy-900 flex items-center gap-3">
+                <h2 className="text-xl font-bold text-orange-700 flex items-center gap-3">
                   <Users className="text-orange-500" />
                   4. Victim(s) / Worker(s) Involved
                 </h2>
@@ -556,8 +553,8 @@ export default function IncidentInputPage() {
             </section>
 
             {/* Section 5: Legal & Compensation */}
-             <section className="p-6 md:p-8 bg-purple-50/50 border-y border-purple-100">
-                <h2 className="text-xl font-bold text-navy-900 mb-6 flex items-center gap-3">
+             <section className="p-6 md:p-8 rounded-2xl mb-6 bg-gradient-to-br from-purple-50 via-purple-100 to-pink-100 border border-purple-200 shadow-lg">
+                <h2 className="text-xl font-bold text-purple-700 mb-6 flex items-center gap-3">
                   <Shield className="text-purple-500" />
                   5. Legal & Compensation
                 </h2>
@@ -590,9 +587,9 @@ export default function IncidentInputPage() {
             </section>
 
             {/* Section 6: Attachments */}
-            <section className="p-6 md:p-8 bg-gray-50/50 border-t border-gray-100">
-              <h2 className="text-xl font-bold text-navy-900 mb-6 flex items-center gap-3">
-                <Upload className="text-gray-500" />
+            <section className="p-6 md:p-8 rounded-2xl mb-6 bg-gradient-to-br from-gray-50 via-gray-100 to-blue-50 border border-gray-200 shadow-lg">
+              <h2 className="text-xl font-bold text-blue-700 mb-6 flex items-center gap-3">
+                <Upload className="text-blue-500" />
                 6. Attachments
               </h2>
               

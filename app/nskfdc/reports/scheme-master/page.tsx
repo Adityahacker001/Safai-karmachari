@@ -362,9 +362,6 @@ const SchemeMasterReportPage = () => {
                 color: 'white',
                 boxShadow: '0 4px 24px 0 rgba(80, 80, 180, 0.10)',
               }}>
-              <span className="p-4 bg-white/20 rounded-full mb-2 sm:mb-0">
-                <BarChart3 className="w-10 h-10 text-white" />
-              </span>
               <div className="flex flex-col items-center sm:items-start">
                 <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold drop-shadow-sm text-center sm:text-left">Scheme Master Report</h1>
                 <p className="text-base sm:text-lg md:text-xl font-medium opacity-90 text-center sm:text-left">View and analyze all scheme details.</p>

@@ -273,27 +273,20 @@ const DelayedComplianceReportPage = () => {
   const closeModal = () => setIsModalOpen(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-sky-50 to-indigo-50 p-4 md:p-8 font-sans">
+    <div className="min-h-screen p-4 md:p-8 font-sans">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
          <header className="mb-6">
-           <nav className="flex items-center text-sm font-medium text-slate-500 mb-2"> <LayoutDashboard className="w-4 h-4 mr-1.5" /> Dashboard <ChevronRightIcon className="w-4 h-4 mx-1" /> Reports & Analytics <ChevronRightIcon className="w-4 h-4 mx-1" /> <span className="font-semibold text-indigo-600">Delayed Compliance Report</span> </nav>
+           <nav className="flex items-center text-sm font-medium text-slate-500 mb-2"> Dashboard <ChevronRightIcon className="w-4 h-4 mx-1" /> Reports & Analytics <ChevronRightIcon className="w-4 h-4 mx-1" /> <span className="font-semibold text-indigo-600">Delayed Compliance Report</span> </nav>
            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-             <div className="flex items-center space-x-3">
-               <span className="p-2 bg-gradient-to-br from-red-500 to-orange-500 rounded-full text-white shadow-lg"><ClipboardCheck className="w-8 h-8" /></span>
-               <div> <h1 className="text-3xl font-bold text-slate-800">Delayed Compliance Report</h1> <p className="text-slate-500 mt-1">Monitor delayed directive compliances across states and districts.</p> </div>
-             </div>
-             <div className="flex items-center gap-2">
-               <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all hover:scale-[1.03] shadow-md hover:shadow-lg" onClick={() => setIsInsightsOpen(true)}> <BarChart3 className="w-4 h-4" /> View Insights </button>
-               <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export CSV"><FileDown className="w-5 h-5 text-green-600" /></button>
-               <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export PDF"><FileDown className="w-5 h-5 text-red-600" /></button>
-               <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Refresh"><RefreshCcw className="w-5 h-5 text-blue-600" /></button>
+             <div className="flex items-center space-x-3 rounded-xl px-6 py-4 w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-lg">
+               <div> <h1 className="text-3xl font-bold text-white drop-shadow">Delayed Compliance Report</h1> <p className="text-indigo-100 mt-1 font-medium">Monitor delayed directive compliances across states and districts.</p> </div>
              </div>
            </div>
          </header>
         {/* Filters */}
-        <div className="bg-white rounded-2xl shadow-xl p-6 border border-slate-100 mb-6">
-           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-slate-800"><Filter className="w-5 h-5 text-indigo-600" /> Filters</h2>
+        <div className="bg-white rounded-2xl shadow-xl p-6 border border-slate-100 mb-4">
+           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-slate-800">Filters</h2>
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8 gap-4"> {/* More cols */}
              <FormSelect label="FY" name="financialYear" value={filters.financialYear} onChange={handleFilterChange}><option value="">All</option>{mockFinancialYears.map(y=><option key={y} value={y}>{y}</option>)}</FormSelect>
              <FormSelect label="State" name="state" value={filters.state} onChange={handleFilterChange}><option value="">All</option>{mockStates.map(s=><option key={s} value={s}>{s}</option>)}</FormSelect>
@@ -301,7 +294,6 @@ const DelayedComplianceReportPage = () => {
              <FormSelect label="Compliance Type" name="type" value={filters.type} onChange={handleFilterChange}><option value="">All</option>{mockComplianceTypes.map(t=><option key={t} value={t}>{t}</option>)}</FormSelect>
              <FormSelect label="Delay Duration" name="delayDuration" value={filters.delayDuration} onChange={handleFilterChange}><option value="">All</option>{mockDelayDurations.map(d=><option key={d} value={d}>{d}</option>)}</FormSelect>
              <FormSelect label="Status" name="status" value={filters.status} onChange={handleFilterChange}><option value="">All</option>{mockStatus.map(s=><option key={s} value={s}>{s}</option>)}</FormSelect>
-             {/* <div className="grid grid-cols-2 gap-2"><FormInput label="From Date" type="date" name="dateFrom" value={filters.dateFrom} onChange={handleFilterChange} /><FormInput label="To Date" type="date" name="dateTo" value={filters.dateTo} onChange={handleFilterChange} /></div> */}
              <div className="relative col-span-2">
                <label htmlFor="search" className="block text-sm font-medium text-slate-600 mb-1">Search</label>
                <input type="text" id="search" placeholder="Direction ID/Office..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="block w-full p-2 pl-9 rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/50 sm:text-sm"/>
@@ -314,10 +306,10 @@ const DelayedComplianceReportPage = () => {
            </div>
          </div>
         {/* Table */}
-        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden w-full">
            <div className="overflow-x-auto">
              <table className="w-full text-sm">
-               <thead className="bg-indigo-100 text-indigo-800 font-semibold sticky top-0 z-10">
+               <thead className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-semibold">
                  <tr>
                    <th className="px-4 py-3 text-left">Sl.</th>
                    <SortableHeader colKey="dirId" title="Direction ID" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[150px]" />
@@ -327,7 +319,6 @@ const DelayedComplianceReportPage = () => {
                    <SortableHeader colKey="state" title="State" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
                    <SortableHeader colKey="district" title="District" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
                    <th className="px-4 py-3 text-left min-w-[120px]">Type</th>
-                   {/* <SortableHeader colKey="status" title="Status" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[140px]" /> */}
                    <SortableHeader colKey="delay" title="Delay (Days)" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[110px] text-right" />
                    <th className="px-4 py-3 text-left min-w-[200px]">Reason for Delay</th>
                    <th className="px-4 py-3 text-left min-w-[200px]">Remarks</th>
@@ -335,9 +326,9 @@ const DelayedComplianceReportPage = () => {
                    <th className="px-4 py-3 text-center">Action</th>
                  </tr>
                </thead>
-               <tbody className="divide-y divide-slate-200">
+               <tbody>
                  {paginatedData.map((item, index) => (
-                   <tr key={item.id} className="hover:bg-indigo-50/70 transition-colors">
+                   <tr key={item.id} className={index % 2 === 0 ? "bg-white hover:bg-indigo-50/70 transition-colors" : "bg-indigo-50/40 hover:bg-indigo-100 transition-colors"}>
                      <td className="px-4 py-3 text-slate-500">{(currentPage-1)*rowsPerPage+index+1}</td>
                      <td className="px-4 py-3 text-slate-700 font-medium">{item.dirId}</td>
                      <td className="px-4 py-3 text-indigo-700 font-semibold truncate max-w-xs">{item.dirTitle}</td>
@@ -346,7 +337,6 @@ const DelayedComplianceReportPage = () => {
                      <td className="px-4 py-3 text-slate-700">{item.state}</td>
                      <td className="px-4 py-3 text-slate-700">{item.district}</td>
                      <td className="px-4 py-3 text-slate-700">{item.type}</td>
-                     {/* <td className="px-4 py-3"><ComplianceStatusBadge status={item.status as Status} /></td> */}
                      <td className="px-4 py-3 text-red-600 font-bold text-right">{item.delay}</td>
                      <td className="px-4 py-3 text-slate-600 text-xs truncate max-w-xs">{item.reason}</td>
                      <td className="px-4 py-3 text-slate-500 text-xs truncate max-w-xs">{item.remarks}</td>

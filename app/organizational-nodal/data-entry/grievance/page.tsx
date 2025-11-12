@@ -48,33 +48,22 @@ const mockWorkers = [
 // --- Main Page Component ---
 export default function GrievanceFeedbackInputPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-red-50 to-orange-50 p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen w-full p-4 sm:p-6 lg:p-8">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="max-w-5xl mx-auto bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8 border border-red-100/80"
+        className="max-w-7xl mx-auto w-full rounded-2xl shadow-xl p-0"
       >
         {/* Header */}
-        <header className="text-center mb-10 pb-6 border-b border-red-200/80">
-          <motion.h1
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, duration: 0.4 }}
-            className="text-3xl lg:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-orange-600 to-yellow-600 tracking-tight"
-          >
-            Grievance Feedback Entry
-          </motion.h1>
-          <motion.p
-             initial={{ opacity: 0 }}
-             animate={{ opacity: 1 }}
-             transition={{ delay: 0.2, duration: 0.4 }}
-             className="text-sm text-gray-600 mt-2 max-w-xl mx-auto"
-           >
-            Log and manage grievances from workers regarding safety, payment, harassment, or other issues.
-          </motion.p>
+        <header className="w-full mb-10 pb-6">
+          <div className="w-full rounded-2xl bg-gradient-to-r from-blue-600 via-purple-500 to-pink-400 shadow-lg px-6 py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <h1 className="text-3xl lg:text-4xl font-extrabold text-white drop-shadow tracking-tight">Grievance Feedback Entry</h1>
+              <p className="text-sm text-white/90 mt-2 max-w-xl">Log and manage grievances from workers regarding safety, payment, harassment, or other issues.</p>
+            </div>
+          </div>
         </header>
-
         <GrievanceForm />
       </motion.div>
     </div>
@@ -324,25 +313,16 @@ function GrievanceForm() {
 
 // ColorSection with refined styling
 function ColorSection({ title, icon, children, color, }: { title: string; icon: React.ReactNode; children: React.ReactNode; color: "indigo" | "pink" | "green" | "yellow" | "orange"; }) { // Added orange
-  const colorMap: Record<string, { border: string, bg: string, text: string, iconBg: string }> = {
-    indigo: { border: "border-indigo-200/80", bg: "bg-indigo-50/50",   text: "text-indigo-800", iconBg: "bg-indigo-100" },
-    pink:   { border: "border-pink-200/80",   bg: "bg-pink-50/50",     text: "text-pink-800",   iconBg: "bg-pink-100" },
-    green:  { border: "border-green-200/80",  bg: "bg-green-50/50",    text: "text-green-800",  iconBg: "bg-green-100" },
-    yellow: { border: "border-yellow-200/80", bg: "bg-yellow-50/50",   text: "text-yellow-800", iconBg: "bg-yellow-100" },
-    orange: { border: "border-orange-200/80", bg: "bg-orange-50/50",   text: "text-orange-800", iconBg: "bg-orange-100" },
-  };
-  const styles = colorMap[color as keyof typeof colorMap] || colorMap.indigo; // Fallback to indigo
-
   return (
     <motion.div
        initial={{ opacity: 0, y: 15 }}
        whileInView={{ opacity: 1, y: 0 }}
        viewport={{ once: true, amount: 0.3 }}
        transition={{ duration: 0.4, ease: "easeOut" }}
-       className={`p-5 rounded-xl ${styles.bg} border ${styles.border} shadow-sm space-y-4`}
+       className={`p-5 rounded-xl border shadow-sm space-y-4`}
      >
-      <h2 className={`text-lg font-semibold flex items-center gap-3 ${styles.text}`}>
-         <span className={`p-1.5 rounded-lg ${styles.iconBg}`}>{icon}</span>
+      <h2 className={`text-lg font-semibold flex items-center gap-3`}>
+         {/* Icon removed from title side, only text remains */}
          {title}
       </h2>
       <div className="pl-1">{children}</div>

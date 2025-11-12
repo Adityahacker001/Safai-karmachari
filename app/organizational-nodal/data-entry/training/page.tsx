@@ -55,33 +55,22 @@ const mockModules = [
 // --- Main Page Component ---
 export default function TrainingCompletionInputPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-cyan-50 to-blue-50 p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen w-full p-4 sm:p-6 lg:p-8">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="max-w-4xl mx-auto bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8 border border-cyan-100/80"
+        className="max-w-7xl mx-auto w-full rounded-2xl shadow-xl p-0"
       >
         {/* Header */}
-        <header className="text-center mb-10 pb-6 border-b border-cyan-200/80">
-          <motion.h1
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, duration: 0.4 }}
-            className="text-3xl lg:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 tracking-tight"
-          >
-            Training Completion Input
-          </motion.h1>
-          <motion.p
-             initial={{ opacity: 0 }}
-             animate={{ opacity: 1 }}
-             transition={{ delay: 0.2, duration: 0.4 }}
-             className="text-sm text-gray-600 mt-2 max-w-xl mx-auto"
-           >
-            Log a worker's completed training module, trainer, and completion date.
-          </motion.p>
+        <header className="w-full mb-10 pb-6">
+          <div className="w-full rounded-2xl bg-gradient-to-r from-blue-600 via-purple-500 to-pink-400 shadow-lg px-6 py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <h1 className="text-3xl lg:text-4xl font-extrabold text-white drop-shadow tracking-tight">Training Completion Input</h1>
+              <p className="text-sm text-white/90 mt-2 max-w-xl">Log a worker's completed training module, trainer, and completion date.</p>
+            </div>
+          </div>
         </header>
-
         <TrainingForm />
       </motion.div>
     </div>
@@ -150,70 +139,56 @@ function TrainingForm() {
       onSubmit={(e) => e.preventDefault()}
       className="space-y-6"
     >
-        <Card className="shadow-xl border border-gray-100 rounded-lg bg-white/90 overflow-hidden">
-          <CardHeader className="bg-gradient-to-r from-cyan-50 to-blue-50 border-b p-5">
-            <CardTitle className="text-xl font-semibold text-gray-800 flex items-center gap-3">
-              <GraduationCap className="w-6 h-6 text-cyan-700" />
-              Log Training Completion
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-6 space-y-6">
-            
-            {/* --- Section 1: Core Details --- */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
+        <div className="p-6 sm:p-8 rounded-2xl mb-6 w-full bg-gradient-to-br from-blue-50 via-cyan-50 to-indigo-50 border border-blue-200 shadow-lg">
+          <h2 className="text-xl font-bold text-blue-700 mb-6">Log Training Completion</h2>
+          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+            <InputGroup>
+              <Label htmlFor="workerName">Worker Name</Label>
+              <Select name="workerName" value={formData.workerName} onValueChange={(value) => handleSelectChange("workerName", value)}>
+                <SelectTrigger className="focus:ring-2 focus:ring-blue-300">
+                  <SelectValue placeholder="Select a worker..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {mockWorkers.map(w => (
+                    <SelectItem key={w.id} value={w.name}>{w.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </InputGroup>
+            <InputGroup>
+              <Label htmlFor="trainingModule">Training Module</Label>
+              <Select name="trainingModule" value={formData.trainingModule} onValueChange={(value) => handleSelectChange("trainingModule", value)}>
+                <SelectTrigger className="focus:ring-2 focus:ring-blue-300">
+                  <SelectValue placeholder="Select a module..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {mockModules.map(m => (
+                    <SelectItem key={m.id} value={m.name}>{m.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </InputGroup>
+            <InputGroup>
+              <Label htmlFor="completionDate">Completion Date</Label>
+              <Input
+                id="completionDate" name="completionDate" type="date"
+                value={formData.completionDate} onChange={handleChange}
+                className="focus:ring-2 focus:ring-blue-300"
+              />
+            </InputGroup>
+            <InputGroup>
+              <Label htmlFor="trainerName">Trainer Name / Organization</Label>
+              <Input
+                id="trainerName" name="trainerName"
+                value={formData.trainerName} onChange={handleChange}
+                placeholder="e.g., Mr. Sharma / UrbanTech NGO"
+                className="focus:ring-2 focus:ring-blue-300"
+              />
+            </InputGroup>
+            <div className="lg:col-span-4 sm:col-span-2 col-span-1 border-t border-gray-200 pt-6">
               <InputGroup>
-                <Label htmlFor="workerName">Worker Name</Label>
-                <Select name="workerName" value={formData.workerName} onValueChange={(value) => handleSelectChange("workerName", value)}>
-                  <SelectTrigger className="focus:ring-2 focus:ring-cyan-300">
-                    <SelectValue placeholder="Select a worker..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {mockWorkers.map(w => (
-                        <SelectItem key={w.id} value={w.name}>{w.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </InputGroup>
-              
-              <InputGroup>
-                <Label htmlFor="trainingModule">Training Module</Label>
-                <Select name="trainingModule" value={formData.trainingModule} onValueChange={(value) => handleSelectChange("trainingModule", value)}>
-                  <SelectTrigger className="focus:ring-2 focus:ring-cyan-300">
-                    <SelectValue placeholder="Select a module..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {mockModules.map(m => (
-                         <SelectItem key={m.id} value={m.name}>{m.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </InputGroup>
-
-              <InputGroup>
-                <Label htmlFor="completionDate">Completion Date</Label>
-                <Input
-                  id="completionDate" name="completionDate" type="date"
-                  value={formData.completionDate} onChange={handleChange}
-                  className="focus:ring-2 focus:ring-cyan-300"
-                />
-              </InputGroup>
-              
-              <InputGroup>
-                <Label htmlFor="trainerName">Trainer Name / Organization</Label>
-                <Input
-                  id="trainerName" name="trainerName"
-                  value={formData.trainerName} onChange={handleChange}
-                  placeholder="e.g., Mr. Sharma / UrbanTech NGO"
-                  className="focus:ring-2 focus:ring-cyan-300"
-                />
-              </InputGroup>
-            </div>
-            
-            {/* --- Section 2: Remarks --- */}
-            <div className="border-t border-gray-200 pt-6">
-               <InputGroup>
                 <Label htmlFor="remarks" className="text-base font-medium text-gray-700">
-                    Remarks (Optional)
+                  Remarks (Optional)
                 </Label>
                 <Textarea
                   id="remarks"
@@ -221,66 +196,58 @@ function TrainingForm() {
                   value={formData.remarks}
                   onChange={handleChange}
                   placeholder="Add any additional notes, observations, or comments about the training..."
-                  className="focus:ring-2 focus:ring-cyan-300 min-h-[100px]"
+                  className="focus:ring-2 focus:ring-blue-300 min-h-[100px]"
                   rows={3}
                 />
               </InputGroup>
             </div>
-            
-            {/* --- Alerts --- */}
-            {alerts.length > 0 && (
-                <div className="bg-red-50 border-l-4 border-red-500 text-red-800 p-4 rounded-md shadow-md" role="alert">
-                  <div className="flex items-center gap-2 mb-2">
-                    <AlertTriangle className="w-5 h-5 text-red-600" />
-                    <p className="font-bold text-base">Please correct the following errors:</p>
-                  </div>
-                  <ul className="list-disc pl-7 text-sm space-y-1">
-                    {alerts.map((msg, i) => ( <li key={i}>{msg}</li> ))}
-                  </ul>
+          </div>
+          {/* --- Alerts --- */}
+          {alerts.length > 0 && (
+            <div className="bg-red-50 border-l-4 border-red-500 text-red-800 p-4 rounded-md shadow-md mt-6" role="alert">
+              <div className="flex items-center gap-2 mb-2">
+                <AlertTriangle className="w-5 h-5 text-red-600" />
+                <p className="font-bold text-base">Please correct the following errors:</p>
+              </div>
+              <ul className="list-disc pl-7 text-sm space-y-1">
+                {alerts.map((msg, i) => (<li key={i}>{msg}</li>))}
+              </ul>
+            </div>
+          )}
+          {/* --- Success Message --- */}
+          {submitted && (
+            <div className="bg-green-50 border-l-4 border-green-500 text-green-800 p-4 rounded-md shadow-md mt-6" role="alert">
+              <div className="flex items-center gap-3">
+                <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0" />
+                <div>
+                  <p className="font-bold">Success!</p>
+                  <p className="text-sm">Training record for {formData.workerName} has been saved.</p>
                 </div>
-            )}
-            
-            {/* --- Success Message --- */}
-            {submitted && (
-                <div className="bg-green-50 border-l-4 border-green-500 text-green-800 p-4 rounded-md shadow-md" role="alert">
-                  <div className="flex items-center gap-3">
-                    <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0" />
-                    <div>
-                      <p className="font-bold">Success!</p>
-                      <p className="text-sm">Training record for {formData.workerName} has been saved.</p>
-                    </div>
-                  </div>
-                </div>
-            )}
-
-          </CardContent>
-          <CardFooter className="bg-gray-50/70 p-4 flex justify-end gap-3">
-             <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
-             >
-                <Button 
-                    type="button"
-                    variant="outline"
-                    onClick={() => alert("Draft saved (simulation)")}
-                    className="flex items-center gap-2 text-slate-700 border-slate-300 hover:bg-slate-100 shadow-sm"
-                >
-                    <Save className="w-4 h-4" /> Save as Draft
-                </Button>
+              </div>
+            </div>
+          )}
+          {/* --- Buttons --- */}
+          <div className="flex flex-wrap gap-4 justify-end pt-6 border-t border-gray-200/80 mt-6">
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.98 }}
+              type="button"
+              onClick={() => alert("Draft saved (simulation)")}
+              className="px-5 py-2 flex items-center gap-2 rounded-lg bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 text-gray-700 font-medium text-sm shadow-sm transition-all duration-200"
+            >
+              <Save className="w-4 h-4" /> Save as Draft
             </motion.button>
-             <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
-             >
-                <Button 
-                    onClick={handleSubmit} 
-                    className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white hover:from-cyan-700 hover:to-blue-700 shadow-md hover:shadow-lg transition-all duration-200"
-                >
-                    <Send className="w-4 h-4 mr-2" /> Submit Training Record
-                </Button>
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.98 }}
+              type="button"
+              onClick={handleSubmit}
+              className="px-5 py-2 flex items-center gap-2 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 font-medium text-sm shadow-md hover:shadow-lg transition-all duration-200"
+            >
+              <Send className="w-4 h-4" /> Submit Training Record
             </motion.button>
-          </CardFooter>
-      </Card>
+          </div>
+        </div>
     </motion.form>
   );
 }

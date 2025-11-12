@@ -277,37 +277,28 @@ const RejectedApplicationsReportPage = () => {
   const closeModal = () => setIsModalOpen(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-sky-50 to-indigo-50 p-4 md:p-8 font-sans">
+    <div className="min-h-screen p-4 md:p-8 font-sans">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
          <header className="mb-6">
-           <nav className="flex items-center text-sm font-medium text-slate-500 mb-2"> <LayoutDashboard className="w-4 h-4 mr-1.5" /> Dashboard <ChevronRightIcon className="w-4 h-4 mx-1" /> Reports & Analytics <ChevronRightIcon className="w-4 h-4 mx-1" /> <span className="font-semibold text-indigo-600">Rejected Applications Report</span> </nav>
+           <nav className="flex items-center text-sm font-medium text-slate-500 mb-2"> Dashboard <ChevronRightIcon className="w-4 h-4 mx-1" /> Exception Reports <ChevronRightIcon className="w-4 h-4 mx-1" /> <span className="font-semibold text-indigo-600">Rejected Applications</span> </nav>
            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-             <div className="flex items-center space-x-3">
-               <span className="p-2 bg-gradient-to-br from-red-500 to-orange-500 rounded-full text-white shadow-lg"><FileX2 className="w-8 h-8" /></span>
-               <div> <h1 className="text-3xl font-bold text-slate-800">Rejected Applications Report</h1> <p className="text-slate-500 mt-1">Track rejected scheme applications across the NSKFDC hierarchy.</p> </div>
-             </div>
-             <div className="flex items-center gap-2">
-               <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all hover:scale-[1.03] shadow-md hover:shadow-lg" onClick={() => setIsInsightsOpen(true)}> <BarChart3 className="w-4 h-4" /> View Insights </button>
-               <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export CSV"><FileDown className="w-5 h-5 text-green-600" /></button>
-               <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export PDF"><FileDown className="w-5 h-5 text-red-600" /></button>
-               <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Refresh"><RefreshCcw className="w-5 h-5 text-blue-600" /></button>
+             <div className="flex items-center space-x-3 rounded-xl px-6 py-4 w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-lg">
+               <div> <h1 className="text-3xl font-bold text-white drop-shadow">Rejected Applications Report</h1> <p className="text-indigo-100 mt-1 font-medium">Monitor rejected applications and analyze reasons.</p> </div>
              </div>
            </div>
          </header>
         {/* Filters */}
-        <div className="bg-white rounded-2xl shadow-xl p-6 border border-slate-100 mb-6">
-           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-slate-800"><Filter className="w-5 h-5 text-indigo-600" /> Filters</h2>
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8 gap-4"> {/* Increased columns for more filters */}
+        <div className="bg-white rounded-2xl shadow-xl p-6 border border-slate-100 mb-4">
+           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-slate-800">Filters</h2>
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8 gap-4">
              <FormSelect label="FY" name="financialYear" value={filters.financialYear} onChange={handleFilterChange}><option value="">All</option>{mockFinancialYears.map(y=><option key={y} value={y}>{y}</option>)}</FormSelect>
              <FormSelect label="Scheme" name="schemeName" value={filters.schemeName} onChange={handleFilterChange}><option value="">All</option>{mockSchemes.map(s=><option key={s} value={s}>{s}</option>)}</FormSelect>
              <FormSelect label="Beneficiary Type" name="benType" value={filters.benType} onChange={handleFilterChange}><option value="">All</option>{mockBenTypes.map(t=><option key={t} value={t}>{t}</option>)}</FormSelect>
              <FormSelect label="State" name="state" value={filters.state} onChange={handleFilterChange}><option value="">All</option>{mockStates.map(s=><option key={s} value={s}>{s}</option>)}</FormSelect>
              <FormSelect label="District" name="district" value={filters.district} onChange={handleFilterChange}><option value="">All</option>{mockDistricts.filter(d=> filters.state ? MOCK_REJECTED_DATA.find(data => data.state === filters.state && data.district === d) : true).map(d=><option key={d} value={d}>{d}</option>)}</FormSelect>
              <FormSelect label="Rejection Level" name="rejLevel" value={filters.rejLevel} onChange={handleFilterChange}><option value="">All</option>{mockRejectionLevels.map(l=><option key={l} value={l}>{l}</option>)}</FormSelect>
-             {/* <FormSelect label="Rejection Reason" name="rejReason" value={filters.rejReason} onChange={handleFilterChange}><option value="">All</option>{mockRejectionReasons.map(r=><option key={r} value={r}>{r}</option>)}</FormSelect> */}
-             {/* <div className="grid grid-cols-2 gap-2"><FormInput label="From Date" type="date" name="dateFrom" value={filters.dateFrom} onChange={handleFilterChange} /><FormInput label="To Date" type="date" name="dateTo" value={filters.dateTo} onChange={handleFilterChange} /></div> */}
-             <div className="relative col-span-2"> {/* Span search across 2 cols */}
+             <div className="relative col-span-2">
                <label htmlFor="search" className="block text-sm font-medium text-slate-600 mb-1">Search</label>
                <input type="text" id="search" placeholder="App ID / Beneficiary..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="block w-full p-2 pl-9 rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/50 sm:text-sm"/>
                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-[37px]" />
@@ -318,31 +309,46 @@ const RejectedApplicationsReportPage = () => {
              <button onClick={applyFilters} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all hover:scale-[1.02] shadow-md hover:shadow-lg"><Search className="w-4 h-4" /> Apply Filters</button>
            </div>
          </div>
+        {/* Export/Reload Section - moved below Filters */}
+        <div className="flex flex-wrap gap-2 mb-6">
+          <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all hover:scale-[1.03] shadow-md hover:shadow-lg" onClick={() => setIsInsightsOpen(true)}>
+            <BarChart3 className="w-4 h-4" /> View Insights
+          </button>
+          <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export CSV">
+            <FileDown className="w-5 h-5 text-green-600" />
+          </button>
+          <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export PDF">
+            <FileDown className="w-5 h-5 text-red-600" />
+          </button>
+          <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Refresh">
+            <RefreshCcw className="w-5 h-5 text-blue-600" />
+          </button>
+        </div>
         {/* Table */}
-        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden w-full">
            <div className="overflow-x-auto">
              <table className="w-full text-sm">
-               <thead className="bg-indigo-100 text-indigo-800 font-semibold sticky top-0 z-10">
+               <thead className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-semibold">
                  <tr>
                    <th className="px-4 py-3 text-left">Sl.</th>
-                   <SortableHeader colKey="appId" title="Application ID" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[150px]" />
+                   <SortableHeader colKey="appId" title="App ID" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
                    <SortableHeader colKey="benName" title="Beneficiary Name" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[180px]" />
-                   <SortableHeader colKey="schemeName" title="Scheme" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[180px]" />
-                   <th className="px-4 py-3 text-left min-w-[100px]">Type</th>
+                   <SortableHeader colKey="schemeName" title="Scheme" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[200px]" />
+                   <SortableHeader colKey="benType" title="Type" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[100px]" />
                    <SortableHeader colKey="state" title="State" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
                    <SortableHeader colKey="district" title="District" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
-                   <SortableHeader colKey="dateSub" title="Submission Date" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[130px]" />
-                   <SortableHeader colKey="dateRej" title="Rejection Date" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[130px]" />
-                   <SortableHeader colKey="rejLevel" title="Rejection Level" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[150px]" />
-                   <th className="px-4 py-3 text-left min-w-[200px]">Rejection Reason</th>
-                   <th className="px-4 py-3 text-left min-w-[200px]">Remarks</th>
+                   <SortableHeader colKey="dateSub" title="Submitted" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
+                   <SortableHeader colKey="dateRej" title="Rejected" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px] text-red-700" />
+                   <SortableHeader colKey="rejLevel" title="Level" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
+                   <SortableHeader colKey="rejReason" title="Reason" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[180px]" />
+                   <th className="px-4 py-3 text-left min-w-[180px]">Remarks</th>
                    <SortableHeader colKey="lastUpdated" title="Last Updated" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
                    <th className="px-4 py-3 text-center">Action</th>
                  </tr>
                </thead>
-               <tbody className="divide-y divide-slate-200">
+               <tbody>
                  {paginatedData.map((item, index) => (
-                   <tr key={item.id} className="hover:bg-indigo-50/70 transition-colors">
+                   <tr key={item.id} className={index % 2 === 0 ? "bg-white hover:bg-indigo-50/70 transition-colors" : "bg-indigo-50/40 hover:bg-indigo-100 transition-colors"}>
                      <td className="px-4 py-3 text-slate-500">{(currentPage-1)*rowsPerPage+index+1}</td>
                      <td className="px-4 py-3 text-slate-700 font-medium">{item.appId}</td>
                      <td className="px-4 py-3 text-indigo-700 font-semibold">{item.benName}</td>
@@ -366,27 +372,20 @@ const RejectedApplicationsReportPage = () => {
            {/* Pagination */}
            {totalPages > 1 && (
              <div className="flex justify-between items-center p-4 border-t border-slate-200 bg-slate-50">
-               <div className="flex items-center gap-2"><label htmlFor="rowsPerPage" className="text-xs text-slate-600">Rows:</label><select id="rowsPerPage" value={rowsPerPage} onChange={(e)=>{setRowsPerPage(Number(e.target.value));setCurrentPage(1);}} className="p-1.5 rounded-md border-slate-300 text-xs focus:ring-indigo-500"><option value={10}>10</option><option value={25}>25</option><option value={50}>50</option></select></div>
+               <div className="flex items-center gap-2"><label htmlFor="rowsPerPage" className="text-xs text-slate-600">Rows:</label><select id="rowsPerPage" value={rowsPerPage} onChange={(e)=>{setRowsPerPage(Number(e.target.value));setCurrentPage(1);}} className="p-1.5 rounded-md border-slate-300 text-xs focus:ring-indigo-500"><option value={10}>10</option><option value={20}>20</option><option value={50}>50</option></select></div>
                <div className="flex items-center gap-3"><span className="text-xs text-slate-600">Page {currentPage} of {totalPages} (Total: {filteredData.length})</span><div className="flex items-center gap-1"><button onClick={()=>setCurrentPage(p=>Math.max(p-1,1))} disabled={currentPage===1} className="p-2 rounded-md disabled:opacity-50 hover:bg-indigo-100"><ChevronLeft className="w-4 h-4"/></button><button onClick={()=>setCurrentPage(p=>Math.min(p+1,totalPages))} disabled={currentPage===totalPages} className="p-2 rounded-md disabled:opacity-50 hover:bg-indigo-100"><ChevronRightIcon className="w-4 h-4"/></button></div></div>
              </div>
            )}
          </div>
         {/* Summary Footer */}
         <div className="bg-white border border-slate-200 rounded-xl p-4 mt-6 shadow-sm text-slate-600 text-sm flex flex-col md:flex-row flex-wrap justify-between items-center gap-3">
-           <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-                <span><FileX2 className="w-4 h-4 inline mr-1 text-red-600"/><strong>Total Rejected:</strong> {summary.total}</span>
-                <span><Package className="w-4 h-4 inline mr-1 text-blue-600"/><strong>Schemes Affected:</strong> {summary.totalSchemes}</span>
-                <span className="text-orange-700"><strong>District Level:</strong> {summary.districtCount}</span>
-                <span className="text-blue-700"><strong>State Level:</strong> {summary.stateCount}</span>
-                <span className="text-red-700"><strong>HQ Level:</strong> {summary.hqCount}</span>
-            </div>
-           <span className="font-semibold text-slate-700"><strong>Top Reason:</strong> {summary.topReason}</span>
-           <span><strong>Last Updated:</strong> 27 Oct 2025, 06:45 PM</span>
+           <div className="flex flex-wrap items-center gap-x-4 gap-y-1"><span><strong>Total Rejected:</strong> {summary.total}</span><span className="font-semibold text-orange-700"><strong>District Nodal:</strong> {summary.districtCount}</span><span className="font-semibold text-blue-700"><strong>State Nodal:</strong> {summary.stateCount}</span><span className="font-semibold text-red-700"><strong>HQ Level:</strong> {summary.hqCount}</span><span className="font-semibold text-indigo-700"><strong>Top Reason:</strong> {summary.topReason}</span></div>
+           <span><strong>Total Schemes:</strong> {summary.totalSchemes}</span>
          </div>
         {/* Audit Footer */}
         <footer className="text-center mt-8 text-xs text-slate-500">
-           <p>Report Generated By: NSKFDC Officer – Automated System • Generated On: 27 Oct 2025, 18:45 IST</p>
-           <p className="mt-1">Data Source: NSKFDC Application Processing Records</p>
+           <p>Report Generated By: NSKFDC Officer – Automated Reporting System • Generated On: 27 Oct 2025, 18:35 IST</p>
+           <p className="mt-1">Data Source: NSKFDC Application Records & Exception Logs</p>
          </footer>
         {/* Modals & Panels */}
         <ViewDetailsModal item={selectedItem} isOpen={isModalOpen} onClose={closeModal} />
@@ -394,8 +393,8 @@ const RejectedApplicationsReportPage = () => {
         {isInsightsOpen && <div className="fixed inset-0 bg-black/30 z-40" onClick={() => setIsInsightsOpen(false)}></div>}
       </div>
     </div>
-  );
-};
+    );
+  };
 
 export default RejectedApplicationsReportPage;
 

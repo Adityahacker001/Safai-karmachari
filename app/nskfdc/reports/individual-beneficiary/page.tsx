@@ -280,7 +280,6 @@ const BeneficiaryReportPage = () => {
             <span className="font-semibold text-indigo-600">Individual Beneficiary Report</span>
           </nav>
 
-          {/* Title Card Responsive and Styled */}
           <div className="w-full">
             <div className="w-full rounded-2xl px-6 py-6 flex flex-col sm:flex-row items-center gap-4 shadow-lg"
               style={{
@@ -288,9 +287,6 @@ const BeneficiaryReportPage = () => {
                 color: 'white',
                 boxShadow: '0 4px 24px 0 rgba(80, 80, 180, 0.10)',
               }}>
-              <span className="p-4 bg-white/20 rounded-full mb-2 sm:mb-0">
-                <UserSearch className="w-10 h-10 text-white" />
-              </span>
               <div className="flex flex-col items-center sm:items-start">
                 <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold drop-shadow-sm text-center sm:text-left">Individual Beneficiary Report</h1>
                 <p className="text-base sm:text-lg md:text-xl font-medium opacity-90 text-center sm:text-left">View and analyze detailed beneficiary-level data.</p>
@@ -306,6 +302,23 @@ const BeneficiaryReportPage = () => {
             Filters
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {/* Global Search Input - inside filters */}
+            <div className="col-span-1 md:col-span-3 lg:col-span-2 flex items-end">
+              <div className="w-full">
+                <label htmlFor="globalSearch" className="block text-sm font-medium text-slate-600 mb-1">Global Search</label>
+                <div className="relative">
+                  <input
+                    id="globalSearch"
+                    type="text"
+                    placeholder="Search by name, ID, mobile, etc."
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
+                    className="block w-full p-2 pr-10 rounded-lg border-2 border-slate-800 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/50 sm:text-sm transition-colors duration-200"
+                  />
+                  <Search className="absolute right-2 top-2 w-5 h-5 text-slate-400" />
+                </div>
+              </div>
+            </div>
             <FormInput label="Beneficiary ID" type="text" name="beneficiaryId" value={filters.beneficiaryId} onChange={handleFilterChange} />
             
             {/* State Dropdown */}

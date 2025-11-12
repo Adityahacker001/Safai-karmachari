@@ -282,96 +282,99 @@ const GeneralFeedbackReportPage = () => {
   const closeModal = () => setIsModalOpen(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-sky-50 to-indigo-50 p-4 md:p-8 font-sans">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen w-full p-4 sm:p-6 lg:p-8 font-sans">
+      <div className="w-full">
         {/* Header */}
         <header className="mb-6">
-           <nav className="flex items-center text-sm font-medium text-slate-500 mb-2"> <LayoutDashboard className="w-4 h-4 mr-1.5" /> Dashboard <ChevronRightIcon className="w-4 h-4 mx-1" /> Reports & Analytics <ChevronRightIcon className="w-4 h-4 mx-1" /> <span className="font-semibold text-indigo-600">General Feedback Report</span> </nav>
-           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-             <div className="flex items-center space-x-3">
-               <span className="p-2 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-full text-white shadow-lg"><MessageSquare className="w-8 h-8" /></span>
-               <div> <h1 className="text-3xl font-bold text-slate-800">General Feedback Report</h1> <p className="text-slate-500 mt-1">View and analyze feedback from multiple sources.</p> </div>
-             </div>
-             <div className="flex items-center gap-2">
-               <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all hover:scale-[1.03] shadow-md hover:shadow-lg" onClick={() => setIsInsightsOpen(true)}> <BarChart3 className="w-4 h-4" /> View Insights </button>
-               <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export CSV"><FileDown className="w-5 h-5 text-green-600" /></button>
-               <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export PDF"><FileDown className="w-5 h-5 text-red-600" /></button>
-               <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Refresh"><RefreshCcw className="w-5 h-5 text-blue-600" /></button>
-             </div>
-           </div>
-         </header>
+          <nav className="flex items-center text-sm font-medium text-slate-500 mb-2">
+            <LayoutDashboard className="w-4 h-4 mr-1.5" /> Dashboard <ChevronRightIcon className="w-4 h-4 mx-1" /> Reports & Analytics <ChevronRightIcon className="w-4 h-4 mx-1" /> <span className="font-semibold text-indigo-600">General Feedback Report</span>
+          </nav>
+          <div className="w-full">
+            <div className="rounded-xl px-6 py-4 bg-gradient-to-r from-indigo-500 via-blue-500 to-sky-500 shadow-lg w-full">
+              <h1 className="text-3xl font-bold text-white tracking-tight">General Feedback Report</h1>
+              <p className="text-white/80 mt-1 font-medium">View and analyze feedback from multiple sources.</p>
+            </div>
+          </div>
+        </header>
         {/* Filters */}
-        <div className="bg-white rounded-2xl shadow-xl p-6 border border-slate-100 mb-6">
-           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-slate-800"><Filter className="w-5 h-5 text-indigo-600" /> Filters</h2>
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-             <FormSelect label="Source" name="source" value={filters.source} onChange={handleFilterChange}><option value="">All Sources</option>{mockSource.map(s=><option key={s} value={s}>{s}</option>)}</FormSelect>
-             <FormSelect label="Type" name="type" value={filters.type} onChange={handleFilterChange}><option value="">All Types</option>{mockType.map(t=><option key={t} value={t}>{t}</option>)}</FormSelect>
-             <FormSelect label="Status" name="status" value={filters.status} onChange={handleFilterChange}><option value="">All Statuses</option>{mockStatus.map(s=><option key={s} value={s}>{s}</option>)}</FormSelect>
-             <div className="grid grid-cols-2 gap-2"><FormInput label="From Date" type="date" name="dateFrom" value={filters.dateFrom} onChange={handleFilterChange} /><FormInput label="To Date" type="date" name="dateTo" value={filters.dateTo} onChange={handleFilterChange} /></div>
-             <div className="relative">
-               <label htmlFor="search" className="block text-sm font-medium text-slate-600 mb-1">Search</label>
-               <input type="text" id="search" placeholder="ID / Type / Source..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="block w-full p-2 pl-9 rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/50 sm:text-sm"/>
-               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-[37px]" />
-             </div>
-           </div>
-           <div className="flex justify-end gap-3 mt-5 border-t border-slate-200 pt-5">
-             <button onClick={clearFilters} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all hover:scale-[1.02]"><X className="w-4 h-4" /> Clear Filters</button>
-             <button onClick={applyFilters} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all hover:scale-[1.02] shadow-md hover:shadow-lg"><Search className="w-4 h-4" /> Apply Filters</button>
-           </div>
-         </div>
+        <div className="bg-white rounded-2xl shadow-xl p-6 border border-slate-100 mb-6 w-full">
+          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-slate-800"><Filter className="w-5 h-5 text-indigo-600" /> Filters</h2>
+          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5">
+            <FormSelect label="Source" name="source" value={filters.source} onChange={handleFilterChange}><option value="">All Sources</option>{mockSource.map(s=><option key={s} value={s}>{s}</option>)}</FormSelect>
+            <FormSelect label="Type" name="type" value={filters.type} onChange={handleFilterChange}><option value="">All Types</option>{mockType.map(t=><option key={t} value={t}>{t}</option>)}</FormSelect>
+            <FormSelect label="Status" name="status" value={filters.status} onChange={handleFilterChange}><option value="">All Statuses</option>{mockStatus.map(s=><option key={s} value={s}>{s}</option>)}</FormSelect>
+            <div className="grid grid-cols-2 gap-2"><FormInput label="From Date" type="date" name="dateFrom" value={filters.dateFrom} onChange={handleFilterChange} /><FormInput label="To Date" type="date" name="dateTo" value={filters.dateTo} onChange={handleFilterChange} /></div>
+            <div className="relative">
+              <label htmlFor="search" className="block text-sm font-medium text-slate-600 mb-1">Search</label>
+              <input type="text" id="search" placeholder="ID / Type / Source..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="block w-full p-2 pl-9 rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/50 sm:text-sm"/>
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-[37px]" />
+            </div>
+          </div>
+          <div className="flex justify-end gap-3 mt-5 border-t border-slate-200 pt-5">
+            <button onClick={clearFilters} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all hover:scale-[1.02]"><X className="w-4 h-4" /> Clear Filters</button>
+            <button onClick={applyFilters} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all hover:scale-[1.02] shadow-md hover:shadow-lg"><Search className="w-4 h-4" /> Apply Filters</button>
+          </div>
+        </div>
+        {/* Export/Reload/Insights Section */}
+        <div className="flex flex-wrap gap-2 mb-6 w-full">
+          <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all hover:scale-[1.03] shadow-md hover:shadow-lg" onClick={() => setIsInsightsOpen(true)}> <BarChart3 className="w-4 h-4" /> View Insights </button>
+          <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export CSV"><FileDown className="w-5 h-5 text-green-600" /></button>
+          <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export PDF"><FileDown className="w-5 h-5 text-red-600" /></button>
+          <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Refresh"><RefreshCcw className="w-5 h-5 text-blue-600" /></button>
+        </div>
         {/* Table */}
-        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
-           <div className="overflow-x-auto">
-             <table className="w-full text-sm">
-               <thead className="bg-indigo-100 text-indigo-800 font-semibold sticky top-0 z-10">
-                 <tr>
-                   <th className="px-4 py-3 text-left">Sl.</th>
-                   <SortableHeader colKey="feedbackId" title="Feedback ID" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[150px]" />
-                   <SortableHeader colKey="source" title="Source" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
-                   <SortableHeader colKey="type" title="Type" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
-                   <th className="px-4 py-3 text-left min-w-[300px]">Description</th>
-                   <SortableHeader colKey="dateReceived" title="Date Received" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[130px]" />
-                   <th className="px-4 py-3 text-left min-w-[250px]">Action Taken</th>
-                   {/* <SortableHeader colKey="status" title="Status" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" /> */}
-                   <th className="px-4 py-3 text-center">Action</th>
-                 </tr>
-               </thead>
-               <tbody className="divide-y divide-slate-200">
-                 {paginatedData.map((item, index) => (
-                   <tr key={item.id} className="hover:bg-indigo-50/70 transition-colors">
-                     <td className="px-4 py-3 text-slate-500">{(currentPage-1)*rowsPerPage+index+1}</td>
-                     <td className="px-4 py-3 text-slate-700 font-medium">{item.feedbackId}</td>
-                     <td className="px-4 py-3 text-slate-700">{item.source}</td>
-                     <td className="px-4 py-3 text-slate-700">{item.type}</td>
-                     <td className="px-4 py-3 text-slate-500 text-xs truncate max-w-sm">{item.description}</td>
-                     <td className="px-4 py-3 text-slate-700">{new Date(item.dateReceived).toLocaleDateString('en-GB')}</td>
-                     <td className="px-4 py-3 text-slate-500 text-xs truncate max-w-xs">{item.actionTaken}</td>
-                     {/* <td className="px-4 py-3"><FeedbackStatusBadge status={item.status as Status} /></td> */}
-                     <td className="px-4 py-3 text-center"><button onClick={()=>openModal(item)} className="p-1.5 rounded-md text-indigo-600 hover:bg-indigo-100" title="View Details"><Eye className="w-5 h-5" /></button></td>
-                   </tr>
-                 ))}
-                 {paginatedData.length === 0 && (<tr><td colSpan={8} className="text-center py-10 text-slate-500">No feedback found.</td></tr>)}
-               </tbody>
-             </table>
-           </div>
-           {/* Pagination */}
-           {totalPages > 1 && (
-             <div className="flex justify-between items-center p-4 border-t border-slate-200 bg-slate-50">
-               <div className="flex items-center gap-2"><label htmlFor="rowsPerPage" className="text-xs text-slate-600">Rows:</label><select id="rowsPerPage" value={rowsPerPage} onChange={(e)=>{setRowsPerPage(Number(e.target.value));setCurrentPage(1);}} className="p-1.5 rounded-md border-slate-300 text-xs focus:ring-indigo-500"><option value={10}>10</option><option value={20}>20</option><option value={50}>50</option></select></div>
-               <div className="flex items-center gap-3"><span className="text-xs text-slate-600">Page {currentPage} of {totalPages} (Total: {filteredData.length})</span><div className="flex items-center gap-1"><button onClick={()=>setCurrentPage(p=>Math.max(p-1,1))} disabled={currentPage===1} className="p-2 rounded-md disabled:opacity-50 hover:bg-indigo-100"><ChevronLeft className="w-4 h-4"/></button><button onClick={()=>setCurrentPage(p=>Math.min(p+1,totalPages))} disabled={currentPage===totalPages} className="p-2 rounded-md disabled:opacity-50 hover:bg-indigo-100"><ChevronRightIcon className="w-4 h-4"/></button></div></div>
-             </div>
-           )}
-         </div>
+        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden w-full">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-gradient-to-r from-indigo-200 via-sky-100 to-blue-100 text-indigo-900 font-semibold sticky top-0 z-10">
+                <tr>
+                  <th className="px-4 py-3 text-left">Sl.</th>
+                  <SortableHeader colKey="feedbackId" title="Feedback ID" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[150px]" />
+                  <SortableHeader colKey="source" title="Source" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
+                  <SortableHeader colKey="type" title="Type" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
+                  <th className="px-4 py-3 text-left min-w-[300px]">Description</th>
+                  <SortableHeader colKey="dateReceived" title="Date Received" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[130px]" />
+                  <th className="px-4 py-3 text-left min-w-[250px]">Action Taken</th>
+                  <th className="px-4 py-3 text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {paginatedData.map((item, index) => (
+                  <tr key={item.id} className={
+                    `${index % 2 === 0 ? 'bg-white' : 'bg-sky-50'} hover:bg-indigo-50/70 transition-colors rounded-lg`}
+                  >
+                    <td className="px-4 py-3 text-slate-500">{(currentPage-1)*rowsPerPage+index+1}</td>
+                    <td className="px-4 py-3 text-slate-700 font-medium">{item.feedbackId}</td>
+                    <td className="px-4 py-3 text-slate-700">{item.source}</td>
+                    <td className="px-4 py-3 text-slate-700">{item.type}</td>
+                    <td className="px-4 py-3 text-slate-500 text-xs truncate max-w-sm">{item.description}</td>
+                    <td className="px-4 py-3 text-slate-700">{new Date(item.dateReceived).toLocaleDateString('en-GB')}</td>
+                    <td className="px-4 py-3 text-slate-500 text-xs truncate max-w-xs">{item.actionTaken}</td>
+                    <td className="px-4 py-3 text-center"><button onClick={()=>openModal(item)} className="p-1.5 rounded-md text-indigo-600 hover:bg-indigo-100" title="View Details"><Eye className="w-5 h-5" /></button></td>
+                  </tr>
+                ))}
+                {paginatedData.length === 0 && (<tr><td colSpan={8} className="text-center py-10 text-slate-500">No feedback found.</td></tr>)}
+              </tbody>
+            </table>
+          </div>
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex justify-between items-center p-4 border-t border-slate-200 bg-slate-50">
+              <div className="flex items-center gap-2"><label htmlFor="rowsPerPage" className="text-xs text-slate-600">Rows:</label><select id="rowsPerPage" value={rowsPerPage} onChange={(e)=>{setRowsPerPage(Number(e.target.value));setCurrentPage(1);}} className="p-1.5 rounded-md border-slate-300 text-xs focus:ring-indigo-500"><option value={10}>10</option><option value={20}>20</option><option value={50}>50</option></select></div>
+              <div className="flex items-center gap-3"><span className="text-xs text-slate-600">Page {currentPage} of {totalPages} (Total: {filteredData.length})</span><div className="flex items-center gap-1"><button onClick={()=>setCurrentPage(p=>Math.max(p-1,1))} disabled={currentPage===1} className="p-2 rounded-md disabled:opacity-50 hover:bg-indigo-100"><ChevronLeft className="w-4 h-4"/></button><button onClick={()=>setCurrentPage(p=>Math.min(p+1,totalPages))} disabled={currentPage===totalPages} className="p-2 rounded-md disabled:opacity-50 hover:bg-indigo-100"><ChevronRightIcon className="w-4 h-4"/></button></div></div>
+            </div>
+          )}
+        </div>
         {/* Summary Footer */}
-        <div className="bg-white border border-slate-200 rounded-xl p-4 mt-6 shadow-sm text-slate-600 text-sm flex flex-col md:flex-row flex-wrap justify-between items-center gap-2">
-           <div className="flex flex-wrap items-center gap-x-4 gap-y-1"><span><strong>Total Feedbacks:</strong> {summary.total}</span><span className="text-yellow-600"><strong>Pending:</strong> {summary.pending}</span><span className="text-green-600"><strong>Resolved:</strong> {summary.resolved}</span></div>
-           <span className="font-semibold text-indigo-700">Resolution Rate: {summary.resolutionRate}</span>
-         </div>
+        <div className="bg-white border border-slate-200 rounded-xl p-4 mt-6 shadow-sm text-slate-600 text-sm flex flex-col md:flex-row flex-wrap justify-between items-center gap-2 w-full">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1"><span><strong>Total Feedbacks:</strong> {summary.total}</span><span className="text-yellow-600"><strong>Pending:</strong> {summary.pending}</span><span className="text-green-600"><strong>Resolved:</strong> {summary.resolved}</span></div>
+          <span className="font-semibold text-indigo-700">Resolution Rate: {summary.resolutionRate}</span>
+        </div>
         {/* Audit Footer */}
         <footer className="text-center mt-8 text-xs text-slate-500">
-           <p>Created By: Officer Name • Created On: 26 Oct 2025</p>
-           <p className="mt-1">Last Updated By: Admin • Updated On: 26 Oct 2025, 17:00 IST</p>
-         </footer>
+          <p>Created By: Officer Name • Created On: 26 Oct 2025</p>
+          <p className="mt-1">Last Updated By: Admin • Updated On: 26 Oct 2025, 17:00 IST</p>
+        </footer>
         {/* Modals & Panels */}
         <ViewDetailsModal item={selectedItem} isOpen={isModalOpen} onClose={closeModal} />
         <InsightsPanel data={filteredData} isOpen={isInsightsOpen} onClose={() => setIsInsightsOpen(false)} />

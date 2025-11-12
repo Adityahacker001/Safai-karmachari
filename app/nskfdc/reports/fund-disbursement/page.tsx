@@ -299,8 +299,8 @@ const FundDisbursementReportPage = () => {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-sky-50 to-indigo-50 p-4 md:p-8 font-sans">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-white p-2 sm:p-4 lg:p-8 font-sans">
+      <div className="w-full mx-auto">
         
         {/* --- 1. Header Section --- */}
         <header className="mb-6">
@@ -313,45 +313,21 @@ const FundDisbursementReportPage = () => {
             <ChevronRightIcon className="w-4 h-4 mx-1" />
             <span className="font-semibold text-indigo-600">Fund Disbursement Report</span>
           </nav>
-
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            {/* Title */}
-            <div className="flex items-center space-x-3">
-              <span className="p-2 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full text-white shadow-lg">
-                <Wallet className="w-8 h-8" />
-              </span>
-              <div>
-                <h1 className="text-3xl font-bold text-slate-800">
-                  Fund Disbursement Report
-                </h1>
-                <p className="text-slate-500 mt-1">
-                  Track fund allocation, disbursement progress, and delays.
-                </p>
-              </div>
-            </div>
-
-            {/* Actions: Export & Refresh */}
-            <div className="flex items-center gap-2">
-              <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all duration-200 hover:scale-[1.03] shadow-md hover:shadow-lg"
-                      onClick={() => setIsInsightsOpen(true)}>
-                <BarChart3 className="w-4 h-4" />
-                View Insights
-              </button>
-              <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors shadow-sm" title="Export as CSV">
-                <FileDown className="w-5 h-5 text-green-600" />
-              </button>
-              <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors shadow-sm" title="Export as PDF">
-                <FileDown className="w-5 h-5 text-red-600" />
-              </button>
-              <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors shadow-sm" title="Refresh Data">
-                <RefreshCcw className="w-5 h-5 text-blue-600" />
-              </button>
+          <div className="w-full rounded-2xl px-6 py-6 flex flex-col sm:flex-row items-center gap-4 shadow-lg"
+            style={{
+              background: 'linear-gradient(90deg, #10b981 0%, #22d3ee 50%, #6366f1 100%)',
+              color: 'white',
+              boxShadow: '0 4px 24px 0 rgba(80, 80, 180, 0.10)',
+            }}>
+            <div className="flex flex-col items-center sm:items-start">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold drop-shadow-sm text-center sm:text-left">Fund Disbursement Report</h1>
+              <p className="text-base sm:text-lg md:text-xl font-medium opacity-90 text-center sm:text-left">Track fund allocation, disbursement progress, and delays.</p>
             </div>
           </div>
         </header>
 
         {/* --- 2. Filters Panel --- */}
-        <div className="bg-white rounded-2xl shadow-xl p-6 border border-slate-100 mb-6">
+  <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-6 border border-slate-100 mb-6">
           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-slate-800">
             <ListFilter className="w-5 h-5 text-indigo-600" />
             Filters
@@ -371,37 +347,55 @@ const FundDisbursementReportPage = () => {
             </FormSelect>
             <FormInput label="From Date" type="date" name="dateFrom" value={filters.dateFrom} onChange={handleFilterChange} />
             <FormInput label="To Date" type="date" name="dateTo" value={filters.dateTo} onChange={handleFilterChange} />
-             <div className="relative">
-                <label htmlFor="search" className="block text-sm font-medium text-slate-600 mb-1">Search</label>
-                <input
-                  type="text" id="search" placeholder="Name/Scheme/Remarks..."
-                  value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                  className="block w-full p-2 pl-9 rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/50 sm:text-sm"
-                />
-                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-[37px]" />
-              </div>
+            <div className="relative">
+              <label htmlFor="search" className="block text-sm font-medium text-slate-600 mb-1">Search</label>
+              <input
+                type="text" id="search" placeholder="Name/Scheme/Remarks..."
+                value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
+                className="block w-full p-2 pl-9 rounded-lg border-2 border-slate-800 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/50 sm:text-sm"
+              />
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-[37px]" />
+            </div>
           </div>
-          <div className="flex justify-end gap-3 mt-5 border-t border-slate-200 pt-5">
-            <button
-              onClick={clearFilters}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all duration-200 hover:scale-[1.02]"
-            >
-              <X className="w-4 h-4" /> Clear Filters
-            </button>
-            <button
-              onClick={applyFilters}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all duration-200 hover:scale-[1.02] shadow-md hover:shadow-lg"
-            >
-              <Search className="w-4 h-4" /> Apply Filters
-            </button>
+          <div className="flex flex-col sm:flex-row justify-between gap-3 mt-5 border-t border-slate-200 pt-5">
+            <div className="flex gap-3">
+              <button
+                onClick={clearFilters}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all duration-200 hover:scale-[1.02]"
+              >
+                <X className="w-4 h-4" /> Clear Filters
+              </button>
+              <button
+                onClick={applyFilters}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all duration-200 hover:scale-[1.02] shadow-md hover:shadow-lg"
+              >
+                <Search className="w-4 h-4" /> Apply Filters
+              </button>
+            </div>
+            {/* Export/Reload/Insights Section under Filters */}
+            <div className="flex items-center gap-2 justify-end">
+              <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all duration-200 hover:scale-[1.03] shadow-md hover:shadow-lg"
+                      onClick={() => setIsInsightsOpen(true)}>
+                <BarChart3 className="w-4 h-4" /> View Insights
+              </button>
+              <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-green-600 hover:bg-green-50 transition-colors shadow-sm" title="Export as CSV">
+                <FileDown className="w-5 h-5" />
+              </button>
+              <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-red-600 hover:bg-red-50 transition-colors shadow-sm" title="Export as PDF">
+                <FileDown className="w-5 h-5" />
+              </button>
+              <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-blue-600 hover:bg-blue-50 transition-colors shadow-sm" title="Refresh Data">
+                <RefreshCcw className="w-5 h-5" />
+              </button>
+            </div>
           </div>
         </div>
 
         {/* --- 3. Disbursement Data Table --- */}
-        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-x-auto">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-indigo-100 text-indigo-800 font-semibold sticky top-0 z-10">
+              <thead className="bg-gradient-to-r from-indigo-200 via-pink-100 to-yellow-100 text-indigo-900 font-bold sticky top-0 z-10">
                 <tr>
                   <th className="px-4 py-3 text-left min-w-[50px]">Sl. No.</th>
                   <SortableHeader colKey="benType" title="Beneficiary Type" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[120px]" />
@@ -414,18 +408,17 @@ const FundDisbursementReportPage = () => {
                   <th className="px-4 py-3 text-left min-w-[200px]">Delay Reason</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200">
+              <tbody>
                 {paginatedData.map((item, index) => (
-                  <tr key={item.id} className="hover:bg-indigo-50/70 transition-colors">
-                    <td className="px-4 py-3 text-slate-500 whitespace-nowrap">{(currentPage - 1) * rowsPerPage + index + 1}</td>
-                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{item.benType}</td>
-                    <td className="px-4 py-3 text-indigo-700 font-semibold whitespace-nowrap">{item.name}</td>
-                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{item.scheme}</td>
-                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap text-right font-medium">{formatCurrency(item.amtSanctioned)}</td>
-                    <td className="px-4 py-3 text-green-700 whitespace-nowrap text-right font-bold">{formatCurrency(item.amtDisbursed)}</td>
-                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{new Date(item.date).toLocaleDateString('en-GB')}</td>
-                    {/* <td className="px-4 py-3 whitespace-nowrap"><StatusBadge status={item.status as Status} /></td> */}
-                    <td className={`px-4 py-3 text-xs whitespace-nowrap ${item.status === 'Delayed' ? 'text-red-600 font-medium' : 'text-slate-500'}`}>{item.delayReason}</td>
+                  <tr key={item.id} className={`transition-colors ${index % 2 === 0 ? 'bg-indigo-50/30' : 'bg-white'} hover:bg-pink-50/60`}>
+                    <td className="px-4 py-3 text-slate-500 whitespace-nowrap border-r border-slate-100">{(currentPage - 1) * rowsPerPage + index + 1}</td>
+                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap border-r border-slate-100">{item.benType}</td>
+                    <td className="px-4 py-3 text-indigo-700 font-semibold whitespace-nowrap border-r border-slate-100">{item.name}</td>
+                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap border-r border-slate-100">{item.scheme}</td>
+                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap text-right font-medium border-r border-slate-100">{formatCurrency(item.amtSanctioned)}</td>
+                    <td className="px-4 py-3 text-green-700 whitespace-nowrap text-right font-bold border-r border-slate-100">{formatCurrency(item.amtDisbursed)}</td>
+                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap border-r border-slate-100">{new Date(item.date).toLocaleDateString('en-GB')}</td>
+                    <td className={`px-4 py-3 text-xs whitespace-nowrap border-r border-slate-100 ${item.status === 'Delayed' ? 'text-red-600 font-medium' : 'text-slate-500'}`}>{item.delayReason}</td>
                   </tr>
                 ))}
                 {paginatedData.length === 0 && (
@@ -436,7 +429,7 @@ const FundDisbursementReportPage = () => {
           </div>
           {/* Pagination */}
           {totalPages > 1 && (
-             <div className="flex justify-between items-center p-4 border-t border-slate-200 bg-slate-50">
+             <div className="flex flex-col sm:flex-row justify-between items-center p-4 border-t border-slate-200 bg-gradient-to-r from-indigo-50 via-pink-50 to-yellow-50">
               <div className="flex items-center gap-2">
                 <label htmlFor="rowsPerPage" className="text-xs text-slate-600">Rows:</label>
                 <select id="rowsPerPage" value={rowsPerPage} 

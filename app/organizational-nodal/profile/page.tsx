@@ -102,31 +102,24 @@ export default function OrganizationalNodalProfilePage() {
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-8 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 min-h-screen relative">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at 25px 25px, rgba(59, 130, 246, 0.15) 2px, transparent 0),
-                           radial-gradient(circle at 75px 75px, rgba(139, 92, 246, 0.15) 2px, transparent 0)`,
-          backgroundSize: '100px 100px'
-        }} />
-      </div>
-      {/* 🔹 Header */}
+    <div className="min-h-screen p-4 sm:p-6 lg:p-8 font-sans">
+      {/* Title Section - add gradient background color to match reference image */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="mb-8"
       >
-        <h1 className="text-2xl lg:text-3xl font-bold text-blue-600 mb-2">
-          Organizational Profile Management
-        </h1>
-        <p className="text-sm text-gray-600 mb-6">
-          Overview, Settings, and Compliance Status
-        </p>
-        
+        <div className="rounded-2xl shadow-lg px-8 py-7 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 flex flex-col gap-2">
+          <h1 className="text-2xl lg:text-3xl font-bold text-white drop-shadow">
+            Organizational Profile Management
+          </h1>
+          <p className="text-lg text-indigo-100 font-medium">
+            Overview, Settings, and Compliance Status
+          </p>
+        </div>
         {/* Profile Header Card */}
-        <Card className="shadow-2xl border-0 rounded-2xl bg-gradient-to-r from-blue-600 to-purple-700 overflow-hidden mb-8">
+        <Card className="shadow-2xl border-0 rounded-2xl bg-gradient-to-r from-blue-600 to-purple-700 overflow-hidden mb-8 mt-8">
           <CardContent className="p-8">
             <div className="flex items-start gap-6 text-white">
               {/* Avatar Circle */}
@@ -138,7 +131,6 @@ export default function OrganizationalNodalProfilePage() {
                   Avatar
                 </span>
               </div>
-              
               {/* Profile Info */}
               <div className="flex-1">
                 <h2 className="text-2xl font-bold mb-1">

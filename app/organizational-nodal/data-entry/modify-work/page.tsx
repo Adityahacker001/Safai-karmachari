@@ -145,7 +145,7 @@ export default function ModifyWorkAssignmentPage() {
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-8 bg-gradient-to-br from-gray-50 via-teal-50 to-indigo-100 min-h-screen">
+    <div className="min-h-screen w-full p-4 sm:p-6 lg:p-8 space-y-8">
       {/* 🔹 Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -153,12 +153,12 @@ export default function ModifyWorkAssignmentPage() {
         transition={{ duration: 0.5 }}
         className="mb-8"
       >
-        <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-teal-600 via-cyan-600 to-blue-600 bg-clip-text text-transparent">
-          Modify Existing Work Assignment
-        </h1>
-        <p className="text-sm text-gray-600 mt-1">
-          Select a work order to update its duration, contractor, or workforce details.
-        </p>
+        <div className="w-full rounded-2xl bg-gradient-to-r from-blue-600 via-purple-500 to-pink-400 shadow-lg px-6 py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl lg:text-4xl font-extrabold text-white drop-shadow tracking-tight">Modify Existing Work Assignment</h1>
+            <p className="text-sm text-white/90 mt-2 max-w-xl">Select a work order to update its duration, contractor, or workforce details.</p>
+          </div>
+        </div>
       </motion.div>
 
       {/* 🔹 Main Form Card */}
@@ -169,10 +169,10 @@ export default function ModifyWorkAssignmentPage() {
         onSubmit={(e) => e.preventDefault()}
         className="space-y-6"
       >
-        <Card className="shadow-xl border border-gray-100 rounded-lg bg-white/80 backdrop-blur-sm overflow-hidden">
+        <Card className="shadow-xl border border-gray-100 rounded-lg overflow-hidden">
           <CardHeader className="bg-gradient-to-r from-gray-50 to-gray-100 border-b p-5">
             <CardTitle className="text-xl font-semibold text-gray-800 flex items-center gap-3">
-              <Search className="w-6 h-6 text-indigo-700" />
+              {/* Icon removed from title side, only text remains */}
               1. Select Work to Modify
             </CardTitle>
             <CardDescription className="text-gray-600">
@@ -196,11 +196,11 @@ export default function ModifyWorkAssignmentPage() {
         </Card>
 
         {/* --- Section 2: Editable Fields --- */}
-        <Card className={cn("shadow-lg border border-gray-100 rounded-lg bg-white/80 backdrop-blur-sm overflow-hidden transition-all duration-300", 
-                       !isFormEnabled && "opacity-50 blur-sm pointer-events-none")}>
+        <Card className={cn("shadow-lg border border-gray-100 rounded-lg overflow-hidden transition-all duration-300", 
+                       !isFormEnabled && "opacity-50 blur-sm pointer-events-none")}> 
           <CardHeader className="bg-gradient-to-r from-teal-50 to-cyan-50 border-b p-5">
             <CardTitle className="text-xl font-semibold text-gray-800 flex items-center gap-3">
-              <FileSignature className="w-6 h-6 text-teal-700" />
+              {/* Icon removed from title side, only text remains */}
               2. Modify Details
             </CardTitle>
              <CardDescription className="text-gray-600">
@@ -208,35 +208,6 @@ export default function ModifyWorkAssignmentPage() {
             </CardDescription>
           </CardHeader>
           <fieldset disabled={!isFormEnabled} className="p-6 space-y-6">
-            
-            <div className="border-b border-gray-200 pb-6">
-               <h3 className="text-lg font-medium text-gray-700 mb-4">Duration & Contractor</h3>
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
-                   <InputGroup>
-                    <Label htmlFor="startDate">Start Date</Label>
-                    <Input id="startDate" name="startDate" type="date" value={formData.startDate || ""} onChange={handleChange} className="focus:ring-2 focus:ring-teal-300" />
-                  </InputGroup>
-                  <InputGroup>
-                    <Label htmlFor="endDate">End Date</Label>
-                    <Input id="endDate" name="endDate" type="date" value={formData.endDate || ""} onChange={handleChange} className="focus:ring-2 focus:ring-teal-300" />
-                  </InputGroup>
-                   <InputGroup className="md:col-span-2">
-                    <Label htmlFor="contractor">Contractor (NSKC Verified Only)</Label>
-                    <Select name="contractor" value={formData.contractor || ""} onValueChange={handleContractorChange}>
-                      <SelectTrigger className="focus:ring-2 focus:ring-teal-300">
-                        <SelectValue placeholder="Select a verified contractor..." />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="CleanForce Pvt Ltd">CleanForce Pvt Ltd</SelectItem>
-                        <SelectItem value="UrbanClean Services">UrbanClean Services</SelectItem>
-                        <SelectItem value="EcoSan Solutions">EcoSan Solutions</SelectItem>
-                        <SelectItem value="Pragati SHG">Pragati SHG (SHG)</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </InputGroup>
-               </div>
-            </div>
-
             <div className="border-b border-gray-200 pb-6">
                <h3 className="text-lg font-medium text-gray-700 mb-4">Workforce Details</h3>
                <div className="grid grid-cols-1 md:grid-cols-4 gap-x-6 gap-y-5">

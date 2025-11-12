@@ -272,27 +272,20 @@ const PendingDisbursementReportPage = () => {
   const closeModal = () => setIsModalOpen(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-sky-50 to-indigo-50 p-4 md:p-8 font-sans">
+    <div className="min-h-screen p-4 md:p-8 font-sans">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
          <header className="mb-6">
-           <nav className="flex items-center text-sm font-medium text-slate-500 mb-2"> <LayoutDashboard className="w-4 h-4 mr-1.5" /> Dashboard <ChevronRightIcon className="w-4 h-4 mx-1" /> Reports & Analytics <ChevronRightIcon className="w-4 h-4 mx-1" /> <span className="font-semibold text-indigo-600">Pending Disbursement Report</span> </nav>
+           <nav className="flex items-center text-sm font-medium text-slate-500 mb-2"> Dashboard <ChevronRightIcon className="w-4 h-4 mx-1" /> Reports & Analytics <ChevronRightIcon className="w-4 h-4 mx-1" /> <span className="font-semibold text-indigo-600">Pending Disbursement Report</span> </nav>
            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-             <div className="flex items-center space-x-3">
-               <span className="p-2 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full text-white shadow-lg"><WalletCards className="w-8 h-8" /></span>
-               <div> <h1 className="text-3xl font-bold text-slate-800">Pending Disbursement Report</h1> <p className="text-slate-500 mt-1">Monitor pending fund releases and analyze delay reasons.</p> </div>
-             </div>
-             <div className="flex items-center gap-2">
-               <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all hover:scale-[1.03] shadow-md hover:shadow-lg" onClick={() => setIsInsightsOpen(true)}> <BarChart3 className="w-4 h-4" /> View Insights </button>
-               <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export CSV"><FileDown className="w-5 h-5 text-green-600" /></button>
-               <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export PDF"><FileDown className="w-5 h-5 text-red-600" /></button>
-               <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Refresh"><RefreshCcw className="w-5 h-5 text-blue-600" /></button>
+             <div className="flex items-center space-x-3 rounded-xl px-6 py-4 w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-lg">
+               <div> <h1 className="text-3xl font-bold text-white drop-shadow">Pending Disbursement Report</h1> <p className="text-indigo-100 mt-1 font-medium">Monitor pending fund releases and analyze delay reasons.</p> </div>
              </div>
            </div>
          </header>
         {/* Filters */}
-        <div className="bg-white rounded-2xl shadow-xl p-6 border border-slate-100 mb-6">
-           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-slate-800"><Filter className="w-5 h-5 text-indigo-600" /> Filters</h2>
+        <div className="bg-white rounded-2xl shadow-xl p-6 border border-slate-100 mb-4">
+           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-slate-800">Filters</h2>
            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4">
              <FormSelect label="Financial Year" name="financialYear" value={filters.financialYear} onChange={handleFilterChange}><option value="">All Years</option>{mockFinancialYears.map(y=><option key={y} value={y}>{y}</option>)}</FormSelect>
              <FormSelect label="Scheme Name" name="schemeName" value={filters.schemeName} onChange={handleFilterChange}><option value="">All Schemes</option>{mockSchemes.map(s=><option key={s} value={s}>{s}</option>)}</FormSelect>
@@ -311,11 +304,26 @@ const PendingDisbursementReportPage = () => {
              <button onClick={applyFilters} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all hover:scale-[1.02] shadow-md hover:shadow-lg"><Search className="w-4 h-4" /> Apply Filters</button>
            </div>
          </div>
+        {/* Export/Reload Section - moved below Filters */}
+        <div className="flex flex-wrap gap-2 mb-6">
+          <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all hover:scale-[1.03] shadow-md hover:shadow-lg" onClick={() => setIsInsightsOpen(true)}>
+            <BarChart3 className="w-4 h-4" /> View Insights
+          </button>
+          <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export CSV">
+            <FileDown className="w-5 h-5 text-green-600" />
+          </button>
+          <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export PDF">
+            <FileDown className="w-5 h-5 text-red-600" />
+          </button>
+          <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Refresh">
+            <RefreshCcw className="w-5 h-5 text-blue-600" />
+          </button>
+        </div>
         {/* Table */}
-        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden w-full">
            <div className="overflow-x-auto">
              <table className="w-full text-sm">
-               <thead className="bg-indigo-100 text-indigo-800 font-semibold sticky top-0 z-10">
+               <thead className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-semibold">
                  <tr>
                    <th className="px-4 py-3 text-left">Sl.</th>
                    <SortableHeader colKey="benName" title="Beneficiary Name" sortConfig={sortConfig} requestSort={requestSort} className="min-w-[180px]" />
@@ -329,9 +337,9 @@ const PendingDisbursementReportPage = () => {
                    <th className="px-4 py-3 text-center">Action</th>
                  </tr>
                </thead>
-               <tbody className="divide-y divide-slate-200">
+               <tbody>
                  {paginatedData.map((item, index) => (
-                   <tr key={item.id} className="hover:bg-indigo-50/70 transition-colors">
+                   <tr key={item.id} className={index % 2 === 0 ? "bg-white hover:bg-indigo-50/70 transition-colors" : "bg-indigo-50/40 hover:bg-indigo-100 transition-colors"}>
                      <td className="px-4 py-3 text-slate-500">{(currentPage-1)*rowsPerPage+index+1}</td>
                      <td className="px-4 py-3 text-indigo-700 font-semibold">{item.benName}</td>
                      <td className="px-4 py-3 text-slate-700">{item.scheme}</td>

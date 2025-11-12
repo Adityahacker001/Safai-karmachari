@@ -168,30 +168,22 @@ export default function TotalWorkersReportPage() {
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-8 bg-gradient-to-br from-gray-50 via-teal-50 to-indigo-100 min-h-screen">
+    <div className="p-4 sm:p-6 lg:p-8 space-y-8 min-h-screen w-full">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-teal-600 via-cyan-600 to-blue-600 bg-clip-text text-transparent">
-          👥 Total Workers Report
+      <div className="w-full rounded-2xl p-6 mb-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-lg flex flex-col items-start">
+        <h1 className="text-4xl font-extrabold text-white tracking-tight drop-shadow-lg">
+          Total Workers Report
         </h1>
-        <div className="flex gap-3">
-          <Button variant="default" onClick={handleViewReport} className="shadow-sm hover:shadow transition-shadow duration-200 bg-teal-600 hover:bg-teal-700">
-            <Eye className="w-4 h-4 mr-2" /> View Report
-          </Button>
-          <Button variant="outline" onClick={handleExport} className="shadow-sm hover:shadow transition-shadow duration-200">
-            <FileDown className="w-4 h-4 mr-2" /> Export Report
-          </Button>
-          <Button variant="secondary" onClick={handleRefresh} className="shadow-sm hover:shadow transition-shadow duration-200">
-            <RefreshCw className="w-4 h-4 mr-2" /> Refresh Data
-          </Button>
-        </div>
+        <p className="mt-2 text-lg text-white/90 font-medium">
+          Monitor deployments, manage compliance, and track worker performance for your organization.
+        </p>
       </div>
 
       {/* Filters */}
       <Card className="shadow-lg border border-gray-100 rounded-lg bg-white/80 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="text-lg font-semibold text-gray-700 flex items-center gap-2">
-            <Filter className="w-5 h-5 text-indigo-600"/> Search & Filters
+            Search & Filters
           </CardTitle>
         </CardHeader>
         <CardContent className="flex flex-wrap items-center gap-4">
@@ -236,8 +228,21 @@ export default function TotalWorkersReportPage() {
         </CardContent>
       </Card>
 
+      {/* Export/Reload Section (moved below Filters) */}
+      <div className="flex flex-wrap gap-3 pt-2">
+        <Button variant="default" onClick={handleExport} className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
+          Export CSV
+        </Button>
+        <Button variant="default" onClick={handleExport} className="bg-pink-600 hover:bg-pink-700 text-white shadow-sm">
+          Export PDF
+        </Button>
+        <Button variant="default" onClick={handleRefresh} className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm">
+          Reload
+        </Button>
+      </div>
+
       {/* Summary Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           title="Total Workers"
           value={filteredWorkers.length}
@@ -268,36 +273,35 @@ export default function TotalWorkersReportPage() {
         />
       </div>
 
-
       {/* Table Section */}
       <Card className="shadow-xl border border-gray-100 rounded-lg bg-white overflow-hidden">
         <CardHeader className="bg-gradient-to-r from-teal-50 to-blue-50 border-b p-4">
-           <CardTitle className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-            <List className="w-5 h-5 text-teal-700"/> Total Workers Report
+           <CardTitle className="text-lg font-semibold text-gray-800">
+            Total Workers Report
            </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table className="min-w-[1200px]">
-              <TableHeader className="bg-gray-50/70">
+              <TableHeader className="bg-gradient-to-r from-indigo-100 via-blue-50 to-teal-50">
                 <TableRow>
-                  <TableHead className="w-[50px] font-semibold text-gray-600">Sl.</TableHead>
-                  <TableHead className="min-w-[150px] font-semibold text-gray-600">Worker Name</TableHead>
-                  <TableHead className="min-w-[150px] font-semibold text-gray-600">Contractor</TableHead>
-                  <TableHead className="min-w-[150px] font-semibold text-gray-600">Category</TableHead>
-                  <TableHead className="font-semibold text-gray-600">Caste</TableHead>
-                  <TableHead className="font-semibold text-gray-600">Religion</TableHead>
-                  <TableHead className="font-semibold text-gray-600">Gender</TableHead>
-                  <TableHead className="text-center font-semibold text-gray-600">Age</TableHead>
-                  <TableHead className="min-w-[150px] font-semibold text-gray-600">Assigned Location</TableHead>
-                  <TableHead className="min-w-[100px] font-semibold text-gray-600">Work Duration</TableHead>
-                  <TableHead className="min-w-[100px] font-semibold text-gray-600">Status</TableHead>
-                  <TableHead className="w-[80px] font-semibold text-gray-600 text-center">Actions</TableHead>
+                  <TableHead className="w-[50px] font-semibold text-gray-800">Sl.</TableHead>
+                  <TableHead className="min-w-[150px] font-semibold text-gray-800">Worker Name</TableHead>
+                  <TableHead className="min-w-[150px] font-semibold text-gray-800">Contractor</TableHead>
+                  <TableHead className="min-w-[150px] font-semibold text-gray-800">Category</TableHead>
+                  <TableHead className="font-semibold text-gray-800">Caste</TableHead>
+                  <TableHead className="font-semibold text-gray-800">Religion</TableHead>
+                  <TableHead className="font-semibold text-gray-800">Gender</TableHead>
+                  <TableHead className="text-center font-semibold text-gray-800">Age</TableHead>
+                  <TableHead className="min-w-[150px] font-semibold text-gray-800">Assigned Location</TableHead>
+                  <TableHead className="min-w-[100px] font-semibold text-gray-800">Work Duration</TableHead>
+                  <TableHead className="min-w-[100px] font-semibold text-gray-800">Status</TableHead>
+                  <TableHead className="w-[80px] font-semibold text-gray-800 text-center">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredWorkers.map((w, i) => (
-                  <TableRow key={w.id} className="hover:bg-teal-50/50 transition-colors duration-150 even:bg-slate-50/70">
+                  <TableRow key={w.id} className="hover:bg-teal-50/50 transition-colors duration-150 even:bg-slate-50/70 odd:bg-white">
                     <TableCell className="font-medium text-gray-700">{i + 1}</TableCell>
                     <TableCell className="font-semibold text-blue-700 cursor-pointer hover:underline">{w.name}</TableCell>
                     <TableCell className="text-gray-700">{w.contractor}</TableCell>
@@ -340,21 +344,18 @@ export default function TotalWorkersReportPage() {
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-xl font-bold text-teal-700">
-              <User className="h-6 w-6" />
               Worker Details
             </DialogTitle>
             <DialogDescription className="text-gray-600">
               Complete information about the selected worker
             </DialogDescription>
           </DialogHeader>
-          
           {selectedWorker && (
             <div className="space-y-6">
               {/* Personal Information */}
               <Card className="border-teal-200">
                 <CardHeader className="bg-gradient-to-r from-teal-50 to-blue-50 pb-3">
                   <CardTitle className="flex items-center gap-2 text-lg text-teal-700">
-                    <User className="h-5 w-5" />
                     Personal Information
                   </CardTitle>
                 </CardHeader>
@@ -406,7 +407,6 @@ export default function TotalWorkersReportPage() {
               <Card className="border-blue-200">
                 <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 pb-3">
                   <CardTitle className="flex items-center gap-2 text-lg text-blue-700">
-                    <Building className="h-5 w-5" />
                     Work Information
                   </CardTitle>
                 </CardHeader>
@@ -452,7 +452,6 @@ export default function TotalWorkersReportPage() {
               <Card className="border-green-200">
                 <CardHeader className="bg-gradient-to-r from-green-50 to-emerald-50 pb-3">
                   <CardTitle className="flex items-center gap-2 text-lg text-green-700">
-                    <Phone className="h-5 w-5" />
                     Contact Information
                   </CardTitle>
                 </CardHeader>
@@ -485,11 +484,9 @@ export default function TotalWorkersReportPage() {
               {/* Action Buttons */}
               <div className="flex gap-3 pt-4">
                 <Button className="flex-1 bg-teal-600 hover:bg-teal-700">
-                  <User className="h-4 w-4 mr-2" />
                   Edit Worker
                 </Button>
                 <Button variant="outline" className="flex-1 border-blue-300 text-blue-700 hover:bg-blue-50">
-                  <FileDown className="h-4 w-4 mr-2" />
                   Download Report
                 </Button>
               </div>

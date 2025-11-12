@@ -166,19 +166,13 @@ export default function TotalIncidentReportPage() {
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-8 bg-gradient-to-br from-gray-50 via-red-50 to-orange-50 min-h-screen">
+    <div className="w-full min-h-screen p-4 sm:p-6 lg:p-8 space-y-8">
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-red-600 via-orange-600 to-yellow-500 bg-clip-text text-transparent">
-          🚨 Total Incident Report
-        </h1>
-        <div className="flex gap-3">
-          <Button variant="outline" onClick={handleExport} className="shadow-sm hover:shadow transition-shadow duration-200">
-            <FileDown className="w-4 h-4 mr-2" /> Export Report
-          </Button>
-          <Button variant="secondary" onClick={handleRefresh} className="shadow-sm hover:shadow transition-shadow duration-200">
-            <RefreshCw className="w-4 h-4 mr-2" /> Refresh Data
-          </Button>
+        <div className="w-full rounded-xl bg-gradient-to-r from-purple-500 via-pink-400 to-yellow-300 px-6 py-8 shadow-md flex items-center">
+          <h1 className="text-4xl font-extrabold bg-gradient-to-r from-white via-yellow-50 to-pink-100 bg-clip-text text-transparent tracking-tight drop-shadow-md">
+            Total Incident Report
+          </h1>
         </div>
       </div>
 
@@ -186,7 +180,7 @@ export default function TotalIncidentReportPage() {
       <Card className="shadow-lg border border-gray-100 rounded-lg bg-white/80 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="text-lg font-semibold text-gray-700 flex items-center gap-2">
-            <Filter className="w-5 h-5 text-indigo-600"/> Search & Filters
+            Search & Filters
           </CardTitle>
         </CardHeader>
         <CardContent className="flex flex-wrap items-center gap-4">
@@ -215,6 +209,16 @@ export default function TotalIncidentReportPage() {
         </CardContent>
       </Card>
 
+      {/* Export/Reload Section - moved below Filters */}
+      <div className="flex flex-wrap gap-3 items-center">
+        <Button variant="outline" onClick={handleExport} className="shadow-sm hover:shadow transition-shadow duration-200">
+          <FileDown className="w-4 h-4 mr-2" /> Export Report
+        </Button>
+        <Button variant="secondary" onClick={handleRefresh} className="shadow-sm hover:shadow transition-shadow duration-200">
+          <RefreshCw className="w-4 h-4 mr-2" /> Refresh Data
+        </Button>
+      </div>
+
       {/* Visual Chart */}
       <Card className="shadow-lg border border-gray-100 rounded-lg bg-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 border-b bg-gray-50/70 p-4">
@@ -240,28 +244,30 @@ export default function TotalIncidentReportPage() {
 
       {/* Table Section */}
       <Card className="shadow-xl border border-gray-100 rounded-lg bg-white overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-red-50 to-orange-50 border-b p-4">
-           <CardTitle className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-            <List className="w-5 h-5 text-red-700"/> Total Incident Report
-           </CardTitle>
+        <CardHeader className="bg-gradient-to-r from-purple-400 via-pink-300 to-yellow-200 border-b p-4">
+           <div className="rounded-lg bg-white px-4 py-6 flex items-center">
+             <CardTitle className="text-2xl font-extrabold text-gray-900 tracking-tight">
+               Total Incident Report
+             </CardTitle>
+           </div>
         </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table className="min-w-[1200px]">
-              <TableHeader className="bg-gray-50/70">
+              <TableHeader className="bg-gradient-to-r from-purple-100 via-pink-100 to-yellow-50">
                 <TableRow>
                   <TableHead className="w-[40px]"></TableHead> {/* For expand button */}
-                  <TableHead className="w-[80px] font-semibold text-gray-600">Sl.</TableHead>
-                  <TableHead className="min-w-[130px] font-semibold text-gray-600">Incident ID</TableHead>
-                  <TableHead className="min-w-[120px] font-semibold text-gray-600">Date</TableHead>
-                  <TableHead className="min-w-[150px] font-semibold text-gray-600">Location</TableHead>
-                  <TableHead className="min-w-[200px] font-semibold text-gray-600">Brief Particulars</TableHead>
-                  <TableHead className="text-center font-semibold text-gray-600">Deaths</TableHead>
-                  <TableHead className="text-center font-semibold text-gray-600">Injuries</TableHead>
-                  <TableHead className="min-w-[120px] font-semibold text-gray-600">FIR No</TableHead>
-                  <TableHead className="min-w-[120px] font-semibold text-gray-600">FIR Status</TableHead>
-                  <TableHead className="min-w-[120px] font-semibold text-gray-600">Compensation</TableHead>
-                  <TableHead className="min-w-[120px] font-semibold text-gray-600">Inquiry Status</TableHead>
+                  <TableHead className="w-[80px] font-semibold text-gray-800">Sl.</TableHead>
+                  <TableHead className="min-w-[130px] font-semibold text-gray-800">Incident ID</TableHead>
+                  <TableHead className="min-w-[120px] font-semibold text-gray-800">Date</TableHead>
+                  <TableHead className="min-w-[150px] font-semibold text-gray-800">Location</TableHead>
+                  <TableHead className="min-w-[200px] font-semibold text-gray-800">Brief Particulars</TableHead>
+                  <TableHead className="text-center font-semibold text-gray-800">Deaths</TableHead>
+                  <TableHead className="text-center font-semibold text-gray-800">Injuries</TableHead>
+                  <TableHead className="min-w-[120px] font-semibold text-gray-800">FIR No</TableHead>
+                  <TableHead className="min-w-[120px] font-semibold text-gray-800">FIR Status</TableHead>
+                  <TableHead className="min-w-[120px] font-semibold text-gray-800">Compensation</TableHead>
+                  <TableHead className="min-w-[120px] font-semibold text-gray-800">Inquiry Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -274,7 +280,7 @@ export default function TotalIncidentReportPage() {
                  )}
                 {filteredIncidents.map((inc, i) => (
                   <Fragment key={inc.id}> {/* Use Fragment to render two rows */}
-                    <TableRow className="hover:bg-orange-50/50 transition-colors duration-150 even:bg-slate-50/70">
+                    <TableRow className="hover:bg-pink-50/60 transition-colors duration-150 even:bg-yellow-50/70 odd:bg-white rounded-lg shadow-sm">
                       <TableCell className="p-1">
                         <Button variant="ghost" size="icon" onClick={() => toggleRow(inc.id)} className="hover:bg-indigo-100">
                           {expandedRow === inc.id ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
@@ -292,7 +298,6 @@ export default function TotalIncidentReportPage() {
                       <TableCell>{getStatusBadge(inc.compensationPaid as any)}</TableCell> {/* Simplified status */}
                       <TableCell>{getStatusBadge(inc.inquiryStatus)}</TableCell>
                     </TableRow>
-                    
                     {/* Expandable Fact Sheet Row */}
                     <AnimatePresence>
                       {expandedRow === inc.id && (
