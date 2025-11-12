@@ -122,10 +122,16 @@ const Grievances = () => {
   ];
 
   return (
-    <div className="space-y-6 bg-gradient-to-br from-indigo-50 via-cyan-50 to-pink-50 min-h-screen p-6 rounded-xl">
-      {/* Page Header - now plain, no white container */}
-      <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Grievances Management</h1>
-      <p className="text-gray-600 mt-1">Track and resolve grievances across all districts</p>
+    <div className="space-y-6 min-h-screen p-6">
+      <div className="rounded-xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-extrabold text-white">Grievances Management</h1>
+            <p className="text-sm text-white/90">Track and resolve grievances across all districts</p>
+          </div>
+          <div className="w-12 h-12 rounded-full bg-white/10 hidden md:block" aria-hidden />
+        </div>
+      </div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">

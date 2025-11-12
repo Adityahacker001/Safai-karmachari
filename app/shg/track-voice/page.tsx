@@ -218,7 +218,7 @@ const TrackMyVoicePage = () => {
   const closeDrawer = () => setIsDrawerOpen(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-indigo-50 to-sky-100 p-4 md:p-8 font-sans animate-fade-in">
+  <div className="min-h-screen p-4 md:p-8 font-sans animate-fade-in">
         {/* Inline Styles */}
         <style jsx global>{`
           @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -233,18 +233,15 @@ const TrackMyVoicePage = () => {
         {/* Header */}
          <header>
            <nav className="flex items-center text-sm font-medium text-slate-500 mb-3"> <LayoutDashboard className="w-4 h-4 mr-1.5" /> SHG Dashboard <ChevronRightIcon className="w-4 h-4 mx-1" /> Manage & Apply <ChevronRightIcon className="w-4 h-4 mx-1" /> <span className="font-semibold text-indigo-600">Track My Voice</span> </nav>
-           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-             <div className="flex items-center space-x-4">
-               <span className="p-3 bg-gradient-to-br from-sky-500 to-blue-500 rounded-2xl text-white shadow-lg relative">
-                   <Megaphone className="w-8 h-8" />
-                   <span className="absolute -top-1 -right-1 flex h-3 w-3">
-                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                     <span className="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
-                   </span>
-               </span>
-               <div> <h1 className="text-3xl font-bold text-slate-800">Track My Voice</h1> <p className="text-slate-500 mt-1">View & track issues, feedback, and suggestions raised by you.</p> </div>
+
+           <div className="w-full bg-gradient-to-r from-sky-600 via-indigo-600 to-purple-600 text-white rounded-xl shadow-2xl p-6 md:p-8 mb-6 min-h-[96px] flex flex-col md:flex-row items-center justify-between gap-4">
+             <div>
+               <h1 className="text-3xl font-bold">Track My Voice</h1>
+               <p className="text-white/90 mt-1">View & track issues, feedback, and suggestions raised by you.</p>
              </div>
-             <span className="px-4 py-2 rounded-full bg-gradient-to-r from-purple-100 via-sky-100 to-emerald-100 text-sm font-semibold text-purple-800 shadow-sm border border-purple-200"> Your voice creates change 💪✨ </span>
+             <div className="w-full md:w-auto">
+               <span className="px-4 py-2 rounded-full bg-white/10 text-sm font-semibold text-white shadow-sm border border-white/20"> Your voice creates change 💪✨ </span>
+             </div>
            </div>
          </header>
         {/* Filters */}

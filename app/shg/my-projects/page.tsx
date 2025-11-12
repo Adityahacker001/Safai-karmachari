@@ -172,7 +172,7 @@ const MyProjectsPage = () => {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-sky-50 to-blue-50 p-4 md:p-8 font-sans animate-fade-in">
+    <div className="min-h-screen p-4 md:p-8 font-sans animate-fade-in">
       <div className="max-w-7xl mx-auto">
         
         {/* --- 1. Header Section --- */}
@@ -187,23 +187,15 @@ const MyProjectsPage = () => {
             <span className="font-semibold text-indigo-600">My Projects</span>
           </nav>
 
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            {/* Title */}
-            <div className="flex items-center space-x-4">
-              <span className="p-3 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-2xl text-white shadow-lg">
-                <FolderKanban className="w-8 h-8" />
-              </span>
-              <div>
-                <h1 className="text-3xl font-bold text-slate-800">
-                  My Projects
-                </h1>
-                <p className="text-slate-500 mt-1">
-                  Manage your SHG's ongoing and completed projects.
-                </p>
-              </div>
+          {/* District Dashboard–style gradient title container */}
+          <div className="w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 text-white rounded-xl shadow-2xl p-6 md:p-8 mb-6 min-h-[96px] flex flex-col md:flex-row items-center justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-bold">My Projects</h1>
+              <p className="text-white/90 mt-1">Manage your SHG's ongoing and completed projects.</p>
             </div>
-            {/* Add New Button */}
-             <GradientButton text="Add New Project" icon={PlusCircle} onClick={handleAddNew} />
+            <div className="w-full md:w-auto">
+              <GradientButton text="Add New Project" icon={PlusCircle} onClick={handleAddNew} />
+            </div>
           </div>
         </header>
 

@@ -113,11 +113,12 @@ export default function SHGDashboardPage() {
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 bg-gradient-to-br from-slate-50 via-white to-blue-50/30 min-h-screen">
-      <div className="space-y-2">
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-800 tracking-tight">
+      {/* Title banner — styled to match District Dashboard reference image */}
+      <div className="w-full bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-600 rounded-lg p-6 shadow-md text-white mb-6">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight">
           SHG Dashboard — NSKFDC Beneficiary
         </h1>
-        <p className="text-sm sm:text-base text-slate-600 max-w-3xl">
+        <p className="text-sm sm:text-base text-white/90 max-w-3xl mt-1">
           Manage members, projects, finances, schemes and applications from the web portal.
         </p>
       </div>

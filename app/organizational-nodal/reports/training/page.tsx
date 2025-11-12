@@ -123,24 +123,18 @@ export default function TrainingReportPage() {
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-8 bg-gradient-to-br from-gray-50 via-cyan-50 to-blue-50 min-h-screen">
-      {/* Header */}
+    <div className="w-full max-w-full p-4 sm:p-6 lg:p-8 space-y-8 min-h-screen">
+      {/* Header (title only — icon removed to keep text placement) */}
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">
-          🎓 Training Completion Report
-        </h1>
-        <div className="flex gap-3">
-          <Button variant="outline" onClick={handleExport} className="shadow-sm hover:shadow transition-shadow duration-200">
-            <FileDown className="w-4 h-4 mr-2" /> Export Report
-          </Button>
-          <Button variant="secondary" onClick={handleRefresh} className="shadow-sm hover:shadow transition-shadow duration-200">
-            <RefreshCw className="w-4 h-4 mr-2" /> Refresh Data
-          </Button>
+        <div className="w-full bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-600 rounded-lg p-6 shadow-md">
+          <h1 className="text-3xl font-bold text-white">
+            Training Completion Report
+          </h1>
         </div>
       </div>
 
       {/* Filters */}
-      <Card className="shadow-lg border border-gray-100 rounded-lg bg-white/80 backdrop-blur-sm">
+      <Card className="shadow-lg border border-gray-100 rounded-lg bg-white/90 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="text-lg font-semibold text-gray-700 flex items-center gap-2">
             <Filter className="w-5 h-5 text-indigo-600"/> Search & Filters
@@ -189,8 +183,20 @@ export default function TrainingReportPage() {
         </CardContent>
       </Card>
 
+      {/* Export / Refresh controls moved below Filters (keeps visual hierarchy) */}
+      <div className="flex justify-end">
+        <div className="flex gap-3">
+          <Button variant="outline" onClick={handleExport} className="shadow-sm hover:shadow transition-shadow duration-200">
+            <FileDown className="w-4 h-4 mr-2" /> Export Report
+          </Button>
+          <Button variant="secondary" onClick={handleRefresh} className="shadow-sm hover:shadow transition-shadow duration-200">
+            <RefreshCw className="w-4 h-4 mr-2" /> Refresh Data
+          </Button>
+        </div>
+      </div>
+
       {/* Summary Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
+      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2">
         <StatCard
           title="Workers Trained"
           value={totalTrained}
@@ -210,44 +216,44 @@ export default function TrainingReportPage() {
 
       {/* Table Section */}
       <Card className="shadow-xl border border-gray-100 rounded-lg bg-white overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-cyan-50 to-blue-50 border-b p-4">
-           <CardTitle className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-            <List className="w-5 h-5 text-cyan-700"/> Training Records Table
-           </CardTitle>
+        <CardHeader className="border-b p-4 bg-gradient-to-r from-cyan-50 to-blue-50">
+           <CardTitle className="text-lg font-semibold text-gray-800">Training Records Table</CardTitle>
         </CardHeader>
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <Table className="min-w-[900px]">
-              <TableHeader className="bg-gray-50/70">
-                <TableRow>
-                  <TableHead className="w-[50px] font-semibold text-gray-600">Sl.</TableHead>
-                  <TableHead className="min-w-[150px] font-semibold text-gray-600">Worker Name</TableHead>
-                  <TableHead className="min-w-[200px] font-semibold text-gray-600">Training Module</TableHead>
-                  <TableHead className="min-w-[120px] font-semibold text-gray-600">Completion Date</TableHead>
-                  <TableHead className="min-w-[150px] font-semibold text-gray-600">Trainer Name</TableHead>
-                  <TableHead className="min-w-[100px] font-semibold text-gray-600">Status</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredData.map((row, i) => (
-                  <TableRow key={row.id} className="hover:bg-cyan-50/50 transition-colors duration-150 even:bg-slate-50/70">
-                    <TableCell className="font-medium text-gray-700">{i + 1}</TableCell>
-                    <TableCell className="font-semibold text-blue-700 cursor-pointer hover:underline">{row.workerName}</TableCell>
-                    <TableCell className="text-gray-700">{row.trainingModule}</TableCell>
-                    <TableCell className="text-gray-700">{row.completionDate || "N/A"}</TableCell>
-                    <TableCell className="text-gray-700">{row.trainerName}</TableCell>
-                    <TableCell>{getStatusBadge(row.status)}</TableCell>
+        <CardContent className="p-4">
+          <div className="overflow-x-auto w-full">
+            <div className="inline-block min-w-full align-middle bg-white rounded-lg shadow-sm overflow-hidden">
+              <Table className="min-w-full">
+                <TableHeader>
+                  <TableRow className="bg-gradient-to-r from-cyan-100 to-blue-50">
+                    <TableHead className="w-[50px] font-semibold text-gray-800">Sl.</TableHead>
+                    <TableHead className="min-w-[150px] font-semibold text-gray-800">Worker Name</TableHead>
+                    <TableHead className="min-w-[200px] font-semibold text-gray-800">Training Module</TableHead>
+                    <TableHead className="min-w-[120px] font-semibold text-gray-800">Completion Date</TableHead>
+                    <TableHead className="min-w-[150px] font-semibold text-gray-800">Trainer Name</TableHead>
+                    <TableHead className="min-w-[100px] font-semibold text-gray-800">Status</TableHead>
                   </TableRow>
-                ))}
-                {filteredData.length === 0 && (
-                     <TableRow>
-                        <TableCell colSpan={6} className="text-center text-gray-500 py-10">
-                            No training records found matching your criteria.
-                        </TableCell>
+                </TableHeader>
+                <TableBody>
+                  {filteredData.map((row, i) => (
+                    <TableRow key={row.id} className={cn("transition-colors duration-150", i % 2 === 0 ? "bg-white" : "bg-slate-50") + " hover:bg-cyan-50/40"}>
+                      <TableCell className="font-medium text-gray-700">{i + 1}</TableCell>
+                      <TableCell className="font-semibold text-blue-700 cursor-pointer hover:underline">{row.workerName}</TableCell>
+                      <TableCell className="text-gray-700">{row.trainingModule}</TableCell>
+                      <TableCell className="text-gray-700">{row.completionDate || "N/A"}</TableCell>
+                      <TableCell className="text-gray-700">{row.trainerName}</TableCell>
+                      <TableCell>{getStatusBadge(row.status)}</TableCell>
                     </TableRow>
-                 )}
-              </TableBody>
-            </Table>
+                  ))}
+                  {filteredData.length === 0 && (
+                       <TableRow>
+                          <TableCell colSpan={6} className="text-center text-gray-500 py-10">
+                              No training records found matching your criteria.
+                          </TableCell>
+                      </TableRow>
+                   )}
+                </TableBody>
+              </Table>
+            </div>
           </div>
         </CardContent>
       </Card>

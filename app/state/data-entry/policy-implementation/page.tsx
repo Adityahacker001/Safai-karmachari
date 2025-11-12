@@ -47,10 +47,18 @@ export default function PolicyImplementationLogPage() {
   };
 
   return (
-    <div className={cn("min-h-screen space-y-8 p-6 md:p-8", contractorTheme.page.gradientBackground)}>
-      <div>
-        <h2 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Policy Implementation Log</h2>
-        <p className="text-slate-600 mt-1">Formally log new state-wide policies and directives to begin tracking their implementation.</p>
+    <div className={cn("min-h-screen space-y-8 p-6 md:p-8")}>
+      {/* District-style title/banner */}
+      <div className="w-full rounded-xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 text-white">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div className="flex items-center space-x-4">
+            <div className="w-12" aria-hidden />
+            <div>
+              <h2 className="text-3xl font-bold">Policy Implementation Log</h2>
+              <p className="mt-1 text-sm opacity-90">Formally log new state-wide policies and directives to begin tracking their implementation.</p>
+            </div>
+          </div>
+        </div>
       </div>
       <div className="grid lg:grid-cols-3 gap-8 items-start">
         {/* Left Column: Log New Policy Form */}

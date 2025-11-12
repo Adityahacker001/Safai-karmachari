@@ -87,12 +87,19 @@ export default function StateDashboard() {
   );
 
   return (
-    // Main container with a full-page gradient background and proper padding
-    <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 to-blue-100 p-6 md:p-10 space-y-8">
-      {/* Page Header */}
-      <div>
-        <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">State-Level Dashboard</h1>
-        <p className="text-gray-600 mt-2 text-xl">An overview of all district activities and compliance metrics.</p>
+  // Main container with proper padding
+  <div className="min-h-screen w-full p-6 md:p-10 space-y-8">
+      {/* Page Header - District-style gradient banner */}
+      <div className="w-full rounded-xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 text-white">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div className="flex items-center space-x-4">
+            <div className="w-12" aria-hidden />
+            <div>
+              <h1 className="text-3xl font-bold">State-Level Dashboard</h1>
+              <p className="mt-1 text-sm opacity-90">An overview of all district activities and compliance metrics.</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Dashboard Cards - Two Rows, 3 Cards Each */}

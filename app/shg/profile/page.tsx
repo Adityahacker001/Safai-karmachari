@@ -303,14 +303,16 @@ export default function SHGProfilePage() {
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8 bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 min-h-screen">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-          SHG Profile Management
-        </h1>
-        <p className="text-sm text-gray-600 mt-1">
-          Manage your Self Help Group details, members, and activities
-        </p>
+      {/* Header banner — match District Dashboard style */}
+      <div className="w-full bg-gradient-to-r from-[#3b82f6] via-[#8b5cf6] to-[#ec4899] rounded-xl p-8 sm:p-10 shadow-2xl text-white mb-8 min-h-[96px] flex items-center">
+        <div>
+          <h1 className="text-3xl lg:text-4xl font-extrabold leading-tight">
+            SHG Profile Management
+          </h1>
+          <p className="text-sm text-white/90 mt-1 max-w-3xl">
+            Manage your Self Help Group details, members, and activities
+          </p>
+        </div>
       </div>
 
       {/* SHG Identity Card */}

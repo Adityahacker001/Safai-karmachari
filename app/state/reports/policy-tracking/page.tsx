@@ -83,21 +83,25 @@ export default function PolicyTrackingReportPage() {
     ];
 
   return (
-    <div className={cn("min-h-screen space-y-8 p-6 md:p-8", contractorTheme.page.gradientBackground)}>
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-        <div>
-            <h2 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Policy Tracking Report</h2>
-            <p className="text-slate-600 mt-1">Analyze the implementation progress of state-wide policies across all districts.</p>
+    <div className={cn("min-h-screen space-y-8 p-6 md:p-8")}>
+      <div className="rounded-xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-white">Policy Tracking Report</h2>
+            <p className="text-sm text-white/90">Analyze the implementation progress of state-wide policies across all districts.</p>
+          </div>
+          <div className="w-12 h-12 rounded-full bg-white/10 hidden md:block" aria-hidden />
         </div>
-        <div className="flex items-center space-x-2 mt-4 sm:mt-0">
-          <Button className={cn(contractorTheme.button.secondary)}><Download className="h-4 w-4 mr-2" />Export Policy Summary</Button>
-        </div>
+      </div>
+      <div className="flex items-center space-x-2 mt-0 justify-end">
+        <Button className={cn(contractorTheme.button.secondary)}><Download className="h-4 w-4 mr-2" />Export Policy Summary</Button>
       </div>
 
       <Card className={cn(contractorTheme.table.container)}>
-        <CardHeader className={cn(contractorTheme.table.header)}>
-            <CardTitle className={cn(contractorTheme.table.headerTitle)}>Master Policy Roster</CardTitle>
-            <CardDescription className={cn(contractorTheme.table.headerDescription)}>Detailed implementation status for each state-wide policy.</CardDescription>
+        {/* Stronger, harder header color per request */}
+        <CardHeader className="p-6 md:p-8 bg-gradient-to-r from-purple-700 to-pink-600 text-white shadow-lg">
+            <CardTitle className="text-2xl md:text-3xl font-bold">Master Policy Roster</CardTitle>
+            <CardDescription className="text-white/90 mt-2">Detailed implementation status for each state-wide policy.</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>

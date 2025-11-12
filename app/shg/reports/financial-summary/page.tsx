@@ -525,7 +525,7 @@ const FinancialSummaryPage: React.FC = () => {
   return (
     <>
       <motion.div
-        className="min-h-screen p-4 md:p-8 bg-gradient-to-br from-white via-indigo-50 to-blue-100 dark:from-slate-900 dark:via-slate-900 dark:to-blue-950 text-slate-900 dark:text-slate-200"
+        className="min-h-screen p-4 md:p-8 text-slate-900 dark:text-slate-200"
         variants={pageVariants}
         initial="hidden"
         animate="visible"
@@ -542,16 +542,17 @@ const FinancialSummaryPage: React.FC = () => {
               <ChevronRight className="w-4 h-4 mx-1" />
               <span className="font-semibold text-indigo-600 dark:text-indigo-400">Financial Summary</span>
             </nav>
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-              <div className="flex items-center space-x-4">
-                <span className="p-3 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-2xl text-white shadow-lg shadow-indigo-500/30">
-                  <Wallet className="w-8 h-8" />
-                </span>
-                <div>
-                  <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100">Financial Summary Report</h1>
-                  <p className="text-slate-500 dark:text-slate-400 mt-1">
-                    Track sanctioned funds, disbursement, utilization & repayment.
-                  </p>
+
+            {/* District-style title/banner */}
+            <div className="w-full rounded-xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 text-white">
+              <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div className="flex items-center space-x-4">
+                  {/* Icon removed visually per request; keep spacing so text doesn't move */}
+                  <div className="w-12" aria-hidden />
+                  <div>
+                    <h1 className="text-3xl font-bold">Financial Summary Report</h1>
+                    <p className="mt-1 text-sm opacity-90">Track sanctioned funds, disbursement, utilization & repayment.</p>
+                  </div>
                 </div>
               </div>
             </div>

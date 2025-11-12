@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import DataTable from "@/components/ui/data-table";
+import StatCard from "@/components/ui/stat-card";
 import { Users, Plus, CheckCircle, XCircle, Clock, Eye } from "lucide-react";
 
 const UserManagement = () => {
@@ -125,25 +126,26 @@ const UserManagement = () => {
     { key: "lastLogin", header: "Last Login", sortable: true },
     {
       key: "action",
-      header: "Actions",
-      render: ({ row }: { row: any }) => (
-        <div className="flex space-x-2">
-          <button 
-            className="flex items-center space-x-1 px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:from-purple-600 hover:to-pink-600 transition-colors text-sm"
-            onClick={() => alert(`Viewing user: ${row.name}`)}
-          >
-            <Eye className="w-3 h-3" />
-            <span>View</span>
-          </button>
-          <button 
-            className="flex items-center space-x-1 px-3 py-1 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:from-blue-600 hover:to-indigo-600 transition-colors text-sm"
-            onClick={() => alert(`Editing user: ${row.name}`)}
-          >
-            <span>Edit</span>
-          </button>
-        </div>
-      ),
-    },
+        header: "Actions",
+        // receive both cell value and full row (data-table now passes row as second arg)
+        render: (_value: any, row: any) => (
+          <div className="flex space-x-2">
+            <button
+              className="flex items-center space-x-1 px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:from-purple-600 hover:to-pink-600 transition-colors text-sm"
+              onClick={() => alert(`Viewing user: ${row.name}`)}
+            >
+              <Eye className="w-3 h-3" />
+              <span>View</span>
+            </button>
+            <button
+              className="flex items-center space-x-1 px-3 py-1 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:from-blue-600 hover:to-indigo-600 transition-colors text-sm"
+              onClick={() => alert(`Editing user: ${row.name}`)}
+            >
+              <span>Edit</span>
+            </button>
+          </div>
+        ),
+      },
   ];
 
   const actionButton = (
@@ -154,17 +156,17 @@ const UserManagement = () => {
   );
 
   return (
-    <div className="space-y-6 min-h-screen w-full bg-gradient-to-br from-blue-50 via-purple-50 to-pink-100 p-6 md:p-10">
-      {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-            User Management
-          </h1>
-          <p className="text-gray-600 mt-1">
-            Manage users, roles, and permissions
-          </p>
+    <div className="space-y-6 min-h-screen w-full p-6 md:p-10">
+      <div className="rounded-xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-extrabold text-white">User Management</h1>
+            <p className="text-sm text-white/90">Manage users, roles, and permissions</p>
+          </div>
+          <div className="w-12 h-12 rounded-full bg-white/10 hidden md:block" aria-hidden />
         </div>
+      </div>
+      <div className="flex justify-end">
         <button 
           className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-colors shadow-lg transform hover:scale-105"
           onClick={() => alert('Add New User functionality')}
@@ -174,61 +176,35 @@ const UserManagement = () => {
         </button>
       </div>
 
-      {/* Stats Cards */}
+      {/* Stats Cards (replaced with reusable StatCard component) */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="p-6 rounded-xl shadow-md text-white bg-gradient-to-r from-blue-500 to-indigo-500">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium">Total Users</p>
-              <p className="text-2xl font-bold mt-1">{userData.length}</p>
-            </div>
-            <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
-              <Users className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
+        <StatCard
+          title="Total Users"
+          value={userData.length}
+          icon={Users}
+          color="indigo"
+        />
 
-        <div className="p-6 rounded-xl shadow-md text-white bg-gradient-to-r from-green-400 to-emerald-600">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium">Active Users</p>
-              <p className="text-2xl font-bold mt-1">
-                {userData.filter((user) => user.status === "Active").length}
-              </p>
-            </div>
-            <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
-              <CheckCircle className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
+        <StatCard
+          title="Active Users"
+          value={userData.filter((user) => user.status === "Active").length}
+          icon={CheckCircle}
+          color="emerald"
+        />
 
-        <div className="p-6 rounded-xl shadow-md text-white bg-gradient-to-r from-yellow-400 to-orange-500">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium">Pending Approval</p>
-              <p className="text-2xl font-bold mt-1">
-                {userData.filter((user) => user.status === "Pending").length}
-              </p>
-            </div>
-            <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
-              <Clock className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
+        <StatCard
+          title="Pending Approval"
+          value={userData.filter((user) => user.status === "Pending").length}
+          icon={Clock}
+          color="amber"
+        />
 
-        <div className="p-6 rounded-xl shadow-md text-white bg-gradient-to-r from-red-400 to-pink-600">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium">Inactive Users</p>
-              <p className="text-2xl font-bold mt-1">
-                {userData.filter((user) => user.status === "Inactive").length}
-              </p>
-            </div>
-            <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
-              <XCircle className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
+        <StatCard
+          title="Inactive Users"
+          value={userData.filter((user) => user.status === "Inactive").length}
+          icon={XCircle}
+          color="red"
+        />
       </div>
 
       {/* Role Distribution */}
@@ -266,13 +242,14 @@ const UserManagement = () => {
           border: 1.5px solid #e5e7eb;
           box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
         }
+        /* Darker, district-dashboard style header */
         .excel-table thead tr {
-          background: linear-gradient(90deg, #e0e7ff 0%, #f0fdfa 100%);
+          background: linear-gradient(90deg, #4f46e5 0%, #8b5cf6 100%);
         }
         .excel-table th {
           font-weight: 600;
-          color: #374151;
-          border-bottom: 2px solid #c7d2fe;
+          color: #ffffff;
+          border-bottom: 1px solid rgba(255,255,255,0.08);
           padding: 12px 16px;
         }
         .excel-table td {

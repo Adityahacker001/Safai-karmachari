@@ -2,6 +2,7 @@
 import React from "react";
 import DataTable from "@/components/ui/data-table";
 import { ScrollText, Activity, User, Settings } from "lucide-react";
+import StatCard from "@/components/ui/stat-card";
 
 const AuditLogs = () => {
   const auditData = [
@@ -181,58 +182,23 @@ const AuditLogs = () => {
   ];
 
   return (
-    <div className="space-y-6 min-h-screen w-full bg-gradient-to-br from-blue-50 via-purple-50 to-pink-100 p-6 md:p-10">
-      {/* Page Header */}
-      <div>
-        <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-          Audit Logs
-        </h1>
-        <p className="text-gray-600 mt-1">
-          Track all system activities and user actions
-        </p>
+    <div className="space-y-6 min-h-screen w-full p-6 md:p-10">
+      <div className="rounded-xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-extrabold text-white">Audit Logs</h1>
+            <p className="text-sm text-white/90">Track all system activities and user actions</p>
+          </div>
+          <div className="w-12 h-12 rounded-full bg-white/10 hidden md:block" aria-hidden />
+        </div>
       </div>
 
-      {/* Stats Cards */}
+      {/* Stats Cards (replaced with reusable StatCard component) */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="relative overflow-hidden rounded-2xl shadow-lg bg-gradient-to-r from-blue-400 to-blue-600 text-white p-6">
-          <div>
-            <p className="text-sm font-medium">Total Events</p>
-            <p className="text-2xl font-bold mt-1">1,247</p>
-          </div>
-          <div className="absolute right-4 bottom-4 text-white/20">
-            <ScrollText className="h-16 w-16" />
-          </div>
-        </div>
-
-        <div className="relative overflow-hidden rounded-2xl shadow-lg bg-gradient-to-r from-green-400 to-emerald-600 text-white p-6">
-          <div>
-            <p className="text-sm font-medium">Today's Events</p>
-            <p className="text-2xl font-bold mt-1">89</p>
-          </div>
-          <div className="absolute right-4 bottom-4 text-white/20">
-            <Activity className="h-16 w-16" />
-          </div>
-        </div>
-
-        <div className="relative overflow-hidden rounded-2xl shadow-lg bg-gradient-to-r from-purple-400 to-indigo-600 text-white p-6">
-          <div>
-            <p className="text-sm font-medium">Active Users</p>
-            <p className="text-2xl font-bold mt-1">34</p>
-          </div>
-          <div className="absolute right-4 bottom-4 text-white/20">
-            <User className="h-16 w-16" />
-          </div>
-        </div>
-
-        <div className="relative overflow-hidden rounded-2xl shadow-lg bg-gradient-to-r from-red-400 to-pink-600 text-white p-6">
-          <div>
-            <p className="text-sm font-medium">Failed Attempts</p>
-            <p className="text-2xl font-bold mt-1">3</p>
-          </div>
-          <div className="absolute right-4 bottom-4 text-white/20">
-            <Settings className="h-16 w-16" />
-          </div>
-        </div>
+        <StatCard title="Total Events" value={"1,247"} icon={ScrollText} color="indigo" />
+        <StatCard title="Today's Events" value={89} icon={Activity} color="emerald" />
+        <StatCard title="Active Users" value={34} icon={User} color="violet" />
+        <StatCard title="Failed Attempts" value={3} icon={Settings} color="red" />
       </div>
 
       {/* Activity Summary */}

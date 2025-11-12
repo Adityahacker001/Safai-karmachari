@@ -265,7 +265,7 @@ const RaiseAVoicePage = () => {
   }), []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-sky-50 to-blue-50 p-4 md:p-8 font-sans animate-fade-in">
+  <div className="min-h-screen p-4 md:p-8 font-sans animate-fade-in">
         {/* Inline Styles for Animations */}
         <style jsx global>{`
           @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -281,12 +281,15 @@ const RaiseAVoicePage = () => {
         {/* --- 1. Header Section --- */}
         <header>
           <nav className="flex items-center text-sm font-medium text-slate-500 mb-3"> <LayoutDashboard className="w-4 h-4 mr-1.5" /> SHG Dashboard <ChevronRight className="w-4 h-4 mx-1" /> Manage & Apply <ChevronRight className="w-4 h-4 mx-1" /> <span className="font-semibold text-indigo-600">Raise a Voice</span> </nav>
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div className="flex items-center space-x-4">
-              <span className="p-3 bg-gradient-to-br from-blue-500 to-sky-500 rounded-2xl text-white shadow-lg"><Megaphone className="w-8 h-8" /></span>
-              <div> <h1 className="text-3xl font-bold text-slate-800">Raise a Voice</h1> <p className="text-slate-500 mt-1">Report issues, delays, or support needs — your dignity & rights matter.</p> </div>
+
+          <div className="w-full bg-gradient-to-r from-indigo-600 via-fuchsia-600 to-rose-500 text-white rounded-xl shadow-2xl p-6 md:p-8 mb-6 min-h-[96px] flex flex-col md:flex-row items-center justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-bold">Raise a Voice</h1>
+              <p className="text-white/90 mt-1">Report issues, delays, or support needs — your dignity & rights matter.</p>
             </div>
-             <button className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all hover:scale-105 shadow-sm"> <HelpCircle className="w-4 h-4" /> Help & Support </button>
+            <div className="w-full md:w-auto">
+              <button className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium text-white bg-white/10 border border-white/20 hover:bg-white/20 transition-all hover:scale-105 shadow-sm"> <HelpCircle className="w-4 h-4" /> Help & Support </button>
+            </div>
           </div>
         </header>
 

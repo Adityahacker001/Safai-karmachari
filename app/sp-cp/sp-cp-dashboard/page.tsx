@@ -198,35 +198,15 @@ export default function DashboardPage() {
     };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-8 bg-gradient-to-br from-gray-50 to-indigo-100 min-h-screen">
-      {/* 🔹 Header */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-4">
+    <div className="p-4 sm:p-6 lg:p-8 space-y-8 min-h-screen w-full">
+      {/* District-style title banner */}
+      <div className="rounded-xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500">
+        <div className="flex items-start justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-red-600 to-orange-500 bg-clip-text text-transparent">
-              {userRole} Command Dashboard
-            </h1>
-            <p className="text-sm text-gray-600 mt-1">
-              Real-time monitoring, incident tracking, and performance overview.
-            </p>
+            <h1 className="text-3xl font-extrabold text-white">{userRole} Command Dashboard</h1>
+            <p className="text-sm text-white/90 mt-1">Real-time monitoring, incident tracking, and performance overview.</p>
           </div>
-          {/* Role Switcher for Demo */}
-          <div className="flex gap-2">
-            <Button 
-              variant={userRole === 'SP' ? 'default' : 'outline'} 
-              size="sm"
-              onClick={() => handleRoleChange('SP')}
-            >
-              SP Mode
-            </Button>
-            <Button 
-              variant={userRole === 'CP' ? 'default' : 'outline'} 
-              size="sm"
-              onClick={() => handleRoleChange('CP')}
-            >
-              CP Mode
-            </Button>
-          </div>
+          <div className="w-12 h-12 rounded-full bg-white/10 hidden md:block" aria-hidden />
         </div>
       </div>
 

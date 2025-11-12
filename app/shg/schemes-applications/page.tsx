@@ -247,7 +247,7 @@ const SchemesApplicationPage = () => {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-sky-50 to-blue-50 p-4 md:p-8 font-sans animate-fade-in">
+    <div className="min-h-screen p-4 md:p-8 font-sans animate-fade-in">
         {/* Inline Styles for Animations */}
         <style jsx global>{`
           @keyframes fadeIn { 
@@ -284,17 +284,17 @@ const SchemesApplicationPage = () => {
           <nav className="flex items-center text-sm font-medium text-slate-500 mb-3" aria-label="Breadcrumb">
             <LayoutDashboard className="w-4 h-4 mr-1.5" /> SHG Dashboard <ChevronRight className="w-4 h-4 mx-1" />
             Manage & Apply <ChevronRight className="w-4 h-4 mx-1" />
-            <span className="font-semibold text-indigo-600">Schemes & Application</span>
+            <span className="font-semibold text-indigo-600">My Schemes</span>
           </nav>
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div className="flex items-center space-x-4">
-              <span className="p-3 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-2xl text-white shadow-lg"><Award className="w-8 h-8" /></span>
-              <div>
-                <h1 className="text-3xl font-bold text-slate-800">Railway Schemes & Applications</h1>
-                <p className="text-slate-500 mt-1">Explore railway cleaning contracts, equipment loans & welfare schemes.</p>
-              </div>
+
+          <div className="w-full bg-gradient-to-r from-indigo-600 via-sky-600 to-teal-500 text-white rounded-xl shadow-2xl p-6 md:p-8 mb-6 min-h-[96px] flex flex-col md:flex-row items-center justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-bold">Available Schemes & Applications</h1>
+              <p className="text-white/90 mt-1">Find schemes your SHG can apply for and track applications.</p>
             </div>
-            {/* Add Header buttons like Search, Filter if needed for schemes */}
+            <div className="w-full md:w-auto">
+              <GradientButton text="Apply for Scheme" icon={Send} onClick={() => setIsModalOpen(true)} />
+            </div>
           </div>
         </header>
 

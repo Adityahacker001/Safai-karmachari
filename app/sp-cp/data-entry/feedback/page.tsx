@@ -39,7 +39,17 @@ interface FormData {
 // --- Main Page Component ---
 export default function GeneralFeedbackPage() {
   return (
-    <div className="min-h-screen p-4 sm:p-6 lg:p-8"> {/* Removed gradient background */}
+    <div className="min-h-screen p-4 sm:p-6 lg:p-8"> {/* neutral page wrapper */}
+      {/* District-style title banner */}
+      <div className="rounded-xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 max-w-5xl mx-auto">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h1 className="text-3xl lg:text-4xl font-extrabold text-white">General Feedback Entry</h1>
+            <p className="text-sm text-white/90 mt-1">Submit, track, and respond to general feedback — suggestions, appreciation, or complaints related to Safai Karmachari operations.</p>
+          </div>
+          <div className="w-12 h-12 rounded-full bg-white/10 hidden md:block" aria-hidden />
+        </div>
+      </div>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

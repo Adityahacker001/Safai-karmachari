@@ -48,11 +48,19 @@ export default function StateComplianceFormPage() {
     };
 
   return (
-    <div className="min-h-screen space-y-8 p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-blue-50 via-purple-50 to-green-50">
+    <div className="min-h-screen space-y-8 p-4 sm:p-6 lg:p-8">
         {/* Header */}
-        <div>
-            <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">State-Wide Compliance Form</h1>
-            <p className="mt-1 text-md text-slate-500">Compile and submit the official state-level performance report to the NCSK.</p>
+        {/* District-style title/banner */}
+        <div className="w-full rounded-xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 text-white">
+            <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div className="flex items-center space-x-4">
+                    <div className="w-12" aria-hidden />
+                    <div>
+                        <h1 className="text-3xl font-bold">State-Wide Compliance Form</h1>
+                        <p className="mt-1 text-sm opacity-90">Compile and submit the official state-level performance report to the NCSK.</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
       <Card className="bg-white/70 backdrop-blur-md shadow-2xl border border-gray-200/80 overflow-hidden">

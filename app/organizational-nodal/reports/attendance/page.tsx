@@ -139,17 +139,10 @@ export default function AttendanceReportPage() {
   return (
     <>
       <div className="pageContainer">
-        {/* --- HEADER --- */}
-        <header className="header">
-          <div className="headerTitle">
-            <FiCalendar />
-            <h1>Attendance-wise Worker Report</h1>
-          </div>
-          <button className="actionButton">
-            <FiDownload />
-            Export Report
-          </button>
-        </header>
+        {/* --- HEADER / Title Banner --- */}
+        <div className="titleBanner">
+          <h1>Attendance-wise Worker Report</h1>
+        </div>
 
         {/* --- STATS GRID --- */}
         <section className="statsGrid">
@@ -193,6 +186,14 @@ export default function AttendanceReportPage() {
                   }}
                 />
               </div>
+            </div>
+
+            {/* --- Export / Refresh moved under filters --- */}
+            <div className="exportControls" style={{ marginTop: 12 }}>
+              <button className="actionButton">
+                <FiDownload />
+                Export Report
+              </button>
             </div>
           </div>
 
@@ -309,11 +310,62 @@ export default function AttendanceReportPage() {
         }
 
         .pageContainer {
-          background-color: #f4f7fa; /* --bg-color */
           padding: 1.5rem 2rem;
           min-height: 100vh;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
             Arial, sans-serif;
+        }
+
+        /* Title banner to match district-dashboard style */
+        .titleBanner {
+          width: 100%;
+          background: linear-gradient(90deg, #4f46e5 0%, #8b5cf6 40%, #ec4899 100%);
+          border-radius: 8px;
+          padding: 1rem 1.25rem;
+          box-shadow: 0 8px 24px rgba(99, 102, 241, 0.12);
+          color: white;
+          margin-bottom: 1rem;
+        }
+        .titleBanner h1 {
+          margin: 0;
+          font-size: 1.75rem;
+          font-weight: 700;
+        }
+
+        /* Table visual improvements (clean, professional) */
+        .tableWrapper .table {
+          border-radius: 12px;
+          overflow: hidden;
+          box-shadow: 0 10px 30px rgba(2,6,23,0.06);
+          background: white;
+        }
+        .table thead tr {
+          background: linear-gradient(90deg, rgba(99,102,241,0.10) 0%, rgba(236,72,153,0.06) 100%);
+        }
+        .table th {
+          color: #1f2937; /* gray-800 */
+          font-weight: 600;
+          padding: 0.95rem 1.25rem;
+          font-size: 0.85rem;
+          text-transform: none;
+        }
+        .table td {
+          padding: 0.95rem 1.25rem;
+          vertical-align: middle;
+          color: #334155; /* gray-700 */
+        }
+        .table tbody tr:nth-child(even) {
+          background: #fbfdff;
+        }
+        .table tbody tr:nth-child(odd) {
+          background: white;
+        }
+        .table tbody tr {
+          transition: background-color 0.18s ease, transform 0.12s ease;
+        }
+        .table tbody tr:hover {
+          background: rgba(99,102,241,0.04);
+          transform: translateY(-1px);
         }
 
         /* --- Header --- */
@@ -374,9 +426,9 @@ export default function AttendanceReportPage() {
 
         .statCard {
           background-color: #ffffff; /* --card-bg */
-          border-radius: 8px;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* --shadow */
-          padding: 1.5rem;
+          border-radius: 10px;
+          box-shadow: 0 8px 20px rgba(2,6,23,0.04); /* --shadow */
+          padding: 1.25rem;
           display: flex;
           align-items: center;
           gap: 1rem;
@@ -520,13 +572,15 @@ export default function AttendanceReportPage() {
         
         /* --- Status Pills (Absences, Late) --- */
         .statusPill {
-          padding: 0.3rem 0.75rem;
-          border-radius: 12px;
+          padding: 0.25rem 0.6rem;
+          border-radius: 9999px;
           font-size: 0.8rem;
-          font-weight: 600;
+          font-weight: 700;
           display: inline-flex;
           align-items: center;
           gap: 0.4rem;
+          letter-spacing: 0.2px;
+          text-transform: none;
         }
         .statusPill :global(svg) {
           font-size: 0.9rem;
@@ -534,16 +588,16 @@ export default function AttendanceReportPage() {
         }
         
         .statusHigh {
-          background-color: #e6f7ec; /* --green-light */
-          color: #008a2e; /* --green-dark */
+          background-color: rgba(16,185,129,0.08);
+          color: #059669; /* emerald-500 */
         }
         .statusMedium {
-          background-color: #fffbea; /* --yellow-light */
-          color: #f39c12; /* --yellow-dark */
+          background-color: rgba(250,204,21,0.08);
+          color: #d97706; /* amber-600 */
         }
         .statusLow {
-          background-color: #fdeaea; /* --red-light */
-          color: #d90429; /* --red-dark */
+          background-color: rgba(239,68,68,0.06);
+          color: #dc2626; /* red-600 */
         }
         
         /* --- Attendance Score Bar --- */

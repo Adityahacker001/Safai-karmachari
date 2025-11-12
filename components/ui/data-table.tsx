@@ -16,7 +16,8 @@ interface DataTableProps {
   columns: {
     key: string;
     header: string;
-    render?: (value: any) => React.ReactNode;
+    // render receives the cell value and the full row (second arg optional for backward compatibility)
+    render?: (value: any, row?: any) => React.ReactNode;
   }[];
   data: any[];
   actions?: boolean;
@@ -47,7 +48,7 @@ const DataTable: React.FC<DataTableProps> = ({ title, columns, data, actions, on
               <TableRow key={rowIndex} className={rowClassName}>
                 {columns.map((col) => (
                   <TableCell key={col.key}>
-                    {col.render ? col.render(row[col.key]) : row[col.key]}
+                    {col.render ? col.render(row[col.key], row) : row[col.key]}
                   </TableCell>
                 ))}
                 {actions && (

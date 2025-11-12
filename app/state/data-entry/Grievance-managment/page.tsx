@@ -30,13 +30,18 @@ const StateGrievanceForm: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-blue-50 to-teal-50 p-6">
-      {/* Header at top left, separate from form */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-extrabold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
-          State Grievance Resolution Form
-        </h1>
-        <p className="text-gray-600 mt-1">For registering and monitoring grievances at the State level</p>
+    <div className="min-h-screen p-6">
+      {/* Header (District-style banner) */}
+      <div className="w-full rounded-xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 text-white">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div className="flex items-center space-x-4">
+            <div className="w-12" aria-hidden />
+            <div>
+              <h1 className="text-3xl font-bold">State Grievance Resolution Form</h1>
+              <p className="mt-1 text-sm opacity-90">For registering and monitoring grievances at the State level</p>
+            </div>
+          </div>
+        </div>
       </div>
       <div className="flex items-center justify-center">
         <form

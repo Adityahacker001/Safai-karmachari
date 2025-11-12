@@ -218,7 +218,7 @@ const MonthlyUtilizationReportPage = () => {
   const closeUploadModal = () => setIsUploadModalOpen(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-indigo-50 to-blue-100 p-4 md:p-8 font-sans animate-fade-in">
+    <div className="min-h-screen p-4 md:p-8 font-sans animate-fade-in">
         {/* Inline Styles */}
         <style jsx global>{`
           @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -230,19 +230,27 @@ const MonthlyUtilizationReportPage = () => {
         `}</style>
 
       <div className="max-w-7xl mx-auto space-y-8">
-        {/* Header */}
+         {/* Header */}
          <header>
            <nav className="flex items-center text-sm font-medium text-slate-500 mb-3"> <LayoutDashboard className="w-4 h-4 mr-1.5" /> SHG Dashboard <ChevronRightIcon className="w-4 h-4 mx-1" /> Reports & Analytics <ChevronRightIcon className="w-4 h-4 mx-1" /> <span className="font-semibold text-indigo-600">Monthly Utilization Report</span> </nav>
-           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-             <div className="flex items-center space-x-4">
-               <span className="p-3 bg-gradient-to-br from-emerald-500 to-green-600 rounded-2xl text-white shadow-lg"><TrendingUp className="w-8 h-8" /></span>
-               <div> <h1 className="text-3xl font-bold text-slate-800">Monthly Utilization Report</h1> <p className="text-slate-500 mt-1">Track scheme fund usage month-wise.</p> </div>
-             </div>
-             <div className="flex items-center gap-2">
-               {/* Insights button removed: InsightsPanel is now always visible below the table */}
-               <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export CSV"><FileDown className="w-5 h-5 text-green-600" /></button>
-               <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Export PDF"><FileDown className="w-5 h-5 text-red-600" /></button>
-               <button className="p-2.5 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 shadow-sm" title="Refresh"><RefreshCcw className="w-5 h-5 text-blue-600" /></button>
+
+           {/* District-style title/banner */}
+           <div className="w-full rounded-xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 text-white">
+             <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+               <div className="flex items-center space-x-4">
+                 {/* Icon removed visually per request; keep spacing so text doesn't move */}
+                 <div className="w-12" aria-hidden />
+                 <div>
+                   <h1 className="text-3xl font-bold">Monthly Utilization Report</h1>
+                   <p className="mt-1 text-sm opacity-90">Track scheme fund usage month-wise.</p>
+                 </div>
+               </div>
+
+               <div className="flex items-center gap-2">
+                 <button className="p-2.5 bg-white/90 text-slate-800 rounded-lg shadow-sm hover:scale-[1.02] transition-transform" title="Export CSV"><FileDown className="w-5 h-5 text-slate-700" /></button>
+                 <button className="p-2.5 bg-white/90 text-slate-800 rounded-lg shadow-sm hover:scale-[1.02] transition-transform" title="Export PDF"><FileDown className="w-5 h-5 text-slate-700" /></button>
+                 <button className="p-2.5 bg-white/90 text-slate-800 rounded-lg shadow-sm hover:scale-[1.02] transition-transform" title="Refresh"><RefreshCcw className="w-5 h-5 text-slate-700" /></button>
+               </div>
              </div>
            </div>
          </header>

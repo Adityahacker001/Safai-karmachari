@@ -138,17 +138,10 @@ export default function SafetyComplianceReportPage() {
   return (
     <>
       <div className="pageContainer">
-        {/* --- HEADER --- */}
-        <header className="header">
-          <div className="headerTitle">
-            <FiShield />
-            <h1>Safety Compliance Report</h1>
-          </div>
-          <button className="actionButton">
-            <FiDownload />
-            Export Report
-          </button>
-        </header>
+        {/* --- HEADER / Title Banner --- */}
+        <div className="titleBanner">
+          <h1>Safety Compliance Report</h1>
+        </div>
 
         {/* --- STATS GRID --- */}
         <section className="statsGrid">
@@ -192,6 +185,14 @@ export default function SafetyComplianceReportPage() {
                   }}
                 />
               </div>
+            </div>
+
+            {/* --- Export moved under filters --- */}
+            <div className="exportControls" style={{ marginTop: 12 }}>
+              <button className="actionButton">
+                <FiDownload />
+                Export Report
+              </button>
             </div>
           </div>
 
@@ -301,6 +302,34 @@ export default function SafetyComplianceReportPage() {
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
             Arial, sans-serif;
         }
+
+        /* Title banner to match district-dashboard style */
+        .titleBanner {
+          width: 100%;
+          background: linear-gradient(90deg, #4f46e5 0%, #8b5cf6 40%, #ec4899 100%);
+          border-radius: 8px;
+          padding: 1rem 1.25rem;
+          box-shadow: 0 8px 24px rgba(99, 102, 241, 0.12);
+          color: white;
+          margin-bottom: 1rem;
+        }
+        .titleBanner h1 {
+          margin: 0;
+          font-size: 1.75rem;
+          font-weight: 700;
+        }
+
+        /* Table visual improvements */
+        .tableWrapper .table {
+          border-radius: 8px;
+          overflow: hidden;
+          box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+        }
+        .table thead tr {
+          background: linear-gradient(90deg, #f0f9ff 0%, #e6f7ff 100%);
+        }
+        .table tbody tr:nth-child(even) { background: #fbfdff; }
+        .table tbody tr:hover { background: rgba(16, 185, 129, 0.06); }
 
         /* --- Header --- */
         .header {

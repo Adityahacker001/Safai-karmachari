@@ -2,6 +2,7 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { FileText, Download, Calendar, BarChart } from 'lucide-react';
+import StatCard from '@/components/ui/stat-card';
 
 const Reports = () => {
   const reports = [
@@ -68,52 +69,39 @@ const Reports = () => {
   };
 
   return (
-    <div className="space-y-8 min-h-screen w-full bg-gradient-to-br from-blue-50 via-purple-50 to-pink-100 p-6 md:p-10">
-      {/* Page Header */}
-      <div className="text-center md:text-left">
-        <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent drop-shadow-sm">
-          Reports & Analytics
-        </h1>
-        <p className="text-gray-600 mt-2 text-lg">Generate and download comprehensive reports</p>
+    <div className="space-y-8 min-h-screen w-full p-6 md:p-10">
+      <div className="rounded-xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-extrabold text-white">Reports & Analytics</h1>
+            <p className="text-sm text-white/90">Generate and download comprehensive reports</p>
+          </div>
+          <div className="w-12 h-12 rounded-full bg-white/10 hidden md:block" aria-hidden />
+        </div>
       </div>
 
-      {/* Quick Stats (New Card Layout) */}
-  <div className="grid gap-6 md:grid-cols-4">
-        {/* Available Reports */}
-        <Card className="relative overflow-hidden rounded-2xl shadow-lg bg-gradient-to-r from-orange-400 to-orange-500 text-white">
-          <CardContent className="p-6">
-            <p className="text-sm font-semibold">Available Reports</p>
-            <p className="text-3xl font-bold mt-2">{reports.length}</p>
-          </CardContent>
-          {/* Icon Watermark */}
-          <div className="absolute right-4 bottom-4 text-white/20 text-6xl">
-            <FileText className="w-8 h-8" />
-          </div>
-        </Card>
+      {/* Quick Stats (now using reusable StatCard) */}
+      <div className="grid gap-6 md:grid-cols-3">
+        <StatCard
+          title="Available Reports"
+          value={reports.length}
+          icon={FileText}
+          color="orange"
+        />
 
-        {/* Generated Today */}
-        <Card className="relative overflow-hidden rounded-2xl shadow-lg bg-gradient-to-r from-emerald-400 to-teal-500 text-white">
-          <CardContent className="p-6">
-            <p className="text-sm font-semibold">Generated Today</p>
-            <p className="text-3xl font-bold mt-2">3</p>
-          </CardContent>
-          {/* Icon Watermark */}
-          <div className="absolute right-4 bottom-4 text-white/20 text-6xl">
-            <Calendar className="w-8 h-8" />
-          </div>
-        </Card>
+        <StatCard
+          title="Generated Today"
+          value={3}
+          icon={Calendar}
+          color="emerald"
+        />
 
-        {/* Total Downloads */}
-        <Card className="relative overflow-hidden rounded-2xl shadow-lg bg-gradient-to-r from-purple-400 to-indigo-500 text-white">
-          <CardContent className="p-6">
-            <p className="text-sm font-semibold">Total Downloads</p>
-            <p className="text-3xl font-bold mt-2">247</p>
-          </CardContent>
-          {/* Icon Watermark */}
-          <div className="absolute right-4 bottom-4 text-white/20 text-6xl">
-            <Download className="w-8 h-8" />
-          </div>
-        </Card>
+        <StatCard
+          title="Total Downloads"
+          value={247}
+          icon={Download}
+          color="purple"
+        />
       </div>
 
       {/* Reports Grid */}

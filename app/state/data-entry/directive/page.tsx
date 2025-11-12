@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import DataTable from '@/components/ui/data-table';
 import { FileText, Plus } from 'lucide-react';
+import StatCard from '@/components/ui/stat-card';
 
 const Directives = () => {
 
@@ -94,20 +95,29 @@ const Directives = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-blue-50 via-purple-50 to-pink-100 p-6 md:p-10 space-y-8">
-      {/* Page Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Directives Management</h1>
-          <p className="text-gray-600 mt-1">Manage and track directives across the state</p>
+    <div className="min-h-screen w-full p-6 md:p-10 space-y-8">
+      {/* Page Header (District-style banner) */}
+      <div className="w-full rounded-xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 text-white">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div className="flex items-center space-x-4">
+            {/* Icon removed visually per request; spacer keeps text placement */}
+            <div className="w-12" aria-hidden />
+            <div>
+              <h1 className="text-3xl font-bold">Directives Management</h1>
+              <p className="mt-1 text-sm opacity-90">Manage and track directives across the state</p>
+            </div>
+          </div>
+
+          <div>
+            <button
+              className="flex items-center space-x-2 px-5 py-2 bg-white/90 text-slate-800 rounded-2xl font-medium shadow hover:bg-white transition-all text-base"
+              onClick={() => setModalOpen(true)}
+            >
+              <Plus className="w-5 h-5 text-slate-800" />
+              <span>Issue New Directive</span>
+            </button>
+          </div>
         </div>
-        <button
-          className="flex items-center space-x-2 px-5 py-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-2xl font-medium shadow hover:from-blue-600 hover:to-blue-800 transition-all text-base"
-          onClick={() => setModalOpen(true)}
-        >
-          <Plus className="w-5 h-5" />
-          <span>Issue New Directive</span>
-        </button>
       </div>
 
       {/* Modal */}
@@ -187,52 +197,12 @@ const Directives = () => {
         </div>
       )}
 
-      {/* Stats Cards */}
+      {/* Stats Cards (use StatCard component) */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-  <div className="p-6 rounded-xl shadow-md border border-blue-200 bg-gradient-to-br from-blue-400 via-blue-300 to-pink-100">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600 font-medium">Total Directives</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">247</p>
-            </div>
-            <div className="w-12 h-12 bg-blue-50 border border-blue-200 text-blue-600 rounded-lg flex items-center justify-center">
-              <FileText className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
-  <div className="p-6 rounded-xl shadow-md border border-green-200 bg-gradient-to-br from-green-400 via-green-200 to-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600 font-medium">Active</p>
-              <p className="text-2xl font-bold text-green-600 mt-1">89</p>
-            </div>
-            <div className="w-12 h-12 bg-green-50 border border-green-200 text-green-600 rounded-lg flex items-center justify-center">
-              <FileText className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
-  <div className="p-6 rounded-xl shadow-md border border-yellow-200 bg-gradient-to-br from-yellow-300 via-yellow-200 to-pink-100">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600 font-medium">Pending</p>
-              <p className="text-2xl font-bold text-yellow-600 mt-1">34</p>
-            </div>
-            <div className="w-12 h-12 bg-yellow-50 border border-yellow-200 text-yellow-600 rounded-lg flex items-center justify-center">
-              <FileText className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
-  <div className="p-6 rounded-xl shadow-md border border-blue-200 bg-gradient-to-br from-blue-400 via-purple-200 to-pink-100">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600 font-medium">Completed</p>
-              <p className="text-2xl font-bold text-blue-600 mt-1">124</p>
-            </div>
-            <div className="w-12 h-12 bg-blue-50 border border-blue-200 text-blue-600 rounded-lg flex items-center justify-center">
-              <FileText className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
+        <StatCard title="Total Directives" value={247} icon={FileText} color="blue" />
+        <StatCard title="Active" value={89} icon={FileText} color="green" />
+        <StatCard title="Pending" value={34} icon={FileText} color="orange" />
+        <StatCard title="Completed" value={124} icon={FileText} color="indigo" />
       </div>
 
       {/* Tabs for Received and Sent Directives */}

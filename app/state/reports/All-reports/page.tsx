@@ -335,14 +335,18 @@ export default function PerformanceReportsPage() {
     };
 
     return (
-        <div className="space-y-8 p-4 md:p-6 min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-            <div className="flex flex-wrap justify-between items-center gap-4">
-                <div>
-                    <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">Performance Reports Hub</h1>
-                    <p className="text-lg text-gray-500 dark:text-gray-400">Comprehensive analysis of all stakeholders.</p>
+        <div className="space-y-8 p-4 md:p-6 min-h-screen">
+            <div className="rounded-xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500">
+                <div className="flex items-start justify-between gap-4">
+                    <div>
+                        <h1 className="text-3xl md:text-4xl font-extrabold text-white">Performance Reports Hub</h1>
+                        <p className="text-sm text-white/90">Comprehensive analysis of all stakeholders.</p>
+                    </div>
+                    {/* Spacer to keep title alignment where an icon would be */}
+                    <div className="w-12 h-12 rounded-full bg-white/10 hidden md:block" aria-hidden />
                 </div>
-                <p className="text-sm text-gray-400 dark:text-gray-500">Last updated: {new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
             </div>
+            <div className="flex justify-end text-sm text-gray-400 dark:text-gray-500">Last updated: {new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
 
             <Card className="shadow-2xl border-0 rounded-2xl overflow-hidden bg-gradient-to-br from-white via-blue-50 to-purple-50 dark:from-gray-800 dark:via-gray-900 dark:to-gray-900">
               <CardHeader className="p-0 border-b border-slate-200 dark:border-gray-700 bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">

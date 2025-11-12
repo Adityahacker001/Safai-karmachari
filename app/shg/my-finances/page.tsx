@@ -147,7 +147,7 @@ const MyFinancesPage = () => {
   const loanProgressPercent = (MOCK_SUMMARY.repaid / MOCK_SUMMARY.loanSanctioned) * 100;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-sky-100 p-4 md:p-8 font-sans animate-fade-in">
+  <div className="min-h-screen p-4 md:p-8 font-sans animate-fade-in">
         {/* Inline Styles for Animations */}
         <style jsx global>{`
           @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -170,17 +170,15 @@ const MyFinancesPage = () => {
             Manage & Apply <ChevronRight className="w-4 h-4 mx-1" />
             <span className="font-semibold text-indigo-600">My Finances</span>
           </nav>
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div className="flex items-center space-x-4">
-              <span className="p-3 bg-gradient-to-br from-emerald-500 to-green-500 rounded-2xl text-white shadow-lg"><Wallet className="w-8 h-8" /></span>
-              <div>
-                <h1 className="text-3xl font-bold text-slate-800">My Finances</h1>
-                <p className="text-slate-500 mt-1">View loan, disbursement, earnings & payment details.</p>
-              </div>
+
+          <div className="w-full bg-gradient-to-r from-sky-600 via-indigo-600 to-purple-600 text-white rounded-xl shadow-2xl p-6 md:p-8 mb-6 min-h-[96px] flex flex-col md:flex-row items-center justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-bold">My Finances</h1>
+              <p className="text-white/90 mt-1">View loan, disbursement, earnings & payment details.</p>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="w-full md:w-auto flex items-center gap-3">
                 <GradientButton text="Add Manual Entry" icon={PlusCircle} className="bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600" />
-                <button className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all hover:scale-105 shadow-sm">
+                <button className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium text-white bg-white/10 border border-white/20 hover:bg-white/20 transition-all hover:scale-105 shadow-sm">
                     <Download className="w-4 h-4" /> Export Report
                 </button>
             </div>

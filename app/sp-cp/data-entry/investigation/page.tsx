@@ -21,16 +21,17 @@ import { Button } from "@/components/ui/button";
 // --- Main Page Component ---
 export default function InvestigationEntryPage() {
   return (
-    <div className="p-4 sm:p-6 lg:p-8 max-w-5xl mx-auto space-y-8 bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 min-h-screen">
-      {/* Header */}
-      <header className="mb-8">
-        <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-          Investigation Progress Entry
-        </h1>
-        <p className="text-sm text-slate-600 mt-1">
-          Fill or update investigation details for a linked incident.
-        </p>
-      </header>
+    <div className="p-4 sm:p-6 lg:p-8 max-w-5xl mx-auto space-y-8 min-h-screen w-full">
+      {/* District-style title banner */}
+      <div className="rounded-xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h1 className="text-3xl lg:text-4xl font-extrabold text-white">Investigation Progress Entry</h1>
+            <p className="text-sm text-white/90 mt-1">Fill or update investigation details for a linked incident.</p>
+          </div>
+          <div className="w-12 h-12 rounded-full bg-white/10 hidden md:block" aria-hidden />
+        </div>
+      </div>
 
       <InvestigationForm />
     </div>
