@@ -377,7 +377,7 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
       <div 
         id="mobile-sidebar"
         className={cn(
-          "fixed top-0 left-0 flex flex-col w-64 h-screen bg-gradient-to-b from-blue-900 to-indigo-950 text-white shadow-2xl border-r border-blue-800 z-50 transition-transform duration-300 ease-in-out",
+          "fixed top-0 left-0 flex flex-col w-64 h-screen bg-gradient-to-b from-blue-900 to-indigo-950 text-white shadow-2xl border-r border-blue-800 z-50 transition-transform duration-300 ease-in-out overflow-hidden",
           // Mobile and tablet: slide in/out from left
           "lg:translate-x-0", // Always visible on desktop
           isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0" // Slide behavior for mobile/tablet

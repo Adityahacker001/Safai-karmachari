@@ -138,28 +138,35 @@ export default function CompensationReportPage() {
     const handleMarkAsPaid = (incidentId: string) => alert(`Marking ${incidentId} as paid...`);
 
   return (
-    <div className="flex-1 space-y-10 p-6 md:p-10 pt-8 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-blue-950 dark:to-indigo-950 text-slate-900 dark:text-slate-50">
-      {/* 1️⃣ Header & Filter Controls */}
-      <div className="space-y-6">
-        {/* Top Bar: Title & Buttons */}
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between space-y-4 md:space-y-0 p-6 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700">
-          <h1 className="text-3xl font-bold tracking-tight text-indigo-700 dark:text-indigo-300 flex items-center gap-3">
-             <DollarSign size={30}/> Compensation Report
-          </h1>
-          <div className="flex items-center space-x-3">
-            <button
-                onClick={handleExport}
-                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-md hover:from-blue-600 hover:to-blue-700 transition-all duration-300 text-sm font-medium transform hover:scale-105">
-              <Download size={16} />
-              Export (CSV/PDF)
-            </button>
-            <button
-                onClick={handleRefresh}
-                className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors text-sm font-medium transform hover:scale-105">
-              <RefreshCw size={16} />
-              Refresh Data
-            </button>
+    <div className="flex-1 space-y-10 p-6 md:p-10 pt-8 text-slate-900 dark:text-slate-50">
+      {/* District-style banner (taller, gradient, gap below) */}
+      <div className="rounded-xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 text-white flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          {/* spacer to keep the title aligned where the icon used to be */}
+          <div className="w-8 h-8 rounded-md opacity-0" aria-hidden />
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Compensation Report</h1>
+            <p className="text-sm opacity-90 mt-1">Overview and latest compensation cases</p>
           </div>
+        </div>
+        <div className="hidden md:block text-sm opacity-90">&nbsp;</div>
+      </div>
+        {/* 1️⃣ Header & Filter Controls */}
+      <div className="space-y-6">
+        {/* Top Bar: Buttons only (title is provided by the banner above) - container removed, responsive */}
+        <div className="flex flex-col sm:flex-row items-center sm:justify-end gap-3 p-2 md:p-0">
+          <button
+              onClick={handleExport}
+              className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-md hover:from-blue-600 hover:to-blue-700 transition-all duration-300 text-sm font-medium transform hover:scale-105">
+            <Download size={16} />
+            Export (CSV/PDF)
+          </button>
+          <button
+              onClick={handleRefresh}
+              className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors text-sm font-medium transform hover:scale-105">
+            <RefreshCw size={16} />
+            Refresh Data
+          </button>
         </div>
 
         {/* Filters Bar */}

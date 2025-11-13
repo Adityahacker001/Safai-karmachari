@@ -24,7 +24,7 @@ export default function InvestigationEntryPage() {
     <div className="p-4 sm:p-6 lg:p-8 max-w-5xl mx-auto space-y-8 min-h-screen w-full">
       {/* District-style title banner */}
       <div className="rounded-xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500">
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl lg:text-4xl font-extrabold text-white">Investigation Progress Entry</h1>
             <p className="text-sm text-white/90 mt-1">Fill or update investigation details for a linked incident.</p>
@@ -125,7 +125,7 @@ function InvestigationForm() {
     >
       {/* 🧾 Section 1: Case & Incident Details */}
       <Section title="Case & Incident Details" icon={FileText}>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5"> {/* Increased gap */}
+  <div className="grid grid-cols-2 sm:grid-cols-2 gap-5"> {/* Mobile: 2 columns, preserve larger breakpoints */}
           <FormField label="Case ID" value={formData.caseId} readOnly icon={Fingerprint} />
           <FormField
             label="Incident ID"
@@ -156,7 +156,7 @@ function InvestigationForm() {
 
       {/* 🔹 Section 2: Categorization */}
       <Section title="Incident Categorization & Officer" icon={ShieldCheck}>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+  <div className="grid grid-cols-2 sm:grid-cols-2 gap-5">
           <SelectField
             label="Incident Category"
             name="category"
@@ -188,7 +188,7 @@ function InvestigationForm() {
           />
 
           {firVisible && (
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 border-t border-dashed border-slate-300 pt-4 mt-4 bg-slate-50 p-4 rounded-md"> {/* Visual grouping */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-5 border-t border-dashed border-slate-300 pt-4 mt-4 bg-slate-50 p-4 rounded-md"> {/* Mobile: 2 columns, desktop still 3 */}
               <FormField
                 label="FIR Number"
                 name="firNo"
@@ -217,7 +217,7 @@ function InvestigationForm() {
 
       {/* 🔍 Section 4: Investigation Progress */}
       <Section title="Investigation Progress" icon={SearchCheck}>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+  <div className="grid grid-cols-2 sm:grid-cols-2 gap-5">
           <SelectField
             label="Investigation Status"
             name="investigationStatus"
@@ -288,12 +288,12 @@ function InvestigationForm() {
       )}
 
       {/* ✅ Submission Buttons */}
-      <div className="flex gap-4 justify-end pt-6 border-t border-slate-200"> {/* Increased gap */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 justify-end pt-6 border-t border-slate-200"> {/* Stack on mobile, keep row on sm+ */}
         <Button
           type="button"
           variant="outline"
           onClick={() => alert("Saved as Draft (simulation)")}
-          className="flex items-center gap-2 text-slate-700 border-slate-300 hover:bg-slate-100"
+          className="w-full sm:w-auto flex items-center gap-2 text-slate-700 border-slate-300 hover:bg-slate-100"
         >
           <Save className="w-4 h-4" /> Save as Draft
         </Button>
@@ -301,7 +301,7 @@ function InvestigationForm() {
         <Button
           type="button"
           onClick={handleSubmit}
-          className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 shadow-md hover:shadow-lg transition-all duration-200"
+          className="w-full sm:w-auto flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 shadow-md hover:shadow-lg transition-all duration-200"
         >
           <Send className="w-4 h-4" /> Submit for Review
         </Button>

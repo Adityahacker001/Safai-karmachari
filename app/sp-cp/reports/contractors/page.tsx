@@ -123,13 +123,22 @@ export default function ContractorsReportsPage() {
 
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-8 bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 min-h-screen">
-      {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
-          🏗️ Contractor Reports Dashboard
-        </h1>
-        <div className="flex gap-3">
+    <div className="p-4 sm:p-6 lg:p-8 space-y-8 min-h-screen text-slate-900 dark:text-slate-50">
+      {/* District-style banner */}
+      <div className="rounded-xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 text-white flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+          <div className="w-8 h-8 rounded-md opacity-0" aria-hidden />
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Contractor Reports Dashboard</h1>
+            <p className="text-sm opacity-90 mt-1">Overview and contractor-level statistics</p>
+          </div>
+        </div>
+        <div className="hidden md:block text-sm opacity-90">&nbsp;</div>
+      </div>
+      {/* Header actions (title is in the banner above) */}
+      <div className="flex flex-col sm:flex-row items-center sm:items-center gap-4">
+        <div className="mb-3 sm:mb-0" />
+        <div className="flex flex-row items-center gap-3">{/* Keep Export & Refresh side-by-side even on mobile */}
           <Button variant="outline" onClick={handleExport} className="shadow-sm hover:shadow transition-shadow duration-200">
             <FileDown className="w-4 h-4 mr-2" /> Export Report
           </Button>
@@ -146,7 +155,7 @@ export default function ContractorsReportsPage() {
             <Search className="w-5 h-5 text-indigo-600"/> Search & Filters
           </CardTitle>
         </CardHeader>
-        <CardContent className="flex flex-wrap items-center gap-4">
+        <CardContent className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
           <div className="relative flex-grow sm:flex-grow-0">
              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
              <Input

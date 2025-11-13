@@ -42,7 +42,7 @@ export default function GeneralFeedbackPage() {
     <div className="min-h-screen p-4 sm:p-6 lg:p-8"> {/* neutral page wrapper */}
       {/* District-style title banner */}
       <div className="rounded-xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 max-w-5xl mx-auto">
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl lg:text-4xl font-extrabold text-white">General Feedback Entry</h1>
             <p className="text-sm text-white/90 mt-1">Submit, track, and respond to general feedback — suggestions, appreciation, or complaints related to Safai Karmachari operations.</p>
@@ -157,7 +157,7 @@ function FeedbackForm() {
         icon={<FileText className="w-5 h-5 text-indigo-700" />}
         color="indigo"
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5">
+        <div className="grid grid-cols-2 sm:grid-cols-2 gap-x-6 gap-y-5"> {/* Mobile: 2 cols, keep sm+ unchanged */}
           <InputField label="Feedback ID" value={formData.feedbackId} readOnly icon={Info} />
           <SelectField
             label="Source" name="source" value={formData.source}
@@ -198,7 +198,7 @@ function FeedbackForm() {
         icon={<CheckCircle2 className="w-5 h-5 text-green-700" />}
         color="green" // Changed color name for consistency
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5">
+        <div className="grid grid-cols-2 sm:grid-cols-2 gap-x-6 gap-y-5"> {/* Mobile: 2 cols, keep sm+ unchanged */}
            <div className="sm:col-span-2">
               <label className="text-sm font-medium text-gray-700 block mb-1.5">Action / Response Details</label>
               <textarea
@@ -265,23 +265,23 @@ function FeedbackForm() {
       )}
 
       {/* BUTTONS */}
-      <div className="flex flex-wrap gap-4 justify-end pt-6 border-t border-gray-200/80">
-        <motion.button
+  <div className="flex flex-col sm:flex-row items-center sm:items-center gap-4 sm:justify-end pt-6 border-t border-gray-200/80">
+  <motion.button
           whileHover={{ scale: 1.03, boxShadow: "0 4px 15px rgba(0, 0, 0, 0.1)" }}
           whileTap={{ scale: 0.98 }}
           type="button"
           onClick={() => alert("Feedback saved as draft (simulation)")}
-          className="px-5 py-2 flex items-center gap-2 rounded-lg bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 text-gray-700 font-medium text-sm shadow-sm transition-all duration-200"
+          className="px-3 sm:px-5 py-1.5 sm:py-2 flex items-center gap-2 rounded-lg bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 text-gray-700 font-medium text-xs sm:text-sm shadow-sm transition-all duration-200"
         >
           <Save className="w-4 h-4" /> Save as Draft
         </motion.button>
 
-        <motion.button
+  <motion.button
           whileHover={{ scale: 1.03, boxShadow: "0 4px 15px rgba(0, 0, 0, 0.1)" }}
           whileTap={{ scale: 0.98 }}
           type="button"
           onClick={handleSubmit}
-          className="px-5 py-2 flex items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 font-medium text-sm shadow-md hover:shadow-lg transition-all duration-200"
+          className="px-3 sm:px-5 py-1.5 sm:py-2 flex items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 font-medium text-xs sm:text-sm shadow-md hover:shadow-lg transition-all duration-200"
         >
           <Send className="w-4 h-4" /> Submit Feedback
         </motion.button>

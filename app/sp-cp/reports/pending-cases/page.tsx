@@ -196,25 +196,35 @@ export default function PendingCasesReportPage() {
 
 
   return (
-    <div className="flex-1 space-y-8 p-6 md:p-10 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-50">
+    <div className="flex-1 space-y-8 p-6 md:p-10 text-slate-900 dark:text-slate-50">
+
+      {/* District-style banner */}
+      <div className="rounded-xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 text-white flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-md opacity-0" aria-hidden />
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Pending Cases Report</h1>
+            <p className="text-sm opacity-90 mt-1">Cases awaiting action and their escalation status</p>
+          </div>
+        </div>
+        <div className="hidden md:block text-sm opacity-90">&nbsp;</div>
+      </div>
 
       {/* 1️⃣ Header & Summary */}
       <div className="space-y-6">
-        {/* Top Bar: Title & Buttons */}
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between space-y-3 md:space-y-0">
-          <h1 className="text-3xl font-bold tracking-tight text-slate-800 dark:text-slate-100">
-            ⏳ Pending Cases Report
-          </h1>
-          <div className="flex items-center space-x-2">
+        {/* Top Bar: Buttons only (title is in the banner above) */}
+        <div className="flex flex-col sm:flex-row items-center sm:justify-end gap-2">
+          <div />
+          <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
             <button
               onClick={handleExport}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-colors text-sm font-medium">
+              className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-colors text-sm font-medium">
               <Download size={16} />
               Export (CSV/PDF)
             </button>
             <button
               onClick={handleRefresh}
-              className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors text-sm font-medium">
+              className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors text-sm font-medium">
               <RefreshCw size={16} />
               Refresh Data
             </button>

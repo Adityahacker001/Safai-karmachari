@@ -127,13 +127,23 @@ export default function WorkersReportsPage() {
 
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-8 bg-gradient-to-br from-gray-50 via-green-50 to-blue-50 min-h-screen"> {/* Adjusted background */}
-      {/* Header */}
+    <div className="p-4 sm:p-6 lg:p-8 space-y-8 min-h-screen text-slate-900 dark:text-slate-50"> {/* neutral page background; banner added below */}
+      {/* District-style banner */}
+      <div className="rounded-xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 text-white flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+          <div className="w-8 h-8 rounded-md opacity-0" aria-hidden />
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Workers Reports Dashboard</h1>
+            <p className="text-sm opacity-90 mt-1">Worker-level monitoring and incident tracking</p>
+          </div>
+        </div>
+        <div className="hidden md:block text-sm opacity-90">&nbsp;</div>
+      </div>
+      {/* Header actions (title is in the banner above) */}
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-green-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">
-          🧍‍♂️ Workers Reports Dashboard
-        </h1>
-        <div className="flex gap-3">
+        <div />
+        {/* keep desktop look by preserving spacing; force row layout so buttons sit side-by-side on phones */}
+        <div className="flex flex-row items-center gap-3">
           <Button variant="outline" onClick={handleExport} className="shadow-sm hover:shadow transition-shadow duration-200">
             <FileDown className="w-4 h-4 mr-2" /> Export Report
           </Button>
@@ -267,8 +277,9 @@ export default function WorkersReportsPage() {
         </CardContent>
       </Card>
 
-      {/* Quick Summary Section */}
-      <div className="grid md:grid-cols-2 gap-6">
+  {/* Quick Summary Section */}
+  {/* show two cards per row on mobile while keeping desktop unchanged */}
+  <div className="grid grid-cols-2 md:grid-cols-2 gap-6">
         <Card className="shadow-md border border-gray-100 rounded-lg bg-white">
           <CardHeader className="flex flex-row items-center gap-2">
              <BarChart2 className="w-5 h-5 text-blue-600"/>

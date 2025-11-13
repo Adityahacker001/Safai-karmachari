@@ -201,7 +201,7 @@ export default function DashboardPage() {
     <div className="p-4 sm:p-6 lg:p-8 space-y-8 min-h-screen w-full">
       {/* District-style title banner */}
       <div className="rounded-xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500">
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-extrabold text-white">{userRole} Command Dashboard</h1>
             <p className="text-sm text-white/90 mt-1">Real-time monitoring, incident tracking, and performance overview.</p>
@@ -217,7 +217,7 @@ export default function DashboardPage() {
       <DashboardCharts /> {/* Charts use static data for now */}
 
       {/* 🔹 Quick Action Buttons */}
-      <QuickActions onActionClick={handleQuickAction} /> {/* Pass handler */}
+  <QuickActions onActionClick={handleQuickAction} /> {/* Pass handler */}
 
       {/* 🔹 Case Tables & Alerts */}
       <CaseSummaryTables
@@ -233,7 +233,7 @@ export default function DashboardPage() {
 // Updated Summary Cards component - accepts props
 function SummaryCards({ cards }: { cards: SummaryCardData[] }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
       {cards.map((item, i) => (
         <StatCard
           key={i}
@@ -341,7 +341,7 @@ function QuickActions({ onActionClick }: { onActionClick: (action: string) => vo
              key={i}
              variant={action.variant}
              size="sm"
-             className="flex items-center gap-2"
+             className="w-full sm:w-auto flex items-center gap-2 justify-center sm:justify-start"
              onClick={() => onActionClick(action.text)} // Added onClick handler
            >
              <action.icon className="h-4 w-4" />
@@ -370,8 +370,9 @@ function CaseSummaryTables({ recentCases, escalatedCases, compensationAlerts, st
             <CardHeader><CardTitle className="text-base font-semibold">Recent Cases Snapshot</CardTitle></CardHeader>
             <CardContent>
               {/* Using MUI Table for consistency with previous example - ensure MUI is installed and configured */}
-              <TableContainer component={Paper} elevation={0} variant="outlined">
-                <Table size="small">
+              <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
+                <TableContainer component={Paper} elevation={0} variant="outlined">
+                  <Table size="small">
                   <TableHead sx={{ backgroundColor: 'grey.100' }}>
                     <TableRow>
                       <TableCell sx={{ fontWeight: 'medium' }}>Case ID</TableCell>
@@ -398,8 +399,9 @@ function CaseSummaryTables({ recentCases, escalatedCases, compensationAlerts, st
                       <TableRow><TableCell colSpan={5} align="center" sx={{ py: 4, color: 'text.secondary' }}>No recent cases</TableCell></TableRow>
                     )}
                   </TableBody>
-                </Table>
-              </TableContainer>
+                  </Table>
+                </TableContainer>
+              </div>
             </CardContent>
           </Card>
 
