@@ -1,16 +1,16 @@
 "use client";
 
 import React, { useState, useEffect } from "react"; // Added useEffect for potential data fetching
-import { useRouter } from "next/navigation";
+import StatCard from '@/components/ui/stat-card';
+import type { StatCardProps } from '@/components/ui/stat-card';
 import {
   Card,
   CardHeader,
   CardTitle,
   CardContent,
-} from "@/components/ui/card"; //a
+} from "@/components/ui/card"; // Assuming Shadcn UI Card
 import { Button } from "@/components/ui/button"; // Assuming Shadcn UI Button
 import { Badge } from "@/components/ui/badge"; // Assuming Shadcn UI Badge
-import StatCard from "@/components/ui/stat-card";
 import {
   TrendingUp,
   AlertTriangle,
@@ -70,14 +70,12 @@ import {
 import ReportProblem from "@mui/icons-material/ReportProblem"; // Added MUI ReportProblem icon
 
 // --- INTERFACES FOR DATA ---
-import { LucideIcon } from "lucide-react"; // Ensure this import exists
-
 interface SummaryCardData {
   title: string;
   value: string;
-  icon: LucideIcon;
-  color: 'blue' | 'green' | 'orange' | 'red' | 'purple' | 'indigo' | 'emerald' | 'amber' | 'sky' | 'violet' | 'pink';
-  subtitle?: string;
+  icon: import('lucide-react').LucideIcon;
+  color: string;
+  subtext?: string;
 }
 interface RecentCase {
   id: string;
@@ -114,16 +112,16 @@ interface StationData {
 
 // --- INITIAL MOCK DATA ---
 const initialCardsData: SummaryCardData[] = [
-    { title: "Total Contractors", value: "18", icon: Briefcase, color: "blue" },
-    { title: "Total Workers", value: "45", icon: Users, color: "emerald" },
-    { title: "Total Incidents", value: "25", icon: AlertTriangle, color: "red" },
-    { title: "Total Cases (FIR)", value: "15", icon: FolderKanban, color: "purple" },
-    { title: "Completed Investigations", value: "7", icon: FileCheck, color: "sky" },
-    { title: "Pending Cases", value: "8", icon: FolderClock, color: "amber" },
-    { title: "Grievances", value: "12", subtitle:"Replied: 9 | Pending: 3", icon: MessageSquareWarning, color: "orange" },
-    { title: "Directions", value: "10", subtitle:"Complied: 7 | Pending: 3", icon: ClipboardCheck, color: "indigo" },
-    { title: "Compensations", value: "15", subtitle:"Paid: 10 | Pending: 5", icon: DollarSign, color: "green" },
-    { title: "Feedbacks", value: "6", subtitle:"Replied: 4 | Pending: 2", icon: Inbox, color: "pink" },
+    { title: "Total Contractors", value: "18", icon: Briefcase, color: "from-blue-500 to-blue-700" },
+    { title: "Total Workers", value: "45", icon: Users, color: "from-green-500 to-emerald-600" },
+    { title: "Total Incidents", value: "25", icon: AlertTriangle, color: "from-red-500 to-red-700" },
+    { title: "Total Cases (FIR)", value: "15", icon: FolderKanban, color: "from-purple-500 to-purple-700" },
+    { title: "Completed Investigations", value: "7", icon: FileCheck, color: "from-cyan-500 to-cyan-700" },
+    { title: "Pending Cases", value: "8", icon: FolderClock, color: "from-amber-500 to-yellow-600" },
+    { title: "Grievances", value: "12", subtext:"Replied: 9 | Pending: 3", icon: MessageSquareWarning, color: "from-yellow-400 to-orange-500 text-black" },
+    { title: "Directions", value: "10", subtext:"Complied: 7 | Pending: 3", icon: ClipboardCheck, color: "from-gray-500 to-gray-700" },
+    { title: "Compensations", value: "15", subtext:"Paid: 10 | Pending: 5", icon: DollarSign, color: "from-lime-500 to-green-600" },
+    { title: "Feedbacks", value: "6", subtext:"Replied: 4 | Pending: 2", icon: Inbox, color: "from-pink-500 to-rose-600" },
 ];
 const initialRecentCases: RecentCase[] = [
     { id: 'CASE-005', type: 'Sewer Injury', station: 'North PS', status: 'In Progress', fir: 'Yes', days: 2 },
@@ -144,35 +142,6 @@ const initialStationBreakdown: StationData[] = [
 
 // Updated page component with state
 export default function DashboardPage() {
-    // --- USER ROLE DETECTION WITH URL SYNC ---
-    const [userRole, setUserRole] = useState<'SP' | 'CP'>('SP');
-    
-    // Get URL search params to sync with layout
-    useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const roleParam = urlParams.get('role');
-        if (roleParam === 'sp' || roleParam === 'cp') {
-            setUserRole(roleParam.toUpperCase() as 'SP' | 'CP');
-        } else {
-            // Set default role in URL if not present
-            const url = new URL(window.location.href);
-            url.searchParams.set('role', 'sp');
-            window.history.replaceState({}, '', url.toString());
-        }
-    }, []);
-    
-    const router = useRouter();
-    
-    // Update URL when role changes
-    const handleRoleChange = (newRole: 'SP' | 'CP') => {
-        setUserRole(newRole);
-        const url = new URL(window.location.href);
-        url.searchParams.set('role', newRole.toLowerCase());
-        window.history.replaceState({}, '', url.toString());
-        // Refresh to update the layout
-        router.refresh();
-    };
-    
     // --- STATE VARIABLES ---
     const [cardsData, setCardsData] = useState<SummaryCardData[]>(initialCardsData);
     const [recentCases, setRecentCases] = useState<RecentCase[]>(initialRecentCases);
@@ -198,16 +167,13 @@ export default function DashboardPage() {
     };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-8 min-h-screen w-full">
-      {/* District-style title banner */}
-      <div className="rounded-xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-extrabold text-white">{userRole} Command Dashboard</h1>
-            <p className="text-sm text-white/90 mt-1">Real-time monitoring, incident tracking, and performance overview.</p>
-          </div>
-          <div className="w-12 h-12 rounded-full bg-white/10 hidden md:block" aria-hidden />
-        </div>
+    <div className="p-4 sm:p-6 lg:p-8 space-y-8 min-h-screen">
+      {/* 🔹 Gradient Title Container (NEW) */}
+      <div className="rounded-2xl mb-6 p-8 bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 shadow-lg">
+        <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-white mb-2">
+          SP  Command Dashboard
+        </h1>
+        <p className="text-lg text-white/80 mb-2">Real-time monitoring, incident tracking, and performance overview.</p>
       </div>
 
       {/* 🔹 RHS Summary Cards */}
@@ -217,7 +183,7 @@ export default function DashboardPage() {
       <DashboardCharts /> {/* Charts use static data for now */}
 
       {/* 🔹 Quick Action Buttons */}
-  <QuickActions onActionClick={handleQuickAction} /> {/* Pass handler */}
+      <QuickActions onActionClick={handleQuickAction} /> {/* Pass handler */}
 
       {/* 🔹 Case Tables & Alerts */}
       <CaseSummaryTables
@@ -232,16 +198,29 @@ export default function DashboardPage() {
 
 // Updated Summary Cards component - accepts props
 function SummaryCards({ cards }: { cards: SummaryCardData[] }) {
+  // Map custom color strings to StatCard color prop
+  const colorMap: Record<string, StatCardProps['color']> = {
+    'from-blue-500 to-blue-700': 'blue',
+    'from-green-500 to-emerald-600': 'green',
+    'from-red-500 to-red-700': 'red',
+    'from-purple-500 to-purple-700': 'purple',
+    'from-cyan-500 to-cyan-700': 'sky',
+    'from-amber-500 to-yellow-600': 'amber',
+    'from-yellow-400 to-orange-500 text-black': 'orange',
+    'from-gray-500 to-gray-700': 'indigo',
+    'from-lime-500 to-green-600': 'emerald',
+    'from-pink-500 to-rose-600': 'pink',
+  };
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
       {cards.map((item, i) => (
         <StatCard
           key={i}
           title={item.title}
           value={item.value}
-          subtitle={item.subtitle}
           icon={item.icon}
-          color={item.color}
+          color={colorMap[item.color] || 'blue'}
+          subtitle={item.subtext}
         />
       ))}
     </div>
@@ -251,59 +230,83 @@ function SummaryCards({ cards }: { cards: SummaryCardData[] }) {
 // Updated Charts component (still uses static data internally)
 function DashboardCharts() {
     const pieData = [ { name: "Manual Scavenging Deaths", value: 6 }, { name: "Sewer Injuries", value: 10 }, { name: "Hazardous Exposure", value: 5 }, { name: "Other", value: 4 }, ];
+    const barData = [ { station: "North PS", Initiated: 3, "In Progress": 4, Completed: 2 }, { station: "East PS", Initiated: 1, "In Progress": 3, Completed: 3 }, { station: "South PS", Initiated: 2, "In Progress": 1, Completed: 4 }, ];
     const lineData = [ { month: "Jan", Sanctioned: 200000, Paid: 180000, Pending: 20000 }, { month: "Feb", Sanctioned: 150000, Paid: 120000, Pending: 30000 }, { month: "Mar", Sanctioned: 250000, Paid: 220000, Pending: 30000 }, { month: "Apr", Sanctioned: 180000, Paid: 180000, Pending: 0 }, { month: "May", Sanctioned: 300000, Paid: 250000, Pending: 50000 }, ];
     const COLORS_PIE = ["#ef4444", "#f97316", "#eab308", "#84cc16"];
+    const COLORS_BAR = { Initiated: "#fbbf24", "In Progress": "#3b82f6", Completed: "#22c55e" };
     const COLORS_LINE = { Sanctioned: "#3b82f6", Paid: "#22c55e", Pending: "#f97316" };
 
   return (
     <div className="space-y-6">
        <h2 className="text-xl font-semibold text-gray-700">Analytics Overview</h2>
-       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
          {/* Charts remain the same, using internal static data */}
          <Card className="shadow-md lg:col-span-1">
            <CardHeader><CardTitle className="text-base font-semibold">Incident Categories</CardTitle></CardHeader>
-           <CardContent className="h-96">
+           <CardContent className="h-72">
              <ResponsiveContainer width="100%" height="100%">
                <PieChart>
-                 <Pie 
-                   data={pieData} 
-                   dataKey="value" 
-                   nameKey="name" 
-                   cx="50%" 
-                   cy="50%" 
-                   outerRadius={90}
-                   innerRadius={25}
-                   labelLine={true}
-                   label={({ name, percent }) => `${(percent * 100).toFixed(0)}%`}
-                   style={{ fontSize: '12px', fontWeight: 'bold' }}
-                 >
+                 <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} labelLine={false} label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}>
                    {pieData.map((entry, index) => (<Cell key={`cell-${index}`} fill={COLORS_PIE[index % COLORS_PIE.length]} />))}
                  </Pie>
-                 <Tooltip 
-                   formatter={(value, name) => [`${value} cases`, name]}
-                   labelStyle={{ color: '#374151', fontWeight: 'bold' }}
-                   contentStyle={{ 
-                     backgroundColor: 'white', 
-                     border: '1px solid #e5e7eb', 
-                     borderRadius: '8px',
-                     fontSize: '14px'
-                   }}
-                 />
-                 <Legend 
-                   verticalAlign="bottom" 
-                   height={36}
-                   wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }}
-                   iconType="circle"
-                 />
+                 <Tooltip />
+               </PieChart>
+             </ResponsiveContainer>
+           </CardContent>
+         </Card>
+         <Card className="shadow-md lg:col-span-2">
+           <CardHeader><CardTitle className="text-base font-semibold">Investigation Status by Station</CardTitle></CardHeader>
+           <CardContent className="h-72">
+             <ResponsiveContainer width="100%" height="100%">
+               <BarChart data={barData} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                 <XAxis dataKey="station" fontSize={12} tickLine={false} axisLine={false} />
+                 <YAxis fontSize={12} tickLine={false} axisLine={false} />
+                 <Tooltip cursor={{ fill: 'transparent' }}/>
+                 <Legend wrapperStyle={{ fontSize: '12px' }}/>
+                 <Bar dataKey="Initiated" stackId="a" fill={COLORS_BAR.Initiated} radius={[4, 4, 0, 0]} />
+                 <Bar dataKey="In Progress" stackId="a" fill={COLORS_BAR["In Progress"]} />
+                 <Bar dataKey="Completed" stackId="a" fill={COLORS_BAR.Completed} radius={[4, 4, 0, 0]} />
+               </BarChart>
+             </ResponsiveContainer>
+           </CardContent>
+         </Card>
+         <Card className="shadow-md lg:col-span-1">
+           <CardHeader><CardTitle className="text-base font-semibold">Direction Compliance</CardTitle></CardHeader>
+           <CardContent className="h-72">
+             <ResponsiveContainer width="100%" height="100%">
+               <PieChart>
+                 <Pie data={[{ name: "Complied", value: 15 }, { name: "Pending", value: 4 }]} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={50} outerRadius={80} label={({ name, value }) => `${name}: ${value}`}>
+                    <Cell fill={COLORS_BAR.Completed} />
+                    <Cell fill={COLORS_BAR.Initiated} />
+                 </Pie>
+                 <Tooltip />
                </PieChart>
              </ResponsiveContainer>
            </CardContent>
          </Card>
          <Card className="shadow-md lg:col-span-1">
-           <CardHeader><CardTitle className="text-base font-semibold">Compensation Tracker</CardTitle></CardHeader>
-           <CardContent className="h-96">
+            <CardHeader><CardTitle className="text-base font-semibold">Grievance Status</CardTitle></CardHeader>
+            <CardContent className="h-72">
              <ResponsiveContainer width="100%" height="100%">
-               <LineChart data={lineData} margin={{ top: 10, right: 30, left: -10, bottom: 10 }}>
+               <BarChart data={[{ type: "Safety", Replied: 5, Pending: 2, Escalated: 1 }, { type: "Payment", Replied: 3, Pending: 4, Escalated: 2 }, { type: "Other", Replied: 8, Pending: 1, Escalated: 0 }]} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                 <XAxis dataKey="type" fontSize={12} tickLine={false} axisLine={false} />
+                 <YAxis fontSize={12} tickLine={false} axisLine={false}/>
+                 <Tooltip />
+                 <Legend wrapperStyle={{ fontSize: '12px' }}/>
+                 <Bar dataKey="Replied" fill={COLORS_BAR.Completed} radius={[4, 4, 0, 0]} />
+                 <Bar dataKey="Pending" fill={COLORS_BAR.Initiated} radius={[4, 4, 0, 0]} />
+                 <Bar dataKey="Escalated" fill={COLORS_PIE[0]} radius={[4, 4, 0, 0]} />
+               </BarChart>
+             </ResponsiveContainer>
+           </CardContent>
+         </Card>
+         <Card className="shadow-md lg:col-span-1">
+           <CardHeader><CardTitle className="text-base font-semibold">Compensation Tracker</CardTitle></CardHeader>
+           <CardContent className="h-72">
+             <ResponsiveContainer width="100%" height="100%">
+               <LineChart data={lineData} margin={{ top: 5, right: 20, left: -20, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" />
                  <XAxis dataKey="month" fontSize={12} tickLine={false} axisLine={false}/>
                  <YAxis fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `₹${value/1000}k`}/>
@@ -341,7 +344,7 @@ function QuickActions({ onActionClick }: { onActionClick: (action: string) => vo
              key={i}
              variant={action.variant}
              size="sm"
-             className="w-full sm:w-auto flex items-center gap-2 justify-center sm:justify-start"
+             className="flex items-center gap-2"
              onClick={() => onActionClick(action.text)} // Added onClick handler
            >
              <action.icon className="h-4 w-4" />
@@ -363,16 +366,15 @@ function CaseSummaryTables({ recentCases, escalatedCases, compensationAlerts, st
   return (
     <div className="space-y-6">
         <h2 className="text-xl font-semibold text-gray-700">Case Management & Alerts</h2>
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
 
           {/* Recent Cases */}
-          <Card className="shadow-md xl:col-span-1">
+          <Card className="shadow-md xl:col-span-2">
             <CardHeader><CardTitle className="text-base font-semibold">Recent Cases Snapshot</CardTitle></CardHeader>
             <CardContent>
               {/* Using MUI Table for consistency with previous example - ensure MUI is installed and configured */}
-              <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
-                <TableContainer component={Paper} elevation={0} variant="outlined">
-                  <Table size="small">
+              <TableContainer component={Paper} elevation={0} variant="outlined">
+                <Table size="small">
                   <TableHead sx={{ backgroundColor: 'grey.100' }}>
                     <TableRow>
                       <TableCell sx={{ fontWeight: 'medium' }}>Case ID</TableCell>
@@ -399,9 +401,8 @@ function CaseSummaryTables({ recentCases, escalatedCases, compensationAlerts, st
                       <TableRow><TableCell colSpan={5} align="center" sx={{ py: 4, color: 'text.secondary' }}>No recent cases</TableCell></TableRow>
                     )}
                   </TableBody>
-                  </Table>
-                </TableContainer>
-              </div>
+                </Table>
+              </TableContainer>
             </CardContent>
           </Card>
 
@@ -454,7 +455,48 @@ function CaseSummaryTables({ recentCases, escalatedCases, compensationAlerts, st
              </CardContent>
           </Card>
 
-
+           {/* Station Breakdown */}
+          <Card className="shadow-md xl:col-span-3">
+            <CardHeader><CardTitle className="text-base font-semibold">Police Station Performance</CardTitle></CardHeader>
+            <CardContent>
+               {/* Using MUI Table */}
+               <TableContainer component={Paper} elevation={0} variant="outlined">
+                  <Table>
+                    <TableHead sx={{ backgroundColor: 'grey.100' }}>
+                      <TableRow>
+                        <TableCell sx={{ fontWeight: 'medium' }}>Station</TableCell>
+                        <TableCell sx={{ fontWeight: 'medium' }} align="center">Incidents</TableCell>
+                        <TableCell sx={{ fontWeight: 'medium' }} align="center">FIRs</TableCell>
+                        <TableCell sx={{ fontWeight: 'medium' }} align="center">Pending</TableCell>
+                        <TableCell sx={{ fontWeight: 'medium' }} align="center">Charge Sheets</TableCell>
+                        <TableCell sx={{ fontWeight: 'medium' }} align="center">Grievances</TableCell>
+                        <TableCell sx={{ fontWeight: 'medium' }} align="center">Directions</TableCell>
+                        <TableCell sx={{ fontWeight: 'medium' }} align="center">Comp. Paid</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {stationBreakdown.map(row => (
+                        <TableRow key={row.station} hover sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                          <TableCell component="th" scope="row" sx={{ fontWeight: 'medium' }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                              <Shield className="h-4 w-4 text-primary" />
+                              {row.station}
+                            </Box>
+                          </TableCell>
+                          <TableCell align="center">{row.incidents}</TableCell>
+                          <TableCell align="center">{row.firs}</TableCell>
+                          <TableCell align="center">{row.pending > 0 ? <Typography color="error.main" variant="inherit" fontWeight="bold">{row.pending}</Typography> : row.pending}</TableCell>
+                          <TableCell align="center">{row.charges}</TableCell>
+                          <TableCell align="center">{row.grievances}</TableCell>
+                          <TableCell align="center">{row.directions}</TableCell>
+                          <TableCell align="center">{row.compPaid}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+               </TableContainer>
+            </CardContent>
+          </Card>
         </div>
     </div>
   );
