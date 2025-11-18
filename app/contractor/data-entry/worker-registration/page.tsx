@@ -1,5 +1,6 @@
 'use client';
 
+import IntegratedLoader from '@/components/IntegratedLoader';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -9,8 +10,20 @@ import { Checkbox } from "@/components/ui/checkbox";
 // UPDATED: Added Shield icon
 import { UserPlus, User, Briefcase, Shield } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
+import React from "react";
 
 export default function WorkerRegistrationPage() {
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1200); // Simulate loading
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <IntegratedLoader />;
+  }
+
   return (
     <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">
       {/* Enhanced Header */}

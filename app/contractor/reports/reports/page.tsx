@@ -1,4 +1,5 @@
 "use client";
+import IntegratedLoader from '@/components/IntegratedLoader';
 import React, { useState } from 'react';
 import { 
     Download, 
@@ -33,10 +34,20 @@ const AuroraBackground = () => (
 );
 
 const Reports: React.FC = () => {
+    const [loading, setLoading] = React.useState(true);
     // --- State for Filters ---
     const [startDate, setStartDate] = useState('2025-09-01');
     const [endDate, setEndDate] = useState('2025-09-16');
     const [workerGroup, setWorkerGroup] = useState('All Workers');
+
+    React.useEffect(() => {
+        const timer = setTimeout(() => setLoading(false), 1200); // Simulate loading
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (loading) {
+        return <IntegratedLoader />;
+    }
 
     // --- Data updated for today: Sept 16, 2025, 6:25 PM ---
     const reports: Report[] = [

@@ -50,9 +50,12 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import StatCard from "@/components/ui/stat-card";
-import React, { useState } from "react"; // Import React for useMemo
+import IntegratedLoader from "@/components/IntegratedLoader";
+import React, { useState, useEffect } from "react"; // Import React for useMemo
 
 export default function WorkerManagementReportPage() {
+  // Loader state
+  const [loading, setLoading] = useState(true);
   // State for filters
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [zoneFilter, setZoneFilter] = useState<string>("all");
@@ -247,6 +250,14 @@ export default function WorkerManagementReportPage() {
 
   const [selectedWorker, setSelectedWorker] = useState<any | null>(null);
 
+  // Loader effect (simulate loading)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 900); // Loader shows for 900ms
+    return () => clearTimeout(timer);
+  }, []);
+
   // Filter workers based on search query and dropdown selections
   const filteredWorkers = React.useMemo(() => {
     const lowerCaseQuery = searchQuery.toLowerCase();
@@ -301,6 +312,10 @@ export default function WorkerManagementReportPage() {
         return "bg-gray-100 text-gray-800";
     }
   };
+
+  if (loading) {
+    return <IntegratedLoader />;
+  }
 
   return (
     <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">

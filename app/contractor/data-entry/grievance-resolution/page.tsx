@@ -1,5 +1,6 @@
 'use client';
 
+import IntegratedLoader from '@/components/IntegratedLoader';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -10,6 +11,16 @@ import { MessageSquarePlus, UploadCloud, FileText } from "lucide-react";
 import React from "react";
 
 export default function GrievanceEntryPage() {
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1200); // Simulate loading
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <IntegratedLoader />;
+  }
 
   // Mock data for workers to select from
   const workers = [

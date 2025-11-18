@@ -11,11 +11,23 @@ import { BookOpenText, CalendarCheck, ArrowLeft, Users, GraduationCap, UserRound
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import IntegratedLoader from '@/components/IntegratedLoader';
+import React from 'react';
 
 export default function TrainingAssignmentPage() {
     const [step, setStep] = useState<'list' | 'assign'>("list");
     const [selectedModuleId, setSelectedModuleId] = useState<string | null>(null);
     const [selectedCount, setSelectedCount] = useState(0);
+    const [loading, setLoading] = React.useState(true);
+
+    React.useEffect(() => {
+        const timer = setTimeout(() => setLoading(false), 1200); // Simulate loading
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (loading) {
+        return <IntegratedLoader />;
+    }
 
     // Mock data
     const workers = [

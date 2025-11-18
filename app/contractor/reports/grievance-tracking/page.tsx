@@ -7,14 +7,17 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import StatCard from "@/components/ui/stat-card";
+import IntegratedLoader from "@/components/IntegratedLoader";
 // UPDATED: Added new icons
 import { MessageSquare, Download, Clock, ThumbsUp, Eye, Search, Hourglass, CheckCircle2, ShieldAlert } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { X } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function GrievanceTrackingReportPage() {
+    // Loader state
+    const [loading, setLoading] = useState(true);
     // State for status filter
     const [statusFilter, setStatusFilter] = useState<string>("all");
 
@@ -105,6 +108,14 @@ export default function GrievanceTrackingReportPage() {
     const [selectedGrievance, setSelectedGrievance] = useState<any | null>(null);
     const [modalStatus, setModalStatus] = useState<string | null>(null);
 
+    // Loader effect (simulate loading)
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 900); // Loader shows for 900ms
+        return () => clearTimeout(timer);
+    }, []);
+
     // Helper function to get badge color classes based on status (no red or black)
     const getStatusBadgeClass = (status: string) => {
         switch (status) {
@@ -120,6 +131,10 @@ export default function GrievanceTrackingReportPage() {
                 return 'bg-gray-200 text-gray-800';
         }
     };
+
+    if (loading) {
+        return <IntegratedLoader />;
+    }
 
     return (
         <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">

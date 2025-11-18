@@ -8,10 +8,22 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@
 import StatCard from "@/components/ui/stat-card";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip, Legend, ChartData, ScriptableContext } from "chart.js";
+import IntegratedLoader from '@/components/IntegratedLoader';
+import React from 'react';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 export default function TrainingCoverageReportPage() {
+    const [loading, setLoading] = React.useState(true);
+
+    React.useEffect(() => {
+        const timer = setTimeout(() => setLoading(false), 1200); // Simulate loading
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (loading) {
+        return <IntegratedLoader />;
+    }
 
     // Mock data for training coverage by module (fixed)
     const trainingCoverage = [

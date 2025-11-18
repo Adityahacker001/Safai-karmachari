@@ -15,7 +15,7 @@ import {
     ListChecks
 } from 'lucide-react';
 import StatCard from '@/components/ui/stat-card';
-
+import IntegratedLoader from '@/components/IntegratedLoader';
 
 // --- Type Definition for User Data ---
 type User = {
@@ -28,10 +28,16 @@ type User = {
 };
 
 const UserManagement: React.FC = () => {
+    const [loading, setLoading] = React.useState(true);
     // --- State for Filters ---
     const [roleFilter, setRoleFilter] = useState('All Roles');
     const [statusFilter, setStatusFilter] = useState('All Status');
     const [searchTerm, setSearchTerm] = useState('');
+
+    React.useEffect(() => {
+        const timer = setTimeout(() => setLoading(false), 1200); // Simulate loading
+        return () => clearTimeout(timer);
+    }, []);
 
     // --- User Data with more recent dates ---
     const userData: User[] = [
@@ -52,6 +58,10 @@ const UserManagement: React.FC = () => {
             return roleMatch && statusMatch && searchMatch;
         });
     }, [userData, roleFilter, statusFilter, searchTerm]);
+
+    if (loading) {
+        return <IntegratedLoader />;
+    }
     
     // --- Helper for VIBRANT Badges ---
     const getBadge = (type: 'Status' | 'Role', value: string) => {
@@ -59,7 +69,14 @@ const UserManagement: React.FC = () => {
             Status: { Active: 'bg-green-500 text-white', Inactive: 'bg-red-500 text-white' },
             Role: { Supervisor: 'bg-indigo-500 text-white', 'Sanitation Worker': 'bg-slate-500 text-white' }
         };
-        const style = colors[type][value as keyof typeof colors[typeof type]] || 'bg-gray-500 text-white';
+        let style = '';
+        if (type === 'Status' && (value === 'Active' || value === 'Inactive')) {
+            style = colors.Status[value as keyof typeof colors.Status];
+        } else if (type === 'Role' && (value === 'Supervisor' || value === 'Sanitation Worker')) {
+            style = colors.Role[value as keyof typeof colors.Role];
+        } else {
+            style = 'bg-gray-500 text-white';
+        }
         return <span className={`px-3 py-1 rounded-full text-xs font-bold ${style}`}>{value}</span>;
     };
     

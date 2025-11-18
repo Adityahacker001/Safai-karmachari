@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import DataTable from '@/components/ui/data-table';
 import StatCard from '@/components/ui/stat-card';
 import { FileText, Send, Inbox, Plus } from 'lucide-react';
+import IntegratedLoader from '@/components/IntegratedLoader';
 
 interface Directive {
   directiveId: string;
@@ -16,6 +17,12 @@ interface Directive {
 
 const Directives = () => {
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1200); // Simulate loading
+    return () => clearTimeout(timer);
+  }, []);
 
   const receivedDirectives = [
     {
@@ -76,6 +83,10 @@ const Directives = () => {
       )
     },
   ];
+
+  if (loading) {
+    return <IntegratedLoader />;
+  }
 
   return (
     <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">

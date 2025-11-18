@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import StatCard from "@/components/ui/stat-card";
 import { UserCheck, UserX, Clock, Edit, Eye, Trash2, MessageCircle, Search } from "lucide-react"; // Added Search Icon
 import React, { useState, useMemo } from "react"; // Added useState and useMemo
+import IntegratedLoader from "@/components/IntegratedLoader";
 
 const attendanceData = [
     {
@@ -78,7 +79,7 @@ const statusBadge = (status: string) => {
 
 export default function WorkerAttendance() {
     const [searchQuery, setSearchQuery] = useState("");
-
+    const [loading, setLoading] = React.useState(true);
     const filteredData = useMemo(() => {
         if (!searchQuery) {
             return attendanceData;
@@ -90,6 +91,15 @@ export default function WorkerAttendance() {
                 worker.id.toLowerCase().includes(lowerCaseQuery)
         );
     }, [searchQuery]);
+
+    React.useEffect(() => {
+        const timer = setTimeout(() => setLoading(false), 1200); // Simulate loading
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (loading) {
+        return <IntegratedLoader />;
+    }
 
     return (
         <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">

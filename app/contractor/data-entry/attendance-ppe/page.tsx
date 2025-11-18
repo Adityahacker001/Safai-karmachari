@@ -9,8 +9,21 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Clock, Shield, CheckCircle, CalendarDays, UserRound, BriefcaseBusiness } from "lucide-react"; // Added more specific icons
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
+import IntegratedLoader from '@/components/IntegratedLoader';
+import React from 'react';
 
 export default function AttendancePpePage() {
+    const [loading, setLoading] = React.useState(true);
+
+    React.useEffect(() => {
+        const timer = setTimeout(() => setLoading(false), 1200); // Simulate loading
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (loading) {
+        return <IntegratedLoader />;
+    }
+
     return (
         <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">
             {/* Enhanced Header */}

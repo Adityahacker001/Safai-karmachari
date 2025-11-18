@@ -14,6 +14,8 @@ import {
     CheckCircle
 } from 'lucide-react';
 import StatCard from '@/components/ui/stat-card';
+import IntegratedLoader from '@/components/IntegratedLoader';
+
 // --- Type Definition for Audit Log Entry ---
 type AuditLog = {
     timestamp: string;
@@ -28,6 +30,12 @@ const AuditLogs: React.FC = () => {
     const [actionFilter, setActionFilter] = useState('All Actions');
     const [userFilter, setUserFilter] = useState('All Users');
     const [dateFilter, setDateFilter] = useState('2025-09-16'); // Default to today
+    const [loading, setLoading] = React.useState(true);
+
+    React.useEffect(() => {
+        const timer = setTimeout(() => setLoading(false), 1200); // Simulate loading
+        return () => clearTimeout(timer);
+    }, []);
 
     // --- Updated Audit Data for Today (Sept 16, 2025) ---
     const auditData: AuditLog[] = [
@@ -94,6 +102,9 @@ const AuditLogs: React.FC = () => {
     // Calculate stats based on today's data
     const todaysActivities = auditData.filter(log => log.timestamp.startsWith('2025-09-16')).length;
 
+    if (loading) {
+        return <IntegratedLoader />;
+    }
 
     return (
         <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">
