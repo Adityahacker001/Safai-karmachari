@@ -101,6 +101,34 @@ const chartLineData: ChartDataEntry[] = [
   { month: 'Oct', 'Total Sanctioned': 12500000, 'Total Paid': 9850000, Pending: 2650000 },
 ];
 
+// Inline IntegratedLoader (same JSX/CSS as components/IntegratedLoader.tsx)
+const IntegratedLoader: React.FC = () => (
+  <div className="w-full h-full flex items-center justify-center min-h-[60vh]">
+    <style jsx>{`
+      .loader {
+        --c: no-repeat linear-gradient(#4f46e5 0 0);
+        background: 
+          var(--c),var(--c),var(--c),
+          var(--c),var(--c),var(--c),
+          var(--c),var(--c),var(--c);
+        background-size: 16px 16px;
+        animation: 
+          l32-1 1s infinite,
+          l32-2 1s infinite;
+      }
+      @keyframes l32-1 {
+        0%,100% {width:45px;height: 45px}
+        35%,65% {width:65px;height: 65px}
+      }
+      @keyframes l32-2 {
+        0%,40%  {background-position: 0 0,0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,  50% 50% }
+        60%,100%{background-position: 0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,0 0,  50% 50% }
+      }
+    `}</style>
+    <div className="loader"></div>
+  </div>
+);
+
 // --- HELPER COMPONENTS ---
 
 const YesNoTag = ({ value }: { value: 'Yes' | 'No' }) => {
@@ -136,6 +164,15 @@ export default function CompensationReportPage() {
     const handleViewIncident = (incidentId: string) => alert(`Viewing incident ${incidentId}...`);
     const handleViewWorker = (workerName: string) => alert(`Viewing worker ${workerName}...`);
     const handleMarkAsPaid = (incidentId: string) => alert(`Marking ${incidentId} as paid...`);
+
+    const [loading, setLoading] = React.useState(true);
+
+    React.useEffect(() => {
+      const t = setTimeout(() => setLoading(false), 1200);
+      return () => clearTimeout(t);
+    }, []);
+
+    if (loading) return <IntegratedLoader />;
 
   return (
     <div className="flex-1 space-y-10 p-6 md:p-10 pt-8 text-slate-900 dark:text-slate-50">

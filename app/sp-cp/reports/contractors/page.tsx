@@ -62,11 +62,40 @@ const initialContractors: Contractor[] = [
     { id: 4, name: "City Waste Management", totalWorkers: 150, manualScavenging: 10, ragpickers: 25, hazardous: 30, ordinary: 85, caste: { sc: 50, st: 15, obc: 60, general: 25 }, religion: { hindu: 110, muslim: 25, other: 15 }, gender: { male: 100, female: 50 }, ageGroups: { under18: 3, a18_40: 90, a41_60: 45, above60: 12 }, incidents: 6, firs: 3, status: "Suspended", },
 ];
 
+// Inline IntegratedLoader (same JSX/CSS as components/IntegratedLoader.tsx)
+const IntegratedLoader: React.FC = () => (
+  <div className="w-full h-full flex items-center justify-center min-h-[60vh]">
+    <style jsx>{`
+      .loader {
+        --c: no-repeat linear-gradient(#4f46e5 0 0);
+        background: 
+          var(--c),var(--c),var(--c),
+          var(--c),var(--c),var(--c),
+          var(--c),var(--c),var(--c);
+        background-size: 16px 16px;
+        animation: 
+          l32-1 1s infinite,
+          l32-2 1s infinite;
+      }
+      @keyframes l32-1 {
+        0%,100% {width:45px;height: 45px}
+        35%,65% {width:65px;height: 65px}
+      }
+      @keyframes l32-2 {
+        0%,40%  {background-position: 0 0,0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,  50% 50% }
+        60%,100%{background-position: 0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,0 0,  50% 50% }
+      }
+    `}</style>
+    <div className="loader"></div>
+  </div>
+);
+
 // --- Main Page Component ---
 export default function ContractorsReportsPage() {
   const [filter, setFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState(""); // Holds the selected status value
   const [contractorsData, setContractorsData] = useState<Contractor[]>(initialContractors);
+  const [loading, setLoading] = useState(true);
 
    // Effect for potential data fetching in the future
    // useEffect(() => {
@@ -121,6 +150,13 @@ export default function ContractorsReportsPage() {
     }
   };
 
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1200);
+    return () => clearTimeout(t);
+  }, []);
+
+  if (loading) return <IntegratedLoader />;
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8 min-h-screen text-slate-900 dark:text-slate-50">
