@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
+import IntegratedLoader from "@/components/IntegratedLoader";
 import {
   Users,
   UserCheck,
@@ -48,6 +49,7 @@ export default function DistrictUserManagement() {
     status: "Active"
   });
   const [addUserSuccess, setAddUserSuccess] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // Mock Users
   const users = [
@@ -74,6 +76,13 @@ export default function DistrictUserManagement() {
       (statusFilter === "All" || user.status === statusFilter)
     );
   }, [searchTerm, roleFilter, statusFilter, users]);
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1200);
+    return () => clearTimeout(t);
+  }, []);
+
+  if (loading) return <IntegratedLoader />;
 
   return (
     <div className="min-h-screen space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 p-3 sm:p-4 md:p-6 lg:p-8">

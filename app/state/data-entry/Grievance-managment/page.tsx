@@ -2,6 +2,35 @@
 import React, { useState } from "react";
 import { Upload, Send, User, MapPin, FileText, Flag } from "lucide-react";
 
+function IntegratedLoader() {
+  return (
+    <div className="w-full h-full flex items-center justify-center min-h-[60vh]">
+      <style jsx>{`
+        .loader {
+          --c: no-repeat linear-gradient(#4f46e5 0 0);
+          background: 
+            var(--c),var(--c),var(--c),
+            var(--c),var(--c),var(--c),
+            var(--c),var(--c),var(--c);
+          background-size: 16px 16px;
+          animation: 
+            l32-1 1s infinite,
+            l32-2 1s infinite;
+        }
+        @keyframes l32-1 {
+          0%,100% {width:45px;height: 45px}
+          35%,65% {width:65px;height: 65px}
+        }
+        @keyframes l32-2 {
+          0%,40%  {background-position: 0 0,0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,  50% 50% }
+          60%,100%{background-position: 0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,0 0,  50% 50% }
+        }
+      `}</style>
+      <div className="loader"></div>
+    </div>
+  );
+}
+
 const StateGrievanceForm: React.FC = () => {
   const [formData, setFormData] = useState({
     grievanceType: "",
@@ -28,6 +57,15 @@ const StateGrievanceForm: React.FC = () => {
     console.log("Submitted:", formData);
     alert("Grievance submitted successfully!");
   };
+
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1200);
+    return () => clearTimeout(t);
+  }, []);
+
+  if (loading) return <IntegratedLoader />;
 
   return (
     <div className="min-h-screen p-6">

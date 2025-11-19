@@ -1,5 +1,6 @@
 "use client";
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import IntegratedLoader from '@/components/IntegratedLoader';
 import DashboardCard from '@/components/dashboard/dashboard-card';
 import DataTable from '@/components/ui/data-table';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -11,6 +12,8 @@ import {
   Medal,
   Crown
 } from 'lucide-react';
+
+
 
 const Recognition: React.FC = () => {
   const nodalLeaderboard = [
@@ -66,6 +69,15 @@ const Recognition: React.FC = () => {
       score: 90.5
     }
   ];
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1200);
+    return () => clearTimeout(t);
+  }, []);
+
+  if (loading) return <IntegratedLoader />;
 
   const nodalColumns: Array<{
     key: string;

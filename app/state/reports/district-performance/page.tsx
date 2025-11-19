@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Download, Award, ThumbsDown, Eye, BarChart3 } from "lucide-react";
@@ -23,6 +25,42 @@ export default function DistrictPerformanceReportPage() {
         { name: "South 24 Parganas", score: 78, incidents: 25, grievances: 18, fatalities: 1, resolutionTime: "45 Hours", status: "Needs Improvement" },
         { name: "Murshidabad", score: 76, incidents: 22, grievances: 20, fatalities: 0, resolutionTime: "52 Hours", status: "Needs Improvement" },
     ];
+
+      // IntegratedLoader (inline copy) — do not modify anything else in this file
+      const IntegratedLoader: React.FC = () => (
+        <div className="w-full h-full flex items-center justify-center min-h-[60vh]">
+          <style jsx>{`
+            .loader {
+              --c: no-repeat linear-gradient(#4f46e5 0 0);
+              background: 
+                var(--c),var(--c),var(--c),
+                var(--c),var(--c),var(--c),
+                var(--c),var(--c),var(--c);
+              background-size: 16px 16px;
+              animation: 
+                l32-1 1s infinite,
+                l32-2 1s infinite;
+            }
+            @keyframes l32-1 {
+              0%,100% {width:45px;height: 45px}
+              35%,65% {width:65px;height: 65px}
+            }
+            @keyframes l32-2 {
+              0%,40%  {background-position: 0 0,0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,  50% 50% }
+              60%,100%{background-position: 0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,0 0,  50% 50% }
+            }
+          `}</style>
+          <div className="loader"></div>
+        </div>
+      );
+
+      const [loading, setLoading] = React.useState(true);
+      React.useEffect(() => {
+        const t = setTimeout(() => setLoading(false), 1200);
+        return () => clearTimeout(t);
+      }, []);
+
+      if (loading) return <IntegratedLoader />;
 
   return (
     <div className={cn("min-h-screen space-y-8 p-6 md:p-8")}>

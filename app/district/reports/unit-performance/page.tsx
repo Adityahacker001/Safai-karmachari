@@ -8,12 +8,14 @@ import { Filter, Download, Star, Shield, GraduationCap, AlertTriangle, Building,
 import { Badge } from "@/components/ui/badge";
 import { contractorTheme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import IntegratedLoader from "@/components/IntegratedLoader";
 
 const UnitPerformancePage = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [zoneFilter, setZoneFilter] = useState('all');
     const [typeFilter, setTypeFilter] = useState('all');
+    const [loading, setLoading] = useState(true);
 
     const performanceData = [
         { id: "U-001", zone: "North Zone A", type: "Contractor", ppe: 98, training: 95, grievances: 1, score: 9.2 },
@@ -59,6 +61,13 @@ const UnitPerformancePage = () => {
         if (score >= 8) return "bg-yellow-100 text-yellow-800 border-yellow-200";
         return "bg-red-100 text-red-800 border-red-200";
     };
+
+    useEffect(() => {
+        const t = setTimeout(() => setLoading(false), 1200);
+        return () => clearTimeout(t);
+    }, []);
+
+    if (loading) return <IntegratedLoader />;
 
     return (
         <div className="min-h-screen space-y-4 sm:space-y-6 md:space-y-8 p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8"> 

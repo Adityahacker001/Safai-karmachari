@@ -31,6 +31,42 @@ export default function RecognitionReviewPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
 
+    const [loading, setLoading] = useState(true);
+
+    React.useEffect(() => {
+        const timer = setTimeout(() => setLoading(false), 1200);
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (loading) {
+        return (
+            <div className="w-full h-full flex items-center justify-center min-h-[60vh]">
+              <style jsx>{`
+                .loader {
+                  --c: no-repeat linear-gradient(#4f46e5 0 0);
+                  background: 
+                    var(--c),var(--c),var(--c),
+                    var(--c),var(--c),var(--c),
+                    var(--c),var(--c),var(--c);
+                  background-size: 16px 16px;
+                  animation: 
+                    l32-1 1s infinite,
+                    l32-2 1s infinite;
+                }
+                @keyframes l32-1 {
+                  0%,100% {width:45px;height: 45px}
+                  35%,65% {width:65px;height: 65px}
+                }
+                @keyframes l32-2 {
+                  0%,40%  {background-position: 0 0,0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,  50% 50% }
+                  60%,100%{background-position: 0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,0 0,  50% 50% }
+                }
+              `}</style>
+              <div className="loader"></div>
+            </div>
+        );
+    }
+
     const nominations = [
         { id: 'NOM-003', nominee: "Priya Sharma", category: "Safety Champion", nominator: "P. Sharma (Central Zone B)", justification: "Identified and reported a critical equipment failure, preventing a potential accident.", status: "Pending Review" },
         { id: 'NOM-004', nominee: "Citizen Reporter #C-4567", category: "Civic Engagement Award", nominator: "A. Singh (North Zone A)", justification: "Provided timely and accurate reports that led to the prevention of 3 major incidents.", status: "Pending Review" },

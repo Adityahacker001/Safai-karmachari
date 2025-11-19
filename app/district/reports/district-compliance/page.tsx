@@ -7,10 +7,49 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { contractorTheme } from "@/lib/theme";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+function IntegratedLoader() {
+        return (
+                <div className="w-full h-full flex items-center justify-center min-h-[60vh]">
+                    <style jsx>{`
+                        .loader {
+                            --c: no-repeat linear-gradient(#4f46e5 0 0);
+                            background: 
+                                var(--c),var(--c),var(--c),
+                                var(--c),var(--c),var(--c),
+                                var(--c),var(--c),var(--c);
+                            background-size: 16px 16px;
+                            animation: 
+                                l32-1 1s infinite,
+                                l32-2 1s infinite;
+                        }
+                        @keyframes l32-1 {
+                            0%,100% {width:45px;height: 45px}
+                            35%,65% {width:65px;height: 65px}
+                        }
+                        @keyframes l32-2 {
+                            0%,40%  {background-position: 0 0,0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,  50% 50% }
+                            60%,100%{background-position: 0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,0 0,  50% 50% }
+                        }
+                    `}</style>
+                    <div className="loader"></div>
+                </div>
+        );
+}
 
 export default function DistrictComplianceReportPage() {
     const [searchTerm, setSearchTerm] = useState('');
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const timer = setTimeout(() => setLoading(false), 1200);
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (loading) {
+        return <IntegratedLoader />;
+    }
 
     const units = [
         { name: "North Zone B", score: 95, warnings: 0, violations: 2, status: "Fully Compliant" },

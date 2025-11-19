@@ -8,6 +8,7 @@ import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { contractorTheme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
+import React, { useState, useEffect } from "react";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -35,7 +36,47 @@ export default function BudgetReportPage() {
     
     const chartColors = ['#3b82f6', '#8b5cf6', '#10b981', '#f97316']; // blue, purple, green, orange
 
-  return (
+    function IntegratedLoader() {
+        return (
+            <div className="w-full h-full flex items-center justify-center min-h-[60vh]">
+              <style jsx>{`
+                .loader {
+                  --c: no-repeat linear-gradient(#4f46e5 0 0);
+                  background: 
+                    var(--c),var(--c),var(--c),
+                    var(--c),var(--c),var(--c),
+                    var(--c),var(--c),var(--c);
+                  background-size: 16px 16px;
+                  animation: 
+                    l32-1 1s infinite,
+                    l32-2 1s infinite;
+                }
+                @keyframes l32-1 {
+                  0%,100% {width:45px;height: 45px}
+                  35%,65% {width:65px;height: 65px}
+                }
+                @keyframes l32-2 {
+                  0%,40%  {background-position: 0 0,0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,  50% 50% }
+                  60%,100%{background-position: 0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,0 0,  50% 50% }
+                }
+              `}</style>
+              <div className="loader"></div>
+            </div>
+        );
+    }
+
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+      const timer = setTimeout(() => setLoading(false), 1200);
+      return () => clearTimeout(timer);
+    }, []);
+
+    if (loading) {
+      return <IntegratedLoader />;
+    }
+
+    return (
     <div className={cn("space-y-8", contractorTheme.page.gradientBackground, "p-6 md:p-8")}>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div className="text-white">

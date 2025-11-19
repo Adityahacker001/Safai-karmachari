@@ -5,10 +5,50 @@ import StatCard from '@/components/ui/stat-card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Plus, FileText, Send, Clock, CheckCircle, Search, X } from 'lucide-react';
 
+function IntegratedLoader() {
+  return (
+    <div className="w-full h-full flex items-center justify-center min-h-[60vh]">
+      <style jsx>{`
+        .loader {
+          --c: no-repeat linear-gradient(#4f46e5 0 0);
+          background: 
+            var(--c),var(--c),var(--c),
+            var(--c),var(--c),var(--c),
+            var(--c),var(--c),var(--c);
+          background-size: 16px 16px;
+          animation: 
+            l32-1 1s infinite,
+            l32-2 1s infinite;
+        }
+        @keyframes l32-1 {
+          0%,100% {width:45px;height: 45px}
+          35%,65% {width:65px;height: 65px}
+        }
+        @keyframes l32-2 {
+          0%,40%  {background-position: 0 0,0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,  50% 50% }
+          60%,100%{background-position: 0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,0 0,  50% 50% }
+        }
+      `}</style>
+      <div className="loader"></div>
+    </div>
+  );
+}
+
 const Directives: React.FC = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1200);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <IntegratedLoader />;
+  }
 
   const directiveData = [
     { directiveId: 'DIR-2024-001', from: 'State Government', to: 'All Nodal Officers', title: 'PPE Distribution Guidelines', date: '2024-01-20', status: 'Active', responses: '18/24' },
