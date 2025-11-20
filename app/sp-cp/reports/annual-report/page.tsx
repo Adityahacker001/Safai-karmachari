@@ -1,5 +1,7 @@
 'use client';
 
+import React, { useState, useEffect } from 'react';
+
 import {
   Bar,
   BarChart,
@@ -142,6 +144,34 @@ const stationPerformanceData = [
   },
 ];
 
+// Inline IntegratedLoader (same JSX/CSS as components/IntegratedLoader.tsx)
+const IntegratedLoader: React.FC = () => (
+  <div className="w-full h-full flex items-center justify-center min-h-[60vh]">
+    <style jsx>{`
+      .loader {
+        --c: no-repeat linear-gradient(#4f46e5 0 0);
+        background: 
+          var(--c),var(--c),var(--c),
+          var(--c),var(--c),var(--c),
+          var(--c),var(--c),var(--c);
+        background-size: 16px 16px;
+        animation: 
+          l32-1 1s infinite,
+          l32-2 1s infinite;
+      }
+      @keyframes l32-1 {
+        0%,100% {width:45px;height: 45px}
+        35%,65% {width:65px;height: 65px}
+      }
+      @keyframes l32-2 {
+        0%,40%  {background-position: 0 0,0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,  50% 50% }
+        60%,100%{background-position: 0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,0 0,  50% 50% }
+      }
+    `}</style>
+    <div className="loader"></div>
+  </div>
+);
+
 // --- HELPER COMPONENTS ---
 
 /**
@@ -165,6 +195,14 @@ const ReportSection = ({
 // --- MAIN PAGE COMPONENT ---
 
 export default function AnnualReportPage() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1200);
+    return () => clearTimeout(t);
+  }, []);
+
+  if (loading) return <IntegratedLoader />;
   return (
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-50">
       {/* 1️⃣ Header & Action Buttons */}

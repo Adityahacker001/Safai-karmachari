@@ -166,6 +166,34 @@ const COMPENSATION_DATA = [
   { month: 'May', Sanctioned: 170000, Paid: 100000, Pending: 70000 },
 ];
 
+// Inline IntegratedLoader (same JSX/CSS as components/IntegratedLoader.tsx)
+const IntegratedLoader: React.FC = () => (
+  <div className="w-full h-full flex items-center justify-center min-h-[60vh]">
+    <style jsx>{`
+      .loader {
+        --c: no-repeat linear-gradient(#4f46e5 0 0);
+        background: 
+          var(--c),var(--c),var(--c),
+          var(--c),var(--c),var(--c),
+          var(--c),var(--c),var(--c);
+        background-size: 16px 16px;
+        animation: 
+          l32-1 1s infinite,
+          l32-2 1s infinite;
+      }
+      @keyframes l32-1 {
+        0%,100% {width:45px;height: 45px}
+        35%,65% {width:65px;height: 65px}
+      }
+      @keyframes l32-2 {
+        0%,40%  {background-position: 0 0,0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,  50% 50% }
+        60%,100%{background-position: 0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,0 0,  50% 50% }
+      }
+    `}</style>
+    <div className="loader"></div>
+  </div>
+);
+
 /* -------------------------------------------------------------------------- */
 /* START OF NEW UI                             */
 /* -------------------------------------------------------------------------- */
@@ -179,6 +207,13 @@ export default function Page() {
   const [onlyFIRFiled, setOnlyFIRFiled] = useState<'all' | 'yes' | 'no'>('all');
   const [compensationStatus, setCompensationStatus] = useState<string>('All');
   const [expandedCase, setExpandedCase] = useState<string | null>(null);
+
+  const [loading, setLoading] = useState(true);
+
+  React.useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1200);
+    return () => clearTimeout(t);
+  }, []);
 
   // YOUR EXISTING FILTER LOGIC (UNCHANGED)
   const filtered = useMemo(() => {
@@ -265,6 +300,8 @@ export default function Page() {
     'px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-white uppercase tracking-wider';
   const tableCellStyle = 'px-5 py-4 border-b border-gray-200 bg-white text-sm';
   const tableRowStriped = 'even:bg-gray-50';
+
+  if (loading) return <IntegratedLoader />;
 
   return (
     <main className="flex-1 space-y-6 p-4 md:p-8 pt-6">

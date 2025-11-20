@@ -20,6 +20,35 @@ function StarRating({ value, max = 5 }: { value: number; max?: number }) {
 }
 import { cn } from "@/lib/utils"; // Assuming you have a utility for class names
 
+function IntegratedLoader() {
+        return (
+                <div className="w-full h-full flex items-center justify-center min-h-[60vh]">
+                    <style jsx>{`
+                        .loader {
+                            --c: no-repeat linear-gradient(#4f46e5 0 0);
+                            background: 
+                                var(--c),var(--c),var(--c),
+                                var(--c),var(--c),var(--c),
+                                var(--c),var(--c),var(--c);
+                            background-size: 16px 16px;
+                            animation: 
+                                l32-1 1s infinite,
+                                l32-2 1s infinite;
+                        }
+                        @keyframes l32-1 {
+                            0%,100% {width:45px;height: 45px}
+                            35%,65% {width:65px;height: 65px}
+                        }
+                        @keyframes l32-2 {
+                            0%,40%  {background-position: 0 0,0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,  50% 50% }
+                            60%,100%{background-position: 0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,0 0,  50% 50% }
+                        }
+                    `}</style>
+                    <div className="loader"></div>
+                </div>
+        );
+}
+
 // --- MOCK DATA (ENRICHED WITH MORE DETAILS) ---
 const goodContractors = [
     { id: 'C001', name: "Apex Cleaners Inc.", region: "Maharashtra", score: 98.5, reason: "Exceeded all SLA targets for 4 consecutive quarters.", since: 2018, projects: 45, lastReview: "2025-08-15", workerSatisfaction: 95, complianceRecord: "100% Compliant" },
@@ -335,6 +364,16 @@ export default function PerformanceReportsPage() {
     const [activeMainTab, setActiveMainTab] = useState('contractors');
     const [searchTerm, setSearchTerm] = useState('');
     const [regionFilter, setRegionFilter] = useState('all');
+    const [loading, setLoading] = useState(true);
+
+    React.useEffect(() => {
+        const timer = setTimeout(() => setLoading(false), 1200);
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (loading) {
+        return <IntegratedLoader />;
+    }
     
     const mainTabs = [
         { id: 'contractors', label: 'Contractors', icon: Building2 },

@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import IntegratedLoader from '@/components/IntegratedLoader';
 import DashboardCard from '@/components/dashboard/dashboard-card';
 import DataTable from '@/components/ui/data-table';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -25,11 +26,22 @@ import {
   Flag
 } from 'lucide-react';
 
+
+
 const Grievances: React.FC = () => {
   const [activeTab, setActiveTab] = useState('summary');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedGrievance, setSelectedGrievance] = useState<string | null>(null);
   const [isGrievanceDetailsOpen, setIsGrievanceDetailsOpen] = useState(false);
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1200);
+    return () => clearTimeout(t);
+  }, []);
+
+  if (loading) return <IntegratedLoader />;
 
   const nodalOfficerData = [
     {
