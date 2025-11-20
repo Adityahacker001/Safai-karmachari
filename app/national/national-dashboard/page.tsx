@@ -1,4 +1,5 @@
 'use client';
+import { useState, useEffect } from 'react';
 
 
 import DashboardLayout from '@/components/layout/dashboard-layout';
@@ -58,6 +59,17 @@ const KPICard = ({ title, value, icon: Icon, color }: KPICardProps) => {
 
 
 export default function NationalDashboard() {
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+      const timer = setTimeout(() => setLoading(false), 800);
+      return () => clearTimeout(timer);
+    }, []);
+
+    if (loading) {
+      const IntegratedLoader = require('@/components/layout/IntegratedLoader').default;
+      return <IntegratedLoader />;
+    }
   // Mock data for charts
   const chartData = [
     { state: 'Uttar Pradesh', grievances: 320, pending: 80, escalated: 20 },

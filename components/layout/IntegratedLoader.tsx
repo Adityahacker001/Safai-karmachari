@@ -2,8 +2,11 @@ import React from 'react';
 
 const IntegratedLoader: React.FC = () => (
   <div className="w-full h-full flex items-center justify-center min-h-[60vh]">
-    <style jsx>{`
+    <style jsx global>{`
       .loader {
+        width: 65px;
+        height: 65px;
+        display: block;
         --c: no-repeat linear-gradient(#4f46e5 0 0);
         background: 
           var(--c),var(--c),var(--c),

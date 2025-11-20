@@ -16,6 +16,17 @@ import { cn } from "@/lib/utils";
 
 
 export default function NationalRecognitionPage() {
+  const [loading, setLoading] = useState(true);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    const IntegratedLoader = require("@/components/layout/IntegratedLoader").default;
+    return <IntegratedLoader />;
+  }
 
     // Mock data for national-level nominations
     const nominations = [

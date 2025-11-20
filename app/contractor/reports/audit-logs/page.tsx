@@ -14,8 +14,7 @@ import {
     CheckCircle
 } from 'lucide-react';
 import StatCard from '@/components/ui/stat-card';
-import IntegratedLoader from '@/components/IntegratedLoader';
-
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 // --- Type Definition for Audit Log Entry ---
 type AuditLog = {
     timestamp: string;

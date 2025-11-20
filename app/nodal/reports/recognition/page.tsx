@@ -1,16 +1,25 @@
 "use client";
 
-import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useEffect, useState } from "react";
+import StatCard from "@/components/ui/stat-card";
 import DataTable from "@/components/ui/data-table";
 import { Award, Trophy, Medal, Star, TrendingUp, TrendingDown } from "lucide-react";
+// ...existing code...
 
 const Recognition = () => {
-  const kpiData = [
-    { title: "Gold Tier Workers", value: 125, icon: Trophy, color: "yellow" },
+  const [loading, setLoading] = useState(true);
+
+  const kpiData: Array<{
+    title: string;
+    value: string | number;
+    icon: typeof Trophy;
+    color?: 'orange' | 'blue' | 'green' | 'red' | 'purple' | 'indigo' | 'emerald' | 'amber' | 'sky' | 'violet' | 'pink';
+    subtitle?: string;
+  }> = [
+    { title: "Gold Tier Workers", value: 125, icon: Trophy, color: "orange" },
     { title: "Silver Tier Workers", value: 298, icon: Medal, color: "blue" },
     { title: "Bronze Tier Workers", value: 156, icon: Award, color: "green" },
-    { title: "Top Contractor", value: "ABC Services", icon: Trophy, color: "yellow", subtitle: "92.5 Score" },
+    { title: "Top Contractor", value: "ABC Services", icon: Trophy, color: "orange", subtitle: "92.5 Score" },
     { title: "Top Worker", value: "Pallab Sharma", icon: Star, color: "blue", subtitle: "96 Score" },
     { title: "Most Improved Contractor", value: "Urban Sanitation Ltd", icon: TrendingUp, color: "green", subtitle: "+8.4 Score" },
   ];
@@ -34,6 +43,18 @@ const Recognition = () => {
     { key: "trend", header: "Trend" },
   ];
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 800); // Loader shows for 800ms
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    const IntegratedLoader = require("@/components/layout/IntegratedLoader").default;
+    return <IntegratedLoader />;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
       {/* Header Card */}
@@ -50,26 +71,32 @@ const Recognition = () => {
         </div>
       </div>
 
-      {/* KPI Cards */}
+      {/* KPI StatCards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
         {kpiData.map((kpi, index) => (
-          <Card key={index} className="shadow-lg hover:shadow-xl transition-all duration-300">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{kpi.title}</CardTitle>
-              <kpi.icon className="h-6 w-6 opacity-80" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold">{kpi.value}</div>
-              <p className="text-xs opacity-90">{kpi.subtitle}</p>
-            </CardContent>
-          </Card>
+          <StatCard
+            key={index}
+            title={kpi.title}
+            value={kpi.value}
+            icon={kpi.icon}
+            color={kpi.color}
+            subtitle={kpi.subtitle}
+          />
         ))}
       </div>
 
       {/* Contractor Leaderboard */}
-      <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6">
-        <h2 className="text-lg font-bold text-gray-700 mb-4">Contractor Leaderboard</h2>
-        <DataTable title="Contractor Leaderboard" columns={leaderboardColumns} data={contractorLeaderboard} />
+      <div className="bg-white rounded-2xl shadow-2xl p-4 sm:p-8 border border-gray-100">
+        <h2 className="text-xl font-bold text-gray-800 mb-6 tracking-tight">Contractor Leaderboard</h2>
+        <div className="overflow-x-auto">
+          <div className="min-w-full">
+            <DataTable
+              title="Contractor Leaderboard"
+              columns={leaderboardColumns}
+              data={contractorLeaderboard}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

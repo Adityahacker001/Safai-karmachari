@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Download, Eye } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -10,6 +11,7 @@ import { contractorTheme as theme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 
 export default function ContractorPerformanceReportPage() {
+  const [loading, setLoading] = useState(true);
   const contractors = [
     { 
       name: "ABC Sanitation", 
@@ -45,6 +47,18 @@ export default function ContractorPerformanceReportPage() {
     },
   ];
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 800); // Loader shows for 800ms
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    const IntegratedLoader = require("@/components/layout/IntegratedLoader").default;
+    return <IntegratedLoader />;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
       {/* Header Card */}
@@ -64,69 +78,60 @@ export default function ContractorPerformanceReportPage() {
           </Button>
         </div>
       </div>
-
-      <Card className="bg-white shadow-lg rounded-2xl overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
-          <CardTitle className="text-xl font-bold">Contractor Responsiveness Roster</CardTitle>
-          <CardDescription className="text-blue-100">
-            This data is compiled from system logs and their actions on the grievance and PPE modules
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-gradient-to-r from-gray-50 to-gray-100 border-b-2 border-blue-200">
-                  <TableHead className="text-gray-700 font-semibold py-4 px-6">Contractor</TableHead>
-                  <TableHead className="text-center text-gray-700 font-semibold py-4 px-6">Overdue Tasks</TableHead>
-                  <TableHead className="text-center text-gray-700 font-semibold py-4 px-6">Last System Login</TableHead>
-                  <TableHead className="text-center text-gray-700 font-semibold py-4 px-6">Responsiveness Status</TableHead>
-                  <TableHead className="text-center text-gray-700 font-semibold py-4 px-6">Actions</TableHead>
+      <Card>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="py-4 px-6">Contractor Name</TableHead>
+                <TableHead className="text-center py-4 px-6">Overdue Tasks</TableHead>
+                <TableHead className="text-center text-gray-700 font-semibold py-4 px-6">Last System Login</TableHead>
+                <TableHead className="text-center text-gray-700 font-semibold py-4 px-6">Responsiveness Status</TableHead>
+                <TableHead className="text-center text-gray-700 font-semibold py-4 px-6">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {contractors.map((c, index) => (
+                <TableRow 
+                  key={c.name} 
+                  className={`hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-200 border-l-4 ${
+                    c.status === 'Unresponsive' ? "border-l-red-400 hover:border-l-red-500" :
+                    c.status === 'Highly Responsive' ? "border-l-green-400 hover:border-l-green-500" :
+                    "border-l-yellow-400 hover:border-l-yellow-500"
+                  } ${index % 2 === 0 ? "bg-white" : "bg-gray-50/30"}`}
+                >
+                  <TableCell className="py-4 px-6">
+                    <div className="flex items-center space-x-3">
+                      <Avatar><AvatarFallback className="bg-blue-100 text-blue-600 font-semibold">{c.name.substring(0, 2)}</AvatarFallback></Avatar>
+                      <span className="font-medium text-gray-900">{c.name}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell className={cn("text-center py-4 px-6 font-bold", c.overdueTasks > 4 ? 'text-red-600' : 'text-gray-700')}>
+                    {c.overdueTasks}
+                  </TableCell>
+                  <TableCell className="text-center text-gray-600 py-4 px-6">{c.lastLogin}</TableCell>
+                  <TableCell className="text-center py-4 px-6">
+                    <Badge 
+                      className={cn("font-semibold text-xs py-1 px-3 rounded-full",
+                        c.status === 'Unresponsive' ? "bg-red-100 text-red-800 hover:bg-red-200" :
+                        c.status === 'Highly Responsive' ? "bg-green-100 text-green-800 hover:bg-green-200" :
+                        c.status === 'Needs Follow-up' ? "bg-yellow-100 text-yellow-800 hover:bg-yellow-200" :
+                        "bg-blue-100 text-blue-800 hover:bg-blue-200"
+                      )}
+                    >
+                      {c.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-center py-4 px-6">
+                    <Button variant="outline" size="sm" className="border-blue-200 text-blue-600 hover:bg-blue-50">
+                      <Eye className="h-4 w-4 mr-2"/>
+                      View Dashboard
+                    </Button>
+                  </TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody>
-                {contractors.map((c, index) => (
-                  <TableRow 
-                    key={c.name} 
-                    className={`hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-200 border-l-4 ${
-                      c.status === 'Unresponsive' ? "border-l-red-400 hover:border-l-red-500" :
-                      c.status === 'Highly Responsive' ? "border-l-green-400 hover:border-l-green-500" :
-                      "border-l-yellow-400 hover:border-l-yellow-500"
-                    } ${index % 2 === 0 ? "bg-white" : "bg-gray-50/30"}`}
-                  >
-                    <TableCell className="py-4 px-6">
-                      <div className="flex items-center space-x-3">
-                        <Avatar><AvatarFallback className="bg-blue-100 text-blue-600 font-semibold">{c.name.substring(0, 2)}</AvatarFallback></Avatar>
-                        <span className="font-medium text-gray-900">{c.name}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell className={cn("text-center py-4 px-6 font-bold", c.overdueTasks > 4 ? 'text-red-600' : 'text-gray-700')}>
-                      {c.overdueTasks}
-                    </TableCell>
-                    <TableCell className="text-center text-gray-600 py-4 px-6">{c.lastLogin}</TableCell>
-                    <TableCell className="text-center py-4 px-6">
-                      <Badge 
-                        className={cn("font-semibold text-xs py-1 px-3 rounded-full",
-                          c.status === 'Unresponsive' ? "bg-red-100 text-red-800 hover:bg-red-200" :
-                          c.status === 'Highly Responsive' ? "bg-green-100 text-green-800 hover:bg-green-200" :
-                          c.status === 'Needs Follow-up' ? "bg-yellow-100 text-yellow-800 hover:bg-yellow-200" :
-                          "bg-blue-100 text-blue-800 hover:bg-blue-200"
-                        )}
-                      >
-                        {c.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-center py-4 px-6">
-                      <Button variant="outline" size="sm" className="border-blue-200 text-blue-600 hover:bg-blue-50">
-                        <Eye className="h-4 w-4 mr-2"/>
-                        View Dashboard
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+              ))}
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
     </div>

@@ -15,7 +15,7 @@ import {
     ListChecks
 } from 'lucide-react';
 import StatCard from '@/components/ui/stat-card';
-import IntegratedLoader from '@/components/IntegratedLoader';
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 
 // --- Type Definition for User Data ---
 type User = {

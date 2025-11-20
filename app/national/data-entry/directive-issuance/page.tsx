@@ -1,4 +1,5 @@
 'use client';
+import { useState, useEffect } from 'react';
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,6 +12,17 @@ import { contractorTheme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 
 export default function DirectiveIssuancePage() {
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+      const timer = setTimeout(() => setLoading(false), 800);
+      return () => clearTimeout(timer);
+    }, []);
+
+    if (loading) {
+      const IntegratedLoader = require('@/components/layout/IntegratedLoader').default;
+      return <IntegratedLoader />;
+    }
   return (
     <div className="min-h-screen p-3 sm:p-4 md:p-6 lg:p-8 space-y-4 sm:space-y-6 md:space-y-8">
       {/* Professional Header */}

@@ -8,12 +8,24 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import StatCard from '@/components/ui/stat-card';
 import { Award, Send, User, Building, FileUp, Users, Trophy, Star, CheckCircle } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import IntegratedLoader from "@/components/layout/IntegratedLoader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { contractorTheme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 
 export default function RecognitionNominationPage() {
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1200);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <IntegratedLoader />;
+  }
 
     // Mock data
     const workers = [

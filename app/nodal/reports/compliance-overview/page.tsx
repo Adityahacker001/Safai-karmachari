@@ -7,8 +7,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { contractorTheme as theme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
+import React, { useEffect, useState } from "react";
 
 export default function ComplianceOverviewReportPage() {
+  const [loading, setLoading] = useState(true);
 
     // Mock data for the audit log
     const auditLog = [
@@ -26,6 +28,18 @@ export default function ComplianceOverviewReportPage() {
         { item: "Late Checklist Submission", count: 9, severity: "Low" },
         { item: "Gloves (Damaged/Missing)", count: 7, severity: "High" },
     ];
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 800); // Loader shows for 800ms
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (loading) {
+        const IntegratedLoader = require("@/components/layout/IntegratedLoader").default;
+        return <IntegratedLoader />;
+    }
 
  return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">

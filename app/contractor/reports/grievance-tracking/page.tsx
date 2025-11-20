@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import StatCard from "@/components/ui/stat-card";
-import IntegratedLoader from "@/components/IntegratedLoader";
+import IntegratedLoader from "@/components/layout/IntegratedLoader";
 // UPDATED: Added new icons
 import { MessageSquare, Download, Clock, ThumbsUp, Eye, Search, Hourglass, CheckCircle2, ShieldAlert } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";

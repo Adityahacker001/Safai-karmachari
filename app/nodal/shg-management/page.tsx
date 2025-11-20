@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import IntegratedLoader from "@/components/layout/IntegratedLoader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -185,16 +186,28 @@ const MapContractorModal = ({ open, handleClose, shg }: { open: boolean, handleC
 
 // --- MAIN COMPONENT ---
 export default function SHGManagementPage() {
+
+    const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState<string>("");
     const [statusFilter, setStatusFilter] = useState<string>("All");
     const [contractorFilter, setContractorFilter] = useState<string>("All");
-    
     // State for modals
     const [registerModalOpen, setRegisterModalOpen] = useState(false);
     const [validateModalOpen, setValidateModalOpen] = useState(false);
     const [viewModalOpen, setViewModalOpen] = useState(false);
     const [mapModalOpen, setMapModalOpen] = useState(false);
     const [selectedShg, setSelectedShg] = useState<SHGData | null>(null);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 1200);
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (loading) {
+        return <IntegratedLoader />;
+    }
 
     const handleOpenViewModal = (shg: SHGData) => { setSelectedShg(shg); setViewModalOpen(true); };
     const handleOpenMapModal = (shg: SHGData) => { setSelectedShg(shg); setMapModalOpen(true); };

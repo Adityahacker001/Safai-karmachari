@@ -8,7 +8,7 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@
 import StatCard from "@/components/ui/stat-card";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip, Legend, ChartData, ScriptableContext } from "chart.js";
-import IntegratedLoader from '@/components/IntegratedLoader';
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 import React from 'react';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);

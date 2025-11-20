@@ -1,9 +1,11 @@
 "use client";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import DataTable from '@/components/ui/data-table';
 import { ScrollText, User, Shield, Clock } from 'lucide-react';
 
 const AuditLogs = () => {
+  const [loading, setLoading] = useState(true);
+
   const auditLogs = [
     {
       timestamp: '2024-01-27 14:30:25',
@@ -105,6 +107,18 @@ const AuditLogs = () => {
     { type: 'System Change', count: 12, color: 'bg-purple-500' },
     { type: 'User Creation', count: 8, color: 'bg-red-500' },
   ];
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 800); // Loader shows for 800ms
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    const IntegratedLoader = require("@/components/layout/IntegratedLoader").default;
+    return <IntegratedLoader />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">

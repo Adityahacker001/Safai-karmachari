@@ -6,7 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from "@/components/ui/dialog";
 import StatCard from "@/components/ui/stat-card";
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import IntegratedLoader from '../../../../components/layout/IntegratedLoader';
 import { Award, CheckCircle2, Hourglass, FileText, Calendar, User, XCircle, CheckCircle, ClipboardList } from "lucide-react";
 
 
@@ -37,6 +38,11 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
 
 
 export default function InitiateAwardPage() {
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        const timer = setTimeout(() => setLoading(false), 900);
+        return () => clearTimeout(timer);
+    }, []);
     // Mock data with added justification for the dialog
     const nominations = [
         { id: 'NOM-NAT-01', nominee: "State of Kerala", category: "Best Performing State", nominator: "NCSK (Auto-generated)", status: "Approved", justification: "Automatically nominated based on achieving the highest national performance metrics across all sanitation and worker welfare categories for the fiscal year." },
@@ -45,8 +51,15 @@ export default function InitiateAwardPage() {
         { id: 'NOM-ST-TN-01', nominee: "Priya Krishnan (TN)", category: "National Safai Karmachari of the Year", nominator: "Escalated from Tamil Nadu", status: "Pending Final Vote", justification: "Nominated by the State of Tamil Nadu for developing a new, efficient waste segregation technique that has been adopted by three neighboring districts." },
     ];
 
+    if (loading) {
+        return (
+            <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 min-h-screen flex items-center justify-center">
+                <IntegratedLoader />
+            </div>
+        );
+    }
     return (
-        <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">
+        <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen relative">
             {/* Enhanced Header */}
             <header className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl"></div>

@@ -15,7 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import StatCard from "@/components/ui/stat-card";
 import { UserCheck, UserX, Clock, Edit, Eye, Trash2, MessageCircle, Search } from "lucide-react"; // Added Search Icon
 import React, { useState, useMemo } from "react"; // Added useState and useMemo
-import IntegratedLoader from "@/components/IntegratedLoader";
+import IntegratedLoader from "@/components/layout/IntegratedLoader";
 
 const attendanceData = [
     {

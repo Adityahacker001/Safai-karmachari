@@ -9,7 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Clock, Shield, CheckCircle, CalendarDays, UserRound, BriefcaseBusiness } from "lucide-react"; // Added more specific icons
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import IntegratedLoader from '@/components/IntegratedLoader';
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 import React from 'react';
 
 export default function AttendancePpePage() {
