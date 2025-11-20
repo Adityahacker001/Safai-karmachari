@@ -11,7 +11,7 @@ import { BookOpenText, CalendarCheck, ArrowLeft, Users, GraduationCap, UserRound
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import IntegratedLoader from '@/components/IntegratedLoader';
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 import React from 'react';
 
 export default function TrainingAssignmentPage() {

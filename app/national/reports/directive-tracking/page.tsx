@@ -1,6 +1,7 @@
-'use client';
+"use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
+import IntegratedLoader from "@/components/layout/IntegratedLoader";
 import { Button } from "@/components/ui/button";
 import { Eye, Plus, Send, FileText } from "lucide-react";
 import { contractorTheme } from "@/lib/theme";
@@ -75,6 +76,14 @@ export default function DirectiveTrackingReportPage() {
 	const [showModal, setShowModal] = useState(false);
 
 	// Summary counts
+	const [loading, setLoading] = React.useState(true);
+	React.useEffect(() => {
+		const timer = setTimeout(() => setLoading(false), 800);
+		return () => clearTimeout(timer);
+	}, []);
+	if (loading) {
+		return <IntegratedLoader />;
+	}
 	const highPriorityCount = sentDirectives.filter((d) => d.priority === "High").length;
 
 	return (

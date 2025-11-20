@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 import { MessageCircle, CheckCircle, Clock, AlertTriangle, Eye, Filter, User, MapPin, Calendar, Flag, X, ArrowLeft } from 'lucide-react';
 
 // --- Helper components defined within the file ---
@@ -93,6 +94,12 @@ const KPICard = ({ title, value, icon: Icon, color }: KPICardProps) => {
 
 
 export default function Grievances() {
+  // Loader state
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 800); // Loader duration (adjust as needed)
+    return () => clearTimeout(timer);
+  }, []);
   const [selectedState, setSelectedState] = useState<string | null>(null);
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
   const [selectedGrievanceId, setSelectedGrievanceId] = useState<string | null>(null);
@@ -296,6 +303,13 @@ export default function Grievances() {
     return <span className={`${priorityStyles[value]}`}>{value}</span>;
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen p-3 sm:p-4 md:p-6 lg:p-8 flex items-center justify-center">
+        <IntegratedLoader />
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen p-3 sm:p-4 md:p-6 lg:p-8 space-y-4 sm:space-y-6 md:space-y-8">
       {/* Professional Header */}

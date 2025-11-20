@@ -1,5 +1,5 @@
 "use client";
-import IntegratedLoader from '@/components/IntegratedLoader';
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 import React, { useState } from 'react';
 import { 
     Download, 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -13,8 +13,6 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import StatCard from "@/components/ui/stat-card";
-
-// Icons
 import {
   BookOpen,
   Wallet,
@@ -25,6 +23,7 @@ import {
   TrendingUp,
   Download
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 // Mock Data
 const compensationData = [
@@ -40,10 +39,23 @@ const schemeData = [
 ];
 
 export default function FinancialTrackerPage() {
+  const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState(0);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 800); // Loader shows for 800ms
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    const IntegratedLoader = require("@/components/layout/IntegratedLoader").default;
+    return <IntegratedLoader />;
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
+    <div className={cn("min-h-screen w-full p-0")}> 
       {/* Header Card */}
       <div className="bg-gradient-to-r from-blue-500 via-blue-600 to-purple-600 rounded-2xl p-6 sm:p-8 mb-6 text-white">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">

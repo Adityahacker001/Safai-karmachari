@@ -6,11 +6,20 @@ import { Badge } from "@/components/ui/badge";
 import { Download, Eye } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import React, { useState } from "react";
-import { contractorTheme as theme } from "@/lib/theme";
+import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
 export default function IncidentReportPage() {
+  const [selectedIncident, setSelectedIncident] = useState<any | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 800); // Loader shows for 800ms
+    return () => clearTimeout(timer);
+  }, []);
+
   const incidents = [
     { 
       id: 'CASE-001', 
@@ -69,32 +78,30 @@ export default function IncidentReportPage() {
     },
   ];
 
-  const [selectedIncident, setSelectedIncident] = useState<any | null>(null);
+  if (loading) {
+    const IntegratedLoader = require("@/components/layout/IntegratedLoader").default;
+    return <IntegratedLoader />;
+  }
 
   return (
-    <div className={cn("min-h-screen w-full p-0", theme.page.gradientBackground)}>
+    <div className={cn("min-h-screen w-full p-0")}> 
       <div className="py-8 px-4 sm:px-8 md:px-12 lg:px-24 xl:px-32 space-y-8 w-full">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        {/* ...existing code... */}
+        <div className="rounded-2xl bg-gradient-to-r from-blue-500 via-blue-600 to-purple-600 p-6 sm:p-8 mb-6 text-white flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-4xl font-extrabold bg-gradient-to-r from-indigo-600 via-pink-600 to-yellow-500 bg-clip-text text-transparent">
-              Incident Management
-            </h2>
-            <p className="text-gray-600 mt-1">
-              Analyze incident trends and review historical case data for your zone.
-            </p>
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold">Incident Management</h1>
+            <p className="text-blue-100 mt-2 text-sm sm:text-base lg:text-lg">Analyze incident trends and review historical case data for your zone.</p>
           </div>
-          <div className="flex items-center space-x-2 mt-4 sm:mt-0">
-            <Button className={theme.button.secondary}>
-              <Download className="h-4 w-4 mr-2" />
-              Export Report (CSV)
-            </Button>
-          </div>
+          <Button className="mt-4 sm:mt-0 bg-white text-blue-600 hover:bg-blue-50 font-semibold">
+            <Download className="h-4 w-4 mr-2" />
+            Export Report (CSV)
+          </Button>
         </div>
 
-        <Card className={theme.card.container}>
-          <CardHeader className={theme.card.header}>
-            <CardTitle className={theme.card.title}>Historical Incident Log</CardTitle>
-            <CardDescription className={theme.card.description}>
+        <Card className="border border-gray-300 rounded-lg shadow-sm">
+          <CardHeader className="bg-gray-50 p-4 sm:p-6 rounded-t-lg">
+            <CardTitle className="text-lg sm:text-xl font-semibold text-gray-800">Historical Incident Log</CardTitle>
+            <CardDescription className="text-gray-600 text-sm sm:text-base">
               Complete record of all verified incidents in your zone.
             </CardDescription>
           </CardHeader>

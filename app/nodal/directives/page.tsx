@@ -1,5 +1,6 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 import DataTable from '@/components/ui/data-table';
 import StatCard from '@/components/ui/stat-card';
 import { FileText, Send, Inbox, Plus } from 'lucide-react';
@@ -17,6 +18,14 @@ interface Directive {
 const Directives = () => {
   const [activeTab, setActiveTab] = useState('received');
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1200); // Loader visible for 1.2s or until UI is ready
+    return () => clearTimeout(timer);
+  }, []);
 
   const receivedDirectives = [
     {
@@ -243,6 +252,10 @@ const Directives = () => {
       )
     },
   ];
+
+  if (loading) {
+    return <IntegratedLoader />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">

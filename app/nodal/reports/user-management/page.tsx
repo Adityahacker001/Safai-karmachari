@@ -1,11 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import DataTable from "@/components/ui/data-table";
 import StatCard from "@/components/ui/stat-card";
 import { Users, UserCheck, UserX, Clock } from "lucide-react";
 
-const UserManagement = () => {
+export default function UserManagementReportPage() {
+  const [loading, setLoading] = useState(true);
+
   const users = [
     {
       userId: "USR-001",
@@ -44,6 +46,18 @@ const UserManagement = () => {
     { key: "status", header: "Status" },
     { key: "lastLogin", header: "Last Login" },
   ];
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 800); // Loader shows for 800ms
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    const IntegratedLoader = require("@/components/layout/IntegratedLoader").default;
+    return <IntegratedLoader />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
@@ -130,6 +144,4 @@ const UserManagement = () => {
       </div>
     </div>
   );
-};
-
-export default UserManagement;
+}

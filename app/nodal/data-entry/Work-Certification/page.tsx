@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -36,6 +37,7 @@ import {
 import StatCard from "@/components/ui/stat-card";
 
 // --- TYPESCRIPT INTERFACES ---
+import IntegratedLoader from "@/components/layout/IntegratedLoader";
 interface CertificationRequest {
     id: string;
     org: string;
@@ -61,6 +63,17 @@ const certificationRequests: CertificationRequest[] = [
 export default function WorkCertificationPage() {
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedRequest, setSelectedRequest] = useState<CertificationRequest | null>(null);
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 1200);
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (loading) {
+        return <IntegratedLoader />;
+    }
 
     const handleOpenModal = (request: CertificationRequest) => {
         setSelectedRequest(request);

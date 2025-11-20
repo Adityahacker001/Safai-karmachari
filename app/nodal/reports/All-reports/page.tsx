@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
@@ -293,6 +293,13 @@ const RegionalTable = ({ data, title }: RegionalTableProps) => {
 
 // --- MAIN PAGE COMPONENT ---
 export default function PerformanceReportsPage() {
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 800); // Loader shows for 800ms
+        return () => clearTimeout(timer);
+    }, []);
     const [activeMainTab, setActiveMainTab] = useState('contractors');
     const mainTabs = [
         { id: 'contractors', label: 'Contractors', icon: Building2 },
@@ -307,6 +314,10 @@ export default function PerformanceReportsPage() {
         }
     };
 
+    if (loading) {
+        const IntegratedLoader = require("@/components/layout/IntegratedLoader").default;
+        return <IntegratedLoader />;
+    }
     return (
         <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
             {/* Header Card */}
@@ -328,7 +339,7 @@ export default function PerformanceReportsPage() {
 
             <Card className="bg-white shadow-lg rounded-2xl overflow-hidden">
                 <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
-                     <div className="flex flex-wrap items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                         {mainTabs.map(tab => {
                             const Icon = tab.icon;
                             return ( <Button key={tab.id} variant="ghost" onClick={() => setActiveMainTab(tab.id)} className={cn("flex-auto justify-center text-center h-11 px-3 text-sm font-medium transition-all duration-300 rounded-lg", activeMainTab === tab.id ? 'bg-white/20 text-white font-bold shadow-md backdrop-blur-sm' : 'text-blue-100 hover:bg-white/10')}><Icon className="mr-2 h-5 w-5" /> {tab.label}</Button> );

@@ -1,10 +1,16 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import IntegratedLoader from '../../../../components/layout/IntegratedLoader';
 import { Filter, Download, Eye, CheckCircle, XCircle, Shield, User } from 'lucide-react';
 import StatCard from "@/components/ui/stat-card";
 
 // --- Main AuditLogs Component ---
 export default function AuditLogs() {
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        const timer = setTimeout(() => setLoading(false), 900);
+        return () => clearTimeout(timer);
+    }, []);
     const [selectedTimeRange, setSelectedTimeRange] = useState('7days');
 
     const auditData = [
@@ -50,8 +56,15 @@ export default function AuditLogs() {
             return <span className={`font-medium ${styles[role] || 'text-slate-500'}`}>{role}</span>;
         };
 
+    if (loading) {
+        return (
+            <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 min-h-screen flex items-center justify-center">
+                <IntegratedLoader />
+            </div>
+        );
+    }
     return (
-        <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">
+        <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen relative">
             {/* Enhanced Header */}
             <header className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl"></div>

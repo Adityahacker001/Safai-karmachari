@@ -50,7 +50,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import StatCard from "@/components/ui/stat-card";
-import IntegratedLoader from "@/components/IntegratedLoader";
+import IntegratedLoader from "@/components/layout/IntegratedLoader";
 import React, { useState, useEffect } from "react"; // Import React for useMemo
 
 export default function WorkerManagementReportPage() {

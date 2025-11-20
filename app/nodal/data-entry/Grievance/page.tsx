@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import IntegratedLoader from "@/components/layout/IntegratedLoader";
 import {
   Card,
   CardHeader,
@@ -18,6 +19,17 @@ import { Calendar, UploadCloud, ShieldCheck, FileText, Clock, CheckCircle2, Aler
 
 export default function GrievanceResolutionForm() {
   const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1200);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <IntegratedLoader />;
+  }
 
   // Mock data for statistics
   const grievanceStats = {
@@ -72,7 +84,6 @@ export default function GrievanceResolutionForm() {
       </div>
       <Card className="w-full max-w-5xl mx-auto shadow-lg rounded-2xl bg-white">
         <CardContent className="space-y-6 p-6 sm:p-8">
-
           {/* Case Information */}
           <section>
             <h3 className="text-lg font-semibold text-blue-700 mb-4">Case Information</h3>
@@ -189,3 +200,4 @@ export default function GrievanceResolutionForm() {
     </div>
   );
 }
+

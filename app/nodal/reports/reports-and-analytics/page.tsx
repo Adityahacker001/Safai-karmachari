@@ -1,9 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FileText, Download, Calendar, BarChart3 } from "lucide-react";
 
 const Reports = () => {
+  const [loading, setLoading] = useState(true);
+
   const reports = [
     {
       title: "Daily Attendance Report",
@@ -76,10 +78,22 @@ const Reports = () => {
     },
   ];
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 800); // Loader shows for 800ms
+    return () => clearTimeout(timer);
+  }, []);
+
   const handleDownload = (reportTitle: string, format: string) => {
     console.log(`Downloading ${reportTitle} in ${format} format`);
     alert(`Downloading ${reportTitle} as ${format}...`);
   };
+
+  if (loading) {
+    const IntegratedLoader = require("@/components/layout/IntegratedLoader").default;
+    return <IntegratedLoader />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">

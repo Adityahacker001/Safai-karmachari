@@ -1,5 +1,6 @@
 "use client";
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import IntegratedLoader from '../../../../components/layout/IntegratedLoader';
 import { Download, FileText, Calendar, BarChart3, ChevronRight, Eye, FileSpreadsheet } from 'lucide-react';
 
 // --- Re-defining components within the file for a self-contained structure ---
@@ -33,6 +34,11 @@ const StatCard = ({ title, value, icon: Icon, color }: StatCardProps) => {
 
 
 export default function Reports() {
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 900);
+    return () => clearTimeout(timer);
+  }, []);
   const preBuiltReports = [
     { title: 'Monthly Grievance Report', description: 'Comprehensive analysis of grievances by state and category.', type: 'PDF', lastGenerated: '2024-01-15', size: '2.4 MB', category: 'Grievances' },
     { title: 'Worker Welfare Statistics', description: 'PPE distribution, training completion, and scheme enrollment data.', type: 'Excel', lastGenerated: '2024-01-14', size: '1.8 MB', category: 'Welfare' },
@@ -66,8 +72,15 @@ export default function Reports() {
     console.log('Generating annual report...');
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen p-3 sm:p-4 md:p-6 lg:p-8 flex items-center justify-center">
+        <IntegratedLoader />
+      </div>
+    );
+  }
   return (
-    <div className="min-h-screen p-3 sm:p-4 md:p-6 lg:p-8 space-y-4 sm:space-y-6 md:space-y-8">
+    <div className="min-h-screen p-3 sm:p-4 md:p-6 lg:p-8 space-y-4 sm:space-y-6 md:space-y-8 relative">
       {/* Professional Header */}
       <header className="relative overflow-hidden bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl">
         <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>

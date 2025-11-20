@@ -17,22 +17,31 @@ import {
 import { ShieldCheck, Building2, Shield, ArrowLeft, Users, CheckCircle, AlertTriangle, FileCheck } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import IntegratedLoader from "@/components/layout/IntegratedLoader";
 import { contractorTheme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 
 export default function ComplianceChecklistPage() {
 
-    // State to manage which contractor is currently being audited
-    const [selectedContractor, setSelectedContractor] = useState<any | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [selectedContractor, setSelectedContractor] = useState<{id: string; name: string; lastAudit: string; status: string} | null>(null);
+  const contractors = [
+    { id: "C-123", name: "ABC Sanitation", lastAudit: "2025-07-15", status: "Compliant" },
+    { id: "C-124", name: "City Maintenance", lastAudit: "2025-06-20", status: "Compliant" },
+    { id: "C-125", name: "Rail Clean Services", lastAudit: "2025-07-22", status: "Compliant" },
+    { id: "C-126", name: "Municipal Services", lastAudit: "2025-05-10", status: "Action Required" },
+  ];
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1200);
+    return () => clearTimeout(timer);
+  }, []);
 
-    // Mock data for the contractors list
-    const contractors = [
-        { id: "C-123", name: "ABC Sanitation", lastAudit: "2025-07-15", status: "Compliant" },
-        { id: "C-124", name: "City Maintenance", lastAudit: "2025-06-20", status: "Compliant" },
-        { id: "C-125", name: "Rail Clean Services", lastAudit: "2025-07-22", status: "Compliant" },
-        { id: "C-126", name: "Municipal Services", lastAudit: "2025-05-10", status: "Action Required" },
-    ];
+  if (loading) {
+    return <IntegratedLoader />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">

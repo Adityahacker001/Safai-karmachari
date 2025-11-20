@@ -1,5 +1,7 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 import { contractorTheme } from '@/lib/theme';
 import { cn } from '@/lib/utils';
 import DashboardLayout from '@/components/layout/dashboard-layout';
@@ -99,6 +101,19 @@ const pieChartConfig = {
 } satisfies ChartConfig;
 
 export default function NodalDashboard() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1200); // Loader visible for 1.2s or until UI is ready
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <IntegratedLoader />;
+  }
+
   return (
     <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">
       <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6 lg:space-y-8">

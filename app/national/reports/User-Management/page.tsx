@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import IntegratedLoader from '../../../../components/layout/IntegratedLoader';
 import { Plus, Check, X, Edit2, UserPlus, Users, Clock } from 'lucide-react';
 import StatCard from "@/components/ui/stat-card";
 
@@ -48,6 +49,11 @@ const RoleBreakdownCard = ({ stats }: { stats: RoleBreakdownStats }) => (
 
 
 export default function UserManagement() {
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        const timer = setTimeout(() => setLoading(false), 900);
+        return () => clearTimeout(timer);
+    }, []);
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [newUser, setNewUser] = useState({ name: '', email: '', password: '', role: 'District', state: '', district: '' });
     const [addUserSuccess, setAddUserSuccess] = useState(false);
@@ -77,13 +83,20 @@ export default function UserManagement() {
             state: userData.filter(u => u.role === 'State').length,
             district: userData.filter(u => u.role === 'District').length,
             nodal: userData.filter(u => u.role === 'Nodal').length,
-        }
+        },
     };
 
     const Pill = ({ text, gradient }: { text: string; gradient: string }) => <span className={`px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs font-bold text-white shadow-sm bg-gradient-to-r ${gradient}`}>{text}</span>;
 
+    if (loading) {
+        return (
+            <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 min-h-screen flex items-center justify-center">
+                <IntegratedLoader />
+            </div>
+        );
+    }
     return (
-        <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">
+        <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen relative">
             {/* Enhanced Header */}
             <header className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl"></div>
@@ -113,7 +126,6 @@ export default function UserManagement() {
                     </div>
                 </div>
             </header>
-
             {/* Add User Form as Modal Overlay */}
             {showCreateModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm animate-fadeIn p-3 sm:p-4">
@@ -169,7 +181,6 @@ export default function UserManagement() {
                     </div>
                 </div>
             )}
-
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                 <StatCard
                     title="Total Users"
@@ -272,4 +283,4 @@ export default function UserManagement() {
             </div>
         </div>
     );
-};
+}

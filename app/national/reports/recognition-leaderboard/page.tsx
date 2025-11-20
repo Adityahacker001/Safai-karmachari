@@ -6,11 +6,52 @@ import StatCard from "@/components/ui/stat-card";
 import { Trophy, Star, BarChart2, Award, Users, Building } from "lucide-react";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useLayoutEffect } from "react";
+
+
+import IntegratedLoader from "@/components/layout/IntegratedLoader";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 export default function RecognitionLeaderboardPage() {
+    // Move all hooks to the top before any conditional return
+    const [loading, setLoading] = useState(true);
+    const chartRef = useRef<any>(null);
+    const [chartData, setChartData] = useState<any>({
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+        datasets: [],
+    });
+    useEffect(() => {
+        const timer = setTimeout(() => setLoading(false), 900); // Loader duration (adjust as needed)
+        return () => clearTimeout(timer);
+    }, []);
+    useLayoutEffect(() => {
+        let backgroundColor: string | CanvasGradient = 'rgba(59, 130, 246, 0.8)';
+        if (typeof window !== 'undefined' && chartRef.current && chartRef.current.ctx) {
+            const ctx = chartRef.current.ctx;
+            if (ctx && typeof ctx.createLinearGradient === 'function') {
+                const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+                gradient.addColorStop(0, 'rgba(59, 130, 246, 0.8)');
+                gradient.addColorStop(1, 'rgba(16, 185, 129, 0.8)');
+                backgroundColor = gradient;
+            }
+        }
+        setChartData({
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+            datasets: [{
+                label: 'Awards Granted',
+                data: [65, 59, 80, 81, 56, 55, 40, 92],
+                backgroundColor,
+                borderColor: 'rgba(59, 130, 246, 1)',
+                borderWidth: 1,
+                borderRadius: 5,
+                hoverBackgroundColor: 'rgba(59, 130, 246, 1)'
+            }],
+        });
+    }, []);
+    if (loading) {
+        return <IntegratedLoader />;
+    }
 
     // Mock Data (Unchanged)
     const topWorkers = [
@@ -35,44 +76,13 @@ export default function RecognitionLeaderboardPage() {
         { rank: 2, name: "Lucknow", state: "Uttar Pradesh", awards: 10 },
         { rank: 3, name: "Kolkata", state: "West Bengal", awards: 9 },
     ];
-    
-    
+
     const nationalAwards = [
         { category: "Best Performing State", winner: "State of Kerala" },
         { category: "Most Improved State", winner: "State of West Bengal" },
         { category: "Best District (Innovation)", winner: "Pune District, Maharashtra" },
         { category: "National Safai Karmachari of the Year", winner: "Ram Singh (East Delhi)" },
     ];
-
-    // --- Logic for Chart Gradient ---
-    const chartRef = useRef<any>(null);
-    const [chartData, setChartData] = useState<any>({
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-        datasets: [],
-    });
-
-    useEffect(() => {
-        const chart = chartRef.current;
-        if (!chart) return;
-        const ctx = chart.ctx;
-        const canvas = chart.canvas;
-        if (!ctx || !canvas) return;
-        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-        gradient.addColorStop(0, 'rgba(59, 130, 246, 0.8)');
-        gradient.addColorStop(1, 'rgba(16, 185, 129, 0.8)');
-        setChartData({
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-            datasets: [{
-                label: 'Awards Granted',
-                data: [65, 59, 80, 81, 56, 55, 40, 92],
-                backgroundColor: gradient,
-                borderColor: 'rgba(59, 130, 246, 1)',
-                borderWidth: 1,
-                borderRadius: 5,
-                hoverBackgroundColor: 'rgba(59, 130, 246, 1)'
-            }],
-        });
-    }, []);
 
     const renderRank = (rank: number) => {
         switch (rank) {
@@ -82,7 +92,6 @@ export default function RecognitionLeaderboardPage() {
             default: return <span className="font-bold text-lg">{rank}</span>;
         }
     };
-
     return (
         <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">
             {/* Enhanced Header */}
@@ -336,7 +345,6 @@ export default function RecognitionLeaderboardPage() {
             <CardContent className="p-4 sm:p-6">
                 <div className="h-80 relative">
                     <Bar
-                        ref={chartRef}
                         data={chartData}
                         options={{
                             responsive: true,
@@ -353,10 +361,11 @@ export default function RecognitionLeaderboardPage() {
                                 },
                             }
                         }}
+                        ref={chartRef}
                     />
                 </div>
             </CardContent>
         </Card>
     </div>
-    );
+    )
 }

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import DataTable from '@/components/ui/data-table';
 import StatCard from '@/components/ui/stat-card';
 import { FileText, Send, Inbox, Plus } from 'lucide-react';
-import IntegratedLoader from '@/components/IntegratedLoader';
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 
 interface Directive {
   directiveId: string;

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import IntegratedLoader from "@/components/layout/IntegratedLoader";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
@@ -343,6 +344,14 @@ export default function PerformanceReportsPage() {
     const [activeMainTab, setActiveMainTab] = useState('contractors');
     const mainTabs = [ { id: 'contractors', label: 'Contractors', icon: Building2 }, { id: 'workers', label: 'Workers', icon: Users }, { id: 'nodals', label: 'Nodal Officers', icon: ShieldCheck }, { id: 'states', label: 'States', icon: Map }, { id: 'districts', label: 'Districts', icon: MapPin }, ];
 
+    const [loading, setLoading] = React.useState(true);
+    React.useEffect(() => {
+        const timer = setTimeout(() => setLoading(false), 800);
+        return () => clearTimeout(timer);
+    }, []);
+    if (loading) {
+        return <IntegratedLoader />;
+    }
     const renderContent = () => {
         switch (activeMainTab) {
             case 'contractors': return <PerformanceTabContent goodData={goodContractors} badData={badContractors} type="Contractor" />;
