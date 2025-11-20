@@ -263,6 +263,12 @@ const ActivityItem: React.FC<ActivityItemProps> = ({ icon: Icon, title, descript
 // Sab components ko ek saath laane wala main component
 
 const NskfdcProfilePage = () => {
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1200);
+    return () => clearTimeout(t);
+  }, []);
   // Sections ke liye Refs
   const profileRef = useRef<HTMLElement>(null);
   const accessRef = useRef<HTMLElement>(null);
@@ -286,6 +292,35 @@ const NskfdcProfilePage = () => {
     { module: 'Annual Report Module', access: 'Generate / Submit', reports: 'View / Download' },
     { module: 'User Management', access: 'View Only', reports: 'N/A' },
   ];
+
+  if (loading) {
+    return (
+      <div className="w-full h-full flex items-center justify-center min-h-[60vh]">
+        <style jsx>{`
+          .loader {
+            --c: no-repeat linear-gradient(#4f46e5 0 0);
+            background: 
+              var(--c),var(--c),var(--c),
+              var(--c),var(--c),var(--c),
+              var(--c),var(--c),var(--c);
+            background-size: 16px 16px;
+            animation: 
+              l32-1 1s infinite,
+              l32-2 1s infinite;
+          }
+          @keyframes l32-1 {
+            0%,100% {width:45px;height: 45px}
+            35%,65% {width:65px;height: 65px}
+          }
+          @keyframes l32-2 {
+            0%,40%  {background-position: 0 0,0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,  50% 50% }
+            60%,100%{background-position: 0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,0 0,  50% 50% }
+          }
+        `}</style>
+        <div className="loader"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white font-sans text-slate-800">
