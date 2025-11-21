@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 import { motion, AnimatePresence } from 'framer-motion';
 import StatCard from '@/components/ui/stat-card';
 import {
@@ -409,6 +410,8 @@ const labelFunction = ({ name, percent }: { name: string; percent: number }) => 
 // --- MAIN PAGE COMPONENT ---
 export default function DirectionReport() {
   const [hasMounted, setHasMounted] = useState(false);
+  // Show the integrated loader while the page initializes (consistent with other pages)
+  const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     district: "All Districts",
     issuedBy: "All Authorities",
@@ -419,7 +422,11 @@ export default function DirectionReport() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedDirection, setSelectedDirection] = useState<Direction | null>(null);
 
-  useEffect(() => { setHasMounted(true); }, []);
+  useEffect(() => { 
+    setHasMounted(true);
+    const t = setTimeout(() => setLoading(false), 700);
+    return () => clearTimeout(t);
+  }, []);
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -464,12 +471,9 @@ export default function DirectionReport() {
   
   const totalPages = Math.ceil(filteredDirections.length / 10);
 
-  if (!hasMounted) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 size={48} className="animate-spin text-blue-700" />
-      </div>
-    );
+  // Use the shared IntegratedLoader while mounting or loading
+  if (!hasMounted || loading) {
+    return <IntegratedLoader />;
   }
 
   return (

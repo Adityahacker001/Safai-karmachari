@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Users, UserPlus, Edit, Trash2, CheckCircle, Clock, XCircle, Save, X, User, Calendar, CreditCard, Briefcase, GraduationCap, Building2 } from "lucide-react";
+import IntegratedLoader from "@/components/layout/IntegratedLoader";
 
 interface SHGMember {
   id: string;
@@ -130,6 +131,16 @@ export default function MyShgMembersPage() {
     if (!confirm("Delete member? This action cannot be undone.")) return;
     setMembers((m) => m.filter((x) => x.id !== id));
   };
+
+  const [hasMounted, setHasMounted] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
+  React.useEffect(() => setHasMounted(true), []);
+  React.useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 700);
+    return () => clearTimeout(t);
+  }, []);
+
+  if (!hasMounted || loading) return <IntegratedLoader />;
 
   return (
     <div className="p-4 sm:p-6 lg:p-8">

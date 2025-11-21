@@ -4,7 +4,8 @@
 
 'use client'; // For Next.js App Router
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import IntegratedLoader from "@/components/layout/IntegratedLoader";
 import {
   ResponsiveContainer, PieChart, Pie, Cell, Tooltip as RechartsTooltip, Legend,
   BarChart, Bar, XAxis, YAxis, CartesianGrid, AreaChart, Area
@@ -132,6 +133,11 @@ const formatCurrency = (amount: number) => amount.toLocaleString('en-IN', { styl
 // --- Main Page Component ---
 const MyFinancesPage = () => {
   const [activeTab, setActiveTab] = useState<'salary' | 'assets' | 'revenue'>('salary');
+  // Page-level loader: mount-aware so loader is visible on first client render
+  const [hasMounted, setHasMounted] = useState(false);
+  useEffect(() => setHasMounted(true), []);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => { const t = setTimeout(() => setLoading(false), 700); return () => clearTimeout(t); }, []);
   
   // Chart Data
   const repaymentData = [
@@ -145,6 +151,9 @@ const MyFinancesPage = () => {
   ];
   
   const loanProgressPercent = (MOCK_SUMMARY.repaid / MOCK_SUMMARY.loanSanctioned) * 100;
+
+  // Render shared integrated loader while mounting or during short simulated loading
+  if (!hasMounted || loading) return <IntegratedLoader />;
 
   return (
   <div className="min-h-screen p-4 md:p-8 font-sans animate-fade-in">

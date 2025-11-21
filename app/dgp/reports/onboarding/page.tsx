@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   ChevronRight as ChevronRightIcon,
@@ -27,6 +27,8 @@ import {
   X
 } from 'lucide-react';
 import StatCard from '@/components/ui/stat-card';
+
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 
 // --- MOCK DATA & OPTIONS ---
 
@@ -236,6 +238,13 @@ const ThSortable: React.FC<ThSortableProps> = ({ sortKey, title, handleSort, sor
 // --- MAIN PAGE COMPONENT ---
 export default function DGPOnboardingReport() {
 
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 700);
+    return () => clearTimeout(t);
+  }, []);
+
+
   // Filter & Search State
   const [filters, setFilters] = useState({
     district: 'All',
@@ -357,6 +366,8 @@ export default function DGPOnboardingReport() {
     return sortConfig.direction === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />;
   };
  
+  if (loading) return <IntegratedLoader />;
+
   return (
     <>
       <motion.div

@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 import StatCard from '@/components/ui/stat-card';
 import {
   Home,
@@ -628,43 +629,42 @@ const Pagination = () => (
 /**
  * Main App Component
  */
-export default function App() {
+export default function WorkersReportPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedWorker, setSelectedWorker] = useState<typeof mockWorkers[0] | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-
-  const handleViewDetails = (worker: typeof mockWorkers[0]) => {
-    setSelectedWorker(worker);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedWorker(null);
-  };
-
-  const handleResetFilters = () => {
-    setSearchTerm('');
-  };
-
+  // --- IntegratedLoader logic (no bg, no transparency) ---
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
   return (
     <div className="min-h-screen p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 font-inter">
-      <div className="max-w-screen-2xl mx-auto">
-        <Header />
-        <SummaryCards />
-        <FilterPanel searchTerm={searchTerm} setSearchTerm={setSearchTerm} handleResetFilters={handleResetFilters} />
-        <WorkersTable onViewDetails={handleViewDetails} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-        <Pagination />
-        <div className="mt-6 text-center text-xs text-gray-500">
-          Data verified by DGP Office
-        </div>
+      <div className="max-w-screen-2xl mx-auto relative">
+        {loading && (
+          <div className="absolute inset-0 z-50 flex items-center justify-center" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <IntegratedLoader />
+          </div>
+        )}
+        {!loading && (
+          <>
+            <Header />
+            <SummaryCards />
+            <FilterPanel searchTerm={searchTerm} setSearchTerm={setSearchTerm} handleResetFilters={() => setSearchTerm('')} />
+            <WorkersTable onViewDetails={worker => { setSelectedWorker(worker); setIsModalOpen(true); }} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+            <Pagination />
+            <div className="mt-6 text-center text-xs text-gray-500">
+              Data verified by DGP Office
+            </div>
+          </>
+        )}
       </div>
       <WorkerDetailModal
         isOpen={isModalOpen}
-        onClose={handleCloseModal}
+        onClose={() => { setIsModalOpen(false); setSelectedWorker(null); }}
         worker={selectedWorker}
       />
-
       {/* --- Global Styles --- */}
       <style jsx global>{`
         /* Form Input Styling */

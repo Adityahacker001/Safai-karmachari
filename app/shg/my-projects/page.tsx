@@ -2,9 +2,10 @@
 // Ensure you have React, TailwindCSS, and lucide-react installed:
 // npm install lucide-react
 
-'use client'; // For Next.js App Router
+"use client"; // For Next.js App Router
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import IntegratedLoader from "@/components/layout/IntegratedLoader";
 import {
   LayoutDashboard, ChevronRight, Briefcase, PlusCircle, CheckCircle, Clock,
   DollarSign, BarChart3, ListFilter, Search, X, Eye, Edit, Trash2, FileText,
@@ -127,6 +128,41 @@ const MyProjectsPage = () => {
     year: 'All',
   });
 
+  // Ensure a visible page-level loader on first client render
+  const [hasMounted, setHasMounted] = useState(false);
+  useEffect(() => setHasMounted(true), []);
+
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 700);
+    return () => clearTimeout(t);
+  }, []);
+
+  // --- Summary Metrics Calculation (hook) ---
+  const summary = useMemo(() => ({
+    total: MOCK_PROJECT_DATA.length,
+    active: MOCK_PROJECT_DATA.filter(p => p.status === 'Active').length,
+    completed: MOCK_PROJECT_DATA.filter(p => p.status === 'Completed').length,
+    pending: MOCK_PROJECT_DATA.filter(p => p.status === 'Pending Approval').length,
+  }), []);
+
+  // --- Filtering Logic (hook) ---
+  const filteredProjects = useMemo(() => {
+    return MOCK_PROJECT_DATA.filter(project => {
+      const matchesSearch = searchTerm === '' ||
+                            project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            project.scheme.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesStatus = filters.status === 'All' || project.status === filters.status;
+      const matchesScheme = filters.scheme === 'All' || project.scheme === filters.scheme;
+      // Basic year check on startDate
+      const matchesYear = filters.year === 'All' || project.startDate.includes(filters.year);
+
+      return matchesSearch && matchesStatus && matchesScheme && matchesYear;
+    });
+  }, [searchTerm, filters]);
+
+  if (!hasMounted || loading) return <IntegratedLoader />;
+
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFilters(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -136,20 +172,6 @@ const MyProjectsPage = () => {
     setSearchTerm('');
   };
 
-  // --- Filtering Logic ---
-  const filteredProjects = useMemo(() => {
-    return MOCK_PROJECT_DATA.filter(project => {
-      const matchesSearch = searchTerm === '' || 
-                            project.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                            project.scheme.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesStatus = filters.status === 'All' || project.status === filters.status;
-      const matchesScheme = filters.scheme === 'All' || project.scheme === filters.scheme;
-      // Basic year check on startDate
-      const matchesYear = filters.year === 'All' || project.startDate.includes(filters.year); 
-
-      return matchesSearch && matchesStatus && matchesScheme && matchesYear;
-    });
-  }, [searchTerm, filters]);
 
   // --- Mock Actions ---
   const handleView = (id: number) => alert(`View Project ID: ${id}`);
@@ -163,12 +185,7 @@ const MyProjectsPage = () => {
   const handleAddNew = () => alert('Navigate to Add New Project Form');
 
   // --- Summary Metrics Calculation ---
-  const summary = useMemo(() => ({
-    total: MOCK_PROJECT_DATA.length,
-    active: MOCK_PROJECT_DATA.filter(p => p.status === 'Active').length,
-    completed: MOCK_PROJECT_DATA.filter(p => p.status === 'Completed').length,
-    pending: MOCK_PROJECT_DATA.filter(p => p.status === 'Pending Approval').length,
-  }), []);
+  
 
 
   return (

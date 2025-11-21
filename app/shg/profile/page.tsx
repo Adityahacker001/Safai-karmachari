@@ -42,6 +42,8 @@ import {
   BellRing,
 } from "lucide-react";
 
+import IntegratedLoader from "@/components/layout/IntegratedLoader";
+
 // --- Interfaces ---
 interface SHGInfo {
   groupName: string;
@@ -275,6 +277,8 @@ export default function SHGProfilePage() {
 
   const [lastLogin, setLastLogin] = useState<string>("23 Nov 2024, 05:30 PM");
 
+  const [loading, setLoading] = useState(true);
+
   // --- Placeholder Event Handlers ---
   const handleAddMember = () => console.log("Add Member clicked");
   const handleEditMember = (id: string) => console.log("Edit Member:", id);
@@ -301,8 +305,15 @@ export default function SHGProfilePage() {
     setLastLogin(`${formattedDate}, ${formattedTime}`);
   }, []);
 
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 700);
+    return () => clearTimeout(t);
+  }, []);
+
+  if (loading) return <IntegratedLoader />;
+
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-8 bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 min-h-screen">
+    <div className="p-4 sm:p-6 lg:p-8 space-y-8 min-h-screen">
       {/* Header banner — match District Dashboard style */}
       <div className="w-full bg-gradient-to-r from-[#3b82f6] via-[#8b5cf6] to-[#ec4899] rounded-xl p-8 sm:p-10 shadow-2xl text-white mb-8 min-h-[96px] flex items-center">
         <div>

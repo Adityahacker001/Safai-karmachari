@@ -6,7 +6,8 @@
 
 'use new'; // For Next.js App Router
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 import {
   ResponsiveContainer, PieChart, Pie, Cell, Tooltip as RechartsTooltip, Legend,
   BarChart, Bar, XAxis, YAxis, CartesianGrid, LineChart, Line
@@ -263,6 +264,19 @@ const RaiseAVoicePage = () => {
     resolved: MOCK_GRIEVANCES.filter(g => g.status === 'Resolved').length,
     avgTime: 21, // Mock avg resolution time
   }), []);
+
+  // Mount-aware loader: ensure loader is visible on first client render
+  const [hasMounted, setHasMounted] = useState(false);
+  useEffect(() => setHasMounted(true), []);
+
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 700);
+    return () => clearTimeout(t);
+  }, []);
+
+  // Keep hooks above early-return to avoid hook-order issues
+  if (!hasMounted || loading) return <IntegratedLoader />;
 
   return (
   <div className="min-h-screen p-4 md:p-8 font-sans animate-fade-in">

@@ -4,7 +4,7 @@
 
 'use client'; // For Next.js App Router
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   ResponsiveContainer, PieChart, Pie, Cell, Tooltip as RechartsTooltip, Legend,
   LineChart, Line, XAxis, YAxis, CartesianGrid, BarChart, Bar
@@ -19,6 +19,7 @@ import {
 import { Trash2, HandCoins, ListChecks, Download } from 'lucide-react';
 import { Button as GradientButton } from '@/components/ui/button';
 import StatCard from '@/components/ui/stat-card';
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 
 // --- Mock Data ---
 
@@ -180,6 +181,12 @@ const MonthlyUtilizationReportPage = () => {
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [uploadContext, setUploadContext] = useState({ month: '', scheme: '' });
 
+  // Mount-aware loader: keep hooks declared in stable order and show loader on first client mount
+  const [hasMounted, setHasMounted] = useState(false);
+  useEffect(() => { setHasMounted(true); }, []);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => { const t = setTimeout(() => setLoading(false), 700); return () => clearTimeout(t); }, []);
+
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => { setFilters(prev => ({ ...prev, [e.target.name]: e.target.value })); };
   const clearFilters = () => { setFilters({ financialYear: '', month: '', schemeName: '', district: '', dateFrom: '', dateTo: '' }); setCurrentPage(1); setSortConfig(null); };
   const applyFilters = () => setCurrentPage(1);
@@ -216,6 +223,11 @@ const MonthlyUtilizationReportPage = () => {
 
   const openUploadModal = (month: string, scheme: string) => { setUploadContext({ month, scheme }); setIsUploadModalOpen(true); };
   const closeUploadModal = () => setIsUploadModalOpen(false);
+
+  // Guarded early-return AFTER all hooks to avoid mismatched hooks error
+  if (!hasMounted || loading) {
+    return <IntegratedLoader />;
+  }
 
   return (
     <div className="min-h-screen p-4 md:p-8 font-sans animate-fade-in">

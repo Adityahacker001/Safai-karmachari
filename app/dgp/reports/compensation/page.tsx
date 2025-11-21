@@ -3,6 +3,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import StatCard from '@/components/ui/stat-card';
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 import {
   Home,
   ChevronRight,
@@ -429,6 +430,7 @@ const CompensationDetailModal = ({ caseData, onClose }: { caseData: Compensation
 // --- MAIN PAGE COMPONENT ---
 export default function CompensationReport() {
   const [hasMounted, setHasMounted] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     district: "All Districts",
     policeStation: "All Police Stations",
@@ -440,7 +442,11 @@ export default function CompensationReport() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCase, setSelectedCase] = useState<CompensationCase | null>(null);
 
-  useEffect(() => { setHasMounted(true); }, []);
+  useEffect(() => { 
+    setHasMounted(true);
+    const t = setTimeout(() => setLoading(false), 700);
+    return () => clearTimeout(t);
+  }, []);
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -491,12 +497,8 @@ export default function CompensationReport() {
   
   const totalPages = Math.ceil(filteredCases.length / 10);
 
-  if (!hasMounted) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 size={48} className="animate-spin text-blue-700" />
-      </div>
-    );
+  if (!hasMounted || loading) {
+    return <IntegratedLoader />;
   }
 
   return (
