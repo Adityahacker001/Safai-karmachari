@@ -44,7 +44,7 @@ export default function GrievanceEntryPage() {
   return (
     <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">
       {/* Enhanced Header */}
-      <header className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative">
+      <header className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative rounded-xl sm:rounded-2xl overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl"></div>
         <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 rounded-xl sm:rounded-2xl"></div>
         <div className="relative p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col gap-2 sm:gap-3">
@@ -58,7 +58,7 @@ export default function GrievanceEntryPage() {
       </header>
 
       <Card className="w-full bg-white/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl overflow-hidden">
-        <CardHeader className="p-4 sm:p-6 bg-gradient-to-r from-red-600/90 to-orange-600/90 text-white">
+        <CardHeader className="p-4 sm:p-6 bg-gradient-to-r from-red-600/90 to-orange-600/90 text-white rounded-t-xl sm:rounded-t-2xl rounded-b-xl sm:rounded-b-2xl">
           <CardTitle className="text-lg sm:text-xl md:text-2xl font-bold">
             <span className="break-words">New Grievance Form</span>
           </CardTitle>
@@ -132,7 +132,7 @@ export default function GrievanceEntryPage() {
             </div>
           </form>
         </CardContent>
-        <CardFooter className="flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4 p-4 sm:p-6 pt-4 border-t border-gray-200">
+        <CardFooter className="flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4 p-4 sm:p-6 pt-4 border-t border-gray-200 rounded-b-xl sm:rounded-b-2xl">
           <Button type="submit" className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold text-lg sm:text-xl py-2.5 sm:py-3.5 px-8 sm:px-10 rounded-lg sm:rounded-xl shadow-xl transition-all duration-400 ease-in-out transform hover:scale-105 hover:shadow-2xl order-1">
             <MessageSquarePlus className="h-5 w-5 sm:h-6 sm:w-6 mr-2 sm:mr-3" />
             Submit Grievance

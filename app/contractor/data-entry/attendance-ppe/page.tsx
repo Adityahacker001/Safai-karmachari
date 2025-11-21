@@ -27,7 +27,7 @@ export default function AttendancePpePage() {
     return (
         <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">
             {/* Enhanced Header */}
-            <header className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative">
+            <header className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative rounded-xl sm:rounded-2xl overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl"></div>
                 <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 rounded-xl sm:rounded-2xl"></div>
                 <div className="relative p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col gap-2 sm:gap-3">
@@ -62,8 +62,8 @@ export default function AttendancePpePage() {
 
                 {/* Attendance Log Tab Content */}
                 <TabsContent value="attendance" className="mt-6 sm:mt-8">
-                    <Card className="w-full bg-white/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl overflow-hidden">
-                        <CardHeader className="p-4 sm:p-6 bg-gradient-to-r from-blue-600/90 to-indigo-600/90 text-white">
+                        <Card className="w-full bg-white/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl overflow-hidden">
+                        <CardHeader className="p-4 sm:p-6 bg-gradient-to-r from-blue-600/90 to-indigo-600/90 text-white rounded-t-xl sm:rounded-t-2xl rounded-b-xl sm:rounded-b-2xl">
                             <CardTitle className="text-xl sm:text-2xl md:text-3xl font-bold">
                                 <span className="break-words">Log Worker Attendance</span>
                             </CardTitle>
@@ -140,7 +140,7 @@ export default function AttendancePpePage() {
                 {/* PPE Log Tab Content */}
                 <TabsContent value="ppe" className="mt-6 sm:mt-8">
                     <Card className="w-full bg-white/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl overflow-hidden">
-                        <CardHeader className="p-4 sm:p-6 bg-gradient-to-r from-purple-600/90 to-pink-600/90 text-white">
+                        <CardHeader className="p-4 sm:p-6 bg-gradient-to-r from-purple-600/90 to-pink-600/90 text-white rounded-t-xl sm:rounded-t-2xl rounded-b-xl sm:rounded-b-2xl">
                             <CardTitle className="text-xl sm:text-2xl md:text-3xl font-bold">
                                 <span className="break-words">Log PPE Distribution</span>
                             </CardTitle>

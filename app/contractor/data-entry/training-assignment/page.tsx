@@ -61,7 +61,7 @@ export default function TrainingAssignmentPage() {
     return (
         <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">
             {/* Enhanced Header */}
-            <header className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative">
+            <header className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative rounded-xl sm:rounded-2xl overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl"></div>
                 <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 rounded-xl sm:rounded-2xl"></div>
                 <div className="relative p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col gap-2 sm:gap-3">
@@ -76,7 +76,7 @@ export default function TrainingAssignmentPage() {
 
             {step === "list" && (
                 <Card className="bg-white/95 backdrop-blur-xl shadow-xl border border-white/20 rounded-3xl overflow-hidden">
-                    <CardHeader className="bg-gradient-to-r from-emerald-600/90 to-teal-600/90 text-white p-4 sm:p-6 md:p-8">
+                    <CardHeader className="bg-gradient-to-r from-emerald-600/90 to-teal-600/90 text-white p-4 sm:p-6 md:p-8 rounded-t-xl sm:rounded-t-2xl rounded-b-xl sm:rounded-b-2xl">
                         <CardTitle className="text-xl sm:text-2xl md:text-3xl font-bold flex items-center gap-3">
                             <BookOpenText className="h-6 w-6 sm:h-8 sm:w-8" />
                             Available Training Modules
@@ -125,7 +125,7 @@ export default function TrainingAssignmentPage() {
 
             {step === "assign" && selectedModule && (
                 <Card className="bg-white/95 backdrop-blur-xl shadow-xl border border-white/20 rounded-3xl overflow-hidden">
-                    <CardHeader className="bg-gradient-to-r from-purple-600/90 to-pink-600/90 text-white p-4 sm:p-6 md:p-8 flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between">
+                    <CardHeader className="bg-gradient-to-r from-purple-600/90 to-pink-600/90 text-white p-4 sm:p-6 md:p-8 flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between rounded-t-xl sm:rounded-t-2xl rounded-b-xl sm:rounded-b-2xl">
                         <div>
                             <CardTitle className="text-xl sm:text-2xl md:text-3xl font-bold flex items-center gap-3">
                                 <GraduationCap className="h-6 w-6 sm:h-8 sm:w-8" />

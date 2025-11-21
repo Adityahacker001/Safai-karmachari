@@ -320,9 +320,9 @@ export default function WorkerManagementReportPage() {
   return (
     <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">
       {/* Enhanced Header */}
-      <header className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl"></div>
-        <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 rounded-xl sm:rounded-2xl"></div>
+      <header className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative z-10 rounded-3xl sm:rounded-3xl overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-3xl sm:rounded-3xl border border-white/20 shadow-xl"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 rounded-3xl sm:rounded-3xl"></div>
         <div className="relative p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col space-y-2 sm:space-y-3 md:space-y-4">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
             <div>
@@ -382,7 +382,7 @@ export default function WorkerManagementReportPage() {
       </div>
 
       <Card className="bg-white/95 backdrop-blur-xl shadow-xl border border-white/20 rounded-3xl overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-emerald-600/90 to-teal-600/90 text-white p-4 sm:p-6 md:p-8">
+        <CardHeader className="bg-gradient-to-r from-emerald-600/90 to-teal-600/90 text-white p-4 sm:p-6 md:p-8 rounded-t-3xl sm:rounded-t-3xl rounded-b-3xl sm:rounded-b-3xl">
           <CardTitle className="text-3xl md:text-4xl font-bold">
             Master Worker Roster
           </CardTitle>

@@ -148,9 +148,9 @@ export default function SafetyComplianceReportPage() {
     return (
         <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">
             {/* Enhanced Header */}
-            <header className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl"></div>
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 rounded-xl sm:rounded-2xl"></div>
+            <header className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative z-50 rounded-t-3xl sm:rounded-t-3xl rounded-b-3xl sm:rounded-b-3xl overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-t-3xl sm:rounded-t-3xl rounded-b-3xl sm:rounded-b-3xl border border-white/20 shadow-xl"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 rounded-t-3xl sm:rounded-t-3xl rounded-b-3xl sm:rounded-b-3xl"></div>
                 <div className="relative p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col space-y-2 sm:space-y-3 md:space-y-4">
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
                         <div>
@@ -239,7 +239,7 @@ export default function SafetyComplianceReportPage() {
                 </Card>
             </div> */}
 
-            <Card className="w-full max-w-full sm:max-w-full md:max-w-6xl mx-auto bg-white/95 backdrop-blur-sm shadow-2xl border border-gray-100 rounded-2xl sm:rounded-3xl overflow-hidden transform transition-all duration-300 hover:scale-[1.005]">
+            <Card className="relative z-0 w-full max-w-full sm:max-w-full md:max-w-6xl mx-auto bg-white/95 backdrop-blur-sm shadow-2xl border border-gray-100 rounded-t-3xl sm:rounded-t-3xl rounded-2xl sm:rounded-3xl overflow-hidden transform transition-all duration-300 hover:scale-[1.005]">
                 <CardHeader className="p-4 sm:p-6 md:p-8 lg:p-10 bg-gradient-to-r from-blue-600 via-purple-500 via-pink-500 via-rose-400 to-yellow-400 text-white shadow-lg">
                     <CardTitle className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold">Daily Compliance Log</CardTitle>
                     <CardDescription className="text-white-300 mt-2 text-sm sm:text-base md:text-lg">
