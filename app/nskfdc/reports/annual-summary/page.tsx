@@ -30,6 +30,7 @@ import {
   Zap,
   AlertOctagon
 } from 'lucide-react';
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 
 // --- Mock Data ---
 
@@ -249,6 +250,11 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({ data, isOpen, onClose }) 
 
 // --- Main Page Component ---
 const AnnualReportSummaryPage = () => {
+  const [loading, setLoading] = useState(true);
+  React.useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1200);
+    return () => clearTimeout(t);
+  }, []);
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({ financialYear: '2024-25', state: '', district: '', schemeName: '', reportType: 'Summary', dateFrom: '', dateTo: '' });
   const [currentPage, setCurrentPage] = useState(1);
@@ -312,6 +318,10 @@ const AnnualReportSummaryPage = () => {
   // --- Modal ---
   const openModal = (item: any) => { setSelectedItem(item); setIsModalOpen(true); };
   const closeModal = () => setIsModalOpen(false);
+
+  if (loading) return (
+     <IntegratedLoader />
+  );
 
   return (
     <div className="min-h-screen p-4 md:p-8 font-sans">

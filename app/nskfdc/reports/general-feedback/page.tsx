@@ -15,6 +15,8 @@ import {
   SlidersHorizontal, ListFilter, Eye, Printer, BadgeCheck, BadgeHelp, Smile, MessageCircleWarning, BookOpen
 } from 'lucide-react';
 
+import IntegratedLoader from '../../../../components/layout/IntegratedLoader';
+
 // --- Mock Data ---
 
 const MOCK_FEEDBACK_DATA = [
@@ -286,16 +288,7 @@ const GeneralFeedbackReportPage = () => {
   // --- Modal Handlers ---
   const openModal = (item: any) => { setSelectedItem(item); setIsModalOpen(true); };
   const closeModal = () => setIsModalOpen(false);
-  if (loading) return (
-    <div className="w-full h-full flex items-center justify-center min-h-[60vh]">
-      <div className="loader" />
-      <style jsx>{`
-        .loader{width:45px;height:45px;border-radius:9999px;--_c:no-repeat linear-gradient(#4f46e5 0 0);background:var(--_c),var(--_c),var(--_c),var(--_c),var(--_c),var(--_c),var(--_c),var(--_c),var(--_c);background-size:16px 16px,16px 16px,16px 16px,16px 16px,16px 16px,16px 16px,16px 16px,16px 16px,16px 16px;animation:l32-1 1s infinite linear,l32-2 1s infinite linear}
-        @keyframes l32-1{0%{width:45px;height:45px}50%{width:65px;height:65px}100%{width:45px;height:45px}}
-        @keyframes l32-2{0%{background-position:0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0}100%{background-position:16px 16px,8px 8px,0 0,-8px -8px,-16px -16px,-24px -24px,-32px -32px,-40px -40px,-48px -48px}}
-      `}</style>
-    </div>
-  );
+  if (loading) return <IntegratedLoader />;
   return (
     <div className="min-h-screen w-full p-4 sm:p-6 lg:p-8 font-sans">
       <div className="w-full">

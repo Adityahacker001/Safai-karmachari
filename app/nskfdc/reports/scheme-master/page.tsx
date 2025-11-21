@@ -23,6 +23,7 @@ import {
   ChevronLeft,
   ChevronRight as ChevronRightIcon,
 } from 'lucide-react';
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 
 // --- Mock Data ---
 
@@ -232,6 +233,11 @@ const FormSelect: React.FC<{ label: string, name: string, value: string, onChang
 
 // --- Main Page Component ---
 const SchemeMasterReportPage = () => {
+  const [loading, setLoading] = useState(true);
+  React.useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1200);
+    return () => clearTimeout(t);
+  }, []);
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({
     schemeType: '',
@@ -337,6 +343,8 @@ const SchemeMasterReportPage = () => {
       </div>
     </th>
   );
+
+  if (loading) return <IntegratedLoader />;
 
   return (
     <div className="min-h-screen p-2 sm:p-4 md:p-8 font-sans">

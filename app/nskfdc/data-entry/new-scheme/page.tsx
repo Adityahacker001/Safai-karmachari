@@ -30,6 +30,8 @@ import {
   Loader2,
 } from 'lucide-react';
 
+import IntegratedLoader from '../../../../components/layout/IntegratedLoader';
+
 // --- Reusable Form Components ---
 
 // 1. Form Input Component
@@ -407,18 +409,7 @@ const NewSchemeEntryPage = () => {
   };
 
 
-  if (loading) {
-    return (
-      <div className="w-full h-full flex items-center justify-center min-h-[60vh]">
-        <style jsx global>{`
-          .loader{width:65px;height:65px;border-radius:12px;--c: no-repeat linear-gradient(#4f46e5 0 0);background: var(--c), radial-gradient(circle at 50% 0%, rgba(79,70,229,0.12) 0 20%, transparent 21%), linear-gradient(135deg, rgba(79,70,229,0.06) 0%, rgba(14,165,233,0.03) 100%);background-size:16px 16px, 100% 100%, 100% 100%;animation: l32-1 1s infinite linear, l32-2 1s infinite linear;display:inline-block}
-          @keyframes l32-1{0%{background-position:0 0,0 0,0 0}50%{background-position:16px 16px,0 0,0 0}100%{background-position:0 0,0 0,0 0}}
-          @keyframes l32-2{0%{transform:scale(.96)}50%{transform:scale(1.04)}100%{transform:scale(.96)}}
-        `}</style>
-        <div className="loader" />
-      </div>
-    );
-  }
+  if (loading) return <IntegratedLoader />;
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans">
