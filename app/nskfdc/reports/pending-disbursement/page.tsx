@@ -30,6 +30,8 @@ import {
   Timer
 } from 'lucide-react';
 
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
+
 // --- Mock Data ---
 
 const MOCK_PENDING_DATA = [
@@ -211,6 +213,11 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({ data, isOpen, onClose }) 
 
 // --- Main Page Component ---
 const PendingDisbursementReportPage = () => {
+  const [loading, setLoading] = useState(true);
+  React.useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1200);
+    return () => clearTimeout(t);
+  }, []);
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({ financialYear: '2025-2026', schemeName: '', benType: '', state: '', district: '', status: '' });
   const [currentPage, setCurrentPage] = useState(1);
@@ -270,6 +277,14 @@ const PendingDisbursementReportPage = () => {
   // --- Modal ---
   const openModal = (item: any) => { setSelectedItem(item); setIsModalOpen(true); };
   const closeModal = () => setIsModalOpen(false);
+  if (loading) return <IntegratedLoader />;
+
+  if (loading) return (
+    <div className="w-full h-full flex items-center justify-center min-h-[60vh]">
+      <style jsx global>{`\n      .loader {\n        width: 65px;\n        height: 65px;\n        display: block;\n        --c: no-repeat linear-gradient(#4f46e5 0 0);\n        background: \n          var(--c),var(--c),var(--c),\n          var(--c),var(--c),var(--c),\n          var(--c),var(--c),var(--c);\n        background-size: 16px 16px;\n        animation: \n          l32-1 1s infinite,\n          l32-2 1s infinite;\n      }\n      @keyframes l32-1 {\n        0%,100% {width:45px;height: 45px}\n        35%,65% {width:65px;height: 65px}\n      }\n      @keyframes l32-2 {\n        0%,40%  {background-position: 0 0,0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,  50% 50% }\n        60%,100%{background-position: 0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,0 0,  50% 50% }\n      }\n    `}</style>
+      <div className="loader"></div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen p-4 md:p-8 font-sans">

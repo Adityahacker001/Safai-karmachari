@@ -35,6 +35,8 @@ import {
   Info,
 } from 'lucide-react';
 
+import IntegratedLoader from '../../../../components/layout/IntegratedLoader';
+
 // --- Mock Data ---
 const mockSchemes = ['Safai Mitra Skill Loan Yojana', 'Rehabilitation Scheme', 'NSKFDC Grant Program'];
 const mockFinancialYears = ['2025-2026', '2024-2025', '2023-2024'];
@@ -351,6 +353,12 @@ const FundAllotmentPage = () => {
   const [files, setFiles] = useState<File[]>([]);
   const [errors, setErrors] = useState<Errors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  React.useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1200);
+    return () => clearTimeout(t);
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -414,6 +422,8 @@ const FundAllotmentPage = () => {
       console.log('Validation Failed:', errors);
     }
   };
+
+  if (loading) return <IntegratedLoader />;
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans">

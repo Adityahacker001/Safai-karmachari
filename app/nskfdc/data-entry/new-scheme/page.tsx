@@ -30,6 +30,8 @@ import {
   Loader2,
 } from 'lucide-react';
 
+import IntegratedLoader from '../../../../components/layout/IntegratedLoader';
+
 // --- Reusable Form Components ---
 
 // 1. Form Input Component
@@ -325,6 +327,12 @@ const NewSchemeEntryPage = () => {
   const [files, setFiles] = useState<File[]>([]);
   const [errors, setErrors] = useState<Errors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  React.useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1200);
+    return () => clearTimeout(t);
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -400,6 +408,8 @@ const NewSchemeEntryPage = () => {
     }
   };
 
+
+  if (loading) return <IntegratedLoader />;
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans">

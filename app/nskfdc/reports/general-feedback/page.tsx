@@ -15,6 +15,8 @@ import {
   SlidersHorizontal, ListFilter, Eye, Printer, BadgeCheck, BadgeHelp, Smile, MessageCircleWarning, BookOpen
 } from 'lucide-react';
 
+import IntegratedLoader from '../../../../components/layout/IntegratedLoader';
+
 // --- Mock Data ---
 
 const MOCK_FEEDBACK_DATA = [
@@ -222,6 +224,12 @@ const GeneralFeedbackReportPage = () => {
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
   const [isInsightsOpen, setIsInsightsOpen] = useState(false);
 
+  const [loading, setLoading] = useState(true);
+  React.useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1200);
+    return () => clearTimeout(t);
+  }, []);
+
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFilters(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -280,7 +288,7 @@ const GeneralFeedbackReportPage = () => {
   // --- Modal Handlers ---
   const openModal = (item: any) => { setSelectedItem(item); setIsModalOpen(true); };
   const closeModal = () => setIsModalOpen(false);
-
+  if (loading) return <IntegratedLoader />;
   return (
     <div className="min-h-screen w-full p-4 sm:p-6 lg:p-8 font-sans">
       <div className="w-full">

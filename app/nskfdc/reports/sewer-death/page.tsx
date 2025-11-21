@@ -35,6 +35,7 @@ import {
 } from 'recharts';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, RefreshCw, Filter as FilterIcon } from 'lucide-react';
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 
 /* -------------------------------------------------------------------------- */
 /* ALL YOUR EXISTING DATA AND LOGIC (UNCHANGED)                               */
@@ -140,8 +141,14 @@ export default function NskfdcSewerDeathPage() {
   const [toDate, setToDate] = useState<string>('');
   const [fir, setFir] = useState<'all' | 'yes' | 'no'>('all');
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  React.useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1200);
+    return () => clearTimeout(t);
+  }, []);
 
-  // YOUR EXISTING DERIVED STATE (UNCHANGED)
+  // Derived state must be declared before any early returns that would skip hooks.
+  // Move derived hooks here so hook order is consistent across renders.
   const filtered = useMemo(() => {
     return cases.filter((c) => {
       if (district !== 'All' && c.district !== district) return false;
@@ -189,6 +196,10 @@ export default function NskfdcSewerDeathPage() {
     };
   }, [cases]);
 
+  if (loading) return <IntegratedLoader />;
+
+  
+
   // YOUR EXISTING FUNCTIONS (UNCHANGED)
   function exportCSV() {
     alert('Export (placeholder) — implement export logic');
@@ -201,6 +212,7 @@ export default function NskfdcSewerDeathPage() {
   const tableHeaderStyle =
     'px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-white uppercase tracking-wider';
   const tableCellStyle = 'px-5 py-4 border-b border-gray-200 bg-white text-sm';
+  
 
   return (
     // Standard dashboard layout

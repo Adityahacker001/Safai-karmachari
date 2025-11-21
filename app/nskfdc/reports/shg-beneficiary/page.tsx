@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 import {
   Users,
   IndianRupee,
@@ -11,6 +12,14 @@ import {
 import StatCard from '@/components/ui/stat-card';
 
 const SHGBeneficiaryReport = (): JSX.Element => {
+  const [loading, setLoading] = React.useState(true);
+  React.useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1200);
+    return () => clearTimeout(t);
+  }, []);
+
+  if (loading) return <IntegratedLoader />;
+
   return (
     <div className="p-6 min-h-screen"> {/* removed page-level bg color as requested */}
       {/* District-style banner (title container) */}

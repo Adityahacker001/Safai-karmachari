@@ -16,6 +16,7 @@ import {
   Eye, Link as LinkIcon, Building2, UserCheck, Clock, FileText, CheckCheck, FileWarning, BadgeCheck, BadgeHelp, BadgeAlert,
   Printer, Mail, AlertOctagon, HelpCircle, Smile, MessageCircleWarning, MapPin, Target, Percent, BookOpen, Wallet, Calculator,
 } from 'lucide-react';
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 
 // --- Mock Data ---
 
@@ -226,6 +227,12 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({ data, isOpen, onClose }) 
 
 // --- Main Page Component ---
 const SchemeUtilizationPage = () => {
+  const [loading, setLoading] = useState(true);
+  React.useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1200);
+    return () => clearTimeout(t);
+  }, []);
+  // Declare UI state before any early returns to preserve hook order
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({ schemeName: '', financialYear: '', state: '', district: '', status: '', dateFrom: '', dateTo: '' });
   const [currentPage, setCurrentPage] = useState(1);
@@ -234,7 +241,7 @@ const SchemeUtilizationPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
   const [isInsightsOpen, setIsInsightsOpen] = useState(false);
-
+  // --- Data & UI handlers must be declared before any early returns so hooks run consistently
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFilters(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -295,6 +302,10 @@ const SchemeUtilizationPage = () => {
   const openModal = (item: any) => { setSelectedItem(item); setIsModalOpen(true); };
   const closeModal = () => setIsModalOpen(false);
 
+  /* duplicate loader return removed (top-level loader used earlier) */
+
+  // Show the canonical loader during initial mount
+  if (loading) return <IntegratedLoader />;
   return (
     <div className="min-h-screen p-4 md:p-8 font-sans">
       <div className="max-w-7xl mx-auto">
