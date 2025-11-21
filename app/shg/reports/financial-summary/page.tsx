@@ -4,7 +4,7 @@
 
 'use client'; // For Next.js App Router
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   ResponsiveContainer,
   PieChart,
@@ -49,6 +49,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import StatCard from '@/components/ui/stat-card';
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 
 // --- MOCK DATA & TYPES ---
 
@@ -397,6 +398,12 @@ const FinancialSummaryPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<FinancialRecord | null>(null);
 
+  // Mount-aware loader: ensure hooks run in stable order and loader is visible on client mount
+  const [hasMounted, setHasMounted] = useState(false);
+  useEffect(() => { setHasMounted(true); }, []);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => { const t = setTimeout(() => setLoading(false), 700); return () => clearTimeout(t); }, []);
+
   // --- Handlers ---
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFilters(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -521,6 +528,11 @@ const FinancialSummaryPage: React.FC = () => {
     hidden: { opacity: 0, y: 10 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' as const } },
   };
+
+  // Guarded return AFTER all hooks (useState/useEffect/useMemo) to avoid hook-order mismatch
+  if (!hasMounted || loading) {
+    return <IntegratedLoader />;
+  }
 
   return (
     <>

@@ -38,6 +38,7 @@ import {
   FileClock,
   Clock as ValidClock
 } from 'lucide-react';
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 
 // --- MOCK DATA ---
 const mockCaseData = {
@@ -370,6 +371,7 @@ const CardHeader: React.FC<CardHeaderProps> = ({ icon, title }) => (
 
 // --- MAIN PAGE COMPONENT ---
 export default function InvestigationProgressEntry() {
+
   // Form State
   const [district, setDistrict] = useState("dwarka");
   const [policeStation, setPoliceStation] = useState("ps-dwarka-n");
@@ -395,6 +397,13 @@ export default function InvestigationProgressEntry() {
     { name: "witness_statement_01.pdf", size: "0.8MB" },
   ]);
 
+  // Loader State (like example)
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
+
   // UI State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isToastVisible, setIsToastVisible] = useState(false);
@@ -413,350 +422,334 @@ export default function InvestigationProgressEntry() {
     setIsToastVisible(true); // Show success toast
   };
 
+  // UI is only visible after loading is false
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.8 }}
-      className="min-h-screen p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8"
-    >
-      {/* --- Enhanced Sticky Header --- */}
-      <header className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 border-b-4 border-gradient-to-r from-yellow-400 to-orange-500 shadow-2xl px-3 sm:px-4 md:px-6 lg:px-10 overflow-hidden">
-        <div className="absolute inset-0 bg-black/10"></div>
-        <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-purple-500/20"></div>
-        <div className="relative z-10 mx-auto max-w-7xl py-4 sm:py-6">
-          {/* Breadcrumb */}
-          <nav className="flex items-center text-xs sm:text-sm font-medium text-white/90 overflow-x-auto" aria-label="Breadcrumb">
-            <a href="#" className="hover:text-white transition-colors whitespace-nowrap flex items-center gap-1">
-              <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
-              DGP Dashboard
-            </a>
-            <ChevronRight size={12} className="mx-1.5 sm:hidden text-white/70" />
-            <ChevronRight size={16} className="hidden sm:block mx-2 text-white/70" />
-            <a href="#" className="hover:text-white transition-colors whitespace-nowrap flex items-center gap-1">
-              <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
-              Data Entry
-            </a>
-            <ChevronRight size={12} className="mx-1.5 sm:hidden text-white/70" />
-            <ChevronRight size={16} className="hidden sm:block mx-2 text-white/70" />
-            <span className="text-white font-bold whitespace-nowrap flex items-center gap-1">
-              <div className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse"></div>
-              Investigation Feedback
-            </span>
-          </nav>
-          {/* Title */}
-          <div className="flex items-start gap-4 mt-4">
-            <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 text-white shadow-2xl shadow-orange-500/40">
-              <ShieldCheck size={24} className="sm:hidden" />
-              <ShieldCheck size={32} className="hidden sm:block" />
+    <>
+      {loading ? (
+        <IntegratedLoader />
+      ) : (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+          className="min-h-screen p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8"
+        >
+          {/* --- Enhanced Sticky Header --- */}
+          <header className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 border-b-4 border-gradient-to-r from-yellow-400 to-orange-500 shadow-2xl px-3 sm:px-4 md:px-6 lg:px-10 overflow-hidden">
+            <div className="absolute inset-0 bg-black/10"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-purple-500/20"></div>
+            <div className="relative z-10 mx-auto max-w-7xl py-4 sm:py-6">
+              {/* Breadcrumb */}
+              <nav className="flex items-center text-xs sm:text-sm font-medium text-white/90 overflow-x-auto" aria-label="Breadcrumb">
+                <a href="#" className="hover:text-white transition-colors whitespace-nowrap flex items-center gap-1">
+                  <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
+                  DGP Dashboard
+                </a>
+                <ChevronRight size={12} className="mx-1.5 sm:hidden text-white/70" />
+                <ChevronRight size={16} className="hidden sm:block mx-2 text-white/70" />
+                <a href="#" className="hover:text-white transition-colors whitespace-nowrap flex items-center gap-1">
+                  <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
+                  Data Entry
+                </a>
+                <ChevronRight size={12} className="mx-1.5 sm:hidden text-white/70" />
+                <ChevronRight size={16} className="hidden sm:block mx-2 text-white/70" />
+                <span className="text-white font-bold whitespace-nowrap flex items-center gap-1">
+                  <div className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse"></div>
+                  Investigation Feedback
+                </span>
+              </nav>
+              {/* Title */}
+              <div className="flex items-start gap-4 mt-4">
+                <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 text-white shadow-2xl shadow-orange-500/40">
+                  <ShieldCheck size={24} className="sm:hidden" />
+                  <ShieldCheck size={32} className="hidden sm:block" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h1 className="text-xl sm:text-2xl lg:text-4xl font-black text-white break-words leading-tight">
+                    Investigation Feedback Entry
+                  </h1>
+                  <p className="text-sm sm:text-base text-white/90 mt-2 leading-relaxed font-medium">
+                    🎯 Log and update investigation details for SKs, SHGs, and Public
+                  </p>
+                </div>
+              </div>
             </div>
-            <div className="min-w-0 flex-1">
-              <h1 className="text-xl sm:text-2xl lg:text-4xl font-black text-white break-words leading-tight">
-                Investigation Feedback Entry
-              </h1>
-              <p className="text-sm sm:text-base text-white/90 mt-2 leading-relaxed font-medium">
-                🎯 Log and update investigation details for SKs, SHGs, and Public
-              </p>
-            </div>
-          </div>
-        </div>
-      </header>
+          </header>
 
-      {/* --- Main Content Area --- */}
-      <main className="max-w-7xl mx-auto p-3 sm:p-4 md:p-6 lg:p-8">
-        <form onSubmit={(e) => { e.preventDefault(); setIsModalOpen(true); }}>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-
-            {/* --- Left Column (Main Form) --- */}
-            <div className="lg:col-span-2 flex flex-col gap-6 lg:gap-8">
-
-              {/* 1. Case Jurisdiction Block */}
-              <GlassCard>
-                <CardHeader icon={<Landmark size={20} />} title="Case Jurisdiction" />
-                <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-                  <FormInputGroup label="District" htmlFor="district" required>
-                    <select id="district" value={district} onChange={(e) => setDistrict(e.target.value)} className="form-select">
-                      {districtOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-                    </select>
-                  </FormInputGroup>
-                  <FormInputGroup label="Police Station" htmlFor="policeStation" required>
-                    <select id="policeStation" value={policeStation} onChange={(e) => setPoliceStation(e.target.value)} className="form-select" disabled={!district}>
-                      {availableStations.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-                    </select>
-                  </FormInputGroup>
-                  <FormInputGroup label="Assigned Investigation Officer (I.O.)" htmlFor="io" required>
-                    <input type="text" id="io" value={investigationOfficer} onChange={(e) => setInvestigationOfficer(e.target.value)} className="form-input" />
-                  </FormInputGroup>
-                  {/* Made this field optional as requested in prompt */}
-                  <FormInputGroup label="Investigation Unit (Optional)" htmlFor="unit">
-                    <input type="text" id="unit" value={investigationUnit} onChange={(e) => setInvestigationUnit(e.target.value)} className="form-input" />
-                  </FormInputGroup>
+          {/* --- Main Content Area --- */}
+          <main className="max-w-7xl mx-auto p-3 sm:p-4 md:p-6 lg:p-8">
+            <form onSubmit={(e) => { e.preventDefault(); setIsModalOpen(true); }}>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+                {/* --- Left Column (Main Form) --- */}
+                <div className="lg:col-span-2 flex flex-col gap-6 lg:gap-8">
+                  {/* 1. Case Jurisdiction Block */}
+                  <GlassCard>
+                    <CardHeader icon={<Landmark size={20} />} title="Case Jurisdiction" />
+                    <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                      <FormInputGroup label="District" htmlFor="district" required>
+                        <select id="district" value={district} onChange={(e) => setDistrict(e.target.value)} className="form-select">
+                          {districtOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                        </select>
+                      </FormInputGroup>
+                      <FormInputGroup label="Police Station" htmlFor="policeStation" required>
+                        <select id="policeStation" value={policeStation} onChange={(e) => setPoliceStation(e.target.value)} className="form-select" disabled={!district}>
+                          {availableStations.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                        </select>
+                      </FormInputGroup>
+                      <FormInputGroup label="Assigned Investigation Officer (I.O.)" htmlFor="io" required>
+                        <input type="text" id="io" value={investigationOfficer} onChange={(e) => setInvestigationOfficer(e.target.value)} className="form-input" />
+                      </FormInputGroup>
+                      <FormInputGroup label="Investigation Unit (Optional)" htmlFor="unit">
+                        <input type="text" id="unit" value={investigationUnit} onChange={(e) => setInvestigationUnit(e.target.value)} className="form-input" />
+                      </FormInputGroup>
+                    </div>
+                  </GlassCard>
+                  {/* 2. Incident & Case Linking */}
+                  <GlassCard noHover>
+                    <CardHeader icon={<Link size={20} />} title="Incident & Case Linking (Read-Only)" />
+                    <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 bg-slate-50/50">
+                      <InfoItem icon={<FileText size={16} />} label="Incident ID" value={mockCaseData.incidentId} />
+                      <InfoItem icon={<FileBadge size={16} />} label="Case ID" value={mockCaseData.caseId} />
+                      <InfoItem icon={<Calendar size={16} />} label="Incident Date" value={mockCaseData.incidentDate} />
+                      <InfoItem icon={<User size={16} />} label="Victim/Complainant" value={mockCaseData.victimName} />
+                      <InfoItem icon={<MapPin size={16} />} label="Location" value={mockCaseData.location} />
+                      <InfoItem icon={<Building size={16} />} label="SHG / Urban Body" value={mockCaseData.orgName} />
+                    </div>
+                  </GlassCard>
+                  {/* 3. Investigation Update Form */}
+                  <GlassCard>
+                    <CardHeader icon={<ClipboardList size={20} />} title="Investigation Update" />
+                    <div className="p-4 sm:p-6 flex flex-col gap-4 sm:gap-6">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                        <FormInputGroup label="Incident Category" htmlFor="incidentCategory" required>
+                          <select id="incidentCategory" value={incidentCategory} onChange={(e) => setIncidentCategory(e.target.value)} className="form-select">
+                            {incidentCategoryOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                          </select>
+                        </FormInputGroup>
+                        <FormInputGroup label="Investigation Status" htmlFor="status" required>
+                          <select id="status" value={investigationStatus} onChange={(e) => setInvestigationStatus(e.target.value)} className="form-select">
+                            {statusOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                          </select>
+                        </FormInputGroup>
+                      </div>
+                      <div className="border-t border-slate-200 -mx-4 sm:-mx-6"></div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 items-center">
+                        <ToggleSwitch enabled={isFirRegistered} setEnabled={setIsFirRegistered} label="FIR Registered?" />
+                        <AnimatePresence>
+                          {isFirRegistered && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.3 }}
+                              className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-5"
+                            >
+                              <FormInputGroup label="FIR Number" htmlFor="firNumber" required>
+                                <input type="text" id="firNumber" value={firNumber} onChange={(e) => setFirNumber(e.target.value)} className="form-input" />
+                              </FormInputGroup>
+                              <FormInputGroup label="FIR Filed Date" htmlFor="firDate" required>
+                                <DatePicker id="firDate" value={firDate} onChange={(e) => setFirDate(e.target.value)} />
+                              </FormInputGroup>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                        <ToggleSwitch enabled={isChargesheetFiled} setEnabled={setIsChargesheetFiled} label="Charge Sheet Filed?" />
+                        <AnimatePresence>
+                          {isChargesheetFiled && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.3 }}
+                              className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-5"
+                            >
+                              <FormInputGroup label="Charge Sheet Date" htmlFor="chargesheetDate" required>
+                                <DatePicker id="chargesheetDate" value={chargesheetDate} onChange={(e) => setChargesheetDate(e.target.value)} />
+                              </FormInputGroup>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                      <div className="border-t border-slate-200 -mx-6"></div>
+                      <FormInputGroup label="Arrests Made (Count)" htmlFor="arrests" required>
+                        <input type="number" id="arrests" value={arrestsMade} onChange={(e) => setArrestsMade(parseInt(e.target.value))} className="form-input w-full md:w-1/3" min="0" />
+                      </FormInputGroup>
+                      <FormInputGroup label="Investigation Summary (Public)" htmlFor="summary" required>
+                        <textarea id="summary" value={investigationSummary} onChange={(e) => setInvestigationSummary(e.target.value)} className="form-textarea" rows={4} placeholder="Enter key findings, progress, and public-facing details..."></textarea>
+                      </FormInputGroup>
+                      <FormInputGroup label="Confidential Officer Remarks (Internal)" htmlFor="remarks" required>
+                        <textarea id="remarks" value={confidentialRemarks} onChange={(e) => setConfidentialRemarks(e.target.value)} className="form-textarea" rows={3} placeholder="Enter internal notes, sensitive information, or next steps..."></textarea>
+                      </FormInputGroup>
+                    </div>
+                  </GlassCard>
+                  {/* 5. Evidence & Attachments */}
+                  <GlassCard>
+                    <CardHeader icon={<Files size={20} />} title="Evidence & Attachments" />
+                    <div className="p-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+                        <FileUploadBox title="Medical / Post-mortem Report" description="Upload PDF, DOCX" icon={<FilePlus2 size={24} />} />
+                        <FileUploadBox title="Charge Sheet Document" description="Upload PDF" icon={<FileBadge size={24} />} />
+                        <FileUploadBox title="Witness Statements" description="Upload PDF, DOCX" icon={<Users size={24} />} />
+                        <FileUploadBox title="Image / Video Evidence" description="Upload JPG, PNG, MP4" icon={<FileUp size={24} />} />
+                      </div>
+                      <h4 className="font-medium text-slate-700 mb-3">Uploaded Files</h4>
+                      <ul className="space-y-2">
+                        {uploadedFiles.map((file, index) => (
+                          <motion.li
+                            key={index}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: index * 0.1 }}
+                            className="flex items-center justify-between p-3 bg-slate-100 rounded-lg border border-slate-200"
+                          >
+                            <div className="flex items-center gap-3">
+                              <File size={18} className="text-blue-700" />
+                              <span className="text-sm font-medium text-slate-800">{file.name}</span>
+                              <span className="text-xs text-slate-500">({file.size})</span>
+                            </div>
+                            <button type="button" className="text-red-500 hover:text-red-700 transition-colors">
+                              <Trash2 size={16} />
+                            </button>
+                          </motion.li>
+                        ))}
+                      </ul>
+                    </div>
+                  </GlassCard>
                 </div>
-              </GlassCard>
-
-              {/* 2. Incident & Case Linking */}
-              <GlassCard noHover>
-                <CardHeader icon={<Link size={20} />} title="Incident & Case Linking (Read-Only)" />
-                <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 bg-slate-50/50">
-                  <InfoItem icon={<FileText size={16} />} label="Incident ID" value={mockCaseData.incidentId} />
-                  <InfoItem icon={<FileBadge size={16} />} label="Case ID" value={mockCaseData.caseId} />
-                  <InfoItem icon={<Calendar size={16} />} label="Incident Date" value={mockCaseData.incidentDate} />
-                  <InfoItem icon={<User size={16} />} label="Victim/Complainant" value={mockCaseData.victimName} />
-                  <InfoItem icon={<MapPin size={16} />} label="Location" value={mockCaseData.location} />
-                  <InfoItem icon={<Building size={16} />} label="SHG / Urban Body" value={mockCaseData.orgName} />
-                </div>
-              </GlassCard>
-
-              {/* 3. Investigation Update Form */}
-              <GlassCard>
-                <CardHeader icon={<ClipboardList size={20} />} title="Investigation Update" />
-                <div className="p-4 sm:p-6 flex flex-col gap-4 sm:gap-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-                    <FormInputGroup label="Incident Category" htmlFor="incidentCategory" required>
-                      <select id="incidentCategory" value={incidentCategory} onChange={(e) => setIncidentCategory(e.target.value)} className="form-select">
-                        {incidentCategoryOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-                      </select>
-                    </FormInputGroup>
-                    <FormInputGroup label="Investigation Status" htmlFor="status" required>
-                      <select id="status" value={investigationStatus} onChange={(e) => setInvestigationStatus(e.target.value)} className="form-select">
-                        {statusOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-                      </select>
-                    </FormInputGroup>
-                  </div>
-                  
-                  <div className="border-t border-slate-200 -mx-4 sm:-mx-6"></div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 items-center">
-                    <ToggleSwitch enabled={isFirRegistered} setEnabled={setIsFirRegistered} label="FIR Registered?" />
-                    <AnimatePresence>
-                      {isFirRegistered && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
-                          exit={{ opacity: 0, height: 0 }}
-                          transition={{ duration: 0.3 }}
-                          className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-5"
-                        >
-                          <FormInputGroup label="FIR Number" htmlFor="firNumber" required>
-                            <input type="text" id="firNumber" value={firNumber} onChange={(e) => setFirNumber(e.target.value)} className="form-input" />
-                          </FormInputGroup>
-                          <FormInputGroup label="FIR Filed Date" htmlFor="firDate" required>
-                            <DatePicker id="firDate" value={firDate} onChange={(e) => setFirDate(e.target.value)} />
-                          </FormInputGroup>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-                    <ToggleSwitch enabled={isChargesheetFiled} setEnabled={setIsChargesheetFiled} label="Charge Sheet Filed?" />
-                    <AnimatePresence>
-                      {isChargesheetFiled && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
-                          exit={{ opacity: 0, height: 0 }}
-                          transition={{ duration: 0.3 }}
-                          className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-5"
-                        >
-                          <FormInputGroup label="Charge Sheet Date" htmlFor="chargesheetDate" required>
-                            <DatePicker id="chargesheetDate" value={chargesheetDate} onChange={(e) => setChargesheetDate(e.target.value)} />
-                          </FormInputGroup>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-
-                  <div className="border-t border-slate-200 -mx-6"></div>
-
-                  <FormInputGroup label="Arrests Made (Count)" htmlFor="arrests" required>
-                    <input type="number" id="arrests" value={arrestsMade} onChange={(e) => setArrestsMade(parseInt(e.target.value))} className="form-input w-full md:w-1/3" min="0" />
-                  </FormInputGroup>
-
-                  <FormInputGroup label="Investigation Summary (Public)" htmlFor="summary" required>
-                    <textarea id="summary" value={investigationSummary} onChange={(e) => setInvestigationSummary(e.target.value)} className="form-textarea" rows={4} placeholder="Enter key findings, progress, and public-facing details..."></textarea>
-                  </FormInputGroup>
-
-                  <FormInputGroup label="Confidential Officer Remarks (Internal)" htmlFor="remarks" required>
-                    <textarea id="remarks" value={confidentialRemarks} onChange={(e) => setConfidentialRemarks(e.target.value)} className="form-textarea" rows={3} placeholder="Enter internal notes, sensitive information, or next steps..."></textarea>
-                  </FormInputGroup>
-                </div>
-              </GlassCard>
-
-              {/* 5. Evidence & Attachments */}
-              <GlassCard>
-                <CardHeader icon={<Files size={20} />} title="Evidence & Attachments" />
-                <div className="p-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-                    <FileUploadBox title="Medical / Post-mortem Report" description="Upload PDF, DOCX" icon={<FilePlus2 size={24} />} />
-                    <FileUploadBox title="Charge Sheet Document" description="Upload PDF" icon={<FileBadge size={24} />} />
-                    <FileUploadBox title="Witness Statements" description="Upload PDF, DOCX" icon={<Users size={24} />} />
-                    <FileUploadBox title="Image / Video Evidence" description="Upload JPG, PNG, MP4" icon={<FileUp size={24} />} />
-                  </div>
-                  <h4 className="font-medium text-slate-700 mb-3">Uploaded Files</h4>
-                  <ul className="space-y-2">
-                    {uploadedFiles.map((file, index) => (
-                      <motion.li
-                        key={index}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        className="flex items-center justify-between p-3 bg-slate-100 rounded-lg border border-slate-200"
+                {/* --- Right Column (Sidebar) --- */}
+                <div className="lg:col-span-1 flex flex-col gap-6 lg:gap-8 lg:sticky lg:top-28">
+                  {/* 6. Timeline Tracking */}
+                  <GlassCard>
+                    <CardHeader icon={<CalendarClock size={20} />} title="Timeline & Status" />
+                    <div className="p-6 flex flex-col gap-5">
+                      <InfoItem icon={<Calendar size={16} />} label="Investigation Start Date" value={mockTimeline.startDate} />
+                      <InfoItem icon={<Calendar size={16} />} label="Last Updated Date" value={mockTimeline.lastUpdated} />
+                      <FormInputGroup label="Expected Completion Date" htmlFor="expectedCompletion" required>
+                        <DatePicker id="expectedCompletion" value={expectedCompletionDate} onChange={(e) => setExpectedCompletionDate(e.target.value)} />
+                      </FormInputGroup>
+                      <div className="border-t border-slate-200 -mx-6 my-2"></div>
+                      <div className="flex flex-col gap-2">
+                        <h4 className="text-sm font-medium text-slate-700 mb-1">Case Status</h4>
+                        <StatusBadge status="On Track" size="md" />
+                        {/* <StatusBadge status="Delayed" size="md" /> */}
+                        {/* <StatusBadge status="Critical" size="md" /> */}
+                      </div>
+                    </div>
+                  </GlassCard>
+                  {/* 7. Buttons Bar */}
+                  <GlassCard noHover>
+                    <CardHeader icon={<Send size={20} />} title="Actions" />
+                    <div className="p-6 flex flex-col gap-3">
+                      {/* Primary Button */}
+                      <button
+                        type="submit"
+                        className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-lg text-sm font-semibold bg-blue-700 text-white hover:bg-blue-800 transition-all shadow-lg shadow-blue-500/30 hover:shadow-xl hover:-translate-y-0.5"
                       >
-                        <div className="flex items-center gap-3">
-                          <File size={18} className="text-blue-700" />
-                          <span className="text-sm font-medium text-slate-800">{file.name}</span>
-                          <span className="text-xs text-slate-500">({file.size})</span>
-                        </div>
-                        <button type="button" className="text-red-500 hover:text-red-700 transition-colors">
-                          <Trash2 size={16} />
-                        </button>
-                      </motion.li>
-                    ))}
-                  </ul>
+                        <Send size={16} />
+                        Submit Update
+                      </button>
+                      {/* Secondary Button */}
+                      <button
+                        type="button"
+                        onClick={handleSaveDraft}
+                        className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-lg text-sm font-semibold bg-slate-200 text-slate-800 hover:bg-slate-300 transition-colors"
+                      >
+                        <Save size={16} />
+                        Save Draft
+                      </button>
+                      {/* Tertiary Button */}
+                      <button
+                        type="button"
+                        className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-100 transition-colors"
+                      >
+                        <Printer size={16} />
+                        Generate PDF Case Memo
+                      </button>
+                      {/* Link-style Button */}
+                      <button
+                        type="button"
+                        className="w-full flex items-center justify-center gap-2 px-5 py-2 mt-2 rounded-lg text-sm font-medium text-slate-500 hover:text-slate-700 transition-colors"
+                      >
+                        <ArrowLeft size={16} />
+                        Back to Dashboard
+                      </button>
+                    </div>
+                  </GlassCard>
                 </div>
-              </GlassCard>
+              </div>
+            </form>
+          </main>
 
-            </div>
+          {/* --- Modals & Toasts --- */}
+          <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleSubmit} />
+          <Toast isVisible={isToastVisible} onClose={() => setIsToastVisible(false)} />
 
-            {/* --- Right Column (Sidebar) --- */}
-            <div className="lg:col-span-1 flex flex-col gap-6 lg:gap-8 lg:sticky lg:top-28">
-              
-              {/* 6. Timeline Tracking */}
-              <GlassCard>
-                <CardHeader icon={<CalendarClock size={20} />} title="Timeline & Status" />
-                <div className="p-6 flex flex-col gap-5">
-                  <InfoItem icon={<Calendar size={16} />} label="Investigation Start Date" value={mockTimeline.startDate} />
-                  <InfoItem icon={<Calendar size={16} />} label="Last Updated Date" value={mockTimeline.lastUpdated} />
-                  
-                  <FormInputGroup label="Expected Completion Date" htmlFor="expectedCompletion" required>
-                    <DatePicker id="expectedCompletion" value={expectedCompletionDate} onChange={(e) => setExpectedCompletionDate(e.target.value)} />
-                  </FormInputGroup>
-
-                  <div className="border-t border-slate-200 -mx-6 my-2"></div>
-
-                  <div className="flex flex-col gap-2">
-                    <h4 className="text-sm font-medium text-slate-700 mb-1">Case Status</h4>
-                    <StatusBadge status="On Track" size="md" />
-                    {/* <StatusBadge status="Delayed" size="md" /> */}
-                    {/* <StatusBadge status="Critical" size="md" /> */}
-                  </div>
+          {/* --- Attachments Drawer (Example) --- */}
+          <AnimatePresence>
+            {isAttachmentsDrawerOpen && (
+              <motion.div
+                initial={{ x: "100%" }}
+                animate={{ x: 0 }}
+                exit={{ x: "100%" }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                className="fixed top-0 right-0 z-50 w-full max-w-md h-full bg-white shadow-2xl border-l border-slate-200"
+              >
+                {/* Drawer content */}
+                <div className="p-6 flex justify-between items-center border-b border-slate-200">
+                  <h3 className="text-xl font-semibold">View Attachments</h3>
+                  <button onClick={() => setIsAttachmentsDrawerOpen(false)}><X size={24} /></button>
                 </div>
-              </GlassCard>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-              {/* 7. Buttons Bar */}
-              <GlassCard noHover>
-                <CardHeader icon={<Send size={20} />} title="Actions" />
-                <div className="p-6 flex flex-col gap-3">
-                  {/* Primary Button */}
-                  <button
-                    type="submit"
-                    className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-lg text-sm font-semibold bg-blue-700 text-white hover:bg-blue-800 transition-all shadow-lg shadow-blue-500/30 hover:shadow-xl hover:-translate-y-0.5"
-                  >
-                    <Send size={16} />
-                    Submit Update
-                  </button>
-                  {/* Secondary Button */}
-                  <button
-                    type="button"
-                    onClick={handleSaveDraft}
-                    className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-lg text-sm font-semibold bg-slate-200 text-slate-800 hover:bg-slate-300 transition-colors"
-                  >
-                    <Save size={16} />
-                    Save Draft
-                  </button>
-                  {/* Tertiary Button */}
-                  <button
-                    type="button"
-                    className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-100 transition-colors"
-                  >
-                    <Printer size={16} />
-                    Generate PDF Case Memo
-                  </button>
-                  {/* Link-style Button */}
-                  <button
-                    type="button"
-                    className="w-full flex items-center justify-center gap-2 px-5 py-2 mt-2 rounded-lg text-sm font-medium text-slate-500 hover:text-slate-700 transition-colors"
-                  >
-                    <ArrowLeft size={16} />
-                    Back to Dashboard
-                  </button>
-                </div>
-              </GlassCard>
-
-            </div>
-
-          </div>
-        </form>
-      </main>
-
-      {/* --- Modals & Toasts --- */}
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleSubmit} />
-      <Toast isVisible={isToastVisible} onClose={() => setIsToastVisible(false)} />
-      
-      {/* --- Attachments Drawer (Example) --- */}
-      <AnimatePresence>
-        {isAttachmentsDrawerOpen && (
-          <motion.div
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed top-0 right-0 z-50 w-full max-w-md h-full bg-white shadow-2xl border-l border-slate-200"
-          >
-            {/* Drawer content */}
-            <div className="p-6 flex justify-between items-center border-b border-slate-200">
-              <h3 className="text-xl font-semibold">View Attachments</h3>
-              <button onClick={() => setIsAttachmentsDrawerOpen(false)}><X size={24} /></button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-
-      {/* --- Global Styles for Form Inputs --- */}
-      <style jsx global>{`
-        /* More Professional Form Input Styles */
-        .form-input, .form-select, .form-textarea {
-          width: 100%;
-          padding: 0.75rem 1rem; /* 12px 16px */
-          font-size: 0.9rem;
-          border-radius: 0.5rem; /* rounded-lg */
-          border: 1px solid #cbd5e1; /* slate-300 */
-          background-color: #ffffff;
-          box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-          transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        .form-input:focus, .form-select:focus, .form-textarea:focus {
-          outline: none;
-          border-color: #2563eb; /* Royal Blue 600 */
-          box-shadow: 0 0 0 3px rgb(37 99 235 / 0.2);
-        }
-        .form-input::placeholder, .form-textarea::placeholder {
-          color: #94a3b8; /* slate-400 */
-        }
-        .form-select {
-          appearance: none;
-          background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-          background-position: right 0.7rem center;
-          background-repeat: no-repeat;
-          background-size: 1.5em 1.5em;
-          padding-right: 2.5rem;
-        }
-        .form-input:disabled, .form-select:disabled, .form-textarea:disabled {
-          background-color: #f8fafc; /* slate-50 */
-          cursor: not-allowed;
-          opacity: 0.7;
-        }
-        /* Professional Navy/Blue Colors */
-        .bg-navy-800 { background-color: #1e3a8a; } 
-        .text-navy-900 { color: #172554; } 
-        .text-navy-800 { color: #1e3a8a; }
-        .bg-blue-700 { background-color: #1d4ed8; }
-        .hover\\:bg-blue-800:hover { background-color: #1e40af; }
-        .shadow-blue-500\\/30 { box-shadow: 0 10px 15px -3px rgb(59 130 246 / 0.3), 0 4px 6px -4px rgb(59 130 246 / 0.3); }
-      `}</style>
-    </motion.div>
+          {/* --- Global Styles for Form Inputs --- */}
+          <style jsx global>{`
+            /* More Professional Form Input Styles */
+            .form-input, .form-select, .form-textarea {
+              width: 100%;
+              padding: 0.75rem 1rem; /* 12px 16px */
+              font-size: 0.9rem;
+              border-radius: 0.5rem; /* rounded-lg */
+              border: 1px solid #cbd5e1; /* slate-300 */
+              background-color: #ffffff;
+              box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+              transition: border-color 0.2s, box-shadow 0.2s;
+            }
+            .form-input:focus, .form-select:focus, .form-textarea:focus {
+              outline: none;
+              border-color: #2563eb; /* Royal Blue 600 */
+              box-shadow: 0 0 0 3px rgb(37 99 235 / 0.2);
+            }
+            .form-input::placeholder, .form-textarea::placeholder {
+              color: #94a3b8; /* slate-400 */
+            }
+            .form-select {
+              appearance: none;
+              background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+              background-position: right 0.7rem center;
+              background-repeat: no-repeat;
+              background-size: 1.5em 1.5em;
+              padding-right: 2.5rem;
+            }
+            .form-input:disabled, .form-select:disabled, .form-textarea:disabled {
+              background-color: #f8fafc; /* slate-50 */
+              cursor: not-allowed;
+              opacity: 0.7;
+            }
+            /* Professional Navy/Blue Colors */
+            .bg-navy-800 { background-color: #1e3a8a; } 
+            .text-navy-900 { color: #172554; } 
+            .text-navy-800 { color: #1e3a8a; }
+            .bg-blue-700 { background-color: #1d4ed8; }
+            .hover\:bg-blue-800:hover { background-color: #1e40af; }
+            .shadow-blue-500\/30 { box-shadow: 0 10px 15px -3px rgb(59 130 246 / 0.3), 0 4px 6px -4px rgb(59 130 246 / 0.3); }
+          `}</style>
+        </motion.div>
+      )}
+    </>
   );
 }
 

@@ -29,6 +29,7 @@ import {
   ShieldCheck as ShieldCheckIcon,
   File as FileIcon
 } from 'lucide-react';
+import IntegratedLoader from "@/components/layout/IntegratedLoader";
 
 // --- MOCK DATA & OPTIONS ---
 
@@ -300,6 +301,14 @@ const ContractorModal: React.FC<{ contractor: typeof mockContractors[0] | null; 
 
 // --- MAIN PAGE COMPONENT ---
 export default function TotalContractorsReport() {
+  // Loader logic (like example)
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // All hooks must be declared unconditionally
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedContractor, setSelectedContractor] = useState<{
     id: string;
@@ -315,17 +324,13 @@ export default function TotalContractorsReport() {
     contract: string;
     notices: string[];
   } | null>(null);
-
-  // Filter & Search State
   const [filters, setFilters] = useState({
     district: 'All',
     year: 'All',
     status: 'All',
-    risk: 'All' // Added risk filter state
+    risk: 'All'
   });
   const [searchTerm, setSearchTerm] = useState('');
-
-  // Table State
   const [sortConfig, setSortConfig] = useState<{ key: ContractorKey, direction: 'asc' | 'desc' }>({ key: 'incidents', direction: 'desc' });
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 7;
@@ -420,6 +425,11 @@ export default function TotalContractorsReport() {
     return sortConfig.direction === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />;
   };
   
+  // Only return loader if loading is true
+  if (loading) {
+    return <IntegratedLoader />;
+  }
+
   return (
     <>      
       <motion.div

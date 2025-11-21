@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 import { motion, AnimatePresence } from 'framer-motion';
 import StatCard from '@/components/ui/stat-card';
 import {
@@ -376,6 +377,8 @@ const CaseDetailModal = ({ caseData, onClose }: { caseData: Case | null, onClose
 // --- MAIN PAGE COMPONENT ---
 export default function TotalCasesReport() {
   const [hasMounted, setHasMounted] = useState(false);
+  // show the shared loader briefly to match the app-wide pattern
+  const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     district: "All Districts",
     status: "All Statuses",
@@ -387,7 +390,11 @@ export default function TotalCasesReport() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCase, setSelectedCase] = useState<Case | null>(null);
 
-  useEffect(() => { setHasMounted(true); }, []);
+  useEffect(() => { 
+    setHasMounted(true);
+    const t = setTimeout(() => setLoading(false), 700);
+    return () => clearTimeout(t);
+  }, []);
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -440,13 +447,7 @@ export default function TotalCasesReport() {
   
   const totalPages = Math.ceil(filteredCases.length / 10);
 
-  if (!hasMounted) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 size={48} className="animate-spin text-blue-700" />
-      </div>
-    );
-  }
+  if (!hasMounted || loading) return <IntegratedLoader />;
 
   return (
     <motion.div

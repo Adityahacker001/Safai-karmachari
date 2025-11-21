@@ -1,6 +1,8 @@
+
 'use client';
 
 import React, { useState, Fragment, useEffect } from 'react';
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ShieldCheck,
@@ -248,6 +250,7 @@ const CardHeader: React.FC<CardHeaderProps> = ({ icon, title, badgeText, childre
 
 // --- MAIN PAGE COMPONENT ---
 export default function GrievanceFeedbackEntry() {
+
   // Form State
   const [district, setDistrict] = useState("dwarka");
   const [grievanceId, setGrievanceId] = useState("GRV-00452"); // Auto-generated
@@ -259,18 +262,20 @@ export default function GrievanceFeedbackEntry() {
   const [status, setStatus] = useState("pending");
   const [escalatedTo, setEscalatedTo] = useState("");
 
+  // Loader State (like example)
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 800);
+    // Simulate fetching a new Grievance ID
+    setGrievanceId(`GRV-${Math.floor(10000 + Math.random() * 90000)}`);
+    return () => clearTimeout(timer);
+  }, []);
+
   // UI State
-  const [hasMounted, setHasMounted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastType, setToastType] = useState("success");
-
-  useEffect(() => {
-    setHasMounted(true);
-    // Simulate fetching a new Grievance ID
-    setGrievanceId(`GRV-${Math.floor(10000 + Math.random() * 90000)}`);
-  }, []);
 
   const handleClearForm = () => {
     setDistrict("");
@@ -310,8 +315,9 @@ export default function GrievanceFeedbackEntry() {
     }, 1000);
   };
   
-  if (!hasMounted) {
-    return null; // Prevents FOUC
+
+  if (loading) {
+    return <IntegratedLoader />;
   }
 
   return (

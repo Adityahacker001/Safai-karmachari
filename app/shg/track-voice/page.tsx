@@ -4,7 +4,7 @@
 
 'use client'; // For Next.js App Router
 
-import React, { useState, useMemo, Fragment } from 'react'; // Added Fragment
+import React, { useState, useMemo, Fragment, useEffect } from 'react'; // Added Fragment
 import {
   ResponsiveContainer, PieChart, Pie, Cell, Tooltip as RechartsTooltip, Legend,
   BarChart, Bar, XAxis, YAxis, CartesianGrid, LineChart, Line
@@ -21,6 +21,7 @@ import { Button as GradientButton } from '@/components/ui/button';
 import { Select as FormSelect } from '@/components/ui/select';
 import { Input as FormInput } from '@/components/ui/input';
 import StatCard from '@/components/ui/stat-card';
+import IntegratedLoader from "@/components/layout/IntegratedLoader";
 // If using Framer Motion (optional, install it: npm install framer-motion)
 // import { motion, AnimatePresence } from 'framer-motion';
 
@@ -169,6 +170,12 @@ const TrackMyVoicePage = () => {
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
   // const [isInsightsOpen, setIsInsightsOpen] = useState(false); // Insights panel if needed later
 
+  // Mount-aware loader: ensure client mount before showing UI; keep hooks stable
+  const [hasMounted, setHasMounted] = useState(false);
+  useEffect(() => { setHasMounted(true); }, []);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => { const t = setTimeout(() => setLoading(false), 700); return () => clearTimeout(t); }, []);
+
   const handleFilterChange = (name: string, value: string) => {
     setFilters((prev) => ({ ...prev, [name]: value }));
   };
@@ -216,6 +223,11 @@ const TrackMyVoicePage = () => {
   // --- Modal/Drawer ---
   const openDrawer = (item: any) => { setSelectedItem(item); setIsDrawerOpen(true); };
   const closeDrawer = () => setIsDrawerOpen(false);
+
+  // Keep the guarded early-return AFTER all hooks to avoid hook-order mismatches
+  if (!hasMounted || loading) {
+    return <IntegratedLoader />;
+  }
 
   return (
   <div className="min-h-screen p-4 md:p-8 font-sans animate-fade-in">

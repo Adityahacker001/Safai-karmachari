@@ -2,9 +2,10 @@
 // Ensure you have React, TailwindCSS, and lucide-react installed:
 // npm install lucide-react
 
-'use client'; // For Next.js App Router
+"use client"; // For Next.js App Router
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import IntegratedLoader from "@/components/layout/IntegratedLoader";
 import {
   LayoutDashboard, ChevronRight, Briefcase, PlusCircle, CheckCircle, Clock, XCircle, FileClock,
   DollarSign, BarChart3, ListFilter, Search, X, Eye, Edit, Trash2, FileText,
@@ -224,6 +225,12 @@ const SchemesApplicationPage = () => {
   const [appRowsPerPage, setAppRowsPerPage] = useState(5); // Fewer rows for this section
   const [appSortConfig, setAppSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null);
 
+  // Page-level loader: mount-aware so loader is visible on first client render
+  const [hasMounted, setHasMounted] = useState(false);
+  useEffect(() => setHasMounted(true), []);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => { const t = setTimeout(() => setLoading(false), 700); return () => clearTimeout(t); }, []);
+
   // Modal Handlers
   const openApplyModal = (scheme: any) => { setSelectedScheme(scheme); setIsModalOpen(true); };
   const closeApplyModal = () => { setSelectedScheme(null); setIsModalOpen(false); };
@@ -245,6 +252,8 @@ const SchemesApplicationPage = () => {
   const viewApplication = (appId: string) => alert(`Viewing Application: ${appId}`);
   const downloadAck = (url: string) => window.open(url, '_blank');
 
+  // Show integrated loader while mounting / during simulated short loading period
+  if (!hasMounted || loading) return <IntegratedLoader />;
 
   return (
     <div className="min-h-screen p-4 md:p-8 font-sans animate-fade-in">

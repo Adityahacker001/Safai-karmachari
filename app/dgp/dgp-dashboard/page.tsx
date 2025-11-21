@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import StatCard from '@/components/ui/stat-card';
 import {
   Building2,
@@ -29,6 +29,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 
 ChartJS.register(
   CategoryScale,
@@ -82,6 +83,20 @@ const DISTRICTS = [
 ];
 
 export default function DGPDashboardPage() {
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 flex items-center justify-center">
+        <IntegratedLoader />
+      </div>
+    );
+  }
+
   // Chart data: Incident Category Pie Chart
   const incidentCategoryData = {
     labels: ['Manual Scavenging Deaths', 'Sewer Injuries', 'Hazardous Exposure', 'Other'],

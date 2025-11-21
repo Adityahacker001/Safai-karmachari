@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import StatCard from "@/components/ui/stat-card";
+
 import {
   User,
   Building2,
@@ -42,6 +43,7 @@ import {
   BellRing,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import IntegratedLoader from "@/components/layout/IntegratedLoader";
 
 // --- Interfaces ---
 interface ProfileInfo {
@@ -167,6 +169,12 @@ export default function DGPProfilePage() {
     { name: "ID & Security Clearance", type: "PDF", verifiedBy: "MHA", status: "✅ Verified" },
   ]);
 
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
+
   const handleUploadSignature = () => console.log("Upload Signature clicked");
   const handleSaveChanges = () => console.log("Save Changes clicked");
   const handleContactNSKC = () => console.log("Contact NSKC clicked");
@@ -185,6 +193,14 @@ export default function DGPProfilePage() {
       )
     );
   }, []);
+
+  if (loading) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <IntegratedLoader />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 md:space-y-4 lg:space-y-6 animate-fadeIn">

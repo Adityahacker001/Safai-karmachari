@@ -40,6 +40,7 @@ import {
   Archive,
   MessageCircle
 } from 'lucide-react';
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 
 // --- MOCK DATA & OPTIONS ---
 
@@ -321,6 +322,13 @@ const LiveDateTimeChip = () => {
 
 // --- MAIN PAGE COMPONENT ---
 export default function GeneralFeedbackEntry() {
+  // Loader logic: only show loader in main content area, not fullscreen
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
+
   // Form State
   const [feedbackId, setFeedbackId] = useState("FBK-90152");
   const [source, setSource] = useState("sp-cp");
@@ -380,6 +388,14 @@ export default function GeneralFeedbackEntry() {
     }, 1000);
   };
   
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <IntegratedLoader />
+      </div>
+    );
+  }
+
   if (!hasMounted) {
     return null; // Prevents FOUC
   }
@@ -633,7 +649,7 @@ export default function GeneralFeedbackEntry() {
         {/* --- Dashboard Enhancements --- */}
         <section className="mt-12">
           {/* 📊 Summary Mini-Cards */}
-        
+          
 
           {/* 🕓 Recent Activity Table */}
           <div className="mt-8 sm:mt-12">

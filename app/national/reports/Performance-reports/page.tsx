@@ -344,12 +344,17 @@ export default function PerformanceReportsPage() {
     const [activeMainTab, setActiveMainTab] = useState('contractors');
     const mainTabs = [ { id: 'contractors', label: 'Contractors', icon: Building2 }, { id: 'workers', label: 'Workers', icon: Users }, { id: 'nodals', label: 'Nodal Officers', icon: ShieldCheck }, { id: 'states', label: 'States', icon: Map }, { id: 'districts', label: 'Districts', icon: MapPin }, ];
 
+    // Mount-aware loader: ensure loader is visible on first client render
+    const [hasMounted, setHasMounted] = React.useState(false);
+    React.useEffect(() => setHasMounted(true), []);
+
     const [loading, setLoading] = React.useState(true);
     React.useEffect(() => {
         const timer = setTimeout(() => setLoading(false), 800);
         return () => clearTimeout(timer);
     }, []);
-    if (loading) {
+
+    if (!hasMounted || loading) {
         return <IntegratedLoader />;
     }
     const renderContent = () => {

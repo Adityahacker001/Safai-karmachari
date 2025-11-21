@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 import { motion, AnimatePresence } from 'framer-motion';
 import StatCard from '@/components/ui/stat-card';
 import {
@@ -352,6 +353,8 @@ const GrievanceDetailModal = ({ grievance, onClose }: { grievance: typeof mockGr
 // --- MAIN PAGE COMPONENT ---
 export default function GrievancesReport() {
   const [hasMounted, setHasMounted] = useState(false);
+  // Use a loading state to show the app-wide IntegratedLoader similar to other pages
+  const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     district: "All Districts",
     source: "All Sources",
@@ -363,7 +366,12 @@ export default function GrievancesReport() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedGrievance, setSelectedGrievance] = useState<typeof mockGrievances[0] | null>(null);
 
-  useEffect(() => { setHasMounted(true); }, []);
+  useEffect(() => {
+    setHasMounted(true);
+    // keep loader visible briefly to simulate data fetching / to match example behavior
+    const t = setTimeout(() => setLoading(false), 700);
+    return () => clearTimeout(t);
+  }, []);
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -412,12 +420,9 @@ export default function GrievancesReport() {
   
   const totalPages = Math.ceil(filteredGrievances.length / 10);
 
-  if (!hasMounted) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 size={48} className="animate-spin text-blue-700" />
-      </div>
-    );
+  // Show the integrated loader while loading is true (matches other pages)
+  if (!hasMounted || loading) {
+    return <IntegratedLoader />;
   }
 
   return (

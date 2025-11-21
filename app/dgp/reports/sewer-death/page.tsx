@@ -1,6 +1,7 @@
 // app/(your-route)/page.tsx
 "use client";
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 import {
   PieChart,
   Pie,
@@ -176,6 +177,14 @@ export default function DgpSewerDeathPage() {
   const [investigationFilter, setInvestigationFilter] = useState<string>('All');
   const [expandedCase, setExpandedCase] = useState<string | null>(null);
 
+  // Show the shared integrated loader briefly on first mount so the
+  // page's loading experience matches other report pages.
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 700);
+    return () => clearTimeout(t);
+  }, []);
+
   // YOUR EXISTING DERIVED STATE (UNCHANGED)
   const filteredCases = useMemo(() => {
     return cases.filter((c) => {
@@ -245,6 +254,8 @@ export default function DgpSewerDeathPage() {
   const tableHeaderStyle =
     'px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-white uppercase tracking-wider';
   const tableCellStyle = 'px-5 py-4 border-b border-gray-200 bg-white text-sm';
+
+  if (loading) return <IntegratedLoader />;
 
   return (
     <main className="flex-1 space-y-6 p-4 md:p-8 pt-6">

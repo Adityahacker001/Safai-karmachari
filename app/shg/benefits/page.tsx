@@ -4,7 +4,8 @@
 
 'use client'; // For Next.js App Router
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import IntegratedLoader from "@/components/layout/IntegratedLoader";
 import {
   ResponsiveContainer, PieChart, Pie, Cell, Tooltip as RechartsTooltip, Legend,
   LineChart, Line, XAxis, YAxis, CartesianGrid, BarChart, Bar
@@ -97,24 +98,56 @@ const BenefitsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5); // Start with fewer rows for benefits table
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null);
-
   // --- Data Logic ---
   const filteredBenefits = useMemo(() => {
     let data = [...MOCK_BENEFITS_DATA];
-    if (searchTerm) { data = data.filter(item => item.name.toLowerCase().includes(searchTerm.toLowerCase()) || item.scheme.toLowerCase().includes(searchTerm.toLowerCase()) || item.type.toLowerCase().includes(searchTerm.toLowerCase())); }
-    if (sortConfig !== null) { data.sort((a, b) => { // @ts-ignore
-        if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === 'asc' ? -1 : 1; // @ts-ignore
-        if (a[sortConfig.key] > b[sortConfig.key]) return sortConfig.direction === 'asc' ? 1 : -1; return 0; }); }
+    if (searchTerm) {
+      data = data.filter(item =>
+        item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.scheme.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.type.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    if (sortConfig !== null) {
+      data.sort((a, b) => {
+        // @ts-ignore - dynamic key access for sorting on mock data
+        if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === 'asc' ? -1 : 1;
+        // @ts-ignore
+        if (a[sortConfig.key] > b[sortConfig.key]) return sortConfig.direction === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
     return data;
   }, [searchTerm, sortConfig]);
 
   // --- Pagination ---
   const totalPages = Math.ceil(filteredBenefits.length / rowsPerPage);
-  const paginatedBenefits = useMemo(() => filteredBenefits.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage), [filteredBenefits, currentPage, rowsPerPage]);
+  const paginatedBenefits = useMemo(
+    () => filteredBenefits.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage),
+    [filteredBenefits, currentPage, rowsPerPage]
+  );
 
   // --- Sorting ---
-  const requestSort = (key: string) => { let direction: 'asc' | 'desc' = 'asc'; if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') { direction = 'desc'; } setSortConfig({ key, direction }); };
+  const requestSort = (key: string) => {
+    let direction: 'asc' | 'desc' = 'asc';
+    if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
 
+  // Mount-aware loader: ensure loader is visible on first client render
+  const [hasMounted, setHasMounted] = useState(false);
+  useEffect(() => setHasMounted(true), []);
+
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 700);
+    return () => clearTimeout(t);
+  }, []);
+
+  // Keep hooks above any early-return to avoid hook-order runtime errors
+  if (!hasMounted || loading) return <IntegratedLoader />;
   // --- Handlers ---
   const handleViewDocument = (url: string | null) => { if (url) window.open(url, '_blank'); else alert('No document available.'); };
   const handleUploadProof = () => alert('Trigger file upload for utilization proof.');

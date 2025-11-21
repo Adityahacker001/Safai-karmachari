@@ -29,6 +29,7 @@ import {
   Database
 } from 'lucide-react';
 import { LucideProps } from 'lucide-react';
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 
 /*
  * DGP Compliance Entry Dashboard
@@ -43,6 +44,13 @@ import { LucideProps } from 'lucide-react';
 
 // Main Application Component
 export default function App() {
+  // Loader logic: only show loader in main content area, not fullscreen
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
+
   // === STATE MANAGEMENT ===
 
   // Form State
@@ -323,319 +331,327 @@ export default function App() {
   // === MAIN RENDER ===
 
   return (
-    <>
-      {/* --- Main Container --- */}
-      <div className="min-h-screen w-full p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 text-slate-800 font-sans">
-        
-        {/* --- Main Content with Fade-in Animation --- */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: 'easeInOut' }}
-          className="max-w-7xl mx-auto"
-        >
-          {/* --- Enhanced Header --- */}
-          <header className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 border-b-4 border-gradient-to-r from-yellow-400 to-orange-500 shadow-2xl px-4 sm:px-6 py-6 sm:py-8 rounded-3xl mb-6 sm:mb-8 overflow-hidden">
-            <div className="absolute inset-0 bg-black/10"></div>
-            <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-purple-500/20"></div>
-            <div className="relative z-10">
-              <div className="flex items-start gap-4 sm:gap-6">
-                <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 text-white shadow-2xl shadow-orange-500/40">
-                  <ShieldCheck className="h-6 w-6 sm:h-8 sm:w-8" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <h1 className="text-xl sm:text-2xl lg:text-4xl font-black text-white tracking-tight break-words leading-tight">
-                    Direction Compliance Entry
-                  </h1>
-                  <p className="text-sm sm:text-base text-white/90 mt-2 leading-relaxed font-medium">
-                    🎯 Update compliance status of government & DGP directives
-                  </p>
-                </div>
-              </div>
-            </div>
-          </header>
-
-          {/* --- Main Form --- */}
-          <form onSubmit={handleSubmit}>
-            <div className="flex flex-col gap-6">
-
-              {/* --- Card: Direction Information --- */}
-              <Card>
-                <div className="px-6 py-5 border-b border-gradient-to-r from-blue-200/30 via-purple-200/20 to-pink-200/30 bg-gradient-to-r from-blue-50/80 via-white/90 to-purple-50/80 rounded-t-3xl backdrop-blur-sm">
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25">
-                      <FileSearch size={20} />
+    <div className="min-h-screen p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8">
+      {loading ? (
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <IntegratedLoader />
+        </div>
+      ) : (
+        <div className="max-w-7xl mx-auto space-y-3 sm:space-y-4 lg:space-y-6">
+          {/* --- Main Container --- */}
+          <div className="min-h-screen w-full p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 text-slate-800 font-sans">
+            
+            {/* --- Main Content with Fade-in Animation --- */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: 'easeInOut' }}
+              className="max-w-7xl mx-auto"
+            >
+              {/* --- Enhanced Header --- */}
+              <header className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 border-b-4 border-gradient-to-r from-yellow-400 to-orange-500 shadow-2xl px-4 sm:px-6 py-6 sm:py-8 rounded-3xl mb-6 sm:mb-8 overflow-hidden">
+                <div className="absolute inset-0 bg-black/10"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-purple-500/20"></div>
+                <div className="relative z-10">
+                  <div className="flex items-start gap-4 sm:gap-6">
+                    <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 text-white shadow-2xl shadow-orange-500/40">
+                      <ShieldCheck className="h-6 w-6 sm:h-8 sm:w-8" />
                     </div>
-                    <h2 className="text-lg font-bold bg-gradient-to-r from-blue-700 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-                      Direction Information
-                    </h2>
+                    <div className="min-w-0 flex-1">
+                      <h1 className="text-xl sm:text-2xl lg:text-4xl font-black text-white tracking-tight break-words leading-tight">
+                        Direction Compliance Entry
+                      </h1>
+                      <p className="text-sm sm:text-base text-white/90 mt-2 leading-relaxed font-medium">
+                        🎯 Update compliance status of government & DGP directives
+                      </p>
+                    </div>
                   </div>
                 </div>
-                <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-                  {/* Read-only fields */}
-                  <div className="sm:col-span-1 lg:col-span-1">
-                    <InputGroup label="Direction ID" htmlFor="direction-id" helperText="Unique identifier for the directive.">
-                      <StyledInput value={directionInfo.id} icon={InfoIcon} readOnly disabled />
-                    </InputGroup>
-                  </div>
-                  <div className="sm:col-span-2 lg:col-span-2">
-                    <InputGroup label="Direction Title" htmlFor="direction-title" helperText="The official title of the directive.">
-                      <StyledInput value={directionInfo.title} icon={FileTextIcon} readOnly disabled />
-                    </InputGroup>
-                  </div>
-                  <div className="sm:col-span-1 lg:col-span-1">
-                    <InputGroup label="Issued By" htmlFor="issued-by" helperText="The issuing authority or department.">
-                      <StyledInput value={directionInfo.issuedBy} icon={UserIcon} readOnly disabled />
-                    </InputGroup>
-                  </div>
-                  <div className="sm:col-span-1 lg:col-span-1">
-                    <InputGroup label="Issued Date" htmlFor="issued-date" helperText="The date the directive was issued.">
-                      <StyledInput value={directionInfo.issuedDate} type="date" icon={CalendarDaysIcon} readOnly disabled />
-                    </InputGroup>
-                  </div>
-                  
-                  {/* Interactive fields */}
-                  <div className="sm:col-span-1 lg:col-span-1">
-                    <InputGroup label="District / Unit" htmlFor="district" helperText="Select the reporting unit.">
-                      <StyledSelect 
-                        id="district"
-                        icon={BuildingIcon} 
-                        value={district} 
-                        onChange={handleDistrictChange}
-                      >
-                        <option value="">Select District/Unit</option>
-                        {Object.keys(districtSpMap).map(d => <option key={d} value={d}>{d}</option>)}
-                      </StyledSelect>
-                    </InputGroup>
-                  </div>
-                  <div className="sm:col-span-1 lg:col-span-1">
-                    <InputGroup label="SP/CP Name" htmlFor="sp-cp-name" helperText="Auto-filled based on selected unit.">
-                      <StyledInput 
-                        value={spName} 
-                        icon={UserCircleIcon} 
-                        readOnly 
-                        disabled 
-                        placeholder="N/A" 
-                      />
-                    </InputGroup>
-                  </div>
-                </div>
-              </Card>
+              </header>
 
-              {/* --- Card: Compliance Entry Form --- */}
-              <Card>
-                <div className="p-4 sm:p-5 border-b border-black/5">
-                  <h2 className="text-base sm:text-lg font-semibold text-blue-900 flex items-center gap-2">
-                    <CheckCircle size={18} className="sm:hidden" />
-                    <CheckCircle size={20} className="hidden sm:block" />
-                    Compliance Entry Form
-                  </h2>
-                </div>
-                <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                  <InputGroup label="Compliance Status" htmlFor="status" helperText="Select the current status.">
-                    <StyledSelect 
-                      id="status"
-                      icon={ClockIcon} 
-                      value={complianceStatus} 
-                      onChange={handleComplianceStatusChange}
-                    >
-                      <option value="">Select Status</option>
-                      <option value="Complied">Complied</option>
-                      <option value="In-Progress">In-Progress</option>
-                      <option value="Not Complied">Not Complied</option>
-                    </StyledSelect>
-                  </InputGroup>
-                  
-                  <InputGroup label="Compliance Date" htmlFor="comp-date" helperText="Date of status update.">
-                    <StyledInput 
-                      id="comp-date"
-                      type="date" 
-                      icon={CalendarDaysIcon} 
-                      value={complianceDate}
-                      onChange={handleComplianceDateChange}
-                    />
-                  </InputGroup>
+              {/* --- Main Form --- */}
+              <form onSubmit={handleSubmit}>
+                <div className="flex flex-col gap-6">
 
-                  <div className="sm:col-span-2">
-                    <InputGroup label="Action Taken" htmlFor="action-taken" helperText="Describe actions taken so far.">
-                      <StyledTextarea 
-                        id="action-taken"
-                        placeholder="e.g., 'Conducted training for all staff...', 'Software update deployed...'"
-                        value={actionTaken}
-                        onChange={(e) => setActionTaken(e.target.value)}
-                      />
-                    </InputGroup>
-                  </div>
-                  
-                  {/* --- Conditional Remarks Field --- */}
-                  <AnimatePresence>
-                    {complianceStatus === 'Not Complied' && (
-                      <motion.div 
-                        className="sm:col-span-2"
-                        initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                        animate={{ opacity: 1, height: 'auto', marginTop: '0px' }}
-                        exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <InputGroup label="Reason for Non-Compliance (Required)" htmlFor="remarks" helperText="Provide a clear justification.">
-                          <StyledTextarea 
-                            id="remarks"
-                            className="focus:ring-red-500 focus:border-red-500 border-red-300/50"
-                            placeholder="Provide detailed reasons for non-compliance..."
-                            value={remarks}
-                            onChange={(e) => setRemarks(e.target.value)}
-                            required
+                  {/* --- Card: Direction Information --- */}
+                  <Card>
+                    <div className="px-6 py-5 border-b border-gradient-to-r from-blue-200/30 via-purple-200/20 to-pink-200/30 bg-gradient-to-r from-blue-50/80 via-white/90 to-purple-50/80 rounded-t-3xl backdrop-blur-sm">
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25">
+                          <FileSearch size={20} />
+                        </div>
+                        <h2 className="text-lg font-bold bg-gradient-to-r from-blue-700 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                          Direction Information
+                        </h2>
+                      </div>
+                    </div>
+                    <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                      {/* Read-only fields */}
+                      <div className="sm:col-span-1 lg:col-span-1">
+                        <InputGroup label="Direction ID" htmlFor="direction-id" helperText="Unique identifier for the directive.">
+                          <StyledInput value={directionInfo.id} icon={InfoIcon} readOnly disabled />
+                        </InputGroup>
+                      </div>
+                      <div className="sm:col-span-2 lg:col-span-2">
+                        <InputGroup label="Direction Title" htmlFor="direction-title" helperText="The official title of the directive.">
+                          <StyledInput value={directionInfo.title} icon={FileTextIcon} readOnly disabled />
+                        </InputGroup>
+                      </div>
+                      <div className="sm:col-span-1 lg:col-span-1">
+                        <InputGroup label="Issued By" htmlFor="issued-by" helperText="The issuing authority or department.">
+                          <StyledInput value={directionInfo.issuedBy} icon={UserIcon} readOnly disabled />
+                        </InputGroup>
+                      </div>
+                      <div className="sm:col-span-1 lg:col-span-1">
+                        <InputGroup label="Issued Date" htmlFor="issued-date" helperText="The date the directive was issued.">
+                          <StyledInput value={directionInfo.issuedDate} type="date" icon={CalendarDaysIcon} readOnly disabled />
+                        </InputGroup>
+                      </div>
+                      
+                      {/* Interactive fields */}
+                      <div className="sm:col-span-1 lg:col-span-1">
+                        <InputGroup label="District / Unit" htmlFor="district" helperText="Select the reporting unit.">
+                          <StyledSelect 
+                            id="district"
+                            icon={BuildingIcon} 
+                            value={district} 
+                            onChange={handleDistrictChange}
+                          >
+                            <option value="">Select District/Unit</option>
+                            {Object.keys(districtSpMap).map(d => <option key={d} value={d}>{d}</option>)}
+                          </StyledSelect>
+                        </InputGroup>
+                      </div>
+                      <div className="sm:col-span-1 lg:col-span-1">
+                        <InputGroup label="SP/CP Name" htmlFor="sp-cp-name" helperText="Auto-filled based on selected unit.">
+                          <StyledInput 
+                            value={spName} 
+                            icon={UserCircleIcon} 
+                            readOnly 
+                            disabled 
+                            placeholder="N/A" 
                           />
                         </InputGroup>
+                      </div>
+                    </div>
+                  </Card>
+
+                  {/* --- Card: Compliance Entry Form --- */}
+                  <Card>
+                    <div className="p-4 sm:p-5 border-b border-black/5">
+                      <h2 className="text-base sm:text-lg font-semibold text-blue-900 flex items-center gap-2">
+                        <CheckCircle size={18} className="sm:hidden" />
+                        <CheckCircle size={20} className="hidden sm:block" />
+                        Compliance Entry Form
+                      </h2>
+                    </div>
+                    <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                      <InputGroup label="Compliance Status" htmlFor="status" helperText="Select the current status.">
+                        <StyledSelect 
+                          id="status"
+                          icon={ClockIcon} 
+                          value={complianceStatus} 
+                          onChange={handleComplianceStatusChange}
+                        >
+                          <option value="">Select Status</option>
+                          <option value="Complied">Complied</option>
+                          <option value="In-Progress">In-Progress</option>
+                          <option value="Not Complied">Not Complied</option>
+                        </StyledSelect>
+                      </InputGroup>
+                      
+                      <InputGroup label="Compliance Date" htmlFor="comp-date" helperText="Date of status update.">
+                        <StyledInput 
+                          id="comp-date"
+                          type="date" 
+                          icon={CalendarDaysIcon} 
+                          value={complianceDate}
+                          onChange={handleComplianceDateChange}
+                        />
+                      </InputGroup>
+
+                      <div className="sm:col-span-2">
+                        <InputGroup label="Action Taken" htmlFor="action-taken" helperText="Describe actions taken so far.">
+                          <StyledTextarea 
+                            id="action-taken"
+                            placeholder="e.g., 'Conducted training for all staff...', 'Software update deployed...'"
+                            value={actionTaken}
+                            onChange={(e) => setActionTaken(e.target.value)}
+                          />
+                        </InputGroup>
+                      </div>
+                      
+                      {/* --- Conditional Remarks Field --- */}
+                      <AnimatePresence>
+                        {complianceStatus === 'Not Complied' && (
+                          <motion.div 
+                            className="sm:col-span-2"
+                            initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                            animate={{ opacity: 1, height: 'auto', marginTop: '0px' }}
+                            exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                            transition={{ duration: 0.3 }}
+                          >
+                            <InputGroup label="Reason for Non-Compliance (Required)" htmlFor="remarks" helperText="Provide a clear justification.">
+                              <StyledTextarea 
+                                id="remarks"
+                                className="focus:ring-red-500 focus:border-red-500 border-red-300/50"
+                                placeholder="Provide detailed reasons for non-compliance..."
+                                value={remarks}
+                                onChange={(e) => setRemarks(e.target.value)}
+                                required
+                              />
+                            </InputGroup>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                    
+                    {/* --- Audit Footer --- */}
+                    <div className="p-4 bg-blue-50/30 border-t border-black/5 rounded-b-2xl">
+                      <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-gray-600">
+                        <div className="flex items-center gap-1.5">
+                          <User size={14} className="text-blue-700" />
+                          Entered by: <span className="font-medium text-blue-900">DGP Staff (Admin)</span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <Clock size={14} className="text-blue-700" />
+                          Auto Timestamp: <span className="font-medium text-blue-900">{currentTimestamp}</span>
+                        </div>
+                      
+                        </div>
+                    </div>
+                  </Card>
+
+                  {/* --- Conditional Upload Section --- */}
+                  <AnimatePresence>
+                    {complianceStatus === 'Complied' && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.4, ease: 'easeInOut' }}
+                      >
+                        <Card>
+                          <div className="p-5 border-b border-black/5">
+                            <h2 className="text-lg font-semibold text-blue-900 flex items-center gap-2">
+                              <Upload size={20} />
+                              Upload Evidence
+                            </h2>
+                          </div>
+                          <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                            <FileUploadCard 
+                              title="Upload Report (PDF)"
+                              file={reportFile}
+                              onChange={handleFileChange(setReportFile)}
+                              accept=".pdf"
+                            />
+                            <FileUploadCard 
+                              title="Upload Photos (Optional)"
+                              file={photosFile}
+                              onChange={handleFileChange(setPhotosFile)}
+                              accept="image/*"
+                            />
+                          </div>
+                        </Card>
                       </motion.div>
                     )}
                   </AnimatePresence>
-                </div>
-                
-                {/* --- Audit Footer --- */}
-                <div className="p-4 bg-blue-50/30 border-t border-black/5 rounded-b-2xl">
-                  <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-gray-600">
-                    <div className="flex items-center gap-1.5">
-                      <User size={14} className="text-blue-700" />
-                      Entered by: <span className="font-medium text-blue-900">DGP Staff (Admin)</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <Clock size={14} className="text-blue-700" />
-                      Auto Timestamp: <span className="font-medium text-blue-900">{currentTimestamp}</span>
-                    </div>
                   
+                  {/* --- Action Buttons --- */}
+                  <div className="mt-4 flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4">
+                    <AppButton variant="link" icon={ArrowLeftIcon} onClick={() => {}}>
+                      <span className="hidden sm:inline">Back to Dashboard</span>
+                      <span className="sm:hidden">Back</span>
+                    </AppButton>
+                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                      <AppButton variant="ghost" icon={Undo2Icon} onClick={handleClear}>
+                        <span className="hidden sm:inline">Clear Form</span>
+                        <span className="sm:hidden">Clear</span>
+                      </AppButton>
+                      <AppButton variant="secondary" icon={SaveIcon} onClick={() => {}}>
+                        <span className="hidden sm:inline">Save Draft</span>
+                        <span className="sm:hidden">Save</span>
+                      </AppButton>
+                      <AppButton type="submit" variant="primary" icon={CheckCircleIcon} onClick={() => {}}>
+                        <span className="hidden sm:inline">Submit Compliance</span>
+                        <span className="sm:hidden">Submit</span>
+                      </AppButton>
+                    </div>
                   </div>
-                </div>
-              </Card>
 
-              {/* --- Conditional Upload Section --- */}
-              <AnimatePresence>
-                {complianceStatus === 'Complied' && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.4, ease: 'easeInOut' }}
-                  >
-                    <Card>
-                      <div className="p-5 border-b border-black/5">
-                        <h2 className="text-lg font-semibold text-blue-900 flex items-center gap-2">
-                          <Upload size={20} />
-                          Upload Evidence
-                        </h2>
-                      </div>
-                      <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                        <FileUploadCard 
-                          title="Upload Report (PDF)"
-                          file={reportFile}
-                          onChange={handleFileChange(setReportFile)}
-                          accept=".pdf"
-                        />
-                        <FileUploadCard 
-                          title="Upload Photos (Optional)"
-                          file={photosFile}
-                          onChange={handleFileChange(setPhotosFile)}
-                          accept="image/*"
-                        />
-                      </div>
-                    </Card>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-              
-              {/* --- Action Buttons --- */}
-              <div className="mt-4 flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4">
-                <AppButton variant="link" icon={ArrowLeftIcon} onClick={() => {}}>
-                  <span className="hidden sm:inline">Back to Dashboard</span>
-                  <span className="sm:hidden">Back</span>
-                </AppButton>
-                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-                  <AppButton variant="ghost" icon={Undo2Icon} onClick={handleClear}>
-                    <span className="hidden sm:inline">Clear Form</span>
-                    <span className="sm:hidden">Clear</span>
-                  </AppButton>
-                  <AppButton variant="secondary" icon={SaveIcon} onClick={() => {}}>
-                    <span className="hidden sm:inline">Save Draft</span>
-                    <span className="sm:hidden">Save</span>
-                  </AppButton>
-                  <AppButton type="submit" variant="primary" icon={CheckCircleIcon} onClick={() => {}}>
-                    <span className="hidden sm:inline">Submit Compliance</span>
-                    <span className="sm:hidden">Submit</span>
-                  </AppButton>
-                </div>
-              </div>
+                  {/* --- Card: Recent Compliance Logs --- */}
+                  <Card className="mt-6 sm:mt-8">
+                    <div className="p-4 sm:p-5 border-b border-black/5">
+                      <h2 className="text-base sm:text-lg font-semibold text-blue-900 flex items-center gap-2">
+                        <Database size={18} className="sm:hidden" />
+                        <Database size={20} className="hidden sm:block" />
+                        Recent Compliance Logs
+                      </h2>
+                    </div>
+                    <div className="overflow-x-auto">
+                      <table className="w-full min-w-max text-xs sm:text-sm text-left">
+                        <thead className="bg-gray-50/50">
+                          <tr>
+                            <th className="px-2 sm:px-4 py-2 sm:py-3 font-medium text-gray-500 uppercase tracking-wider text-xs sm:text-sm">Direction ID</th>
+                            <th className="px-2 sm:px-4 py-2 sm:py-3 font-medium text-gray-500 uppercase tracking-wider text-xs sm:text-sm hidden sm:table-cell">District</th>
+                            <th className="px-2 sm:px-4 py-2 sm:py-3 font-medium text-gray-500 uppercase tracking-wider text-xs sm:text-sm">Status</th>
+                            <th className="px-2 sm:px-4 py-2 sm:py-3 font-medium text-gray-500 uppercase tracking-wider text-xs sm:text-sm">Date</th>
+                            <th className="px-2 sm:px-4 py-2 sm:py-3 font-medium text-gray-500 uppercase tracking-wider text-xs sm:text-sm hidden md:table-cell">Officer</th>
+                            <th className="px-2 sm:px-4 py-2 sm:py-3 font-medium text-gray-500 uppercase tracking-wider text-center text-xs sm:text-sm">View</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200/50">
+                          {mockLogs.map((log) => (
+                            <tr key={log.id} className="hover:bg-white/50 transition-colors">
+                              <td className="px-2 sm:px-4 py-2 sm:py-3 font-mono text-xs text-gray-700">{log.id}</td>
+                              <td className="px-2 sm:px-4 py-2 sm:py-3 text-gray-800 hidden sm:table-cell">{log.district}</td>
+                              <td className="px-2 sm:px-4 py-2 sm:py-3"><StatusChip status={log.status} /></td>
+                              <td className="px-2 sm:px-4 py-2 sm:py-3 text-gray-600 text-xs sm:text-sm">{log.date}</td>
+                              <td className="px-2 sm:px-4 py-2 sm:py-3 text-gray-800 text-xs sm:text-sm hidden md:table-cell">{log.officer}</td>
+                              <td className="px-2 sm:px-4 py-2 sm:py-3 text-center">
+                                <button className="p-1 sm:p-1.5 text-gray-500 hover:text-blue-600 rounded-full hover:bg-blue-100/50">
+                                  <Eye size={14} className="sm:hidden" />
+                                  <Eye size={16} className="hidden sm:block" />
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </Card>
 
-              {/* --- Card: Recent Compliance Logs --- */}
-              <Card className="mt-6 sm:mt-8">
-                <div className="p-4 sm:p-5 border-b border-black/5">
-                  <h2 className="text-base sm:text-lg font-semibold text-blue-900 flex items-center gap-2">
-                    <Database size={18} className="sm:hidden" />
-                    <Database size={20} className="hidden sm:block" />
-                    Recent Compliance Logs
-                  </h2>
                 </div>
-                <div className="overflow-x-auto">
-                  <table className="w-full min-w-max text-xs sm:text-sm text-left">
-                    <thead className="bg-gray-50/50">
-                      <tr>
-                        <th className="px-2 sm:px-4 py-2 sm:py-3 font-medium text-gray-500 uppercase tracking-wider text-xs sm:text-sm">Direction ID</th>
-                        <th className="px-2 sm:px-4 py-2 sm:py-3 font-medium text-gray-500 uppercase tracking-wider text-xs sm:text-sm hidden sm:table-cell">District</th>
-                        <th className="px-2 sm:px-4 py-2 sm:py-3 font-medium text-gray-500 uppercase tracking-wider text-xs sm:text-sm">Status</th>
-                        <th className="px-2 sm:px-4 py-2 sm:py-3 font-medium text-gray-500 uppercase tracking-wider text-xs sm:text-sm">Date</th>
-                        <th className="px-2 sm:px-4 py-2 sm:py-3 font-medium text-gray-500 uppercase tracking-wider text-xs sm:text-sm hidden md:table-cell">Officer</th>
-                        <th className="px-2 sm:px-4 py-2 sm:py-3 font-medium text-gray-500 uppercase tracking-wider text-center text-xs sm:text-sm">View</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200/50">
-                      {mockLogs.map((log) => (
-                        <tr key={log.id} className="hover:bg-white/50 transition-colors">
-                          <td className="px-2 sm:px-4 py-2 sm:py-3 font-mono text-xs text-gray-700">{log.id}</td>
-                          <td className="px-2 sm:px-4 py-2 sm:py-3 text-gray-800 hidden sm:table-cell">{log.district}</td>
-                          <td className="px-2 sm:px-4 py-2 sm:py-3"><StatusChip status={log.status} /></td>
-                          <td className="px-2 sm:px-4 py-2 sm:py-3 text-gray-600 text-xs sm:text-sm">{log.date}</td>
-                          <td className="px-2 sm:px-4 py-2 sm:py-3 text-gray-800 text-xs sm:text-sm hidden md:table-cell">{log.officer}</td>
-                          <td className="px-2 sm:px-4 py-2 sm:py-3 text-center">
-                            <button className="p-1 sm:p-1.5 text-gray-500 hover:text-blue-600 rounded-full hover:bg-blue-100/50">
-                              <Eye size={14} className="sm:hidden" />
-                              <Eye size={16} className="hidden sm:block" />
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </Card>
-
-            </div>
-          </form>
-        </motion.div>
-        
-        {/* --- Success Toast Notification --- */}
-        <AnimatePresence>
-          {showToast && (
-            <motion.div
-              initial={{ opacity: 0, y: 50, scale: 0.9 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 20, scale: 0.9 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-              className="fixed bottom-3 sm:bottom-6 right-3 sm:right-6 left-3 sm:left-auto z-50 flex items-center gap-2 sm:gap-3 p-3 sm:p-4 w-auto sm:max-w-sm bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg sm:rounded-xl shadow-2xl shadow-blue-500/40"
-            >
-              <CheckCircle size={20} className="sm:hidden flex-shrink-0" />
-              <CheckCircle size={24} className="hidden sm:block flex-shrink-0" />
-              <div className="flex-grow min-w-0">
-                <h4 className="font-semibold text-sm sm:text-base">Success</h4>
-                <p className="text-xs sm:text-sm text-blue-100 truncate">Compliance status submitted successfully.</p>
-              </div>
-              <button onClick={() => setShowToast(false)} className="p-1 rounded-full hover:bg-white/10 flex-shrink-0">
-                <X size={16} className="sm:hidden" />
-                <X size={18} className="hidden sm:block" />
-              </button>
+              </form>
             </motion.div>
-          )}
-        </AnimatePresence>
+            
+            {/* --- Success Toast Notification --- */}
+            <AnimatePresence>
+              {showToast && (
+                <motion.div
+                  initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 20, scale: 0.9 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                  className="fixed bottom-3 sm:bottom-6 right-3 sm:right-6 left-3 sm:left-auto z-50 flex items-center gap-2 sm:gap-3 p-3 sm:p-4 w-auto sm:max-w-sm bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg sm:rounded-xl shadow-2xl shadow-blue-500/40"
+                >
+                  <CheckCircle size={20} className="sm:hidden flex-shrink-0" />
+                  <CheckCircle size={24} className="hidden sm:block flex-shrink-0" />
+                  <div className="flex-grow min-w-0">
+                    <h4 className="font-semibold text-sm sm:text-base">Success</h4>
+                    <p className="text-xs sm:text-sm text-blue-100 truncate">Compliance status submitted successfully.</p>
+                  </div>
+                  <button onClick={() => setShowToast(false)} className="p-1 rounded-full hover:bg-white/10 flex-shrink-0">
+                    <X size={16} className="sm:hidden" />
+                    <X size={18} className="hidden sm:block" />
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
-      </div>
-    </>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardHeader,
@@ -58,6 +58,8 @@ import {
   Typography,
 } from "@mui/material";
 
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
+
 // --- TYPES ---
 interface SHGMember { id: string; name: string; age: number; gender: string; caste?: string; aadhaar?: string; role?: string; training?: string; bankLinked?: boolean; }
 interface Project { id: string; title: string; scheme: string; loanSanctioned: number; status: string; assets: string; manpower: number; paymentReceived: number; salaryPaid: number; remarks?: string }
@@ -103,11 +105,18 @@ const summaryCards = [
 ];
 
 export default function SHGDashboardPage() {
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 700);
+    return () => clearTimeout(t);
+  }, []);
   const [members] = useState<SHGMember[]>(initialMembers);
   const [projects] = useState<Project[]>(initialProjects);
   const [schemes] = useState<SchemeCard[]>(initialSchemes);
   const [benefits] = useState<Benefit[]>(initialBenefits);
   const [applications] = useState<Application[]>(initialApplications);
+
+  if (loading) return <IntegratedLoader />;
 
   const handleAction = (text: string) => { console.log('Action:', text); };
 
