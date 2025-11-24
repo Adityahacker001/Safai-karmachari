@@ -93,6 +93,7 @@ interface RoleConfig {
   color: string;
   bgColor: string;
   dataEntry?: Array<{ name: string; icon: React.ElementType; href: string }>;
+  manageApply?: Array<{ name: string; icon: React.ElementType; href: string }>;
   reports?: Array<{ name: string; icon: React.ElementType; href: string }>;
   "Exception reports"?: Array<{ name: string; icon: React.ElementType; href: string }>;
 
@@ -105,7 +106,7 @@ const roleConfig: Record<string, RoleConfig> = {
     icon: Users,
     color: "text-sky-400",
     bgColor: "from-sky-900/30 to-slate-900",
-    dataEntry: [ { name: "Worker Registration", icon: UserPlus, href: "/contractor/data-entry/worker-registration" }, { name: "Attendance & PPE Log", icon: Clock, href: "/contractor/data-entry/attendance-ppe" }, { name: "Grievance Resolution", icon: AlertTriangle, href: "/contractor/data-entry/grievance-resolution" }, { name: "Training Assignment", icon: GraduationCap, href: "/contractor/data-entry/training-assignment" }, { name: "Directive Issuance", icon: FileText, href: "/contractor/data-entry/directive" }, ],
+    dataEntry: [ { name: "Attendance & PPE Log", icon: Clock, href: "/contractor/data-entry/attendance-ppe" }, { name: "Grievance Resolution", icon: AlertTriangle, href: "/contractor/data-entry/grievance-resolution" }, { name: "Training Assignment", icon: GraduationCap, href: "/contractor/data-entry/training-assignment" }, ],
     reports: [ { name: "Worker Management", icon: Users, href: "/contractor/reports/worker-management" }, { name: "Attendance Reports", icon: Clock, href: "/contractor/reports/attendance" }, { name: "Grievance Tracking", icon: AlertTriangle, href: "/contractor/reports/grievance-tracking" }, { name: "Training Coverage", icon: GraduationCap, href: "/contractor/reports/training-coverage" }, { name: "Safety Compliance", icon: Shield, href: "/contractor/reports/safety-compliance" }, { name: "Audit Logs", icon: FileText, href: "/contractor/reports/audit-logs" }, { name: "User Management", icon: Users, href: "/contractor/reports/user-management" }, { name: "Reports & Analytics", icon: BarChart3, href: "/contractor/reports/reports" }, ],
     dashboard: "/contractor/contractor-dashboard",
   },
@@ -188,11 +189,16 @@ const roleConfig: Record<string, RoleConfig> = {
     icon: Group, // Icon for SHG
     color: "text-green-400", // Example color
     bgColor: "from-green-900/30 to-slate-900", // Example background
-    // Using dataEntry array to list main functional modules for consistency
+    // Data Entry: only worker registration lives here for SHG
     dataEntry: [
+      { name: "Worker Registration", icon: UserPlus, href: "/shg/data-entry/worker-registration" },
+    ],
+
+    // Manage & Apply: other SHG actions (Worker Registration removed)
+    manageApply: [
       { name: "My SHG (Members)", icon: Users, href: "/shg/my-shg" },
       { name: "My Projects", icon: Briefcase, href: "/shg/my-projects" },
-      { name: "Schemes & Applications", icon: ListChecks, href: "/shg/schemes-applications" }, // Combines View/New/Track
+      { name: "Schemes & Applications", icon: ListChecks, href: "/shg/schemes-applications" },
       { name: "My Finances", icon: Wallet, href: "/shg/my-finances" },
       { name: "Benefits", icon: Gift, href: "/shg/benefits" },
       { name: "Raise a Voice", icon: Megaphone, href: "/shg/raise-voice" },
@@ -264,6 +270,7 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
   const config = roleConfig[role] || roleConfig.national;
   const RoleIcon = config.icon;
   const [isDataEntryOpen, setIsDataEntryOpen] = useState(true);
+  const [isManageApplyOpen, setIsManageApplyOpen] = useState(true);
   const [isReportsOpen, setIsReportsOpen] = useState(true);
   const [isExceptionReportsOpen, setIsExceptionReportsOpen] = useState(true); // State for Exception Reports
 
@@ -345,6 +352,8 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
 
   // Determine if role has Data Entry items
   const hasDataEntry = config.dataEntry && config.dataEntry.length > 0;
+  // Determine if role has Manage & Apply items (SHG)
+  const hasManageApply = (config as any).manageApply && (config as any).manageApply.length > 0;
   // Determine if role has Report items
   const hasReports = config.reports && config.reports.length > 0;
 
@@ -409,7 +418,19 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
             Dashboard
           </NavLink>
 
-  <div className="flex-1 overflow-y-auto relative z-10" ref={scrollableRef}>
+                  {/* Contractor: top-level Directive Issuance (moved out of Data Entry) */}
+                  {role === "contractor" && (
+                    <NavLink
+                      href="/contractor/data-entry/directive"
+                      icon={FileText}
+                      activeClass="bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg scale-[1.03] border border-cyan-400/50"
+                      inactiveClass="text-white/80 hover:text-white hover:scale-[1.02]"
+                    >
+                      Directive Issuance
+                    </NavLink>
+                  )}
+
+          <div className="flex-1 overflow-y-auto relative z-10" ref={scrollableRef}>
         <nav className="p-4 space-y-4">
           {/* Conditionally render Profile Link */}
           {showProfileLink && (
@@ -442,7 +463,7 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
                 className="w-full flex items-center justify-between px-4 py-2 text-sm font-bold text-white/90 bg-white/5 rounded-lg hover:bg-white/10 transition-all"
               >
                 {/* Adjust title for SHG */}
-                <span>{role === 'shg' ? 'Manage & Apply' : 'Data Entry'}</span>
+                <span>Data Entry</span>
                 {isDataEntryOpen ? (
                   <ChevronDown className="h-4 w-4" />
                 ) : (
@@ -452,6 +473,38 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
               {isDataEntryOpen && (
                 <div className="space-y-1 pt-1 pl-4">
                   {config.dataEntry?.map((item) => (
+                    <NavLink
+                      key={item.href}
+                      href={item.href}
+                      icon={item.icon}
+                      activeClass="bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg scale-[1.03] border border-cyan-400/50"
+                      inactiveClass="text-white/80 hover:text-white hover:scale-[1.02]"
+                    >
+                      {item.name}
+                    </NavLink>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Manage & Apply Section (SHG specific content will use config.manageApply) */}
+          {hasManageApply && (
+            <div className="space-y-2">
+              <button
+                onClick={() => setIsManageApplyOpen(!isManageApplyOpen)}
+                className="w-full flex items-center justify-between px-4 py-2 text-sm font-bold text-white/90 bg-white/5 rounded-lg hover:bg-white/10 transition-all"
+              >
+                <span>Manage & Apply</span>
+                {isManageApplyOpen ? (
+                  <ChevronDown className="h-4 w-4" />
+                ) : (
+                  <ChevronRight className="h-4 w-4" />
+                )}
+              </button>
+              {isManageApplyOpen && (
+                <div className="space-y-1 pt-1 pl-4">
+                  {(config as any).manageApply?.map((item: any) => (
                     <NavLink
                       key={item.href}
                       href={item.href}

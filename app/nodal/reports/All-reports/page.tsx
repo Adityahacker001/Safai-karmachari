@@ -337,8 +337,8 @@ export default function PerformanceReportsPage() {
                 </div>
             </div>
 
-            <Card className="bg-white shadow-lg rounded-2xl overflow-hidden">
-                <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+            <Card className="relative z-0 bg-white shadow-lg rounded-2xl overflow-hidden">
+                <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-t-3xl sm:rounded-t-3xl rounded-b-3xl sm:rounded-b-3xl overflow-hidden relative z-10">
                     <div className="flex flex-wrap items-center gap-2">
                         {mainTabs.map(tab => {
                             const Icon = tab.icon;
