@@ -240,7 +240,7 @@ export default function SafetyComplianceReportPage() {
             </div> */}
 
             <Card className="relative z-0 w-full max-w-full sm:max-w-full md:max-w-6xl mx-auto bg-white/95 backdrop-blur-sm shadow-2xl border border-gray-100 rounded-t-3xl sm:rounded-t-3xl rounded-2xl sm:rounded-3xl overflow-hidden transform transition-all duration-300 hover:scale-[1.005]">
-                <CardHeader className="p-4 sm:p-6 md:p-8 lg:p-10 bg-gradient-to-r from-blue-600 via-purple-500 via-pink-500 via-rose-400 to-yellow-400 text-white shadow-lg">
+                <CardHeader className="p-4 sm:p-6 md:p-8 lg:p-10 bg-gradient-to-r from-blue-600 via-purple-500 via-pink-500 via-rose-400 to-yellow-400 text-white shadow-lg rounded-t-3xl sm:rounded-t-3xl rounded-b-3xl sm:rounded-b-3xl overflow-hidden relative z-10">
                     <CardTitle className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold">Daily Compliance Log</CardTitle>
                     <CardDescription className="text-white-300 mt-2 text-sm sm:text-base md:text-lg">
                         Detailed log of today's checklist submissions. Non-compliant entries are highlighted.

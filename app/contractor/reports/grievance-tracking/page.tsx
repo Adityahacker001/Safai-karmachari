@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import StatCard from "@/components/ui/stat-card";
 import IntegratedLoader from "@/components/layout/IntegratedLoader";
 // UPDATED: Added new icons
-import { MessageSquare, Download, Clock, ThumbsUp, Eye, Search, Hourglass, CheckCircle2, ShieldAlert } from "lucide-react";
+import { MessageSquare, Download, Clock, ThumbsUp, Eye, Search, Hourglass, CheckCircle2, ShieldAlert, Image, File } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { X } from "lucide-react";
@@ -107,6 +107,53 @@ export default function GrievanceTrackingReportPage() {
 
     const [selectedGrievance, setSelectedGrievance] = useState<any | null>(null);
     const [modalStatus, setModalStatus] = useState<string | null>(null);
+    const [documents, setDocuments] = useState<Array<{ name: string; url: string; mime?: string }>>([]);
+
+    // Helper: derive extension and whether file is image
+    const getExtension = (name: string) => {
+        const parts = name.split('.');
+        return parts.length > 1 ? parts.pop()!.toLowerCase() : '';
+    };
+
+    const isImageFile = (nameOrUrl: string) => {
+        const ext = getExtension(nameOrUrl);
+        return ['png', 'jpg', 'jpeg', 'gif', 'webp', 'bmp'].includes(ext);
+    };
+
+    // When a grievance is selected, attempt to fetch documents from an API endpoint,
+    // otherwise fall back to any documents embedded on the grievance object.
+    useEffect(() => {
+        let mounted = true;
+        if (!selectedGrievance) {
+            setDocuments([]);
+            return;
+        }
+
+        const loadDocs = async () => {
+            // Try grievance-specific documents endpoint first
+            try {
+                const res = await fetch(`/api/grievances/${selectedGrievance.id}/documents`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (mounted && Array.isArray(data)) {
+                        setDocuments(data);
+                        return;
+                    }
+                }
+            } catch (e) {
+                // ignore and fallback
+            }
+
+            // Fallback: check common fields on the selected grievance
+            const fallback = selectedGrievance.idProof || selectedGrievance.documents || [];
+            if (mounted && Array.isArray(fallback)) setDocuments(fallback.map((d: any) => (typeof d === 'string' ? { name: d.split('/').pop() || d, url: d } : d)));
+        };
+
+        loadDocs();
+        return () => {
+            mounted = false;
+        };
+    }, [selectedGrievance]);
 
     // Loader effect (simulate loading)
     useEffect(() => {
@@ -135,6 +182,7 @@ export default function GrievanceTrackingReportPage() {
     if (loading) {
         return <IntegratedLoader />;
     }
+
 
     return (
         <div className="p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 min-h-screen">
@@ -313,6 +361,56 @@ export default function GrievanceTrackingReportPage() {
                                                             <h4 className="font-semibold text-gray-700 mb-1">Original Complaint:</h4>
                                                             <p className="text-lg text-gray-800 italic">"{selectedGrievance.description}"</p>
                                                         </div>
+                                                            {/* ID Proof Submitted Section */}
+                                                            <div className="p-4 border border-gray-200 rounded-xl bg-white shadow-sm">
+                                                                <h4 className="font-semibold text-gray-700 mb-3">ID Proof Submitted</h4>
+                                                                {(!documents || documents.length === 0) ? (
+                                                                    <p className="text-gray-600">No ID proof submitted.</p>
+                                                                ) : (
+                                                                    <div className="space-y-3">
+                                                                        {documents.map((doc) => {
+                                                                            const isImage = isImageFile(doc.url || doc.name || '');
+                                                                            const fileName = doc.name || (doc.url ? doc.url.split('/').pop() : 'Document');
+                                                                            return (
+                                                                                <div key={doc.url || fileName} className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-100 shadow-sm">
+                                                                                    <div className="flex items-center space-x-3">
+                                                                                        <div className="p-2 rounded-md bg-gray-50 flex items-center justify-center">
+                                                                                            {isImage ? (
+                                                                                                <img src={doc.url} alt={fileName} className="h-10 w-10 object-cover rounded" />
+                                                                                            ) : (
+                                                                                                <File className="h-6 w-6 text-gray-600" />
+                                                                                            )}
+                                                                                        </div>
+                                                                                        <div className="flex flex-col">
+                                                                                            <span className="font-medium text-gray-800 text-sm truncate max-w-[300px]">{fileName}</span>
+                                                                                            <span className="text-xs text-gray-500">{doc.mime || getExtension(fileName)}</span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div className="flex items-center space-x-2">
+                                                                                        <a
+                                                                                            href={doc.url}
+                                                                                            target="_blank"
+                                                                                            rel="noreferrer"
+                                                                                            className="inline-flex items-center px-3 py-1.5 bg-white/10 text-blue-700 hover:bg-white/20 border border-gray-200 rounded-md text-sm"
+                                                                                        >
+                                                                                            <Eye className="h-4 w-4 mr-2" />
+                                                                                            View
+                                                                                        </a>
+                                                                                        <a
+                                                                                            href={doc.url}
+                                                                                            download
+                                                                                            className="inline-flex items-center px-3 py-1.5 bg-white/90 text-gray-800 border border-gray-200 rounded-md text-sm"
+                                                                                        >
+                                                                                            <Download className="h-4 w-4 mr-2" />
+                                                                                            Download
+                                                                                        </a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            );
+                                                                        })}
+                                                                    </div>
+                                                                )}
+                                                            </div>
                                                         {selectedGrievance.resolutionNotes && (
                                                             <div className={`p-4 border rounded-xl shadow-sm ${selectedGrievance.status === 'Resolved' ? 'border-green-200 bg-green-50' : 'border-yellow-200 bg-yellow-50'}`}>
                                                                 <h4 className={`font-semibold mb-1 ${selectedGrievance.status === 'Resolved' ? 'text-green-800' : 'text-yellow-800'}`}>

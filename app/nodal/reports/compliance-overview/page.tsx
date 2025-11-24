@@ -64,8 +64,8 @@ export default function ComplianceOverviewReportPage() {
       {/* Two-Column Layout for Tables */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         {/* Left Column: Official Audit Log */}
-        <Card className="bg-white shadow-lg rounded-2xl overflow-hidden"> 
-          <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+        <Card className="relative z-0 bg-white shadow-lg rounded-2xl overflow-hidden"> 
+          <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-t-3xl sm:rounded-t-3xl rounded-b-3xl sm:rounded-b-3xl overflow-hidden relative z-10">
             <CardTitle className="text-xl font-bold">Official Audit Log</CardTitle>
             <CardDescription className="text-blue-100">History of compliance audits conducted by the Nodal Officer</CardDescription>
           </CardHeader>
@@ -107,8 +107,8 @@ export default function ComplianceOverviewReportPage() {
         </Card>
 
         {/* Right Column: Top Violations from Daily Checklists */}
-        <Card className="bg-white shadow-lg rounded-2xl overflow-hidden"> 
-          <CardHeader className="bg-gradient-to-r from-purple-500 to-purple-600 text-white">
+        <Card className="relative z-0 bg-white shadow-lg rounded-2xl overflow-hidden"> 
+          <CardHeader className="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-t-3xl sm:rounded-t-3xl rounded-b-3xl sm:rounded-b-3xl overflow-hidden relative z-10">
             <CardTitle className="text-xl font-bold">Top 5 Daily Violations</CardTitle>
             <CardDescription className="text-purple-100">Aggregated from all daily worker safety submissions</CardDescription>
           </CardHeader>

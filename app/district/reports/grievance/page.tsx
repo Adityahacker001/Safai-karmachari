@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import IntegratedLoader from '@/components/IntegratedLoader';
+import IntegratedLoader from '@/components/layout/IntegratedLoader';
 import DashboardCard from '@/components/dashboard/dashboard-card';
 import DataTable from '@/components/ui/data-table';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';

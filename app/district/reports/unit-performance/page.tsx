@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { contractorTheme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
-import IntegratedLoader from "@/components/IntegratedLoader";
+import IntegratedLoader from "@/components/layout/IntegratedLoader";
 
 const UnitPerformancePage = () => {
     const [searchTerm, setSearchTerm] = useState('');

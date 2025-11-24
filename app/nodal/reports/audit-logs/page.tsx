@@ -227,8 +227,8 @@ const AuditLogs = () => {
       </div>
 
       {/* Audit Logs Table */}
-      <div className="bg-white rounded-2xl shadow-lg overflow-hidden border">
-        <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-4 sm:p-6">
+      <div className="relative z-0 bg-white rounded-2xl shadow-lg overflow-hidden border">
+        <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-4 sm:p-6 rounded-t-3xl sm:rounded-t-3xl rounded-b-3xl sm:rounded-b-3xl overflow-hidden relative z-10">
           <h3 className="text-lg font-bold text-white">Recent Activity Logs</h3>
         </div>
         <div className="p-0">

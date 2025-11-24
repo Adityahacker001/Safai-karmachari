@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
-import IntegratedLoader from "@/components/IntegratedLoader";
+import IntegratedLoader from "@/components/layout/IntegratedLoader";
 import {
   Users,
   UserCheck,
@@ -259,12 +259,12 @@ export default function DistrictUserManagement() {
       </Card>
 
       {/* User Table */}
-      <Card className="backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-blue-600/10 to-purple-600/10 backdrop-blur-sm border-b border-gray-200/50 p-4 sm:p-6 md:p-8">
+      <Card className="relative z-0 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl overflow-hidden">
+        <CardHeader className="bg-gradient-to-r from-blue-600/10 to-purple-600/10 backdrop-blur-sm border-b border-gray-200/50 p-4 sm:p-6 md:p-8 rounded-t-3xl sm:rounded-t-3xl rounded-b-3xl sm:rounded-b-3xl overflow-hidden relative z-10">
           <CardTitle className="text-xl sm:text-2xl md:text-3xl font-black text-gray-800">User Accounts</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto rounded-t-3xl sm:rounded-t-3xl rounded-b-3xl sm:rounded-b-3xl overflow-hidden">
             <Table>
               {/* 🎨 New Excel-style Header with blue-cyan gradient and white text */}
               <TableHeader>
