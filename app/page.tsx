@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from 'next/navigation';
 import { motion, easeInOut, AnimatePresence } from "framer-motion"; // --- NEW --- Added AnimatePresence
 import {
     NavigationMenu,
@@ -27,6 +28,7 @@ import {
 // --- NEW, BOLDER, ANIMATED NAVIGATION COMPONENT ---
 const CustomNavigationMenu = ({ onLogin }: { onLogin: () => void }) => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const router = useRouter();
     // --- NEW --- State to track scroll position
     const [isScrolled, setIsScrolled] = useState(false);
 
@@ -128,16 +130,24 @@ const CustomNavigationMenu = ({ onLogin }: { onLogin: () => void }) => {
                         </NavigationMenuList>
                     </NavigationMenu>
 
-                    {/* --- NEW --- Desktop Login Button with Shine Effect */}
-                    <Button
-                        onClick={onLogin}
-                        className="hidden lg:flex relative overflow-hidden group bg-gradient-to-r from-yellow-400 via-pink-500 to-blue-500 hover:from-yellow-500 hover:to-blue-700 text-white font-bold px-8 py-2 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-yellow-400/40 border-2 border-white/30"
-                    >
-                        {/* The Shine Element */}
-                        <span className="absolute top-0 left-[-150%] w-3/4 h-full bg-white/30 transform -skew-x-20 transition-all duration-700 ease-in-out group-hover:left-[150%]" />
-                        {/* The Text (relative to be on top) */}
-                        <span className="relative z-10">Login</span>
-                    </Button>
+                    {/* --- NEW --- Desktop Create SHG & Login Buttons */}
+                    <div className="hidden lg:flex items-center space-x-3">
+                        <Button
+                            onClick={() => router.push('/shg-cr')}
+                            className="relative overflow-hidden group bg-gradient-to-r from-yellow-400 via-pink-500 to-blue-500 hover:from-yellow-500 hover:to-blue-700 text-white font-bold px-8 py-2 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-yellow-400/40 border-2 border-white/30"
+                        >
+                            <span className="absolute top-0 left-[-150%] w-3/4 h-full bg-white/30 transform -skew-x-20 transition-all duration-700 ease-in-out group-hover:left-[150%]" />
+                            <span className="relative z-10">Create SHG</span>
+                        </Button>
+
+                        <Button
+                            onClick={onLogin}
+                            className="relative overflow-hidden group bg-gradient-to-r from-yellow-400 via-pink-500 to-blue-500 hover:from-yellow-500 hover:to-blue-700 text-white font-bold px-8 py-2 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-yellow-400/40 border-2 border-white/30"
+                        >
+                            <span className="absolute top-0 left-[-150%] w-3/4 h-full bg-white/30 transform -skew-x-20 transition-all duration-700 ease-in-out group-hover:left-[150%]" />
+                            <span className="relative z-10">Login</span>
+                        </Button>
+                    </div>
 
                     {/* Mobile Menu Button */}
                     <button
@@ -191,15 +201,27 @@ const CustomNavigationMenu = ({ onLogin }: { onLogin: () => void }) => {
                                 Contact
                             </motion.a>
                             <motion.div variants={mobileNavItemVariants}> {/* --- NEW --- Wrapper */}
-                                <Button
-                                    onClick={() => {
-                                        onLogin();
-                                        setMobileMenuOpen(false);
-                                    }}
-                                    className="w-full bg-gradient-to-r from-yellow-400 via-pink-500 to-blue-500 hover:from-yellow-500 hover:to-blue-700 text-white font-bold px-8 py-3 mt-4 rounded-xl shadow-lg border-2 border-white/30 transition-all duration-300"
-                                >
-                                    Login
-                                </Button>
+                                <div className="space-y-3">
+                                    <Button
+                                        onClick={() => {
+                                            router.push('/shg-cr');
+                                            setMobileMenuOpen(false);
+                                        }}
+                                        className="w-full bg-gradient-to-r from-yellow-400 via-pink-500 to-blue-500 hover:from-yellow-500 hover:to-blue-700 text-white font-bold px-8 py-3 rounded-xl shadow-lg border-2 border-white/30 transition-all duration-300"
+                                    >
+                                        Create SHG
+                                    </Button>
+
+                                    <Button
+                                        onClick={() => {
+                                            onLogin();
+                                            setMobileMenuOpen(false);
+                                        }}
+                                        className="w-full bg-gradient-to-r from-yellow-400 via-pink-500 to-blue-500 hover:from-yellow-500 hover:to-blue-700 text-white font-bold px-8 py-3 rounded-xl shadow-lg border-2 border-white/30 transition-all duration-300"
+                                    >
+                                        Login
+                                    </Button>
+                                </div>
                             </motion.div>
                         </nav>
                     </motion.div>
