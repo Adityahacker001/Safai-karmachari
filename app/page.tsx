@@ -134,17 +134,17 @@ const CustomNavigationMenu = ({ onLogin }: { onLogin: () => void }) => {
                     <div className="hidden lg:flex items-center space-x-3">
                         <Button
                             onClick={() => router.push('/shg-cr')}
-                            className="relative overflow-hidden group bg-gradient-to-r from-yellow-400 via-pink-500 to-blue-500 hover:from-yellow-500 hover:to-blue-700 text-white font-bold px-8 py-2 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-yellow-400/40 border-2 border-white/30"
+                            className="relative overflow-hidden group bg-gradient-to-r from-[#9EDDFF] to-[#BEFFF7] text-[#06452a] font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-sky-300/30 rounded-md px-6 py-2"
                         >
-                            <span className="absolute top-0 left-[-150%] w-3/4 h-full bg-white/30 transform -skew-x-20 transition-all duration-700 ease-in-out group-hover:left-[150%]" />
+                            <span className="absolute top-0 left-[-150%] w-3/4 h-full bg-white/10 transform -skew-x-20 transition-all duration-700 ease-in-out group-hover:left-[150%]" />
                             <span className="relative z-10">Create SHG</span>
                         </Button>
 
                         <Button
                             onClick={onLogin}
-                            className="relative overflow-hidden group bg-gradient-to-r from-yellow-400 via-pink-500 to-blue-500 hover:from-yellow-500 hover:to-blue-700 text-white font-bold px-8 py-2 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-yellow-400/40 border-2 border-white/30"
+                            className="relative overflow-hidden group bg-gradient-to-r from-[#0499E9] to-[#A6F6FF] text-black font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-sky-400/30 rounded-md px-6 py-2"
                         >
-                            <span className="absolute top-0 left-[-150%] w-3/4 h-full bg-white/30 transform -skew-x-20 transition-all duration-700 ease-in-out group-hover:left-[150%]" />
+                            <span className="absolute top-0 left-[-150%] w-3/4 h-full bg-white/10 transform -skew-x-20 transition-all duration-700 ease-in-out group-hover:left-[150%]" />
                             <span className="relative z-10">Login</span>
                         </Button>
                     </div>
@@ -207,7 +207,7 @@ const CustomNavigationMenu = ({ onLogin }: { onLogin: () => void }) => {
                                             router.push('/shg-cr');
                                             setMobileMenuOpen(false);
                                         }}
-                                        className="w-full bg-gradient-to-r from-yellow-400 via-pink-500 to-blue-500 hover:from-yellow-500 hover:to-blue-700 text-white font-bold px-8 py-3 rounded-xl shadow-lg border-2 border-white/30 transition-all duration-300"
+                                        className="w-full transition-all duration-300 bg-gradient-to-r from-[#9EDDFF] to-[#BEFFF7] text-[#06452a] font-semibold rounded-md py-2 shadow-md hover:shadow-sky-300/30"
                                     >
                                         Create SHG
                                     </Button>
@@ -217,7 +217,7 @@ const CustomNavigationMenu = ({ onLogin }: { onLogin: () => void }) => {
                                             onLogin();
                                             setMobileMenuOpen(false);
                                         }}
-                                        className="w-full bg-gradient-to-r from-yellow-400 via-pink-500 to-blue-500 hover:from-yellow-500 hover:to-blue-700 text-white font-bold px-8 py-3 rounded-xl shadow-lg border-2 border-white/30 transition-all duration-300"
+                                        className="w-full transition-all duration-300 bg-gradient-to-r from-[#0499E9] to-[#A6F6FF] text-white font-semibold rounded-md py-2 shadow-md hover:shadow-sky-400/30"
                                     >
                                         Login
                                     </Button>
@@ -903,6 +903,25 @@ export default function Home() {
                 .animate-pulse-blue {
                   animation: pulse-blue 3s ease-in-out infinite;
                 }
+
+                                /* Fixed solid button style for Create SHG and Login */
+                                .fixed-solid-btn {
+                                    background: #F59E0B;
+                                    color: #ffffff;
+                                    font-weight: 600;
+                                    border: 1px solid rgba(255,255,255,0.3);
+                                    border-radius: 10px;
+                                    padding: 10px 28px;
+                                    display: inline-flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    transition: filter 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+                                }
+
+                                .fixed-solid-btn:hover {
+                                    filter: brightness(1.08);
+                                    box-shadow: 0 8px 30px rgba(139,92,246,0.15);
+                                }
               `}</style>
         </div>
     );
