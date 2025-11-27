@@ -43,6 +43,25 @@ const CustomNavigationMenu = ({ onLogin }: { onLogin: () => void }) => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    // Active color toggles between 'pink' and 'blue' every 4 seconds.
+    const [activeColor, setActiveColor] = useState<'blue' | 'pink'>('blue');
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setActiveColor(prev => (prev === 'pink' ? 'blue' : 'pink'));
+        }, 4000);
+        return () => clearInterval(interval);
+    }, []);
+
+    // Shared base classes appended to desktop buttons (keeps shape, shine, scale, shadow)
+    const sharedDesktopBase = 'relative overflow-hidden group bg-[length:200%_200%] animate-text font-semibold transform hover:scale-105 shadow-lg rounded-md px-6 py-2';
+
+    // Desktop button classes switch only the gradient & text color based on activeColor.
+    // Updated to use smooth 500ms transitions and header-like animated gradient
+    // Use a single animated gradient (pink -> blue) so transitions are smooth (no class swap snapping)
+    // Buttons inherit the header's gradientShift animation and have 500ms transitions for background/color/box-shadow
+    const createDesktopBtnClasses = `${sharedDesktopBase} animated-btn-gradient text-black hover:shadow-2xl hover:scale-105 hover:-translate-y-1 hover:brightness-105 focus:outline-none focus:ring-4 focus:ring-white/20 [transition:background_500ms_ease,_color_500ms_ease,_box-shadow_500ms_ease]`;
+    const loginDesktopBtnClasses = `${sharedDesktopBase} animated-btn-gradient text-black hover:shadow-2xl hover:scale-105 hover:-translate-y-1 hover:brightness-105 focus:outline-none focus:ring-4 focus:ring-white/20 [transition:background_500ms_ease,_color_500ms_ease,_box-shadow_500ms_ease]`;
+
     // --- NEW --- Animation variants for staggered mobile menu
     const mobileMenuVariants = {
         hidden: { opacity: 0 },
@@ -134,7 +153,7 @@ const CustomNavigationMenu = ({ onLogin }: { onLogin: () => void }) => {
                     <div className="hidden lg:flex items-center space-x-3">
                         <Button
                             onClick={() => router.push('/shg-cr')}
-                            className="relative overflow-hidden group bg-gradient-to-r from-[#9EDDFF] to-[#BEFFF7] text-[#06452a] font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-sky-300/30 rounded-md px-6 py-2"
+                            className={createDesktopBtnClasses}
                         >
                             <span className="absolute top-0 left-[-150%] w-3/4 h-full bg-white/10 transform -skew-x-20 transition-all duration-700 ease-in-out group-hover:left-[150%]" />
                             <span className="relative z-10">Create SHG</span>
@@ -142,7 +161,7 @@ const CustomNavigationMenu = ({ onLogin }: { onLogin: () => void }) => {
 
                         <Button
                             onClick={onLogin}
-                            className="relative overflow-hidden group bg-gradient-to-r from-[#0499E9] to-[#A6F6FF] text-black font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-sky-400/30 rounded-md px-6 py-2"
+                            className={loginDesktopBtnClasses}
                         >
                             <span className="absolute top-0 left-[-150%] w-3/4 h-full bg-white/10 transform -skew-x-20 transition-all duration-700 ease-in-out group-hover:left-[150%]" />
                             <span className="relative z-10">Login</span>
@@ -821,6 +840,16 @@ export default function Home() {
                   background-size: 200% 200%;
                   animation: gradientShift 8s ease infinite;
                 }
+
+                                /* Animated gradient for buttons to match header
+                                   Use a single gradient containing both pink and blue phases so
+                                   switching/morphing is smooth (no class-swap snapping). */
+                                .animated-btn-gradient {
+                                    background-image: linear-gradient(90deg, #FF7FCF 0%, #FFB7ED 33%, #ffcff3ff 44%,  #f6f9faff 55%, #A6F6FF 100%, #4DB8FF 66%, #2ba2f1ff  100%);
+                                    background-size: 200% 200%;
+                                    animation: gradientShift 8s ease infinite;
+                                    transition: background 500ms ease, color 500ms ease, box-shadow 500ms ease;
+                                }
 
                 @keyframes glow-pulse {
                   0%,
