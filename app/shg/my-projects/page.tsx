@@ -138,6 +138,10 @@ const MyProjectsPage = () => {
     return () => clearTimeout(t);
   }, []);
 
+  // Modal state for View Details
+  const [selectedProject, setSelectedProject] = useState<any | null>(null);
+  const [viewOpen, setViewOpen] = useState(false);
+
   // --- Summary Metrics Calculation (hook) ---
   const summary = useMemo(() => ({
     total: MOCK_PROJECT_DATA.length,
@@ -174,15 +178,29 @@ const MyProjectsPage = () => {
 
 
   // --- Mock Actions ---
-  const handleView = (id: number) => alert(`View Project ID: ${id}`);
-  const handleEdit = (id: number) => alert(`Edit Project ID: ${id}`);
+  const handleView = (id: number) => {
+    console.log('handleView called, id=', id);
+    const proj = MOCK_PROJECT_DATA.find(p => p.id === id) ?? null;
+    setSelectedProject(proj);
+    setViewOpen(true);
+  };
+  const handleEdit = (id: number) => {
+    console.log('Edit Project ID:', id);
+  };
   const handleDelete = (id: number) => {
-    if(confirm(`Are you sure you want to delete Project ID: ${id}?`)) {
-        alert(`Deleting Project ID: ${id}`);
-        // Add actual delete logic here
+    if (confirm(`Are you sure you want to delete Project ID: ${id}?`)) {
+      console.log(`Deleting Project ID: ${id}`);
+      // Add actual delete logic here
     }
   };
-  const handleAddNew = () => alert('Navigate to Add New Project Form');
+  const handleAddNew = () => {
+    console.log('Navigate to Add New Project Form');
+  };
+
+  const closeView = () => {
+    setViewOpen(false);
+    setSelectedProject(null);
+  };
 
   // --- Summary Metrics Calculation ---
   
@@ -302,9 +320,80 @@ const MyProjectsPage = () => {
 
       </div>
        {/* Simple Footer */}
-        <footer className="text-center mt-12 text-xs text-slate-500">
-           NSKFDC SHG Dashboard &copy; {new Date().getFullYear()}
-        </footer>
+          {viewOpen && selectedProject && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+              <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-2xl p-8 w-full max-w-lg border border-slate-200 relative animate-fade-in">
+
+                {/* Close Button */}
+                <button 
+                  onClick={() => setViewOpen(false)}
+                  className="absolute top-4 right-4 text-slate-500 hover:text-slate-700 transition"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+
+                <h2 className="text-2xl font-bold text-slate-800 mb-1">
+                  Project Overview
+                </h2>
+                <p className="text-sm text-slate-500 mb-6">
+                  Brief details of the selected project
+                </p>
+
+                <div className="space-y-4 text-sm">
+
+                  <div>
+                    <p className="font-semibold text-slate-700">Project Title</p>
+                    <p className="text-slate-600">{selectedProject.title}</p>
+                  </div>
+
+                  <div>
+                    <p className="font-semibold text-slate-700">Service Type</p>
+                    <p className="text-slate-600">{selectedProject.scheme}</p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="font-semibold text-slate-700">Start Date</p>
+                      <p className="text-slate-600">{selectedProject.startDate}</p>
+                    </div>
+
+                    <div>
+                      <p className="font-semibold text-slate-700">End Date</p>
+                      <p className="text-slate-600">—</p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <p className="font-semibold text-slate-700">Status</p>
+                    <ProjectStatusBadge status={selectedProject.status} />
+                  </div>
+
+                  <div>
+                    <p className="font-semibold text-slate-700">Project Location</p>
+                    <p className="text-slate-600">Not Available</p>
+                  </div>
+
+                  <div>
+                    <p className="font-semibold text-slate-700">Work Description</p>
+                    <p className="text-slate-600">—</p>
+                  </div>
+
+                </div>
+
+                <button
+                  onClick={() => setViewOpen(false)}
+                  className="mt-6 w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow-md transition"
+                >
+                  Close
+                </button>
+
+              </div>
+            </div>
+          )}
+
+          <footer className="text-center mt-12 text-xs text-slate-500">
+             NSKFDC SHG Dashboard &copy; {new Date().getFullYear()}
+          </footer>
     </div>
   );
 };
