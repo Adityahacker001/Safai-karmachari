@@ -3,6 +3,8 @@
 import { useSearchParams } from 'next/navigation';
 import Sidebar from './sidebar';
 import Header from './header';
+import { createPortal } from 'react-dom';
+import { useEffect, useState } from 'react';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -24,6 +26,19 @@ const roleTitles = {
 
 export default function DashboardLayout({ children, role, name }: DashboardLayoutProps) {
   const searchParams = useSearchParams();
+  const [modalContainer, setModalContainer] = useState<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const modalRoot = document.getElementById('modal-root');
+    if (!modalRoot) {
+      const newModalRoot = document.createElement('div');
+      newModalRoot.id = 'modal-root';
+      document.body.appendChild(newModalRoot);
+      setModalContainer(newModalRoot);
+    } else {
+      setModalContainer(modalRoot);
+    }
+  }, []);
 
   // Prefer explicit `name` prop, but when the dashboard role is the combined
   // SP/CP route, derive the title from the URL query `?role=sp|cp` so the
@@ -42,7 +57,7 @@ export default function DashboardLayout({ children, role, name }: DashboardLayou
     <div className="flex h-screen relative">
       {/* Single Sidebar instance - handles both desktop and mobile */}
       <Sidebar role={role} />
-      
+
       {/* Main Content Area */}
       <div className="flex flex-col flex-1 min-w-0 lg:ml-64">
         <Header dashboardTitle={title} userName={title} />
@@ -50,6 +65,9 @@ export default function DashboardLayout({ children, role, name }: DashboardLayou
           {children}
         </main>
       </div>
+
+      {/* Modal Root for React Portal */}
+      {modalContainer && createPortal(<div id="modal-root" />, modalContainer)}
     </div>
   );
 }

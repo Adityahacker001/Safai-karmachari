@@ -5,6 +5,7 @@
 "use client"; // For Next.js App Router
 
 import React, { useState, useMemo, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import IntegratedLoader from "@/components/layout/IntegratedLoader";
 import {
   LayoutDashboard, ChevronRight, Briefcase, PlusCircle, CheckCircle, Clock, XCircle, FileClock,
@@ -166,8 +167,8 @@ const ApplyModal: React.FC<{ isOpen: boolean; onClose: () => void; scheme: any |
 
   if (!isOpen || !scheme) return null;
 
-  return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-3xl animate-fade-in">
+  const modalContent = (
+    <div className="fixed inset-0 z-[999999] flex items-center justify-center bg-black/70 backdrop-blur-3xl">
       <div className="z-[10000] bg-white/95 rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden flex flex-col">
         {/* Header */}
         <div className="flex justify-between items-center p-5 border-b border-slate-200">
@@ -297,6 +298,8 @@ const ApplyModal: React.FC<{ isOpen: boolean; onClose: () => void; scheme: any |
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.getElementById('modal-root')!);
 };
 
 // 6. Toast Notification
@@ -374,7 +377,7 @@ const SchemesApplicationPage = () => {
   if (!hasMounted || loading) return <IntegratedLoader />;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-slate-200 to-slate-300 backdrop-blur-3xl p-4 md:p-8 font-sans animate-fade-in">
+    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-slate-200 to-slate-300 p-4 md:p-8">
       <div className="max-w-7xl mx-auto space-y-8">
         
         {/* --- 1. Header Section --- */}
@@ -474,7 +477,7 @@ const SchemesApplicationPage = () => {
         {detailsOpen && selectedSchemeDetails && (
           <div
             onClick={closeDetailsModal}
-            className="fixed inset-0 z-[9999] flex items-start justify-center pt-20 bg-black/70 backdrop-blur-3xl animate-fade-in"
+            className="fixed inset-0 z-[999999] flex items-center justify-center bg-black/40 backdrop-blur-sm animate-fade-in"
           >
             <div
               onClick={(e) => e.stopPropagation()}

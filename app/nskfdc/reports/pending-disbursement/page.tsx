@@ -35,8 +35,8 @@ import IntegratedLoader from '@/components/layout/IntegratedLoader';
 // --- Mock Data ---
 
 const MOCK_PENDING_DATA = [
-  { id: 1, benName: 'Vijay Patel', benType: 'Individual', scheme: 'Self Employment Scheme', amtSanctioned: 200000, dateSanction: '2025-09-15', status: 'Pending', delayReason: 'Awaiting fund approval from bank', remarks: 'Escalated to State Nodal', state: 'Gujarat', district: 'Ahmedabad', officer: 'S. Sharma', expectedDate: '2025-11-05', lastUpdated: '2025-10-27' },
-  { id: 2, benName: 'Ujala SHG', benType: 'SHG', scheme: 'Mechanized Cleaning Grant', amtSanctioned: 2500000, dateSanction: '2025-08-10', status: 'Delayed', delayReason: 'Bank Processing Issue - KYC Update', remarks: 'Contacted bank relationship manager', state: 'Maharashtra', district: 'Mumbai', officer: 'A. Desai', expectedDate: '2025-11-10', lastUpdated: '2025-10-26' },
+  { id: 1, benName: 'Vijay Patel', benType: 'Individual', scheme: 'Self Employment Scheme', amtSanctioned: 200000, dateSanction: '2025-09-15', status: 'Pending', delayReason: 'Awaiting fund approval from bank', remarks: 'Escalated to State Nodal', state: 'Gujarat', district: 'Ahmedabad', officer: 'S. Sharma', expectedDate: '2025-11-05', lastUpdated: '2025-10-27', bankBranch: 'HDFC Bank, Ahmedabad Main' },
+  { id: 2, benName: 'Ujala SHG', benType: 'SHG', scheme: 'Mechanized Cleaning Grant', amtSanctioned: 2500000, dateSanction: '2025-08-10', status: 'Delayed', delayReason: 'Bank Processing Issue - KYC Update', remarks: 'Contacted bank relationship manager', state: 'Maharashtra', district: 'Mumbai', officer: 'A. Desai', expectedDate: '2025-11-10', lastUpdated: '2025-10-26', bankBranch: 'ICICI Bank, Mumbai Central' },
   { id: 3, benName: 'Ekta SHG', benType: 'SHG', scheme: 'Self Employment Scheme', amtSanctioned: 800000, dateSanction: '2025-10-01', status: 'Under Review', delayReason: 'Verification Ongoing by SCA', remarks: 'Documents submitted, awaiting clearance', state: 'Rajasthan', district: 'Jaipur', officer: 'R. Meena', expectedDate: '2025-11-15', lastUpdated: '2025-10-25' },
   { id: 4, benName: 'Manoj Kumar', benType: 'Individual', scheme: 'Self Employment Scheme', amtSanctioned: 100000, dateSanction: '2025-07-20', status: 'Delayed', delayReason: 'State Agency Fund Constraint', remarks: 'Awaiting fund release from State Govt.', state: 'Bihar', district: 'Patna', officer: 'P. Singh', expectedDate: '2025-11-30', lastUpdated: '2025-10-20' },
   { id: 5, benName: 'Pragati SHG', benType: 'SHG', scheme: 'Mechanized Cleaning Grant', amtSanctioned: 2000000, dateSanction: '2025-10-05', status: 'Pending', delayReason: 'Final Approval Pending at HQ', remarks: 'File moved to final approver', state: 'Punjab', district: 'Ludhiana', officer: 'G. Kaur', expectedDate: '2025-11-12', lastUpdated: '2025-10-27' },
@@ -116,6 +116,7 @@ const ViewDetailsModal: React.FC<DetailsModalProps> = ({ item, isOpen, onClose }
             <DetailItem label="Sanctioning Officer" value={item.officer || 'N/A'} />
             <DetailItem label="Expected Disbursement Date" value={item.expectedDate ? new Date(item.expectedDate).toLocaleDateString('en-GB') : 'N/A'} />
             <DetailItem label="Last Updated" value={new Date(item.lastUpdated).toLocaleDateString('en-GB')} className="md:col-span-2"/>
+            {item.bankBranch && <DetailItem label="Bank / Branch Name" value={item.bankBranch} className="md:col-span-2" />}
           </div>
         </div>
         <div className="flex justify-end items-center p-4 border-t border-slate-200 bg-slate-50 gap-3">

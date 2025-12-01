@@ -403,6 +403,18 @@ export default function DirectionsComplianceReportPage() {
                       <StatusPill status={selectedDirection.status} />
                     </span>
                   </div>
+                  <div className="infoRow">
+                    <span className="label">Supporting Document:</span>
+                    <span className="value">
+                      {selectedDirection.supportingDocsLink ? (
+                        <a href={selectedDirection.supportingDocsLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                          View Document
+                        </a>
+                      ) : (
+                        'Not Uploaded'
+                      )}
+                    </span>
+                  </div>
                 </div>
                 <div className="messageSection">
                   <h4>Direction Message:</h4>
