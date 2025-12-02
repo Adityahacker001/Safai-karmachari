@@ -5,6 +5,7 @@
 "use client"; // For Next.js App Router
 
 import React, { useState, useMemo, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import IntegratedLoader from "@/components/layout/IntegratedLoader";
 import {
   LayoutDashboard, ChevronRight, Briefcase, PlusCircle, CheckCircle, Clock, XCircle, FileClock,
@@ -116,80 +117,189 @@ const FileUpload: React.FC<{ label: string, name: string, onChange: any, require
 
 // 5. Apply Modal Component
 const ApplyModal: React.FC<{ isOpen: boolean; onClose: () => void; scheme: any | null }> = ({ isOpen, onClose, scheme }) => {
-  const [formData, setFormData] = useState({ projectTitle: '', category: '', amount: '', cost: '', contribution: '', description: '', assets: '' });
+  const [formData, setFormData] = useState({
+    projectTitle: '',
+    category: '',
+    amount: '',
+    cost: '',
+    contribution: '',
+    description: '',
+    assets: ''
+  });
   const [files, setFiles] = useState<File[]>([]);
-  const [errors, setErrors] = useState<any>({});
+  const [errors, setErrors] = useState<Record<string, string | null>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-      setFormData((prev: any) => ({ ...prev, [e.target.name]: e.target.value }));
-      if(errors[e.target.name]) setErrors((prev: any) => ({...prev, [e.target.name]: null}));
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    if (errors[e.target.name]) {
+      setErrors((prev) => ({ ...prev, [e.target.name]: null }));
+    }
   };
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => { if(e.target.files) setFiles(prev => [...prev, ...Array.from(e.target.files!)].slice(0, 5)); }; // Limit 5 files
 
-  const validate = () => {
-    let tempErrors: any = {};
-    if (!formData.projectTitle) tempErrors.projectTitle = "Project Title is required.";
-    if (!formData.amount || isNaN(Number(formData.amount)) || Number(formData.amount) <= 0) tempErrors.amount = "Valid Loan Amount is required.";
-    if (!formData.description) tempErrors.description = "Description is required.";
-    if (files.length === 0) tempErrors.files = "At least one document is required.";
-    setErrors(tempErrors);
-    return Object.keys(tempErrors).length === 0;
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setFiles((prev) => [...prev, ...Array.from(e.target.files || [])].slice(0, 5));
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (validate()) {
+    const tempErrors: Record<string, string> = {};
+    if (!formData.projectTitle) tempErrors.projectTitle = 'Project Title is required.';
+    if (!formData.amount || isNaN(Number(formData.amount)) || Number(formData.amount) <= 0) tempErrors.amount = 'Valid Loan Amount is required.';
+    if (!formData.description) tempErrors.description = 'Description is required.';
+    if (files.length === 0) tempErrors.files = 'At least one document is required.';
+    setErrors(tempErrors);
+    if (Object.keys(tempErrors).length === 0) {
       setIsSubmitting(true);
-      console.log("Submitting:", { ...formData, scheme: scheme?.name, files });
-      // Simulate API call
       setTimeout(() => {
         setIsSubmitting(false);
-        setShowToast(true); // Show success toast
-        setTimeout(() => { setShowToast(false); onClose(); }, 2000); // Close toast & modal after 2s
-        // Reset form? You might want to clear formData and files here
+        setShowToast(true);
+        setTimeout(() => {
+          setShowToast(false);
+          onClose();
+        }, 2000);
       }, 1500);
     }
   };
 
   if (!isOpen || !scheme) return null;
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4 animate-modal-enter">
-      <div className="bg-gradient-to-br from-white via-sky-50 to-blue-50 rounded-2xl shadow-2xl w-full max-w-3xl max-h-[95vh] overflow-hidden flex flex-col scale-100">
+
+  const modalContent = (
+    <div className="fixed inset-0 z-[999999] flex items-center justify-center bg-black/70 backdrop-blur-3xl">
+      <div className="z-[10000] bg-white/95 rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden flex flex-col">
         {/* Header */}
         <div className="flex justify-between items-center p-5 border-b border-slate-200">
           <div>
-            <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2"><Send className="w-6 h-6 text-indigo-600" /> Apply for Scheme</h2>
-            <p className="text-sm text-slate-500">Submit your project proposal for: <span className="font-semibold text-indigo-700">{scheme.name}</span></p>
+            <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
+              <Send className="w-6 h-6 text-indigo-600" /> Apply for Scheme
+            </h2>
+            <p className="text-sm text-slate-500">
+              Submit your project proposal for: <span className="font-semibold text-indigo-700">{scheme.name}</span>
+            </p>
           </div>
-          <button onClick={onClose} className="p-2 rounded-full hover:bg-slate-200 text-slate-500"><X className="w-6 h-6" /></button>
+          <button
+            onClick={onClose}
+            className="p-2 rounded-full hover:bg-slate-200 text-slate-500"
+          >
+            <X className="w-6 h-6" />
+          </button>
         </div>
         {/* Body Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4 overflow-y-auto">
-          <p className="text-sm p-3 bg-blue-50 border border-blue-200 text-blue-800 rounded-lg"><span className="font-semibold">SHG Name:</span> Your SHG Name Here (Auto-filled)</p>
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          <p className="text-sm p-3 bg-blue-50 border border-blue-200 text-blue-800 rounded-lg">
+            <span className="font-semibold">SHG Name:</span> Your SHG Name Here (Auto-filled)
+          </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormInput label="Project Title" name="projectTitle" type="text" value={formData.projectTitle} onChange={handleChange} required error={errors.projectTitle} placeholder="e.g., Organic Soap Making Unit" />
-            <FormSelect label="Project Category" name="category" value={formData.category} onChange={handleChange}><option value="">Select Category</option><option value="Handicrafts">Handicrafts</option><option value="Food Processing">Food Processing</option><option value="Services">Services</option><option value="Other">Other</option></FormSelect>
-            <FormInput label="Loan Amount Requested (₹)" name="amount" type="number" value={formData.amount} onChange={handleChange} required error={errors.amount} placeholder="e.g., 250000" />
-            <FormInput label="Estimated Project Cost (₹)" name="cost" type="number" value={formData.cost} onChange={handleChange} placeholder="e.g., 300000" />
-            <FormInput label="SHG Contribution (%)" name="contribution" type="number" value={formData.contribution} onChange={handleChange} placeholder="e.g., 10" />
+            <FormInput
+              label="Project Title"
+              name="projectTitle"
+              type="text"
+              value={formData.projectTitle}
+              onChange={handleChange}
+              required
+              error={errors.projectTitle}
+              placeholder="e.g., Organic Soap Making Unit"
+            />
+            <FormSelect
+              label="Project Category"
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+            >
+              <option value="">Select Category</option>
+              <option value="Handicrafts">Handicrafts</option>
+              <option value="Food Processing">Food Processing</option>
+              <option value="Services">Services</option>
+              <option value="Other">Other</option>
+            </FormSelect>
+            <FormInput
+              label="Loan Amount Requested (₹)"
+              name="amount"
+              type="number"
+              value={formData.amount}
+              onChange={handleChange}
+              required
+              error={errors.amount}
+              placeholder="e.g., 250000"
+            />
+            <FormInput
+              label="Estimated Project Cost (₹)"
+              name="cost"
+              type="number"
+              value={formData.cost}
+              onChange={handleChange}
+              placeholder="e.g., 300000"
+            />
+            <FormInput
+              label="SHG Contribution (%)"
+              name="contribution"
+              type="number"
+              value={formData.contribution}
+              onChange={handleChange}
+              placeholder="e.g., 10"
+            />
           </div>
-          <FormTextarea label="Project Description" name="description" value={formData.description} onChange={handleChange} required error={errors.description} placeholder="Describe your project plan, objectives, and market..." rows={4} />
-          <FormTextarea label="Assets Required" name="assets" value={formData.assets} onChange={handleChange} placeholder="List main equipment or assets needed..." rows={2} />
-          <FileUpload label="Upload Supporting Documents" name="files" onChange={handleFileChange} required error={errors.files} files={files} />
+          <FormTextarea
+            label="Project Description"
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            required
+            error={errors.description}
+            placeholder="Describe your project plan, objectives, and market..."
+            rows={3}
+          />
+          <FormTextarea
+            label="Assets Required"
+            name="assets"
+            value={formData.assets}
+            onChange={handleChange}
+            placeholder="List main equipment or assets needed..."
+            rows={2}
+          />
+          <FileUpload
+            label="Upload Supporting Documents"
+            name="files"
+            onChange={handleFileChange}
+            required
+            error={errors.files}
+            files={files}
+          />
         </form>
         {/* Footer Actions */}
         <div className="flex justify-end items-center p-4 border-t border-slate-200 bg-slate-50 gap-3 mt-auto">
-          <button type="button" onClick={onClose} disabled={isSubmitting} className="px-5 py-2 rounded-full text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all hover:scale-[1.03]">Cancel</button>
-          {/* Submit button needs to be linked to the form */}
-          <GradientButton text={isSubmitting ? "Submitting..." : "Submit Application"} icon={Send} type="submit" onClick={handleSubmit} disabled={isSubmitting} />
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={isSubmitting}
+            className="px-5 py-2 rounded-full text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all hover:scale-[1.03]"
+          >
+            Cancel
+          </button>
+          <GradientButton
+            text={isSubmitting ? "Submitting..." : "Submit Application"}
+            icon={Send}
+            type="submit"
+            onClick={handleSubmit}
+            disabled={isSubmitting}
+          />
         </div>
         {/* Toast Notification - Rendered conditionally within the modal */}
-        {showToast && <ToastNotification message="Application Submitted Successfully!" type="success" onClose={() => setShowToast(false)} />}
+        {showToast && (
+          <ToastNotification
+            message="Application Submitted Successfully!"
+            type="success"
+            onClose={() => setShowToast(false)}
+          />
+        )}
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.getElementById('modal-root')!);
 };
 
 // 6. Toast Notification
@@ -220,6 +330,16 @@ const AppSortableHeader: React.FC<AppSortableHeaderProps> = ({ colKey, title, so
 const SchemesApplicationPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedScheme, setSelectedScheme] = useState<any | null>(null);
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const [selectedSchemeDetails, setSelectedSchemeDetails] = useState<any | null>(null);
+
+  // Close on Escape key when modal is open
+  useEffect(() => {
+    if (!detailsOpen) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') closeDetailsModal(); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [detailsOpen]);
   const [appSearchTerm, setAppSearchTerm] = useState('');
   const [appCurrentPage, setAppCurrentPage] = useState(1);
   const [appRowsPerPage, setAppRowsPerPage] = useState(5); // Fewer rows for this section
@@ -234,7 +354,8 @@ const SchemesApplicationPage = () => {
   // Modal Handlers
   const openApplyModal = (scheme: any) => { setSelectedScheme(scheme); setIsModalOpen(true); };
   const closeApplyModal = () => { setSelectedScheme(null); setIsModalOpen(false); };
-  const openViewDetailsModal = (scheme: any) => { alert(`Viewing details for: ${scheme.name}`); /* Implement details modal later */ };
+  const openViewDetailsModal = (scheme: any) => { setSelectedSchemeDetails(scheme); setDetailsOpen(true); };
+  const closeDetailsModal = () => { setSelectedSchemeDetails(null); setDetailsOpen(false); };
 
   // --- Application Table Logic ---
   const filteredApplications = useMemo(() => {
@@ -256,36 +377,7 @@ const SchemesApplicationPage = () => {
   if (!hasMounted || loading) return <IntegratedLoader />;
 
   return (
-    <div className="min-h-screen p-4 md:p-8 font-sans animate-fade-in">
-        {/* Inline Styles for Animations */}
-        <style jsx global>{`
-          @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(10px); } 
-            to { opacity: 1; transform: translateY(0); } 
-          }
-          .animate-fade-in { 
-            animation: fadeIn 0.5s ease-out forwards; 
-          }
-
-          @keyframes modalEnter { 
-            from { opacity: 0; transform: scale(0.95); } 
-            to { opacity: 1; transform: scale(1); } 
-          }
-          .animate-modal-enter { 
-            animation: modalEnter 0.2s ease-out forwards; 
-          }
-
-          @keyframes toastEnterExit { 
-            0% { opacity: 0; transform: translateY(20px) scale(0.95); } 
-            10% { opacity: 1; transform: translateY(0) scale(1); } 
-            90% { opacity: 1; transform: translateY(0) scale(1); } 
-            100% { opacity: 0; transform: translateY(20px) scale(0.95); } 
-          }
-          .animate-toast-enter-exit { 
-            animation: toastEnterExit 2.5s ease-in-out forwards; 
-          }
-        `}</style>
-      
+    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-slate-200 to-slate-300 p-4 md:p-8">
       <div className="max-w-7xl mx-auto space-y-8">
         
         {/* --- 1. Header Section --- */}
@@ -381,12 +473,97 @@ const SchemesApplicationPage = () => {
         </section>
 
         {/* --- Modals --- */}
-        <ApplyModal isOpen={isModalOpen} onClose={closeApplyModal} scheme={selectedScheme} />
-        
-        {/* Simple Footer */}
-        <footer className="text-center mt-12 text-xs text-slate-500">
-           NSKFDC SHG Dashboard &copy; {new Date().getFullYear()}
-        </footer>
+        {/* Details Modal for Scheme */}
+        {detailsOpen && selectedSchemeDetails && (
+          <div
+            onClick={closeDetailsModal}
+            className="fixed inset-0 z-[999999] flex items-center justify-center bg-black/40 backdrop-blur-sm animate-fade-in"
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="z-[10000] bg-white/95 rounded-2xl shadow-2xl p-6 w-full max-w-2xl border border-slate-200 relative max-h-[80vh] overflow-auto mt-6"
+            >
+              <button
+                onClick={closeDetailsModal}
+                className="absolute top-4 right-4 text-slate-600 hover:text-slate-800 transition"
+              >
+                <X className="w-5 h-5" />
+              </button>
+              <h2 className="text-2xl font-bold text-slate-900 mb-1">Scheme Details</h2>
+              <p className="text-sm text-slate-500 mb-4">Brief information about the selected scheme</p>
+
+              <div className="space-y-4 text-sm text-slate-700">
+                <div>
+                  <p className="font-semibold text-slate-800">Name</p>
+                  <p className="text-slate-600">{selectedSchemeDetails.name}</p>
+                </div>
+                <div className="flex flex-col sm:flex-row sm:gap-6">
+                  <div className="flex-1">
+                    <p className="font-semibold text-slate-800">Category</p>
+                    <p className="text-slate-600">{selectedSchemeDetails.category}</p>
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-semibold text-slate-800">Deadline</p>
+                    <p className="text-slate-600">{selectedSchemeDetails.deadline ?? 'No deadline'}</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="font-semibold text-slate-800">Max Amount</p>
+                    <p className="text-slate-600">{selectedSchemeDetails.maxAmount}</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-slate-800">Rate</p>
+                    <p className="text-slate-600">{selectedSchemeDetails.rate}</p>
+                  </div>
+                </div>
+
+                <div>
+                  <p className="font-semibold text-slate-800">Eligibility</p>
+                  <p className="text-slate-600">{selectedSchemeDetails.eligibility}</p>
+                </div>
+                <div>
+                  <p className="font-semibold text-slate-800">Required Documents</p>
+                  <p className="text-slate-600">{selectedSchemeDetails.docs}</p>
+                </div>
+              </div>
+
+              <div className="mt-6 flex items-center justify-between gap-3">
+                <a
+                  href={selectedSchemeDetails.brochureUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm text-indigo-600 hover:underline"
+                >
+                  Open Brochure
+                </a>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={closeDetailsModal}
+                    className="px-4 py-2 rounded bg-slate-100 text-slate-700 hover:bg-slate-200"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Apply Modal */}
+        <ApplyModal
+          isOpen={isModalOpen}
+          onClose={closeApplyModal}
+          scheme={selectedScheme}
+        />
+
+        {/* Adjusted modal background transparency */}
+        <style jsx>{`
+          .fixed.inset-0 {
+            background-color: rgba(0, 0, 0, 0.5); /* Adjusted transparency */
+          }
+        `}</style>
       </div>
     </div>
   );

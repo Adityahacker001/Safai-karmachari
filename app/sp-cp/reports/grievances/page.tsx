@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react"; // Added useEffect
+import { createPortal } from "react-dom";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
@@ -31,6 +32,13 @@ interface Grievance {
   actionTaken: string;
   status: "Resolved" | "Pending" | "Escalated";
   escalatedTo: string;
+
+  // Newly added fields
+  escalationDate?: string;
+  escalationReason?: string;
+  escalatedBy?: string;
+  expectedResolutionDate?: string;
+  supportingDocument?: string;
 }
 
 // --- Initial Mock Data ---
@@ -76,6 +84,8 @@ export default function GrievanceReportsPage() {
   const [typeFilter, setTypeFilter] = useState("");
   const [sourceFilter, setSourceFilter] = useState("");
   const [grievancesData, setGrievancesData] = useState<Grievance[]>(initialGrievances);
+  const [selectedGrievance, setSelectedGrievance] = useState<Grievance | null>(null);
+  const [modalRoot, setModalRoot] = useState<HTMLElement | null>(null);
 
   // useEffect(() => { /* Fetch data here */ }, []);
 
@@ -117,16 +127,43 @@ export default function GrievanceReportsPage() {
     resetFilters();
   };
   const handleAddGrievance = () => alert("Add Grievance functionality to be implemented.");
-  const handleViewEscalated = () => alert("View Escalated Cases functionality to be implemented.");
+  const handleViewEscalated = () => {
+    setSelectedGrievance({
+      id: 3, // Added the missing `id` field
+      grievanceId: "GRV003",
+      source: "Public",
+      type: "Harassment",
+      dateReceived: "2025-10-10",
+
+      description:
+        "Improper police behavior during questioning. Victim reports verbal misconduct and intimidation by on-duty officer.",
+
+      // Escalation Section
+      escalatedTo: "NSKC",
+      escalationDate: "2025-10-12",
+      escalationReason: "Misconduct by officer requiring higher administrative review.",
+      escalatedBy: "SP Office",
+
+      // Status Section
+      status: "Escalated",
+      actionTaken:
+        "Case forwarded to Superintendent of Police for internal inquiry and disciplinary review.",
+      expectedResolutionDate: "2025-10-20",
+
+      // Supporting Document
+      supportingDocument:
+        "https://example.com/supporting-docs/GRV003-incident-report.pdf"
+    });
+  };
   const handleGenerateSummary = () => alert("Generate Summary functionality to be implemented.");
 
 
   // --- Badge Styling ---
   const getStatusBadge = (status: Grievance['status']) => {
     switch (status) {
-      case "Resolved": return <Badge variant="default" className="bg-green-100 text-green-800 border-green-200">Resolved</Badge>;
-      case "Pending": return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 border-yellow-200">Pending</Badge>;
-      case "Escalated": return <Badge variant="destructive" className="bg-red-100 text-red-800 border-red-200">Escalated</Badge>;
+      case "Resolved": return <Badge variant="default" className="bg-green-200 text-green-900 border-green-300">Resolved</Badge>;
+      case "Pending": return <Badge variant="secondary" className="bg-yellow-200 text-yellow-900 border-yellow-300">Pending</Badge>;
+      case "Escalated": return <Badge variant="destructive" className="bg-red-200 text-red-900 border-red-300">Escalated</Badge>;
       default: return <Badge variant="outline">{status}</Badge>;
     }
   };
@@ -138,7 +175,153 @@ export default function GrievanceReportsPage() {
     return () => clearTimeout(t);
   }, []);
 
+  useEffect(() => {
+    // Prefer the app-level `#modal-root` if present (dashboard layout creates it),
+    // otherwise fall back to `document.body` so the overlay covers everything.
+    const root = document.getElementById("modal-root") || document.body;
+    setModalRoot(root as HTMLElement);
+  }, []);
+
   if (loading) return <IntegratedLoader />;
+  // Build modal content outside of JSX to avoid parser issues and for clarity
+  let EscalatedModal: React.ReactNode = null;
+  if (selectedGrievance) {
+    const modalContent = (
+      <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
+        <div
+          className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-all duration-300"
+          onClick={() => setSelectedGrievance(null)}
+        />
+        <div className="relative bg-white/80 backdrop-blur-sm rounded-lg shadow-2xl border border-slate-200 p-4 sm:p-6 max-w-4xl w-full max-h-[86vh] overflow-y-auto">
+          {/* Modal Header */}
+          <div className="flex justify-between items-center pb-3 mb-4">
+            <h2 className="text-lg font-bold text-gray-900">Escalated Case Details</h2>
+            <button onClick={() => setSelectedGrievance(null)} className="text-gray-600 hover:text-gray-900">&times;</button>
+          </div>
+          <div className="max-w-4xl mx-auto w-full space-y-4">
+            {/* Basic Grievance Info */}
+            <div className="rounded-md p-3 flex items-start gap-3">
+              <div className="w-1 mt-1 rounded-full bg-gradient-to-b from-indigo-600 via-violet-600 to-pink-500" aria-hidden />
+              <div className="flex-1">
+                <h3 className="text-md font-bold text-indigo-700 flex items-center gap-2 mb-3">Basic Grievance Info</h3>
+                <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 shadow-xl">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <div className="flex flex-col bg-white rounded-lg p-3 shadow-sm">
+                      <span className="text-xs font-bold text-slate-600 uppercase tracking-wide">Grievance ID</span>
+                      <span className="text-sm text-slate-900 font-semibold mt-1">{selectedGrievance.grievanceId}</span>
+                    </div>
+                    <div className="flex flex-col bg-white rounded-lg p-3 shadow-sm">
+                      <span className="text-xs font-bold text-slate-600 uppercase tracking-wide">Source</span>
+                      <span className="text-sm text-slate-900 font-semibold mt-1">{selectedGrievance.source}</span>
+                    </div>
+                    <div className="flex flex-col bg-white rounded-lg p-3 shadow-sm">
+                      <span className="text-xs font-bold text-slate-600 uppercase tracking-wide">Type</span>
+                      <span className="text-sm text-slate-900 font-semibold mt-1">{selectedGrievance.type}</span>
+                    </div>
+                    <div className="flex flex-col bg-white rounded-lg p-3 shadow-sm">
+                      <span className="text-xs font-bold text-slate-600 uppercase tracking-wide">Date Received</span>
+                      <span className="text-sm text-slate-900 font-semibold mt-1">{selectedGrievance.dateReceived}</span>
+                    </div>
+                    <div className="flex flex-col bg-white rounded-lg p-3 shadow-sm col-span-2 md:col-span-4">
+                      <span className="text-xs font-bold text-slate-600 uppercase tracking-wide">Description</span>
+                      <span className="text-sm text-slate-900 font-medium mt-1">{selectedGrievance.description}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Escalation Information */}
+            <div className="rounded-md p-3 flex items-start gap-3">
+              <div className="w-1 mt-1 rounded-full bg-gradient-to-b from-indigo-600 via-violet-600 to-pink-500" aria-hidden />
+              <div className="flex-1">
+                <h3 className="text-md font-bold text-indigo-700 flex items-center gap-2 mb-3">Escalation Information</h3>
+                <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 shadow-xl">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <div className="flex flex-col bg-white rounded-lg p-3 shadow-sm">
+                      <span className="text-xs font-bold text-slate-600 uppercase tracking-wide">Escalated To</span>
+                      <span className="text-sm text-slate-900 font-semibold mt-1">{selectedGrievance.escalatedTo}</span>
+                    </div>
+                    <div className="flex flex-col bg-white rounded-lg p-3 shadow-sm">
+                      <span className="text-xs font-bold text-slate-600 uppercase tracking-wide">Escalation Date</span>
+                      <span className="text-sm text-slate-900 font-semibold mt-1">{selectedGrievance.escalationDate || 'N/A'}</span>
+                    </div>
+                    <div className="flex flex-col bg-white rounded-lg p-3 shadow-sm col-span-2 md:col-span-1">
+                      <span className="text-xs font-bold text-slate-600 uppercase tracking-wide">Escalated By</span>
+                      <span className="text-sm text-slate-900 font-semibold mt-1">{selectedGrievance.escalatedBy || 'N/A'}</span>
+                    </div>
+                    <div className="flex flex-col bg-white rounded-lg p-3 shadow-sm col-span-2 md:col-span-3">
+                      <span className="text-xs font-bold text-slate-600 uppercase tracking-wide">Reason for Escalation</span>
+                      <span className="text-sm text-slate-900 font-medium mt-1">{selectedGrievance.escalationReason || 'N/A'}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Current Status */}
+            <div className="rounded-md p-3 flex items-start gap-3">
+              <div className="w-1 mt-1 rounded-full bg-gradient-to-b from-indigo-600 via-violet-600 to-pink-500" aria-hidden />
+              <div className="flex-1">
+                <h3 className="text-md font-bold text-indigo-700 flex items-center gap-2 mb-3">Current Status</h3>
+                <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 shadow-xl">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    <div className="flex flex-col bg-white rounded-lg p-3 shadow-sm">
+                      <span className="text-xs font-bold text-slate-600 uppercase tracking-wide">Status</span>
+                      <span className="text-sm text-slate-900 font-semibold mt-1">{selectedGrievance.status}</span>
+                    </div>
+                    <div className="flex flex-col bg-white rounded-lg p-3 shadow-sm">
+                      <span className="text-xs font-bold text-slate-600 uppercase tracking-wide">Expected Resolution</span>
+                      <span className="text-sm text-slate-900 font-semibold mt-1">{selectedGrievance.expectedResolutionDate || 'N/A'}</span>
+                    </div>
+                    <div className="flex flex-col bg-white rounded-lg p-3 shadow-sm col-span-2 md:col-span-1">
+                      <span className="text-xs font-bold text-slate-600 uppercase tracking-wide">Action Taken</span>
+                      <span className="text-sm text-slate-900 font-medium mt-1">{selectedGrievance.actionTaken}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Supporting Document */}
+            <div className="rounded-md p-3 flex items-start gap-3">
+              <div className="w-1 mt-1 rounded-full bg-gradient-to-b from-indigo-600 via-violet-600 to-pink-500" aria-hidden />
+              <div className="flex-1">
+                <h3 className="text-md font-bold text-indigo-700 flex items-center gap-2">Supporting Document</h3>
+                <div className="pb-2 mb-3"></div>
+                <div>
+                  {selectedGrievance.supportingDocument ? (
+                    <a
+                      href={selectedGrievance.supportingDocument}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-indigo-600 font-bold underline hover:text-indigo-800"
+                    >
+                      View Document
+                    </a>
+                  ) : (
+                    <span className="text-slate-500 italic">Not Uploaded</span>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Modal Footer */}
+          <div className="flex justify-end pt-4 mt-3">
+            <button
+              onClick={() => setSelectedGrievance(null)}
+              className="px-5 py-2 bg-indigo-600 text-white font-bold hover:bg-indigo-700 rounded-md"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+
+    EscalatedModal = modalRoot ? createPortal(modalContent, modalRoot) : modalContent;
+  }
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8 min-h-screen text-slate-900 dark:text-slate-50">
@@ -309,6 +492,9 @@ export default function GrievanceReportsPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* View Escalated Case Modal (render into app-level modal root via portal so overlay covers header/sidebar) */}
+      {EscalatedModal}
     </div>
   );
 }

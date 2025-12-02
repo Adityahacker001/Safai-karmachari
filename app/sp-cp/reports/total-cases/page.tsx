@@ -2,7 +2,8 @@
 
 "use client";
 
-import React, { useState } from 'react'; // Removed useEffect
+import React, { useState, useEffect } from 'react'; // Added useEffect
+import { createPortal } from 'react-dom';
 import {
     BarChart as BarChartIcon, // Renamed
     AlertTriangle,
@@ -170,6 +171,8 @@ export default function TotalCasesReportPage() {
     const [tableData, setTableData] = useState(initialTableData);
     const [chargeSheetData, setChargeSheetData] = useState(chargeSheetChartData);
     const [compensationData, setCompensationData] = useState(compensationChartData);
+    const [selectedCase, setSelectedCase] = useState<CaseData | null>(null);
+    const [modalRoot, setModalRoot] = useState<HTMLElement | null>(null);
 
     // Filter State
     const [searchQuery, setSearchQuery] = useState("");
@@ -215,7 +218,10 @@ export default function TotalCasesReportPage() {
     };
 
     const handleExport = () => alert("Export functionality to be implemented.");
-    const handleViewDetails = (caseId: string) => alert(`Viewing details for ${caseId} (simulation)`);
+    const handleViewDetails = (caseId: string) => {
+        const found = tableData.find(t => t.caseId === caseId) || initialTableData.find(t => t.caseId === caseId);
+        if (found) setSelectedCase(found);
+    };
     const handleEditRecord = (caseId: string) => alert(`Editing record for ${caseId} (simulation)`);
     const handleUploadDocs = () => alert("Upload Case Documents (simulation)");
     const handleSyncRecords = () => alert("Sync Investigation Records (simulation)");
@@ -225,6 +231,90 @@ export default function TotalCasesReportPage() {
         const t = setTimeout(() => setLoading(false), 1200);
         return () => clearTimeout(t);
     }, []);
+
+    useEffect(() => {
+        const root = document.getElementById('modal-root') || document.body;
+        setModalRoot(root as HTMLElement);
+    }, []);
+
+    // Build the View Details modal outside the return to avoid parser issues
+    let ViewDetailsModal: React.ReactNode = null;
+    if (selectedCase) {
+        const modalContent = (
+            <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
+                <div
+                    className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-all duration-300"
+                    onClick={() => setSelectedCase(null)}
+                />
+                <div className="relative bg-white/80 backdrop-blur-sm rounded-lg shadow-2xl border border-slate-200 p-4 sm:p-6 max-w-2xl w-full max-h-[86vh] overflow-y-auto">
+                    <div className="flex justify-between items-center pb-3 mb-4">
+                        <h2 className="text-lg font-bold text-gray-900">Case Details</h2>
+                        <button onClick={() => setSelectedCase(null)} className="text-gray-600 hover:text-gray-900">&times;</button>
+                    </div>
+
+                    <div className="space-y-4 max-w-xl mx-auto">
+                        {/* Case Information */}
+                        <div>
+                            <h3 className="text-md font-bold text-indigo-700 mb-2">Case Information</h3>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-white/60 backdrop-blur-sm rounded-xl p-3 shadow-sm">
+                                <div>
+                                    <span className="text-xs font-bold text-slate-600 uppercase">Case ID</span>
+                                    <div className="text-sm font-semibold text-slate-900 mt-1">{selectedCase.caseId}</div>
+                                </div>
+                                <div>
+                                    <span className="text-xs font-bold text-slate-600 uppercase">Incident ID</span>
+                                    <div className="text-sm font-semibold text-slate-900 mt-1">{selectedCase.incidentId}</div>
+                                </div>
+                                <div>
+                                    <span className="text-xs font-bold text-slate-600 uppercase">Police Station</span>
+                                    <div className="text-sm font-semibold text-slate-900 mt-1">{selectedCase.policeStation}</div>
+                                </div>
+                                <div>
+                                    <span className="text-xs font-bold text-slate-600 uppercase">FIR Number</span>
+                                    <div className="text-sm font-semibold text-slate-900 mt-1">{selectedCase.firNo}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Investigation Details */}
+                        <div>
+                            <h3 className="text-md font-bold text-indigo-700 mb-2">Investigation Details</h3>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-white/60 backdrop-blur-sm rounded-xl p-3 shadow-sm">
+                                <div>
+                                    <span className="text-xs font-bold text-slate-600 uppercase">Investigation Status</span>
+                                    <div className="text-sm font-semibold text-slate-900 mt-1">{selectedCase.investigationStatus}</div>
+                                </div>
+                                <div>
+                                    <span className="text-xs font-bold text-slate-600 uppercase">Charge Sheet Filed</span>
+                                    <div className="text-sm font-semibold text-slate-900 mt-1">{selectedCase.chargeSheetFiled}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Compensation */}
+                        <div>
+                            <h3 className="text-md font-bold text-indigo-700 mb-2">Compensation</h3>
+                            <div className="bg-white/60 backdrop-blur-sm rounded-xl p-3 shadow-sm">
+                                <span className="text-xs font-bold text-slate-600 uppercase">Compensation Paid</span>
+                                <div className="text-sm font-semibold text-slate-900 mt-1">{selectedCase.compensationPaid}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex justify-end pt-4 mt-3">
+                        <button
+                            onClick={() => setSelectedCase(null)}
+                            className="px-5 py-2 bg-indigo-600 text-white font-bold hover:bg-indigo-700 rounded-md"
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+
+        ViewDetailsModal = modalRoot ? createPortal(modalContent, modalRoot) : modalContent;
+    }
 
 
     if (loading) return <IntegratedLoader />;
@@ -585,6 +675,7 @@ export default function TotalCasesReportPage() {
                     </div>
                 </div>
             </div>
+            {ViewDetailsModal}
         </div>
     );
 }

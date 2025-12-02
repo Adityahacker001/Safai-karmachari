@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import StatCard from "@/components/ui/stat-card";
 import IntegratedLoader from "@/components/layout/IntegratedLoader";
 // UPDATED: Added new icons
-import { MessageSquare, Download, Clock, ThumbsUp, Eye, Search, Hourglass, CheckCircle2, ShieldAlert, Image, File } from "lucide-react";
+import { MessageSquare, Download, Clock, ThumbsUp, Eye, Search, Hourglass, CheckCircle2, ShieldAlert, File } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { X } from "lucide-react";
@@ -31,7 +31,12 @@ export default function GrievanceTrackingReportPage() {
             resolved: "---",
             status: "Pending",
             description: "PF amount not deducted correctly.",
-            resolutionNotes: ""
+            resolutionNotes: "",
+            // Mock documents for local testing/demo
+            documents: [
+                { name: 'aadhaar-front.jpg', url: '/mock-docs/aadhaar-front.jpg', mime: 'image/jpeg' },
+                { name: 'aadhaar.pdf', url: '/mock-docs/aadhaar.pdf', mime: 'application/pdf' },
+            ]
         },
         {
             id: 'GRV-087',
@@ -383,7 +388,7 @@ export default function GrievanceTrackingReportPage() {
                                                                                         </div>
                                                                                         <div className="flex flex-col">
                                                                                             <span className="font-medium text-gray-800 text-sm truncate max-w-[300px]">{fileName}</span>
-                                                                                            <span className="text-xs text-gray-500">{doc.mime || getExtension(fileName)}</span>
+                                                                                            <span className="text-xs text-gray-500">{doc.mime || getExtension(fileName || '')}</span>
                                                                                         </div>
                                                                                     </div>
                                                                                     <div className="flex items-center space-x-2">

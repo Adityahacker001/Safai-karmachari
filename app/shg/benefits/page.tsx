@@ -18,6 +18,7 @@ import {
   ChevronDown, ChevronUp, UploadCloud
 } from 'lucide-react';
 import StatCard from '@/components/ui/stat-card';
+import Portal from '@/components/common/Portal';
 
 // --- Mock Data ---
 
@@ -98,6 +99,8 @@ const BenefitsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5); // Start with fewer rows for benefits table
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null);
+  const [selectedBenefit, setSelectedBenefit] = useState<Benefit | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   // --- Data Logic ---
   const filteredBenefits = useMemo(() => {
     let data = [...MOCK_BENEFITS_DATA];
@@ -154,6 +157,14 @@ const BenefitsPage = () => {
   const handleDownloadCertificate = (url: string | null) => { if (url) window.open(url, '_blank'); else alert('Certificate not available.'); };
   const handleExport = (type: 'CSV' | 'PDF') => alert(`Exporting Benefits Report as ${type}`);
   const handlePrint = () => window.print();
+  const openModal = (benefit: any) => {
+    setSelectedBenefit(benefit);
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setSelectedBenefit(null);
+    setIsModalOpen(false);
+  };
 
   return (
   <div className="min-h-screen p-4 md:p-8 font-sans animate-fade-in">
@@ -234,8 +245,10 @@ const BenefitsPage = () => {
                                 <td className="px-4 py-3 text-slate-800 font-medium text-right">{formatCurrency(item.value)}</td>
                                 <td className="px-4 py-3 text-slate-600">{item.provider}</td>
                                 <td className="px-4 py-3 text-center">
-                                    <button onClick={() => handleViewDocument(item.docUrl)} disabled={!item.docUrl}
-                                            className="p-1.5 rounded-md text-indigo-600 hover:bg-indigo-100 disabled:opacity-50 disabled:cursor-not-allowed" title="View Document">
+                                    <button 
+                                      onClick={() => openModal(item)}
+                                      className="p-1.5 rounded-md text-indigo-600 hover:bg-indigo-100"
+                                      title="View Benefit Details">
                                         <Eye className="w-4 h-4" />
                                     </button>
                                 </td>
@@ -296,9 +309,128 @@ const BenefitsPage = () => {
         <footer className="text-center mt-12 text-xs text-slate-500">
            NSKFDC SHG Dashboard &copy; {new Date().getFullYear()}
         </footer>
+
+        {/* --- View Details Modal --- */}
+        <Portal>
+          {isModalOpen && selectedBenefit && (
+            <div
+              className="fixed inset-0 z-[999999999]
+                         bg-black/50 
+                         backdrop-blur-[12px] backdrop-saturate-150
+                         flex items-center justify-center animate-fade-in"
+            >
+              <div
+                className="bg-white/80 backdrop-blur-xl 
+                           rounded-2xl shadow-2xl border border-slate-200/60
+                           w-full max-w-lg p-8 relative animate-fade-in"
+              >
+                {/* Close */}
+                <button
+                  onClick={closeModal}
+                  className="absolute top-4 right-4 text-slate-500 hover:text-slate-700"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+
+                {/* Title */}
+                <h2 className="text-2xl font-bold text-slate-800 mb-1">
+                  Benefit Overview
+                </h2>
+                <p className="text-sm text-slate-500 mb-6">
+                  Detailed information about the selected benefit
+                </p>
+
+                {/* Content */}
+                <div className="space-y-4 text-sm">
+                  <div>
+                    <p className="font-semibold text-slate-700">Benefit Name</p>
+                    <p className="text-slate-600">{selectedBenefit.name}</p>
+                  </div>
+
+                  <div>
+                    <p className="font-semibold text-slate-700">Benefit Type</p>
+                    <p className="text-slate-600">{selectedBenefit.type}</p>
+                  </div>
+
+                  <div>
+                    <p className="font-semibold text-slate-700">Scheme / Program</p>
+                    <p className="text-slate-600">{selectedBenefit.scheme}</p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="font-semibold text-slate-700">Date Availed</p>
+                      <p className="text-slate-600">
+                        {new Date(selectedBenefit.date).toLocaleDateString('en-GB')}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-slate-700">Amount / Value</p>
+                      <p className="text-slate-600">
+                        {formatCurrency(selectedBenefit.value ?? null)}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <p className="font-semibold text-slate-700">Provider Office</p>
+                    <p className="text-slate-600">{selectedBenefit.provider}</p>
+                  </div>
+
+                  <div>
+                    <p className="font-semibold text-slate-700">Proof Document</p>
+                    {selectedBenefit.docUrl ? (
+                      <button
+                        onClick={() => {
+                          if (selectedBenefit?.docUrl) {
+                            handleViewDocument(selectedBenefit.docUrl);
+                          } else {
+                            alert('No document available.');
+                          }
+                        }}
+                        className="text-indigo-600 hover:underline"
+                      >
+                        View Document
+                      </button>
+                    ) : (
+                      <p className="text-slate-400">No document available</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <p className="font-semibold text-slate-700">Status</p>
+                    <BenefitStatusBadge status={selectedBenefit.status} />
+                  </div>
+                </div>
+
+                {/* Close Button */}
+                <button
+                  onClick={closeModal}
+                  className="mt-6 w-full py-2.5 rounded-xl 
+                             bg-indigo-600 hover:bg-indigo-700 
+                             text-white font-semibold shadow-md"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          )}
+        </Portal>
       </div>
     </div>
   );
 };
 
 export default BenefitsPage;
+
+// Extend the Benefit interface to include all required properties
+interface Benefit {
+  name: string;
+  type: string;
+  scheme: string;
+  date: string;
+  value?: number;
+  provider: string;
+  docUrl?: string;
+  status: BenefitStatus; // Ensure this matches the expected type
+}

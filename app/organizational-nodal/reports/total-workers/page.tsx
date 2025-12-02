@@ -74,6 +74,19 @@ interface Worker {
   assignedLocation: string;
   workDuration: string; // e.g., "1.5 Years"
   status: WorkerStatus;
+  aadhaarNumber?: string;
+  dateOfBirth?: string;
+  photoUrl?: string;
+  zone?: string;
+  ward?: string;
+  shiftTiming?: string;
+  supervisorName?: string;
+  emergencyContactName?: string;
+  emergencyContactNumber?: string;
+  medicalStatus?: string;
+  ppeIssued?: boolean;
+  esicNumber?: string;
+  pfNumber?: string;
 }
 
 // --- Initial Mock Data ---
@@ -324,12 +337,7 @@ export default function TotalWorkersReportPage() {
                   <TableHead className="min-w-[150px] font-semibold text-gray-800">Worker Name</TableHead>
                   <TableHead className="min-w-[150px] font-semibold text-gray-800">Contractor</TableHead>
                   <TableHead className="min-w-[150px] font-semibold text-gray-800">Category</TableHead>
-                  <TableHead className="font-semibold text-gray-800">Caste</TableHead>
-                  <TableHead className="font-semibold text-gray-800">Religion</TableHead>
-                  <TableHead className="font-semibold text-gray-800">Gender</TableHead>
-                  <TableHead className="text-center font-semibold text-gray-800">Age</TableHead>
                   <TableHead className="min-w-[150px] font-semibold text-gray-800">Assigned Location</TableHead>
-                  <TableHead className="min-w-[100px] font-semibold text-gray-800">Work Duration</TableHead>
                   <TableHead className="min-w-[100px] font-semibold text-gray-800">Status</TableHead>
                   <TableHead className="w-[80px] font-semibold text-gray-800 text-center">Actions</TableHead>
                 </TableRow>
@@ -341,12 +349,7 @@ export default function TotalWorkersReportPage() {
                     <TableCell className="font-semibold text-blue-700 cursor-pointer hover:underline">{w.name}</TableCell>
                     <TableCell className="text-gray-700">{w.contractor}</TableCell>
                     <TableCell>{getCategoryBadge(w.category)}</TableCell>
-                    <TableCell className="text-gray-700">{w.caste}</TableCell>
-                    <TableCell className="text-gray-700">{w.religion}</TableCell>
-                    <TableCell className="text-gray-700">{w.gender}</TableCell>
-                    <TableCell className="text-center text-gray-700">{w.age}</TableCell>
                     <TableCell className="text-xs text-gray-600">{w.assignedLocation}</TableCell>
-                    <TableCell className="text-gray-700">{w.workDuration}</TableCell>
                     <TableCell>{getStatusBadge(w.status)}</TableCell>
                     <TableCell className="text-center">
                       <Button
@@ -363,7 +366,7 @@ export default function TotalWorkersReportPage() {
                 ))}
                 {filteredWorkers.length === 0 && (
                      <TableRow>
-                        <TableCell colSpan={12} className="text-center text-gray-500 py-10">
+                        <TableCell colSpan={7} className="text-center text-gray-500 py-10">
                             No workers found matching your criteria. Please adjust filters.
                         </TableCell>
                     </TableRow>
@@ -376,7 +379,7 @@ export default function TotalWorkersReportPage() {
 
       {/* Worker Details Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-xl font-bold text-teal-700">
               Worker Details
@@ -387,6 +390,21 @@ export default function TotalWorkersReportPage() {
           </DialogHeader>
           {selectedWorker && (
             <div className="space-y-6">
+              {/* Worker Photo */}
+              <div className="flex justify-center items-center">
+                {selectedWorker.photoUrl ? (
+                  <img
+                    src={selectedWorker.photoUrl}
+                    alt="Worker Photo"
+                    className="w-24 h-24 rounded-full border"
+                  />
+                ) : (
+                  <div className="w-24 h-24 rounded-full border flex items-center justify-center bg-gray-100">
+                    <User className="h-12 w-12 text-gray-400" />
+                  </div>
+                )}
+              </div>
+
               {/* Personal Information */}
               <Card className="border-teal-200">
                 <CardHeader className="bg-gradient-to-r from-teal-50 to-blue-50 pb-3">
@@ -409,6 +427,20 @@ export default function TotalWorkersReportPage() {
                       </div>
                     </div>
                     <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-600">Caste Category</label>
+                      <div className="p-3 bg-gray-50 rounded-lg border">
+                        <Badge variant="outline" className="bg-blue-100 text-blue-800 border-blue-200">
+                          {selectedWorker.caste}
+                        </Badge>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-600">Religion</label>
+                      <div className="p-3 bg-gray-50 rounded-lg border">
+                        <span className="text-gray-800">{selectedWorker.religion}</span>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
                       <label className="text-sm font-medium text-gray-600">Gender</label>
                       <div className="p-3 bg-gray-50 rounded-lg border">
                         <span className="text-gray-800">{selectedWorker.gender}</span>
@@ -421,17 +453,21 @@ export default function TotalWorkersReportPage() {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-medium text-gray-600">Caste Category</label>
+                      <label className="text-sm font-medium text-gray-600">Work Duration</label>
                       <div className="p-3 bg-gray-50 rounded-lg border">
-                        <Badge variant="outline" className="bg-blue-100 text-blue-800 border-blue-200">
-                          {selectedWorker.caste}
-                        </Badge>
+                        <span className="text-gray-800">{selectedWorker.workDuration}</span>
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-medium text-gray-600">Religion</label>
+                      <label className="text-sm font-medium text-gray-600">Aadhaar Number</label>
                       <div className="p-3 bg-gray-50 rounded-lg border">
-                        <span className="text-gray-800">{selectedWorker.religion}</span>
+                        <span className="text-gray-800">{selectedWorker.aadhaarNumber || 'N/A'}</span>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-600">Date of Birth</label>
+                      <div className="p-3 bg-gray-50 rounded-lg border">
+                        <span className="text-gray-800">{selectedWorker.dateOfBirth || 'N/A'}</span>
                       </div>
                     </div>
                   </div>
@@ -467,16 +503,27 @@ export default function TotalWorkersReportPage() {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-medium text-gray-600">Work Duration</label>
-                      <div className="p-3 bg-gray-50 rounded-lg border flex items-center gap-2">
-                        <Calendar className="h-4 w-4 text-gray-500" />
-                        <span className="text-gray-800">{selectedWorker.workDuration}</span>
+                      <label className="text-sm font-medium text-gray-600">Zone</label>
+                      <div className="p-3 bg-gray-50 rounded-lg border">
+                        <span className="text-gray-800">{selectedWorker.zone || 'N/A'}</span>
                       </div>
                     </div>
-                    <div className="space-y-2 md:col-span-2">
-                      <label className="text-sm font-medium text-gray-600">Current Status</label>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-600">Ward/Area</label>
                       <div className="p-3 bg-gray-50 rounded-lg border">
-                        {getStatusBadge(selectedWorker.status)}
+                        <span className="text-gray-800">{selectedWorker.ward || 'N/A'}</span>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-600">Shift Timing</label>
+                      <div className="p-3 bg-gray-50 rounded-lg border">
+                        <span className="text-gray-800">{selectedWorker.shiftTiming || 'N/A'}</span>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-600">Supervisor Name</label>
+                      <div className="p-3 bg-gray-50 rounded-lg border">
+                        <span className="text-gray-800">{selectedWorker.supervisorName || 'N/A'}</span>
                       </div>
                     </div>
                   </div>
@@ -500,16 +547,52 @@ export default function TotalWorkersReportPage() {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-medium text-gray-600">Email Address</label>
-                      <div className="p-3 bg-gray-50 rounded-lg border flex items-center gap-2">
-                        <Mail className="h-4 w-4 text-gray-500" />
-                        <span className="text-gray-800">{selectedWorker.name.toLowerCase().replace(' ', '.')}@contractor.com</span>
+                      <label className="text-sm font-medium text-gray-600">Emergency Contact Name</label>
+                      <div className="p-3 bg-gray-50 rounded-lg border">
+                        <span className="text-gray-800">{selectedWorker.emergencyContactName || 'N/A'}</span>
                       </div>
                     </div>
-                    <div className="space-y-2 md:col-span-2">
-                      <label className="text-sm font-medium text-gray-600">Address</label>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-600">Emergency Contact Number</label>
                       <div className="p-3 bg-gray-50 rounded-lg border">
-                        <span className="text-gray-800">123 Worker Colony, Delhi - 110001</span>
+                        <span className="text-gray-800">{selectedWorker.emergencyContactNumber || 'N/A'}</span>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Compliance */}
+              <Card className="border-yellow-200">
+                <CardHeader className="bg-gradient-to-r from-yellow-50 to-orange-50 pb-3">
+                  <CardTitle className="flex items-center gap-2 text-lg text-yellow-700">
+                    Compliance
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-600">Medical Examination Status</label>
+                      <div className="p-3 bg-gray-50 rounded-lg border">
+                        <span className="text-gray-800">{selectedWorker.medicalStatus || 'N/A'}</span>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-600">PPE Issued</label>
+                      <div className="p-3 bg-gray-50 rounded-lg border">
+                        <span className="text-gray-800">{selectedWorker.ppeIssued ? 'Yes' : 'No'}</span>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-600">ESIC Number</label>
+                      <div className="p-3 bg-gray-50 rounded-lg border">
+                        <span className="text-gray-800">{selectedWorker.esicNumber || 'N/A'}</span>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-600">PF Number</label>
+                      <div className="p-3 bg-gray-50 rounded-lg border">
+                        <span className="text-gray-800">{selectedWorker.pfNumber || 'N/A'}</span>
                       </div>
                     </div>
                   </div>
