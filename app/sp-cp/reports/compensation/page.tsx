@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react'; // Import React
+import { createPortal } from 'react-dom';
 import {
   Line,
   LineChart,
@@ -60,6 +61,36 @@ interface CompensationLedgerEntry {
     paid: 'Yes' | 'No';
     datePaid: string; // Can be '---' or a date
     remarks: string;
+  // Additional fields for View Incident modal
+  dateOfIncident?: string;
+  location?: string;
+  policeStation?: string;
+  investigationStatus?: string;
+  numberOfDeaths?: number;
+  numberOfInjuries?: number;
+  workerId?: string;
+  category?: string;
+  contractor?: string;
+  amountReleased?: number;
+  amountPending?: number;
+  paymentStatus?: 'Paid' | 'Pending';
+  paymentDate?: string;
+  supportingDocuments?: {
+    // file URLs
+    sanctionOrderFile?: string;
+    paymentProofFile?: string;
+    // sanction order metadata
+    sanctionNumber?: string;
+    sanctionDate?: string;
+    sanctionAmount?: number;
+    approvingAuthority?: string;
+    // payment order metadata
+    paymentDate?: string;
+    amountReleased?: number;
+    paymentMode?: string;
+    transactionId?: string;
+    certifyingAuthority?: string;
+  };
 }
 
 interface ChartDataEntry {
@@ -84,11 +115,186 @@ const mockAlertData: CompensationAlert[] = [
 ];
 
 const mockTableData: CompensationLedgerEntry[] = [
-  { slNo: 1, workerName: 'Ramesh K.', incidentId: 'INC027', firNo: 'FIR-121/2025', amountSanctioned: 500000, paid: 'No', datePaid: '---', remarks: 'Pending at treasury' },
-  { slNo: 2, workerName: 'Vikas P.', incidentId: 'INC023', firNo: 'FIR-234/2025', amountSanctioned: 500000, paid: 'Yes', datePaid: '2025-09-15', remarks: 'Paid to next of kin' },
-  { slNo: 3, workerName: 'Suresh M.', incidentId: 'INC030', firNo: 'FIR-145/2025', amountSanctioned: 500000, paid: 'No', datePaid: '---', remarks: 'Awaiting District Nodal approval' },
-  { slNo: 4, workerName: 'Amit S.', incidentId: 'INC031', firNo: 'FIR-235/2025', amountSanctioned: 250000, paid: 'Yes', datePaid: '2025-10-01', remarks: 'Injury compensation paid' },
-  { slNo: 5, workerName: 'Anil G.', incidentId: 'INC039', firNo: 'FIR-111/2025', amountSanctioned: 250000, paid: 'No', datePaid: '---', remarks: 'Verification in progress' },
+  {
+    slNo: 1,
+    workerName: 'Ramesh K.',
+    incidentId: 'INC027',
+    firNo: 'FIR-121/2025',
+    amountSanctioned: 500000,
+    amountReleased: 0,
+    amountPending: 500000,
+    paid: 'No',
+    paymentStatus: 'Pending',
+    datePaid: '---',
+    paymentDate: '---',
+    remarks: 'Pending at treasury',
+    dateOfIncident: '2025-07-10',
+    location: 'Kurla, Mumbai',
+    policeStation: 'Mumbai Central',
+    investigationStatus: 'In Progress',
+    numberOfDeaths: 0,
+    numberOfInjuries: 1,
+    workerId: 'WKR-1001',
+    category: 'Sanitation Worker',
+    contractor: 'CleanCity Pvt Ltd',
+    supportingDocuments: {
+      sanctionOrderFile: '',
+      paymentProofFile: '',
+      sanctionNumber: 'SAN-001',
+      sanctionDate: '2025-07-15',
+      sanctionAmount: 500000,
+      approvingAuthority: 'District Nodal Officer',
+      paymentDate: '',
+      amountReleased: 0,
+      paymentMode: '',
+      transactionId: '',
+      certifyingAuthority: '',
+    },
+  },
+  {
+    slNo: 2,
+    workerName: 'Vikas P.',
+    incidentId: 'INC023',
+    firNo: 'FIR-234/2025',
+    amountSanctioned: 500000,
+    amountReleased: 500000,
+    amountPending: 0,
+    paid: 'Yes',
+    paymentStatus: 'Paid',
+    datePaid: '2025-09-15',
+    paymentDate: '2025-09-15',
+    remarks: 'Paid to next of kin',
+    dateOfIncident: '2025-05-21',
+    location: 'Gurgaon Sector 12',
+    policeStation: 'Gurgaon North',
+    investigationStatus: 'Closed',
+    numberOfDeaths: 1,
+    numberOfInjuries: 0,
+    workerId: 'WKR-0987',
+    category: 'Contract Labour',
+    contractor: 'SafeHands Contractors',
+    supportingDocuments: {
+      sanctionOrderFile: 'https://example.com/sanction/inc023.pdf',
+      paymentProofFile: 'https://example.com/payment/inc023_receipt.pdf',
+      sanctionNumber: 'SAN-023',
+      sanctionDate: '2025-05-30',
+      sanctionAmount: 500000,
+      approvingAuthority: 'State Nodal Officer',
+      paymentDate: '2025-09-15',
+      amountReleased: 500000,
+      paymentMode: 'NEFT',
+      transactionId: 'TXN-20250915-9876',
+      certifyingAuthority: 'Treasury Officer',
+    },
+  },
+  {
+    slNo: 3,
+    workerName: 'Suresh M.',
+    incidentId: 'INC030',
+    firNo: 'FIR-145/2025',
+    amountSanctioned: 500000,
+    amountReleased: 0,
+    amountPending: 500000,
+    paid: 'No',
+    paymentStatus: 'Pending',
+    datePaid: '---',
+    paymentDate: '---',
+    remarks: 'Awaiting District Nodal approval',
+    dateOfIncident: '2025-06-02',
+    location: 'Lucknow Zone',
+    policeStation: 'Lucknow Zone',
+    investigationStatus: 'Verification',
+    numberOfDeaths: 0,
+    numberOfInjuries: 2,
+    workerId: 'WKR-1022',
+    category: 'Sanitation Worker',
+    contractor: 'CityClean Services',
+    supportingDocuments: {
+      sanctionOrderFile: '',
+      paymentProofFile: '',
+      sanctionNumber: '',
+      sanctionDate: '',
+      sanctionAmount: 0,
+      approvingAuthority: '',
+      paymentDate: '',
+      amountReleased: 0,
+      paymentMode: '',
+      transactionId: '',
+      certifyingAuthority: '',
+    },
+  },
+  {
+    slNo: 4,
+    workerName: 'Amit S.',
+    incidentId: 'INC031',
+    firNo: 'FIR-235/2025',
+    amountSanctioned: 250000,
+    amountReleased: 250000,
+    amountPending: 0,
+    paid: 'Yes',
+    paymentStatus: 'Paid',
+    datePaid: '2025-10-01',
+    paymentDate: '2025-10-01',
+    remarks: 'Injury compensation paid',
+    dateOfIncident: '2025-08-12',
+    location: 'Noida Sector 5',
+    policeStation: 'Noida West',
+    investigationStatus: 'Closed',
+    numberOfDeaths: 0,
+    numberOfInjuries: 1,
+    workerId: 'WKR-1100',
+    category: 'Sanitation Worker',
+    contractor: 'Apex Contractors',
+    supportingDocuments: {
+      sanctionOrderFile: 'https://example.com/sanction/inc031.pdf',
+      paymentProofFile: 'https://example.com/payment/inc031_receipt.pdf',
+      sanctionNumber: 'SAN-031',
+      sanctionDate: '2025-08-25',
+      sanctionAmount: 250000,
+      approvingAuthority: 'District Nodal Officer',
+      paymentDate: '2025-10-01',
+      amountReleased: 250000,
+      paymentMode: 'Cheque',
+      transactionId: 'CHQ-20251001-4455',
+      certifyingAuthority: 'Treasury Officer',
+    },
+  },
+  {
+    slNo: 5,
+    workerName: 'Anil G.',
+    incidentId: 'INC039',
+    firNo: 'FIR-111/2025',
+    amountSanctioned: 250000,
+    amountReleased: 0,
+    amountPending: 250000,
+    paid: 'No',
+    paymentStatus: 'Pending',
+    datePaid: '---',
+    paymentDate: '---',
+    remarks: 'Verification in progress',
+    dateOfIncident: '2025-09-01',
+    location: 'Delhi North',
+    policeStation: 'Delhi North',
+    investigationStatus: 'Under Investigation',
+    numberOfDeaths: 0,
+    numberOfInjuries: 1,
+    workerId: 'WKR-1155',
+    category: 'Sanitation Worker',
+    contractor: 'Delhi Cleaners',
+    supportingDocuments: {
+      sanctionOrderFile: '',
+      paymentProofFile: '',
+      sanctionNumber: '',
+      sanctionDate: '',
+      sanctionAmount: 0,
+      approvingAuthority: '',
+      paymentDate: '',
+      amountReleased: 0,
+      paymentMode: '',
+      transactionId: '',
+      certifyingAuthority: '',
+    },
+  },
 ];
 
 const chartLineData: ChartDataEntry[] = [
@@ -161,9 +367,41 @@ export default function CompensationReportPage() {
     const handleApplyFilters = () => alert("Applying filters...");
     const handleResetFilters = () => alert("Resetting filters...");
     const handleProcessPayment = (incidentId: string) => alert(`Processing payment for ${incidentId}...`);
-    const handleViewIncident = (incidentId: string) => alert(`Viewing incident ${incidentId}...`);
-    const handleViewWorker = (workerName: string) => alert(`Viewing worker ${workerName}...`);
+    const handleViewIncident = (incidentId: string) => {
+      const found = mockTableData.find(m => m.incidentId === incidentId);
+      if (found) setSelectedIncident(found);
+      else alert(`Viewing incident ${incidentId}...`);
+    };
+    const handleViewWorker = (workerName: string) => {
+      const found = mockTableData.find(m => m.workerName === workerName);
+      if (found) setSelectedDocIncident(found);
+      else alert(`No documents found for worker ${workerName}`);
+    };
     const handleMarkAsPaid = (incidentId: string) => alert(`Marking ${incidentId} as paid...`);
+    const handleViewDocuments = (incidentId: string) => {
+      const found = mockTableData.find(m => m.incidentId === incidentId);
+      if (found) setSelectedDocIncident(found);
+      else alert(`No documents found for ${incidentId}`);
+    };
+
+    // Download full details (JSON) for selected incident
+    const handleDownloadDetails = (inc: CompensationLedgerEntry) => {
+      try {
+        const payload = JSON.stringify(inc, null, 2);
+        const blob = new Blob([payload], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        const fileName = `${inc.incidentId || 'incident'}-details.json`;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      } catch (err) {
+        alert('Failed to download details.');
+      }
+    };
 
     const [loading, setLoading] = React.useState(true);
 
@@ -172,10 +410,318 @@ export default function CompensationReportPage() {
       return () => clearTimeout(t);
     }, []);
 
-    if (loading) return <IntegratedLoader />;
+    // Modal root and selected incident state (placed before early return to keep hooks order stable)
+    const [modalRoot, setModalRoot] = React.useState<HTMLElement | null>(null);
+    const [selectedIncident, setSelectedIncident] = React.useState<CompensationLedgerEntry | null>(null);
+    const [selectedDocIncident, setSelectedDocIncident] = React.useState<CompensationLedgerEntry | null>(null);
 
-  return (
+    React.useEffect(() => {
+      const root = document.getElementById('modal-root') || document.body;
+      setModalRoot(root as HTMLElement);
+    }, []);
+
+    if (loading) return <IntegratedLoader />;
+    // Build modal outside return
+    let ViewIncidentModal: React.ReactNode = null;
+    if (selectedIncident) {
+      const doc = selectedIncident.supportingDocuments || {};
+      const pending = selectedIncident.amountPending ?? (selectedIncident.amountSanctioned - (selectedIncident.amountReleased ?? 0));
+      const modalContent = (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
+          <div
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-all duration-300"
+            onClick={() => setSelectedIncident(null)}
+          />
+          <div className="relative bg-white/95 rounded-lg shadow-2xl border border-slate-200 p-4 sm:p-6 max-w-4xl w-full max-h-[86vh] overflow-y-auto">
+            <div className="flex justify-between items-center pb-3 mb-4">
+              <h2 className="text-lg font-bold text-gray-900">Incident Details</h2>
+              <button onClick={() => setSelectedIncident(null)} className="text-gray-600 hover:text-gray-900">&times;</button>
+            </div>
+
+            <div className="space-y-4">
+              {/* 1) Incident Info */}
+              <section>
+                <h3 className="text-md font-bold text-indigo-700 mb-2">Incident Info</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-white/60 backdrop-blur-sm rounded-xl p-3 shadow-sm">
+                  <div>
+                    <span className="text-xs font-bold text-slate-600 uppercase">Incident ID</span>
+                    <div className="text-sm font-semibold text-slate-900 mt-1">{selectedIncident.incidentId}</div>
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-slate-600 uppercase">Date of Incident</span>
+                    <div className="text-sm font-semibold text-slate-900 mt-1">{selectedIncident.dateOfIncident || 'N/A'}</div>
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-slate-600 uppercase">Location</span>
+                    <div className="text-sm font-semibold text-slate-900 mt-1">{selectedIncident.location || 'N/A'}</div>
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-slate-600 uppercase">Police Station</span>
+                    <div className="text-sm font-semibold text-slate-900 mt-1">{selectedIncident.policeStation || 'N/A'}</div>
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-slate-600 uppercase">FIR Number</span>
+                    <div className="text-sm font-semibold text-slate-900 mt-1">{selectedIncident.firNo || 'N/A'}</div>
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-slate-600 uppercase">Investigation Status</span>
+                    <div className="text-sm font-semibold text-slate-900 mt-1">{selectedIncident.investigationStatus || 'N/A'}</div>
+                  </div>
+                  <div className="sm:col-span-2">
+                    <span className="text-xs font-bold text-slate-600 uppercase">Outcome (Deaths / Injuries)</span>
+                    <div className="text-sm font-semibold text-slate-900 mt-1">{selectedIncident.numberOfDeaths ?? 0} / {selectedIncident.numberOfInjuries ?? 0}</div>
+                  </div>
+                </div>
+              </section>
+
+              {/* 2) Worker Info */}
+              <section>
+                <h3 className="text-md font-bold text-indigo-700 mb-2">Worker Info</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-white/60 backdrop-blur-sm rounded-xl p-3 shadow-sm">
+                  <div>
+                    <span className="text-xs font-bold text-slate-600 uppercase">Name</span>
+                    <div className="text-sm font-semibold text-slate-900 mt-1">{selectedIncident.workerName}</div>
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-slate-600 uppercase">Worker ID</span>
+                    <div className="text-sm font-semibold text-slate-900 mt-1">{selectedIncident.workerId || 'N/A'}</div>
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-slate-600 uppercase">Category</span>
+                    <div className="text-sm font-semibold text-slate-900 mt-1">{selectedIncident.category || 'N/A'}</div>
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-slate-600 uppercase">Contractor</span>
+                    <div className="text-sm font-semibold text-slate-900 mt-1">{selectedIncident.contractor || 'N/A'}</div>
+                  </div>
+                </div>
+              </section>
+
+              {/* 3) Compensation Details */}
+              <section>
+                <h3 className="text-md font-bold text-indigo-700 mb-2">Compensation Details</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-white/60 backdrop-blur-sm rounded-xl p-3 shadow-sm">
+                  <div>
+                    <span className="text-xs font-bold text-slate-600 uppercase">Amount Sanctioned</span>
+                    <div className="text-sm font-semibold text-slate-900 mt-1">{formatCurrency(selectedIncident.amountSanctioned)}</div>
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-slate-600 uppercase">Amount Released</span>
+                    <div className="text-sm font-semibold text-slate-900 mt-1">{selectedIncident.amountReleased ? formatCurrency(selectedIncident.amountReleased) : '₹0'}</div>
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-slate-600 uppercase">Amount Pending</span>
+                    <div className="text-sm font-semibold text-slate-900 mt-1">{pending ? formatCurrency(pending) : '₹0'}</div>
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-slate-600 uppercase">Payment Status</span>
+                    <div className="text-sm font-semibold text-slate-900 mt-1">{selectedIncident.paymentStatus || selectedIncident.paid || 'Pending'}</div>
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-slate-600 uppercase">Payment Date</span>
+                    <div className="text-sm font-semibold text-slate-900 mt-1">{selectedIncident.paymentDate || selectedIncident.datePaid || 'N/A'}</div>
+                  </div>
+                  <div className="sm:col-span-2">
+                    <span className="text-xs font-bold text-slate-600 uppercase">Remarks</span>
+                    <div className="text-sm text-slate-900 mt-1">{selectedIncident.remarks || 'N/A'}</div>
+                  </div>
+                </div>
+              </section>
+
+              {/* 4) Supporting Documents */}
+              <section>
+                <h3 className="text-md font-bold text-indigo-700 mb-2">Supporting Documents</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-white/60 backdrop-blur-sm rounded-xl p-3 shadow-sm">
+                  <div>
+                      <span className="text-xs font-bold text-slate-600 uppercase">Sanction Order</span>
+                      <div className="text-sm font-semibold text-slate-900 mt-1">{doc.sanctionOrderFile ? (<a href={doc.sanctionOrderFile} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">View</a>) : 'None'}</div>
+                    </div>
+                    <div>
+                      <span className="text-xs font-bold text-slate-600 uppercase">Payment Proof</span>
+                      <div className="text-sm font-semibold text-slate-900 mt-1">{doc.paymentProofFile ? (<a href={doc.paymentProofFile} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">View</a>) : 'None'}</div>
+                    </div>
+                </div>
+              </section>
+            </div>
+
+            <div className="flex justify-end pt-4 mt-3">
+              <button
+                onClick={() => setSelectedIncident(null)}
+                className="px-5 py-2 bg-indigo-600 text-white font-bold hover:bg-indigo-700 rounded-md"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+
+      ViewIncidentModal = modalRoot ? createPortal(modalContent, modalRoot) : modalContent;
+    }
+
+    // Document View modal
+    let DocumentViewModal: React.ReactNode = null;
+    if (selectedDocIncident) {
+      const d = selectedDocIncident.supportingDocuments || {};
+      const docContent = (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
+          <div
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-all duration-300"
+            onClick={() => setSelectedDocIncident(null)}
+          />
+          <div className="relative bg-white/95 rounded-lg shadow-2xl border border-slate-200 p-4 sm:p-6 max-w-2xl w-full max-h-[86vh] overflow-y-auto">
+            <div className="flex justify-between items-center pb-3 mb-4">
+              <h2 className="text-lg font-bold text-gray-900">Document View</h2>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => selectedDocIncident && handleDownloadDetails(selectedDocIncident)}
+                  className="px-3 py-1 bg-slate-100 hover:bg-slate-200 rounded text-sm text-slate-700"
+                >
+                  Download Details
+                </button>
+                <button onClick={() => setSelectedDocIncident(null)} className="text-gray-600 hover:text-gray-900">&times;</button>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <section>
+                <h3 className="text-md font-bold text-indigo-700 mb-2">Sanction Order</h3>
+                <div className="grid grid-cols-1 gap-2 bg-white/60 rounded-xl p-3 shadow-sm">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <span className="text-xs font-bold text-slate-600 uppercase">Sanction Number</span>
+                      <div className="text-sm font-semibold text-slate-900 mt-1">{d.sanctionNumber || 'N/A'}</div>
+                    </div>
+                    <div>
+                      <span className="text-xs font-bold text-slate-600 uppercase">Sanction Date</span>
+                      <div className="text-sm font-semibold text-slate-900 mt-1">{d.sanctionDate || 'N/A'}</div>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <span className="text-xs font-bold text-slate-600 uppercase">Amount</span>
+                      <div className="text-sm font-semibold text-slate-900 mt-1">{d.sanctionAmount ? formatCurrency(d.sanctionAmount) : 'N/A'}</div>
+                    </div>
+                    <div>
+                      <span className="text-xs font-bold text-slate-600 uppercase">Worker Name</span>
+                      <div className="text-sm font-semibold text-slate-900 mt-1">{selectedDocIncident.workerName}</div>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <span className="text-xs font-bold text-slate-600 uppercase">Category</span>
+                      <div className="text-sm font-semibold text-slate-900 mt-1">{selectedDocIncident.category || 'N/A'}</div>
+                    </div>
+                    <div>
+                      <span className="text-xs font-bold text-slate-600 uppercase">Incident ID</span>
+                      <div className="text-sm font-semibold text-slate-900 mt-1">{selectedDocIncident.incidentId}</div>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <span className="text-xs font-bold text-slate-600 uppercase">FIR Number</span>
+                      <div className="text-sm font-semibold text-slate-900 mt-1">{selectedDocIncident.firNo || 'N/A'}</div>
+                    </div>
+                    <div>
+                      <span className="text-xs font-bold text-slate-600 uppercase">Approving Authority</span>
+                      <div className="text-sm font-semibold text-slate-900 mt-1">{d.approvingAuthority || 'N/A'}</div>
+                    </div>
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-slate-600 uppercase">Sanction Order File</span>
+                    <div className="text-sm font-semibold text-slate-900 mt-2">
+                      {d.sanctionOrderFile ? (
+                        <div className="space-y-2">
+                          {d.sanctionOrderFile.toLowerCase().includes('.pdf') ? (
+                            <div className="w-full h-64 border rounded overflow-hidden">
+                              <iframe src={d.sanctionOrderFile} className="w-full h-full" title="Sanction Order Preview" />
+                            </div>
+                          ) : (
+                            <img src={d.sanctionOrderFile} alt="Sanction Order" className="max-h-64 object-contain border rounded" />
+                          )}
+                          <div>
+                            <a href={d.sanctionOrderFile} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">Open / Download</a>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="text-sm text-slate-500">No file attached</div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section>
+                <h3 className="text-md font-bold text-indigo-700 mb-2">Payment Order</h3>
+                <div className="grid grid-cols-1 gap-2 bg-white/60 rounded-xl p-3 shadow-sm">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <span className="text-xs font-bold text-slate-600 uppercase">Payment Date</span>
+                      <div className="text-sm font-semibold text-slate-900 mt-1">{d.paymentDate || 'N/A'}</div>
+                    </div>
+                    <div>
+                      <span className="text-xs font-bold text-slate-600 uppercase">Amount Released</span>
+                      <div className="text-sm font-semibold text-slate-900 mt-1">{d.amountReleased ? formatCurrency(d.amountReleased) : 'N/A'}</div>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <span className="text-xs font-bold text-slate-600 uppercase">Mode</span>
+                      <div className="text-sm font-semibold text-slate-900 mt-1">{d.paymentMode || 'N/A'}</div>
+                    </div>
+                    <div>
+                      <span className="text-xs font-bold text-slate-600 uppercase">Transaction ID</span>
+                      <div className="text-sm font-semibold text-slate-900 mt-1">{d.transactionId || 'N/A'}</div>
+                    </div>
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-slate-600 uppercase">Certifying Authority</span>
+                    <div className="text-sm font-semibold text-slate-900 mt-1">{d.certifyingAuthority || 'N/A'}</div>
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-slate-600 uppercase">Payment Proof File</span>
+                    <div className="text-sm font-semibold text-slate-900 mt-2">
+                      {d.paymentProofFile ? (
+                        <div className="space-y-2">
+                          {d.paymentProofFile.toLowerCase().includes('.pdf') ? (
+                            <div className="w-full h-64 border rounded overflow-hidden">
+                              <iframe src={d.paymentProofFile} className="w-full h-full" title="Payment Proof Preview" />
+                            </div>
+                          ) : (
+                            <img src={d.paymentProofFile} alt="Payment Proof" className="max-h-64 object-contain border rounded" />
+                          )}
+                          <div>
+                            <a href={d.paymentProofFile} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">Open / Download</a>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="text-sm text-slate-500">No file attached</div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+
+            <div className="flex justify-end pt-4 mt-3">
+              <button
+                onClick={() => setSelectedDocIncident(null)}
+                className="px-5 py-2 bg-indigo-600 text-white font-bold hover:bg-indigo-700 rounded-md"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+
+      DocumentViewModal = modalRoot ? createPortal(docContent, modalRoot) : docContent;
+    }
+
+    return (
     <div className="flex-1 space-y-10 p-6 md:p-10 pt-8 text-slate-900 dark:text-slate-50">
+      {ViewIncidentModal}
+      {DocumentViewModal}
       {/* District-style banner (taller, gradient, gap below) */}
       <div className="rounded-xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 text-white flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -470,13 +1016,14 @@ export default function CompensationReportPage() {
                     {row.remarks}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-1.5">
-                    <button
-                      onClick={() => handleViewIncident(row.incidentId)}
-                      title="View Incident"
-                      className="p-2 text-blue-600 hover:bg-blue-100 dark:hover:bg-slate-700 rounded-md transition-colors duration-150"
-                    >
-                      <Eye size={16} />
-                    </button>
+                      <button
+                        onClick={() => handleViewIncident(row.incidentId)}
+                        title="View Incident"
+                        className="p-2 text-blue-600 hover:bg-blue-100 dark:hover:bg-slate-700 rounded-md transition-colors duration-150"
+                      >
+                        <Eye size={16} />
+                      </button>
+                    
                     <button
                       onClick={() => handleViewWorker(row.workerName)}
                       title="View Worker Profile"

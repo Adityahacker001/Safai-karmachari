@@ -392,103 +392,118 @@ export default function NskfdcSewerDeathPage() {
 
       {/* 6. Main Table + Side Widgets (RE-STYLED) */}
       <section className="mb-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Table (main) */}
-        <div className="lg:col-span-2 overflow-hidden">
-          <h3 className="text-2xl font-semibold text-gray-800 mb-4">
-            Total Incident Report
-          </h3>
-          <div className="overflow-x-auto rounded-lg shadow-md">
-            {/* COLORFUL TABLE HEADER */}
-            <table className="min-w-full leading-normal">
-              <thead
-                className={`${tableHeaderStyle} bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-t-lg`}
-              >
-                <tr>
-                  <th className={`${tableHeaderStyle} rounded-tl-lg`}></th>
-                  <th className={tableHeaderStyle}>Incident ID</th>
-                  <th className={tableHeaderStyle}>Date</th>
-                  <th className={tableHeaderStyle}>Location</th>
-                  <th className={tableHeaderStyle}>Deaths</th>
-                  <th className={tableHeaderStyle}>Injuries</th>
-                  <th className={tableHeaderStyle}>FIR No</th>
-                  <th className={tableHeaderStyle}>Comp. Paid</th>
-                  <th className={`${tableHeaderStyle} rounded-tr-lg`}>
-                    Inquiry
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white">
-                {filtered.map((c) => (
-                  <React.Fragment key={c.caseId}>
-                    {/* STRIPED & HOVERABLE ROWS */}
-                    <tr
-                      className="cursor-pointer hover:bg-emerald-50 even:bg-gray-50"
-                      onClick={() =>
-                        setExpanded(expanded === c.caseId ? null : c.caseId)
-                      }
-                      tabIndex={0}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ')
-                          setExpanded(expanded === c.caseId ? null : c.caseId);
-                      }}
-                      aria-expanded={expanded === c.caseId}
-                    >
-                      <td className={`${tableCellStyle} w-10`}>
-                        {expanded === c.caseId ? (
-                          <ChevronDown className="h-5 w-5 text-emerald-600" />
-                        ) : (
-                          <ChevronRight className="h-5 w-5 text-gray-400" />
-                        )}
-                      </td>
-                      <td className={tableCellStyle}>
-                        <p className="font-medium">{c.incidentId}</p>
-                      </td>
-                      <td className={tableCellStyle}>{c.date}</td>
-                      <td className={tableCellStyle}>
-                        {c.district} / {c.policeStation}
-                      </td>
-                      <td className={`${tableCellStyle} text-red-600 font-bold`}>
-                        {c.deaths ?? 0}
-                      </td>
-                      <td
-                        className={`${tableCellStyle} text-yellow-600 font-bold`}
-                      >
-                        {c.injuries ?? 0}
-                      </td>
-                      <td className={tableCellStyle}>{c.firNo || '-'}</td>
-                      <td className={tableCellStyle}>
-                        {c.compensationPaid
-                          ? `₹${formatINR(c.compensationPaid)}`
-                          : '-'}
-                      </td>
-                      <td className={tableCellStyle}>
-                        <StatusPill status={c.inquiryStatus} />
-                      </td>
-                    </tr>
+        {/* Replaced table with PDF-style stacked incident cards (left column) */}
+        <div className="lg:col-span-2">
+          <h3 className="text-2xl font-semibold text-gray-800 mb-4">Total Incident Report</h3>
+          <div className="space-y-6">
+            {filtered.map((c) => (
+              <article key={c.caseId} className="bg-white rounded-lg shadow-sm border border-gray-100">
+                {/* Basic Details block */}
+                <div className="p-4 border-b border-gray-100">
+                  <h4 className="text-md font-semibold text-gray-800 mb-2">Basic Details</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm text-gray-700">
+                    <div>
+                      <div className="font-medium">Incident ID</div>
+                      <div className="mt-1">{c.incidentId}</div>
+                    </div>
+                    <div>
+                      <div className="font-medium">Date</div>
+                      <div className="mt-1">{c.date}</div>
+                    </div>
+                    <div>
+                      <div className="font-medium">District / Location</div>
+                      <div className="mt-1">{c.district} / {c.policeStation}</div>
+                    </div>
+                    <div>
+                      <div className="font-medium">Deaths</div>
+                      <div className="mt-1 text-red-600 font-semibold">{c.deaths ?? 0}</div>
+                    </div>
+                    <div>
+                      <div className="font-medium">FIR No</div>
+                      <div className="mt-1">{c.firNo || 'N/A'}</div>
+                    </div>
+                    <div>
+                      <div className="font-medium">Status</div>
+                      <div className="mt-1"><StatusPill status={c.inquiryStatus} /></div>
+                    </div>
+                  </div>
+                </div>
 
-                    {/* Expandable Fact Sheet */}
-                    <tr>
-                      <td colSpan={9} className="p-0">
-                        <AnimatePresence>
-                          {expanded === c.caseId && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: 'auto', opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.18 }}
-                              className="overflow-hidden"
-                            >
-                              {/* CLEAN 2-COLUMN FACT SHEET */}
-                              <FactSheet caseItem={c} />
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </td>
-                    </tr>
-                  </React.Fragment>
-                ))}
-              </tbody>
-            </table>
+                {/* Narrative Summary block */}
+                <div className="p-4 bg-gray-50 border-b border-gray-100">
+                  <h4 className="text-md font-semibold text-gray-800 mb-2">Narrative Summary</h4>
+                  <p className="text-sm text-gray-700">{c.narrative || 'No narrative provided.'}</p>
+                </div>
+
+                {/* Compensation Details block */}
+                <div className="p-4 border-b border-gray-100">
+                  <h4 className="text-md font-semibold text-gray-800 mb-2">Compensation Details</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-sm text-gray-700">
+                    <div>
+                      <div className="font-medium">Amount Sanctioned</div>
+                      <div className="mt-1">{c.compensationSanctioned ? `₹${formatINR(c.compensationSanctioned)}` : 'N/A'}</div>
+                    </div>
+                    <div>
+                      <div className="font-medium">Amount Paid</div>
+                      <div className="mt-1">{c.compensationPaid ? `₹${formatINR(c.compensationPaid)}` : '₹0'}</div>
+                    </div>
+                    <div>
+                      <div className="font-medium">Date Paid</div>
+                      <div className="mt-1">{(c.compensationPaid && c.date) ? c.date : 'N/A'}</div>
+                    </div>
+                    <div>
+                      <div className="font-medium">Days Pending</div>
+                      <div className="mt-1">{c.daysPending ?? 'N/A'}</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Attachments block */}
+                <div className="p-4 bg-gray-50">
+                  <h4 className="text-md font-semibold text-gray-800 mb-2">Attachments</h4>
+                  <div className="text-sm text-gray-700">
+                    <ul className="list-disc list-inside space-y-1">
+                      {/* FIR */}
+                      <li>
+                        <span className="font-medium">FIR:</span>{' '}
+                        {c.attachments && c.attachments.find(a => /fir/i.test(a)) ? (
+                          <a className="text-blue-600 hover:underline" href="#">{c.attachments.find(a => /fir/i.test(a))}</a>
+                        ) : (
+                          <span className="text-gray-500">Not attached</span>
+                        )}
+                      </li>
+                      {/* Post-Mortem Report */}
+                      <li>
+                        <span className="font-medium">Post-Mortem Report:</span>{' '}
+                        {c.attachments && c.attachments.find(a => /post|mortem/i.test(a)) ? (
+                          <a className="text-blue-600 hover:underline" href="#">{c.attachments.find(a => /post|mortem/i.test(a))}</a>
+                        ) : (
+                          <span className="text-gray-500">Not attached</span>
+                        )}
+                      </li>
+                      {/* Sanction Letter */}
+                      <li>
+                        <span className="font-medium">Sanction Letter:</span>{' '}
+                        {c.attachments && c.attachments.find(a => /sanction/i.test(a)) ? (
+                          <a className="text-blue-600 hover:underline" href="#">{c.attachments.find(a => /sanction/i.test(a))}</a>
+                        ) : (
+                          <span className="text-gray-500">Not attached</span>
+                        )}
+                      </li>
+                      {/* Payment Proof */}
+                      <li>
+                        <span className="font-medium">Payment Proof:</span>{' '}
+                        {c.attachments && c.attachments.find(a => /payment|receipt/i.test(a)) ? (
+                          <a className="text-blue-600 hover:underline" href="#">{c.attachments.find(a => /payment|receipt/i.test(a))}</a>
+                        ) : (
+                          <span className="text-gray-500">Not attached</span>
+                        )}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </article>
+            ))}
           </div>
         </div>
 

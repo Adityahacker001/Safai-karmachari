@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react'; // Removed useEffect as it's not used
+import React, { useState, useEffect } from 'react'; // Removed useEffect as it's not used
+import { createPortal } from 'react-dom';
 import {
   BarChart as BarChartIcon,
   AlertTriangle,
@@ -48,6 +49,32 @@ interface PendingCase {
   status: 'In Progress' | 'Initiated' | 'Awaiting Charge Sheet';
   daysPending: number;
   escalationTriggered: 'Yes' | 'No';
+
+  // Additional fields for the View Details modal (optional so table remains unchanged)
+  incidentId?: string;
+  incidentDateTime?: string; // Date & Time of Incident
+  location?: string; // Location / geo-tag if available
+
+  // FIR Details
+  firNumber?: string; // duplicate of firNo but keeps naming explicit
+  firStatus?: 'Lodged' | 'Under Investigation' | 'Charge Sheet Filed' | 'Closed' | string;
+
+  // Investigation
+  investigationStatus?: 'Pending' | 'Initiated' | 'Completed' | string;
+  chargeSheetFiled?: 'Yes' | 'No';
+  chargeSheetDate?: string;
+
+  // Compensation
+  compensationAmount?: string;
+  compensationPaid?: 'Yes' | 'No';
+  compensationDatePaid?: string;
+
+  // Outcome
+  numberOfDeaths?: number;
+  numberOfInjuries?: number;
+
+  // Description / narrative
+  description?: string;
 }
 
 interface BarChartEntry {
@@ -82,11 +109,121 @@ const allStatuses: PendingCase['status'][] = [
 ];
 
 const initialTableData: PendingCase[] = [
-  { slNo: 1, caseId: 'CASE002', firNo: 'FIR-121/2025', policeStation: 'Mumbai Central', status: 'In Progress', daysPending: 82, escalationTriggered: 'Yes' },
-  { slNo: 2, caseId: 'CASE003', firNo: 'FIR-145/2025', policeStation: 'Lucknow Zone', status: 'Initiated', daysPending: 75, escalationTriggered: 'Yes' },
-  { slNo: 3, caseId: 'CASE004', firNo: 'FIR-235/2025', policeStation: 'Delhi North', status: 'In Progress', daysPending: 41, escalationTriggered: 'No' },
-  { slNo: 4, caseId: 'CASE007', firNo: 'FIR-119/2025', policeStation: 'Kolkata South', status: 'Awaiting Charge Sheet', daysPending: 32, escalationTriggered: 'No' },
-  { slNo: 5, caseId: 'CASE009', firNo: 'FIR-180/2025', policeStation: 'Mumbai Central', status: 'Awaiting Charge Sheet', daysPending: 61, escalationTriggered: 'Yes' },
+  {
+    slNo: 1,
+    caseId: 'CASE002',
+    firNo: 'FIR-121/2025',
+    firNumber: 'FIR-121/2025',
+    policeStation: 'Mumbai Central',
+    status: 'In Progress',
+    daysPending: 82,
+    escalationTriggered: 'Yes',
+    incidentId: 'INC-021',
+    incidentDateTime: '2025-09-10 14:30',
+    location: 'Mumbai Central - Station Road (geo:19.0760,72.8777)',
+    firStatus: 'Under Investigation',
+    investigationStatus: 'Pending',
+    chargeSheetFiled: 'No',
+    chargeSheetDate: undefined,
+    compensationAmount: '0',
+    compensationPaid: 'No',
+    compensationDatePaid: undefined,
+    numberOfDeaths: 0,
+    numberOfInjuries: 1,
+    description: 'Allegation of assault during an altercation near the market area.'
+  },
+  {
+    slNo: 2,
+    caseId: 'CASE003',
+    firNo: 'FIR-145/2025',
+    firNumber: 'FIR-145/2025',
+    policeStation: 'Lucknow Zone',
+    status: 'Initiated',
+    daysPending: 75,
+    escalationTriggered: 'Yes',
+    incidentId: 'INC-030',
+    incidentDateTime: '2025-08-20 09:15',
+    location: 'Lucknow Zone - Old Bus Stand',
+    firStatus: 'Lodged',
+    investigationStatus: 'Initiated',
+    chargeSheetFiled: 'No',
+    chargeSheetDate: undefined,
+    compensationAmount: '0',
+    compensationPaid: 'No',
+    compensationDatePaid: undefined,
+    numberOfDeaths: 0,
+    numberOfInjuries: 2,
+    description: 'Two individuals injured during roadside incident; investigation started.'
+  },
+  {
+    slNo: 3,
+    caseId: 'CASE004',
+    firNo: 'FIR-235/2025',
+    firNumber: 'FIR-235/2025',
+    policeStation: 'Delhi North',
+    status: 'In Progress',
+    daysPending: 41,
+    escalationTriggered: 'No',
+    incidentId: 'INC-033',
+    incidentDateTime: '2025-10-01 22:45',
+    location: 'Delhi North - Sector 12',
+    firStatus: 'Under Investigation',
+    investigationStatus: 'Pending',
+    chargeSheetFiled: 'No',
+    chargeSheetDate: undefined,
+    compensationAmount: '50000',
+    compensationPaid: 'Yes',
+    compensationDatePaid: '2025-11-05',
+    numberOfDeaths: 0,
+    numberOfInjuries: 1,
+    description: 'Property damage during protest; single injured person treated.'
+  },
+  {
+    slNo: 4,
+    caseId: 'CASE007',
+    firNo: 'FIR-119/2025',
+    firNumber: 'FIR-119/2025',
+    policeStation: 'Kolkata South',
+    status: 'Awaiting Charge Sheet',
+    daysPending: 32,
+    escalationTriggered: 'No',
+    incidentId: 'INC-040',
+    incidentDateTime: '2025-07-02 18:00',
+    location: 'Kolkata South - Riverside',
+    firStatus: 'Lodged',
+    investigationStatus: 'Initiated',
+    chargeSheetFiled: 'No',
+    chargeSheetDate: undefined,
+    compensationAmount: '0',
+    compensationPaid: 'No',
+    compensationDatePaid: undefined,
+    numberOfDeaths: 0,
+    numberOfInjuries: 0,
+    description: 'Complaint alleging theft from parked vehicle.'
+  },
+  {
+    slNo: 5,
+    caseId: 'CASE009',
+    firNo: 'FIR-180/2025',
+    firNumber: 'FIR-180/2025',
+    policeStation: 'Mumbai Central',
+    status: 'Awaiting Charge Sheet',
+    daysPending: 61,
+    escalationTriggered: 'Yes',
+    incidentId: 'INC-055',
+    incidentDateTime: '2025-06-14 03:20',
+    location: 'Mumbai Central - Dockyards',
+    firStatus: 'Charge Sheet Filed',
+    investigationStatus: 'Completed',
+    chargeSheetFiled: 'Yes',
+    chargeSheetDate: '2025-08-01',
+    compensationAmount: '150000',
+    compensationPaid: 'Yes',
+    compensationDatePaid: '2025-09-10',
+    numberOfDeaths: 1,
+    numberOfInjuries: 3,
+    description: 'Serious industrial accident resulting in casualties; chargesheet filed.'
+  },
 ];
 
 const initialChartBarData: BarChartEntry[] = [
@@ -170,9 +307,19 @@ export default function PendingCasesReportPage() {
 
   const [loading, setLoading] = useState(true);
 
+  // Modal state + portal root
+  const [selectedCase, setSelectedCase] = useState<PendingCase | null>(null);
+  const [modalRoot, setModalRoot] = useState<HTMLElement | null>(null);
+
   React.useEffect(() => {
     const t = setTimeout(() => setLoading(false), 1200);
     return () => clearTimeout(t);
+  }, []);
+
+  // Ensure modal root is set as a hook (must run before any conditional returns)
+  useEffect(() => {
+    const root = document.getElementById('modal-root') || document.body;
+    setModalRoot(root as HTMLElement);
   }, []);
 
   // Filter State
@@ -222,7 +369,10 @@ export default function PendingCasesReportPage() {
   };
 
   const handleExport = () => alert("Export functionality to be implemented.");
-  const handleViewDetails = (caseId: string) => alert(`Viewing details for ${caseId} (simulation)`);
+  const handleViewDetails = (caseId: string) => {
+    const found = tableData.find(t => t.caseId === caseId) || initialTableData.find(t => t.caseId === caseId);
+    if (found) setSelectedCase(found);
+  };
   const handleUpdateProgress = (caseId: string) => alert(`Updating progress for ${caseId} (simulation)`);
   const handleEscalateCase = (caseId: string) => alert(`Escalating case ${caseId} (simulation)`);
 
@@ -231,6 +381,130 @@ export default function PendingCasesReportPage() {
 
 
   if (loading) return <IntegratedLoader />;
+
+  // Build modal outside return
+  let ViewDetailsModal: React.ReactNode = null;
+  if (selectedCase) {
+    const modalContent = (
+      <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
+        <div
+          className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-all duration-300"
+          onClick={() => setSelectedCase(null)}
+        />
+        <div className="relative bg-white/80 backdrop-blur-sm rounded-lg shadow-2xl border border-slate-200 p-4 sm:p-6 max-w-3xl w-full max-h-[86vh] overflow-y-auto">
+          <div className="flex justify-between items-center pb-3 mb-4">
+            <h2 className="text-lg font-bold text-gray-900">Case Details</h2>
+            <button onClick={() => setSelectedCase(null)} className="text-gray-600 hover:text-gray-900">&times;</button>
+          </div>
+
+          <div className="space-y-4">
+            {/* Basic Case Information */}
+            <section>
+              <h3 className="text-md font-bold text-indigo-700 mb-2">Basic Case Information</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-white/60 backdrop-blur-sm rounded-xl p-3 shadow-sm">
+                <div>
+                  <span className="text-xs font-bold text-slate-600 uppercase">Case ID</span>
+                  <div className="text-sm font-semibold text-slate-900 mt-1">{selectedCase.caseId}</div>
+                </div>
+                <div>
+                  <span className="text-xs font-bold text-slate-600 uppercase">Incident ID</span>
+                  <div className="text-sm font-semibold text-slate-900 mt-1">{selectedCase.incidentId || 'N/A'}</div>
+                </div>
+                <div>
+                  <span className="text-xs font-bold text-slate-600 uppercase">Date & Time of Incident</span>
+                  <div className="text-sm font-semibold text-slate-900 mt-1">{selectedCase.incidentDateTime || 'N/A'}</div>
+                </div>
+                <div>
+                  <span className="text-xs font-bold text-slate-600 uppercase">Location</span>
+                  <div className="text-sm font-semibold text-slate-900 mt-1">{selectedCase.location || 'N/A'}</div>
+                </div>
+              </div>
+            </section>
+
+            {/* FIR Details */}
+            <section>
+              <h3 className="text-md font-bold text-indigo-700 mb-2">FIR Details</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-white/60 backdrop-blur-sm rounded-xl p-3 shadow-sm">
+                <div>
+                  <span className="text-xs font-bold text-slate-600 uppercase">FIR Number</span>
+                  <div className="text-sm font-semibold text-slate-900 mt-1">{selectedCase.firNumber || selectedCase.firNo || 'N/A'}</div>
+                </div>
+                <div>
+                  <span className="text-xs font-bold text-slate-600 uppercase">Police Station</span>
+                  <div className="text-sm font-semibold text-slate-900 mt-1">{selectedCase.policeStation}</div>
+                </div>
+                <div className="sm:col-span-2">
+                  <span className="text-xs font-bold text-slate-600 uppercase">FIR Status</span>
+                  <div className="text-sm font-semibold text-slate-900 mt-1">{selectedCase.firStatus || 'N/A'}</div>
+                </div>
+              </div>
+            </section>
+
+            {/* Investigation Information */}
+            <section>
+              <h3 className="text-md font-bold text-indigo-700 mb-2">Investigation Information</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-white/60 backdrop-blur-sm rounded-xl p-3 shadow-sm">
+                <div>
+                  <span className="text-xs font-bold text-slate-600 uppercase">Investigation Status</span>
+                  <div className="text-sm font-semibold text-slate-900 mt-1">{selectedCase.investigationStatus || 'N/A'}</div>
+                </div>
+                <div>
+                  <span className="text-xs font-bold text-slate-600 uppercase">Charge Sheet Filed</span>
+                  <div className="text-sm font-semibold text-slate-900 mt-1">{selectedCase.chargeSheetFiled || 'No' }{selectedCase.chargeSheetDate ? ` (Date: ${selectedCase.chargeSheetDate})` : ''}</div>
+                </div>
+              </div>
+            </section>
+
+            {/* Compensation Information */}
+            <section>
+              <h3 className="text-md font-bold text-indigo-700 mb-2">Compensation Information</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-white/60 backdrop-blur-sm rounded-xl p-3 shadow-sm">
+                <div>
+                  <span className="text-xs font-bold text-slate-600 uppercase">Compensation Amount</span>
+                  <div className="text-sm font-semibold text-slate-900 mt-1">{selectedCase.compensationAmount ? `₹${selectedCase.compensationAmount}` : 'N/A'}</div>
+                </div>
+                <div>
+                  <span className="text-xs font-bold text-slate-600 uppercase">Compensation Paid</span>
+                  <div className="text-sm font-semibold text-slate-900 mt-1">{selectedCase.compensationPaid || 'No'}{selectedCase.compensationDatePaid ? ` (Date: ${selectedCase.compensationDatePaid})` : ''}</div>
+                </div>
+              </div>
+            </section>
+
+            {/* Incident Outcome */}
+            <section>
+              <h3 className="text-md font-bold text-indigo-700 mb-2">Incident Outcome</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-white/60 backdrop-blur-sm rounded-xl p-3 shadow-sm">
+                <div>
+                  <span className="text-xs font-bold text-slate-600 uppercase">Number of Deaths</span>
+                  <div className="text-sm font-semibold text-slate-900 mt-1">{selectedCase.numberOfDeaths ?? 0}</div>
+                </div>
+                <div>
+                  <span className="text-xs font-bold text-slate-600 uppercase">Number of Injuries</span>
+                  <div className="text-sm font-semibold text-slate-900 mt-1">{selectedCase.numberOfInjuries ?? 0}</div>
+                </div>
+                <div className="sm:col-span-2">
+                  <span className="text-xs font-bold text-slate-600 uppercase">Description</span>
+                  <div className="text-sm text-slate-900 mt-1">{selectedCase.description || 'N/A'}</div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div className="flex justify-end pt-4 mt-3">
+            <button
+              onClick={() => setSelectedCase(null)}
+              className="px-5 py-2 bg-indigo-600 text-white font-bold hover:bg-indigo-700 rounded-md"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+
+      );
+
+      ViewDetailsModal = modalRoot ? createPortal(modalContent, modalRoot) : modalContent;
+    }
 
   return (
     <div className="flex-1 space-y-8 p-6 md:p-10 text-slate-900 dark:text-slate-50">
@@ -597,6 +871,7 @@ export default function PendingCasesReportPage() {
             </button>
           </div>
         </div>
+        {ViewDetailsModal}
       </div>
     </div>
   );
