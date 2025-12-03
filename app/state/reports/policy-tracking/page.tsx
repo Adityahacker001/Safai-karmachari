@@ -120,7 +120,7 @@ export default function PolicyTrackingReportPage() {
 
   return (
     <div className={cn("min-h-screen space-y-8 p-6 md:p-8")}>
-      <div className="rounded-xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500">
+      <div className="rounded-xl sm:rounded-2xl lg:rounded-3xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500">
         <div className="flex items-start justify-between gap-4">
           <div>
             <h2 className="text-3xl md:text-4xl font-extrabold text-white">Policy Tracking Report</h2>
@@ -135,7 +135,7 @@ export default function PolicyTrackingReportPage() {
 
       <Card className={cn(contractorTheme.table.container)}>
         {/* Stronger, harder header color per request */}
-        <CardHeader className="p-6 md:p-8 bg-gradient-to-r from-purple-700 to-pink-600 text-white shadow-lg">
+        <CardHeader className="rounded-xl sm:rounded-2xl lg:rounded-3xl p-6 md:p-8 bg-gradient-to-r from-purple-700 to-pink-600 text-white shadow-lg">
             <CardTitle className="text-2xl md:text-3xl font-bold">Master Policy Roster</CardTitle>
             <CardDescription className="text-white/90 mt-2">Detailed implementation status for each state-wide policy.</CardDescription>
         </CardHeader>
@@ -145,7 +145,8 @@ export default function PolicyTrackingReportPage() {
               <TableRow>
                 <TableHead>Policy Initiative</TableHead>
                 <TableHead>Compliant Districts</TableHead>
-                <TableHead>Top Performer</TableHead>
+                  <TableHead>Implementation Status</TableHead>
+                  <TableHead>Top Performer</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -154,7 +155,21 @@ export default function PolicyTrackingReportPage() {
                 <TableRow key={policy.name}>
                   <TableCell className="font-medium">{policy.name}</TableCell>
                   <TableCell className="font-semibold text-center">{policy.compliantDistricts} / {policy.totalDistricts}</TableCell>
-                  <TableCell>{policy.topPerformer}</TableCell>
+                    <TableCell className="text-center">
+                      {(() => {
+                        const st = policy.status === 'On Track'
+                          ? { text: 'On Track', cls: 'inline-block px-3 py-1 rounded-full bg-green-100 text-green-700 font-bold' }
+                          : policy.status === 'Lagging'
+                          ? { text: 'Delayed', cls: 'inline-block px-3 py-1 rounded-full bg-red-100 text-red-700 font-bold' }
+                          : policy.compliance === 0
+                          ? { text: 'Not Started', cls: 'inline-block px-3 py-1 rounded-full bg-gray-100 text-gray-700 font-bold' }
+                          : policy.compliance < policy.target
+                          ? { text: 'In Progress', cls: 'inline-block px-3 py-1 rounded-full bg-yellow-100 text-yellow-800 font-bold' }
+                          : { text: 'Completed', cls: 'inline-block px-3 py-1 rounded-full bg-green-100 text-green-700 font-bold' };
+                        return <span className={st.cls}>{st.text}</span>;
+                      })()}
+                    </TableCell>
+                    <TableCell>{policy.topPerformer}</TableCell>
                   <TableCell className="text-right">
                     <Dialog>
                         <DialogTrigger asChild><Button className={cn(contractorTheme.button.secondary, "!px-4 !py-2 text-sm") }><Eye className="h-4 w-4 mr-2"/>View Breakdown</Button></DialogTrigger>
