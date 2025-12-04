@@ -852,7 +852,7 @@ export default function WorkerManagementReportPage() {
       </Card>
 
       {/* Zone Assignment Section (as per image) */}
-      <div className="mt-10 bg-gradient-to-br from-teal-400 to-cyan-600 rounded-3xl p-8 text-white shadow-2xl">
+      <div className="mt-10 bg-gradient-to-br from-teal-200 via-cyan-200 to-cyan-400 rounded-3xl p-8 text-slate-900 shadow-2xl">
         <div className="mb-2">
           <h3 className="text-3xl font-extrabold mb-1">Zone Assignment</h3>
           <p className="text-lg opacity-90">Manage worker's assigned zone.</p>
@@ -862,7 +862,8 @@ export default function WorkerManagementReportPage() {
           <label htmlFor="zone-worker-select" className="block text-lg font-semibold mb-2">Select Worker</label>
           <select
             id="zone-worker-select"
-            className="w-full bg-cyan-300/60 border-2 border-white rounded-xl px-6 py-4 text-lg text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-white transition-all"
+            className="w-full bg-white/40 border-0 rounded-xl px-6 py-4 text-lg text-slate-900 placeholder-slate-700 appearance-none ring-0 shadow-none focus:outline-none focus:ring-0 transition-all"
+            style={{ boxShadow: 'none', outline: 'none', border: 'none' }}
             value={selectedWorker ? selectedWorker.id : ''}
             onChange={e => {
               const worker = workers.find(w => w.id === e.target.value);
@@ -871,7 +872,12 @@ export default function WorkerManagementReportPage() {
           >
             <option value="" disabled>Select a worker</option>
             {workers.map(worker => (
-              <option key={worker.id} value={worker.id}>
+              <option
+                key={worker.id}
+                value={worker.id}
+                className="text-slate-900"
+                style={{ backgroundColor: '#e6fbff', color: '#0f172a', border: 'none', outline: 'none' }}
+              >
                 {worker.name} ({worker.id})
               </option>
             ))}
@@ -883,14 +889,14 @@ export default function WorkerManagementReportPage() {
             <div className="text-2xl font-extrabold mt-1 mb-6">{selectedWorker.zone}</div>
             <div className="text-lg font-semibold mb-2">Change Zone</div>
             <div className="flex flex-col sm:flex-row items-center gap-4">
-              <select className="flex-grow bg-cyan-300/60 border-2 border-white rounded-xl px-6 py-4 text-lg text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-white transition-all" defaultValue="">
-                <option value="" disabled>Select a new zone</option>
-                <option value="Zone 1">Zone 1</option>
-                <option value="Zone 2">Zone 2</option>
-                <option value="Zone 3">Zone 3</option>
-                <option value="Zone 4">Zone 4</option>
+              <select className="flex-grow bg-white/40 border-0 rounded-xl px-6 py-4 text-lg text-slate-900 placeholder-slate-700 appearance-none ring-0 shadow-none focus:outline-none focus:ring-0 transition-all" defaultValue="" style={{ boxShadow: 'none', outline: 'none', border: 'none' }}>
+                <option value="" disabled style={{ backgroundColor: '#e6fbff', color: '#0f172a', border: 'none', outline: 'none' }}>Select a new zone</option>
+                <option value="Zone 1" style={{ backgroundColor: '#e6fbff', color: '#0f172a', border: 'none', outline: 'none' }}>Zone 1</option>
+                <option value="Zone 2" style={{ backgroundColor: '#e6fbff', color: '#0f172a', border: 'none', outline: 'none' }}>Zone 2</option>
+                <option value="Zone 3" style={{ backgroundColor: '#e6fbff', color: '#0f172a', border: 'none', outline: 'none' }}>Zone 3</option>
+                <option value="Zone 4" style={{ backgroundColor: '#e6fbff', color: '#0f172a', border: 'none', outline: 'none' }}>Zone 4</option>
               </select>
-              <button className="bg-white text-teal-600 font-bold text-lg px-8 py-4 rounded-xl shadow-lg flex items-center gap-2 hover:bg-gray-100 transition-all">
+              <button className="bg-white/95 text-teal-700 font-bold text-lg px-8 py-4 rounded-xl shadow-lg flex items-center gap-2 hover:bg-gray-100 transition-all">
                 <Save className="h-6 w-6" />
                 Update Zone
               </button>

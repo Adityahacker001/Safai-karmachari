@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Download, GraduationCap, Target, AlertTriangle, CheckCircle, Loader, Clock, XCircle, Eye } from "lucide-react";
+import { Download, GraduationCap, Target, AlertTriangle, CheckCircle, Loader, Clock, XCircle, Eye, User, Calendar, FileText } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import StatCard from "@/components/ui/stat-card";
@@ -20,6 +20,47 @@ export default function TrainingCoverageReportPage() {
         const timer = setTimeout(() => setLoading(false), 1200); // Simulate loading
         return () => clearTimeout(timer);
     }, []);
+
+    // Modal state for Training Details view (must be declared before any early returns)
+    const [selectedRecord, setSelectedRecord] = React.useState<any>(null);
+
+    const formatDate = (d: string | null) => {
+        if (!d) return '—';
+        try {
+            return new Date(d).toLocaleDateString();
+        } catch (e) {
+            return d;
+        }
+    }
+
+    const daysSince = (d: string | null) => {
+        if (!d) return null;
+        const then = new Date(d);
+        const now = new Date();
+        const diff = Math.floor((now.getTime() - then.getTime()) / (1000 * 60 * 60 * 24));
+        return diff;
+    }
+
+    const getStatusBadge = (record: any) => {
+        if (!record) return null;
+        const overdueBy = daysSince(record.assignedDate);
+        const isOverdue = record.status !== 'Completed' && overdueBy !== null && overdueBy > 30;
+        if (isOverdue) return <span className="px-3 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Overdue</span>;
+        switch (record.status) {
+            case 'Completed':
+                return <span className="px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Completed</span>;
+            case 'Pending':
+                return <span className="px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>;
+            case 'In Progress':
+                return <span className="px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">In Progress</span>;
+            case 'Assigned':
+                return <span className="px-3 py-1 text-xs font-semibold rounded-full bg-slate-100 text-slate-800">Assigned</span>;
+            case 'Overdue':
+                return <span className="px-3 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Overdue</span>;
+            default:
+                return <span className="px-3 py-1 text-xs font-semibold rounded-full bg-slate-100 text-slate-800">{record.status}</span>;
+        }
+    }
 
     if (loading) {
         return <IntegratedLoader />;
@@ -82,13 +123,99 @@ export default function TrainingCoverageReportPage() {
     ];
 
     const trainingRecords = [
-        { worker: "Abishek Kumar", module: "Sewer Safety", status: "Completed", score: 85, certificate: true },
-        { worker: "Sita Devi", module: "PPE Usage", status: "Pending", score: null, certificate: false },
-        { worker: "Amit Patel", module: "Sewer Safety", status: "Completed", score: 92, certificate: true },
-        { worker: "Priya Sharma", module: "First Aid Basics", status: "In Progress", score: null, certificate: false },
-        { worker: "Mohan Singh", module: "Equipment Handling", status: "Completed", score: 78, certificate: true },
-        { worker: "Sunita Yadav", module: "Confined Space Entry", status: "Overdue", score: null, certificate: false },
+        {
+            id: 'TR-1001',
+            worker: "Abishek Kumar",
+            workerId: 'W-001',
+            category: 'Manual Cleaner',
+            module: "Sewer Safety",
+            status: "Completed",
+            score: 85,
+            certificate: true,
+            certificateUrl: '/certificates/TR-1001.pdf',
+            assignedDate: '2025-10-01',
+            completedDate: '2025-10-15',
+            trainer: 'Ramesh Kumar',
+            remarks: 'Performed well in practical assessment.'
+        },
+        {
+            id: 'TR-1002',
+            worker: "Sita Devi",
+            workerId: 'W-002',
+            category: 'Helper',
+            module: "PPE Usage",
+            status: "Pending",
+            score: null,
+            certificate: false,
+            certificateUrl: null,
+            assignedDate: '2025-11-01',
+            completedDate: null,
+            trainer: 'Meena Sharma',
+            remarks: 'Scheduled for next batch.'
+        },
+        {
+            id: 'TR-1003',
+            worker: "Amit Patel",
+            workerId: 'W-003',
+            category: 'Supervisor',
+            module: "Sewer Safety",
+            status: "Completed",
+            score: 92,
+            certificate: true,
+            certificateUrl: '/certificates/TR-1003.pdf',
+            assignedDate: '2025-09-20',
+            completedDate: '2025-10-02',
+            trainer: 'Ramesh Kumar',
+            remarks: 'Excellent knowledge of procedures.'
+        },
+        {
+            id: 'TR-1004',
+            worker: "Priya Sharma",
+            workerId: 'W-004',
+            category: 'Manual Cleaner',
+            module: "First Aid Basics",
+            status: "In Progress",
+            score: null,
+            certificate: false,
+            certificateUrl: null,
+            assignedDate: '2025-11-05',
+            completedDate: null,
+            trainer: 'Anita Desai',
+            remarks: 'Practical pending.'
+        },
+        {
+            id: 'TR-1005',
+            worker: "Mohan Singh",
+            workerId: 'W-005',
+            category: 'Equipment Operator',
+            module: "Equipment Handling",
+            status: "Completed",
+            score: 78,
+            certificate: true,
+            certificateUrl: '/certificates/TR-1005.pdf',
+            assignedDate: '2025-09-25',
+            completedDate: '2025-10-04',
+            trainer: 'Suresh Yadav',
+            remarks: 'Needs a follow-up on machinery checks.'
+        },
+        {
+            id: 'TR-1006',
+            worker: "Sunita Yadav",
+            workerId: 'W-006',
+            category: 'Manual Cleaner',
+            module: "Confined Space Entry",
+            status: "Overdue",
+            score: null,
+            certificate: false,
+            certificateUrl: null,
+            assignedDate: '2025-09-01',
+            completedDate: null,
+            trainer: 'Rajan Verma',
+            remarks: 'Missed scheduled sessions.'
+        },
     ];
+
+    
 
     const totalTrainings = trainingCoverage.reduce((sum, t) => sum + t.enrolled, 0);
     const totalCompleted = trainingCoverage.reduce((sum, t) => sum + t.completed, 0);
@@ -283,19 +410,27 @@ export default function TrainingCoverageReportPage() {
                                     <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{record.score !== null ? `${record.score}%` : '—'}</TableCell>
                                     <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-center">
                                         {record.certificate ? (
-                                            <Button variant="ghost" size="sm" className="text-green-600 hover:text-green-700">
+                                            <a
+                                                href={record.certificateUrl || '#'}
+                                                download={`${record.id}-certificate.pdf`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="inline-flex items-center text-green-600 hover:text-green-700"
+                                            >
                                                 <Download className="h-4 w-4 mr-1" /> Download
-                                            </Button>
+                                            </a>
                                         ) : (
                                             <XCircle className="h-5 w-5 text-red-400 mx-auto" />
                                         )}
                                     </TableCell>
                                     <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-center">
                                         <Button 
+                                            type="button"
                                             variant="ghost" 
                                             size="sm" 
                                             className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
-                                            onClick={() => alert(`Viewing details for ${record.worker} - ${record.module}`)}
+                                            aria-label={`View training details for ${record.worker}`}
+                                            onClick={() => setSelectedRecord(record)}
                                         >
                                             <Eye className="h-4 w-4 mr-1" /> View
                                         </Button>
@@ -306,6 +441,136 @@ export default function TrainingCoverageReportPage() {
                     </Table>
                 </CardContent>
             </Card>
+
+            {/* Training Details Modal */}
+            {selectedRecord && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                    <div className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity" onClick={() => setSelectedRecord(null)} />
+                    <div className="relative w-full max-w-5xl mx-auto">
+                        <div className="bg-white/60 backdrop-blur-md border border-white/30 rounded-2xl shadow-xl overflow-hidden transform transition-all duration-300">
+                            <div className="p-6 lg:p-8">
+                                <div className="flex items-start justify-between gap-4">
+                                    <div className="flex items-center gap-4">
+                                        <div className="bg-white/40 rounded-full p-3 shadow-sm">
+                                            <User className="h-6 w-6 text-slate-700" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-lg lg:text-xl font-bold text-slate-900">{selectedRecord.worker}</h3>
+                                            <p className="text-sm text-slate-600">ID: {selectedRecord.workerId} • {selectedRecord.category}</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        {getStatusBadge(selectedRecord)}
+                                    </div>
+                                </div>
+
+                                <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                    <div className="lg:col-span-2 space-y-4">
+                                        {/* Training Details */}
+                                        <div className="bg-white/60 border border-white/25 rounded-xl p-4 shadow-sm">
+                                            <div className="flex items-start justify-between">
+                                                <div className="flex items-center gap-3">
+                                                    <GraduationCap className="h-5 w-5 text-slate-700" />
+                                                    <div>
+                                                        <p className="text-sm text-slate-500">Training Module</p>
+                                                        <h4 className="text-md font-semibold text-slate-900">{selectedRecord.module}</h4>
+                                                    </div>
+                                                </div>
+                                                <div className="text-right">
+                                                    <p className="text-sm text-slate-500">Score</p>
+                                                    <div className="flex items-center gap-2">
+                                                        <p className="text-lg font-bold text-slate-900">{selectedRecord.score !== null ? `${selectedRecord.score}%` : '—'}</p>
+                                                        {selectedRecord.score !== null && selectedRecord.score < 70 && (
+                                                            <span className="px-2 py-0.5 text-xs font-medium rounded-md bg-red-100 text-red-800">Below Passing Score</span>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="mt-4 flex items-center justify-between">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="text-sm text-slate-600 flex items-center gap-2"><Calendar className="h-4 w-4" /> Assigned: <span className="font-medium text-slate-800">{formatDate(selectedRecord.assignedDate)}</span></div>
+                                                    <div className="text-sm text-slate-600 flex items-center gap-2"><Clock className="h-4 w-4" /> Completed: <span className="font-medium text-slate-800">{formatDate(selectedRecord.completedDate)}</span></div>
+                                                </div>
+                                                <div>
+                                                    {selectedRecord.certificate ? (
+                                                        <a
+                                                            href={selectedRecord.certificateUrl || '#'}
+                                                            download={`${selectedRecord.id}-certificate.pdf`}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="inline-flex items-center px-3 py-2 bg-white text-slate-900 rounded-lg shadow-sm border border-white/30 hover:shadow-md"
+                                                        >
+                                                            <Download className="h-4 w-4 mr-2" /> Download Certificate
+                                                        </a>
+                                                    ) : (
+                                                        <div className="text-sm text-slate-500">No certificate</div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Timeline & Remarks */}
+                                        <div className="bg-white/60 border border-white/25 rounded-xl p-4 shadow-sm">
+                                            <div className="flex items-start gap-4">
+                                                <div className="flex-shrink-0 mt-1 text-slate-700"><Calendar className="h-5 w-5" /></div>
+                                                <div>
+                                                    <p className="text-sm text-slate-500">Trainer</p>
+                                                    <p className="font-medium text-slate-900">{selectedRecord.trainer || '—'}</p>
+                                                    <div className="mt-3 text-sm text-slate-500">Remarks</div>
+                                                    <p className="mt-1 text-sm text-slate-700">{selectedRecord.remarks || '—'}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Extra info row */}
+                                        <div className="flex items-center justify-between gap-4">
+                                            <div className="text-sm text-slate-600">Assigned: {formatDate(selectedRecord.assignedDate)}</div>
+                                            <div className="text-sm text-slate-600">Completed: {formatDate(selectedRecord.completedDate)}</div>
+                                        </div>
+                                    </div>
+
+                                    {/* Right column - Summary / Actions */}
+                                    <div className="space-y-4">
+                                        <div className="bg-white/60 border border-white/25 rounded-xl p-4 shadow-sm flex flex-col items-start">
+                                            <div className="flex items-center gap-3">
+                                                <FileText className="h-5 w-5 text-slate-700" />
+                                                <div>
+                                                    <p className="text-sm text-slate-500">Training Status</p>
+                                                    <div className="mt-1">{getStatusBadge(selectedRecord)}</div>
+                                                </div>
+                                            </div>
+                                            <div className="mt-4 w-full">
+                                                <p className="text-sm text-slate-500">Quick Actions</p>
+                                                <div className="mt-3 flex items-center gap-3">
+                                                    <button type="button" onClick={() => setSelectedRecord(null)} className="px-3 py-2 rounded-lg bg-white/40 border border-white/20 text-slate-800 hover:shadow">Close</button>
+                                                    {selectedRecord.certificate && (
+                                                        <a
+                                                            href={selectedRecord.certificateUrl || '#'}
+                                                            download={`${selectedRecord.id}-certificate.pdf`}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="px-3 py-2 rounded-lg bg-slate-900 text-white hover:opacity-95"
+                                                        >Download Certificate</a>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="bg-white/60 border border-white/25 rounded-xl p-4 shadow-sm">
+                                            <p className="text-sm text-slate-500">Metadata</p>
+                                            <div className="mt-2 text-sm text-slate-700">
+                                                <div>ID: <span className="font-medium">{selectedRecord.id}</span></div>
+                                                <div className="mt-1">Module: <span className="font-medium">{selectedRecord.module}</span></div>
+                                                <div className="mt-1">Trainer: <span className="font-medium">{selectedRecord.trainer}</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <Card className="relative z-0 bg-white shadow-2xl border border-gray-100 rounded-3xl overflow-hidden transform transition-all duration-300 hover:scale-[1.005]">
                 <CardHeader className="p-8 md:p-10 bg-gradient-to-r from-purple-600 to-pink-700 text-white shadow-lg rounded-t-3xl sm:rounded-t-3xl rounded-b-3xl sm:rounded-b-3xl overflow-hidden relative z-10">

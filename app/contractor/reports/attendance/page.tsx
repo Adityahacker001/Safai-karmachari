@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import StatCard from "@/components/ui/stat-card";
-import { UserCheck, UserX, Clock, Edit, Eye, Trash2, MessageCircle, Search } from "lucide-react"; // Added Search Icon
+import { UserCheck, UserX, Clock, Edit, Eye, Trash2, MessageCircle, Search, MapPin, AlertTriangle, Map } from "lucide-react"; // Added icons
 import React, { useState, useMemo } from "react"; // Added useState and useMemo
 import IntegratedLoader from "@/components/layout/IntegratedLoader";
 
@@ -25,6 +25,14 @@ const attendanceData = [
         status: "Present",
         checkin: "06:30 AM",
         checkout: "02:30 PM",
+        category: 'Ordinary SK',
+        assignedLocation: 'Ward 12',
+        date: '2025-12-04',
+        workType: 'Sweeping',
+        remarks: 'Completed assigned path',
+        checkinCoords: { lat: 22.5726, lng: 88.3639 },
+        checkoutCoords: { lat: 22.5730, lng: 88.3645 },
+        irregularities: { late: false, missedCheckout: false, outsideZone: false }
     },
     {
         name: "Priya Sharma",
@@ -33,6 +41,14 @@ const attendanceData = [
         status: "Present",
         checkin: "02:00 PM",
         checkout: "10:00 PM",
+        category: 'Hazardous',
+        assignedLocation: 'Sector 7',
+        date: '2025-12-04',
+        workType: 'Sewer Cleaning',
+        remarks: 'Used PPE correctly',
+        checkinCoords: { lat: 22.5720, lng: 88.3620 },
+        checkoutCoords: { lat: 22.5725, lng: 88.3627 },
+        irregularities: { late: false, missedCheckout: false, outsideZone: false }
     },
     {
         name: "Abishek Yadav",
@@ -80,6 +96,13 @@ const statusBadge = (status: string) => {
 export default function WorkerAttendance() {
     const [searchQuery, setSearchQuery] = useState("");
     const [loading, setLoading] = React.useState(true);
+    const [selectedRecord, setSelectedRecord] = useState<any | null>(null);
+
+    React.useEffect(() => {
+        if (selectedRecord) {
+            console.log('Attendance modal opened for:', selectedRecord.id || selectedRecord.name, selectedRecord);
+        }
+    }, [selectedRecord]);
     const filteredData = useMemo(() => {
         if (!searchQuery) {
             return attendanceData;
@@ -221,26 +244,35 @@ export default function WorkerAttendance() {
                                         <TableCell className="text-right py-3 sm:py-4 px-3 sm:px-6">
                                             <div className="flex space-x-1 sm:space-x-2 justify-end">
                                                 <button
+                                                    type="button"
                                                     className="text-blue-600 hover:text-blue-800 p-1"
                                                     title="Edit Attendance"
+                                                    aria-label={`Edit attendance ${row.id}`}
                                                 >
                                                     <Edit className="w-3 h-3 sm:w-4 sm:h-4" />
                                                 </button>
                                                 <button
+                                                    type="button"
                                                     className="text-gray-600 hover:text-gray-900 p-1"
                                                     title="View Details"
+                                                    aria-label={`View attendance details ${row.id}`}
+                                                    onClick={() => { console.log('Eye clicked for', row.id); setSelectedRecord(row); }}
                                                 >
                                                     <Eye className="w-3 h-3 sm:w-4 sm:h-4" />
                                                 </button>
                                                 <button
+                                                    type="button"
                                                     className="text-red-600 hover:text-red-800 p-1"
                                                     title="Delete Record"
+                                                    aria-label={`Delete attendance ${row.id}`}
                                                 >
                                                     <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
                                                 </button>
                                                 <button
+                                                    type="button"
                                                     className="text-yellow-600 hover:text-yellow-800 p-1"
                                                     title="Add Note"
+                                                    aria-label={`Add note ${row.id}`}
                                                 >
                                                     <MessageCircle className="w-3 h-3 sm:w-4 sm:h-4" />
                                                 </button>
@@ -252,6 +284,164 @@ export default function WorkerAttendance() {
                         </Table>
                     </CardContent>
                 </Card>
+                {/* Attendance Detail Modal */}
+                {selectedRecord && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center">
+                        <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setSelectedRecord(null)}></div>
+                        <div className="relative w-full max-w-5xl mx-4 lg:mx-0 bg-white/80 backdrop-blur-md rounded-2xl shadow-2xl border border-white/30 overflow-hidden transform transition-all duration-200 scale-100">
+                            <div className="p-6 lg:p-8">
+                                <div className="flex items-start justify-between gap-4">
+                                    <div className="flex items-center gap-4">
+                                        <div className="bg-gradient-to-br from-blue-500 to-teal-400 text-white rounded-lg p-3 shadow-lg">
+                                            <UserCheck className="w-6 h-6" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-xl lg:text-2xl font-bold text-slate-900">{selectedRecord.name}</h3>
+                                            <div className="text-sm text-slate-600">ID: {selectedRecord.id} • {selectedRecord.category}</div>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center space-x-3">
+                                        <button onClick={() => window.print()} className="px-3 py-2 bg-white border rounded-md text-sm">Print</button>
+                                        <button onClick={() => setSelectedRecord(null)} className="px-3 py-2 bg-white border rounded-md text-sm">Close</button>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+                                    {/* Left column: Worker info & attendance details */}
+                                    <div className="space-y-4">
+                                        <div className="p-4 bg-white/60 rounded-lg border border-white/30 shadow-sm">
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center gap-3">
+                                                    <MapPin className="w-4 h-4 text-slate-600" />
+                                                    <div>
+                                                        <div className="text-xs text-slate-500">Assigned Location</div>
+                                                        <div className="font-medium text-slate-800">{selectedRecord.assignedLocation || 'N/A'}</div>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div className="text-xs text-slate-500">Shift</div>
+                                                    <div className="font-medium text-slate-800">{selectedRecord.shift}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="p-4 bg-white/60 rounded-lg border border-white/30 shadow-sm">
+                                            <h4 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2"><Clock className="w-4 h-4"/> Attendance Details</h4>
+                                            <div className="grid grid-cols-2 gap-3 text-sm text-slate-700">
+                                                <div>
+                                                    <div className="text-xs text-slate-500">Date</div>
+                                                    <div className="font-medium">{selectedRecord.date || new Date().toISOString().slice(0,10)}</div>
+                                                </div>
+                                                <div>
+                                                    <div className="text-xs text-slate-500">Status</div>
+                                                    <div className="font-medium">{selectedRecord.status}</div>
+                                                </div>
+                                                <div>
+                                                    <div className="text-xs text-slate-500">Check-in</div>
+                                                    <div className="font-medium">{selectedRecord.checkin}</div>
+                                                </div>
+                                                <div>
+                                                    <div className="text-xs text-slate-500">Check-out</div>
+                                                    <div className="font-medium">{selectedRecord.checkout}</div>
+                                                </div>
+                                                <div>
+                                                    <div className="text-xs text-slate-500">Work Type</div>
+                                                    <div className="font-medium">{selectedRecord.workType || '—'}</div>
+                                                </div>
+                                                <div>
+                                                    <div className="text-xs text-slate-500">Remarks</div>
+                                                    <div className="font-medium">{selectedRecord.remarks || '—'}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Irregularities (moved under Attendance Details) */}
+                                        <div className="p-4 bg-white/60 rounded-lg border border-white/30 shadow-sm">
+                                            <h4 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2"><AlertTriangle className="w-4 h-4 text-amber-600"/> Irregularities</h4>
+                                            <div className="text-sm text-slate-700 space-y-2">
+                                                <div className="flex items-center justify-between">
+                                                    <div>Late Check-in</div>
+                                                    <div className={`font-medium ${selectedRecord.irregularities?.late ? 'text-amber-700' : 'text-green-700'}`}>{selectedRecord.irregularities?.late ? 'Yes' : 'No'}</div>
+                                                </div>
+                                                <div className="flex items-center justify-between">
+                                                    <div>Missed Check-out</div>
+                                                    <div className={`font-medium ${selectedRecord.irregularities?.missedCheckout ? 'text-amber-700' : 'text-green-700'}`}>{selectedRecord.irregularities?.missedCheckout ? 'Yes' : 'No'}</div>
+                                                </div>
+                                                <div className="flex items-center justify-between">
+                                                    <div>Outside Assigned Zone</div>
+                                                    <div className={`font-medium ${selectedRecord.irregularities?.outsideZone ? 'text-amber-700' : 'text-green-700'}`}>{selectedRecord.irregularities?.outsideZone ? 'Yes' : 'No'}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Attachments (moved under Attendance Details) */}
+                                        <div className="p-4 bg-white/60 rounded-lg border border-white/30 shadow-sm">
+                                            <h4 className="text-sm font-semibold text-slate-700 mb-3">Attachments</h4>
+                                            {selectedRecord.attachments ? (
+                                                selectedRecord.attachments.map((a: any, idx: number) => (
+                                                    <div key={idx} className="flex items-center justify-between py-2 border-t border-white/20">
+                                                        <div className="text-sm text-slate-800">{a.name || a}</div>
+                                                        {a.url ? (
+                                                            <a href={a.url} target="_blank" rel="noreferrer" className="text-teal-600">View</a>
+                                                        ) : (
+                                                            <div className="text-slate-500">—</div>
+                                                        )}
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <div className="text-sm text-slate-600">No attachments</div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Right column: Attendance History only (expanded) */}
+                                    <div className="space-y-4 flex flex-col">
+                                        <div className="p-6 bg-gradient-to-br from-sky-50 via-emerald-50 to-teal-50 rounded-lg border border-white/20 shadow-lg flex flex-col">
+                                            <div className="flex items-center justify-between mb-3">
+                                                <h4 className="text-lg font-semibold text-slate-800">Attendance History (last 7 days)</h4>
+                                                <div className="text-sm text-slate-500">Most recent first</div>
+                                            </div>
+                                            <div className="overflow-y-auto max-h-[560px] pt-2">
+                                                <table className="w-full text-sm text-slate-700">
+                                                    <thead>
+                                                        <tr className="text-left text-xs text-slate-600">
+                                                            <th className="py-3">Date</th>
+                                                            <th className="py-3">Status</th>
+                                                            <th className="py-3">Check-in</th>
+                                                            <th className="py-3">Check-out</th>
+                                                            <th className="py-3">Late</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {Array.from({ length: 14 }).map((_, i) => {
+                                                            const d = new Date();
+                                                            d.setDate(d.getDate() - i);
+                                                            const dateStr = d.toISOString().slice(0,10);
+                                                            const status = i % 6 === 0 ? 'Absent' : i % 6 === 2 ? 'Late' : 'Present';
+                                                            const isLate = i % 6 === 1 || i % 6 === 2;
+                                                            const statusClass = status === 'Present' ? 'bg-green-100 text-green-800' : status === 'Late' ? 'bg-amber-100 text-amber-800' : 'bg-red-100 text-red-800';
+                                                            return (
+                                                                <tr key={i} className="border-t border-white/30 hover:bg-white/60 transition-colors">
+                                                                    <td className="py-3 font-medium">{dateStr}</td>
+                                                                    <td className="py-3">
+                                                                        <span className={`px-2 py-1 rounded-full text-xs font-semibold ${statusClass}`}>{status}</span>
+                                                                    </td>
+                                                                    <td className="py-3">{status === 'Absent' ? '-' : '06:30'}</td>
+                                                                    <td className="py-3">{status === 'Absent' ? '-' : '14:30'}</td>
+                                                                    <td className="py-3">{isLate ? <span className="text-amber-700 font-semibold">Yes</span> : <span className="text-green-700 font-semibold">No</span>}</td>
+                                                                </tr>
+                                                            );
+                                                        })}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
         </div>
     );
 }
