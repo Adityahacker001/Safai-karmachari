@@ -22,24 +22,24 @@ import { cn } from "@/lib/utils"; // Assuming you have a utility for class names
 
 // --- MOCK DATA (ENRICHED WITH MORE DETAILS) ---
 const goodContractors = [
-    { id: 'C001', name: "Apex Cleaners Inc.", region: "Maharashtra", score: 98.5, reason: "Exceeded all SLA targets for 4 consecutive quarters.", since: 2018, projects: 45, lastReview: "2025-08-15", workerSatisfaction: 95, complianceRecord: "100% Compliant" },
-    { id: 'C002', name: "Urban Hygiene Solutions", region: "Delhi", score: 97.2, reason: "Lowest worker grievance rate and 100% compliance.", since: 2020, projects: 22, lastReview: "2025-09-01", workerSatisfaction: 98, complianceRecord: "100% Compliant" },
-    { id: 'C003', name: "GreenScape Maintenance", region: "Karnataka", score: 96.8, reason: "Innovated a water-saving cleaning process.", since: 2019, projects: 31, lastReview: "2025-08-22", workerSatisfaction: 94, complianceRecord: "100% Compliant" },
-    { id: 'C006', name: "Quality Clean LLP", region: "Tamil Nadu", score: 95.5, reason: "Highest rating in community feedback portal.", since: 2021, projects: 18, lastReview: "2025-08-19", workerSatisfaction: 96, complianceRecord: "100% Compliant" },
+    { id: 'C001', name: "Apex Cleaners Inc.", region: "Maharashtra", locality: "Pune - Kothrud", score: 98.5, reason: "Exceeded all SLA targets for 4 consecutive quarters.", since: 2018, projects: 45, lastReview: "2025-08-15", workerSatisfaction: 95, complianceRecord: "100% Compliant" },
+    { id: 'C002', name: "Urban Hygiene Solutions", region: "Delhi", locality: "North East - Yamuna Vihar", score: 97.2, reason: "Lowest worker grievance rate and 100% compliance.", since: 2020, projects: 22, lastReview: "2025-09-01", workerSatisfaction: 98, complianceRecord: "100% Compliant" },
+    { id: 'C003', name: "GreenScape Maintenance", region: "Karnataka", locality: "Bangalore South - Jayanagar", score: 96.8, reason: "Innovated a water-saving cleaning process.", since: 2019, projects: 31, lastReview: "2025-08-22", workerSatisfaction: 94, complianceRecord: "100% Compliant" },
+    { id: 'C006', name: "Quality Clean LLP", region: "Tamil Nadu", locality: "Chennai - T. Nagar", score: 95.5, reason: "Highest rating in community feedback portal.", since: 2021, projects: 18, lastReview: "2025-08-19", workerSatisfaction: 96, complianceRecord: "100% Compliant" },
 ];
 const badContractors = [
-    { id: 'C004', name: "Legacy Sanitation", region: "Uttar Pradesh", score: 62.1, reason: "Multiple safety protocol violations.", since: 2017, projects: 51, lastReview: "2025-07-30", workerSatisfaction: 55, complianceRecord: "Minor Infractions Noted", activeWarnings: 2 },
-    { id: 'C005', name: "Metro Sweep Co.", region: "West Bengal", score: 65.7, reason: "High equipment downtime and delayed services.", since: 2021, projects: 15, lastReview: "2025-09-05", workerSatisfaction: 61, complianceRecord: "Non-Compliant", activeWarnings: 3 },
-    { id: 'C007', name: "General Maintenance", region: "Bihar", score: 68.0, reason: "Failure to submit mandatory monthly reports.", since: 2019, projects: 25, lastReview: "2025-07-25", workerSatisfaction: 65, complianceRecord: "Minor Infractions Noted", activeWarnings: 1 },
+    { id: 'C004', name: "Legacy Sanitation", region: "Uttar Pradesh", locality: "Lucknow - Gomti Nagar", score: 62.1, reason: "Multiple safety protocol violations.", since: 2017, projects: 51, lastReview: "2025-07-30", workerSatisfaction: 55, complianceRecord: "Minor Infractions Noted", activeWarnings: 2 },
+    { id: 'C005', name: "Metro Sweep Co.", region: "West Bengal", locality: "Kolkata - Howrah Ghats", score: 65.7, reason: "High equipment downtime and delayed services.", since: 2021, projects: 15, lastReview: "2025-09-05", workerSatisfaction: 61, complianceRecord: "Non-Compliant", activeWarnings: 3 },
+    { id: 'C007', name: "General Maintenance", region: "Bihar", locality: "Patna - Boring Road", score: 68.0, reason: "Failure to submit mandatory monthly reports.", since: 2019, projects: 25, lastReview: "2025-07-25", workerSatisfaction: 65, complianceRecord: "Minor Infractions Noted", activeWarnings: 1 },
 ];
 const goodWorkers = [
-    { id: 'W001', name: "Ram Singh", region: "East Delhi", score: 99.1, reason: "Perfect attendance and recipient of 3 'Worker of the Month' awards.", since: 2019, tasksCompleted: 1520, lastReview: "2025-09-01", team: "Urban Hygiene Solutions", specialCommendations: "Safety Star Award Q2 2025" },
-    { id: 'W002', name: "Priya Sharma", region: "Bangalore South", score: 98.4, reason: "Led a successful local community cleaning drive.", since: 2021, tasksCompleted: 1280, lastReview: "2025-08-28", team: "GreenScape Maintenance", specialCommendations: "Community Service Medal 2025" },
-    { id: 'W004', name: "Abishek Patil", region: "Pune", score: 97.9, reason: "Consistently receives positive feedback from citizens.", since: 2020, tasksCompleted: 1450, lastReview: "2025-09-03", team: "Apex Cleaners Inc.", specialCommendations: "Citizen Choice Award 2024" },
+    { id: 'W001', name: "Ram Singh", region: "East Delhi", locality: "Yamuna Vihar", score: 99.1, reason: "Perfect attendance and recipient of 3 'Worker of the Month' awards.", since: 2019, tasksCompleted: 1520, lastReview: "2025-09-01", team: "Urban Hygiene Solutions", specialCommendations: "Safety Star Award Q2 2025" },
+    { id: 'W002', name: "Priya Sharma", region: "Bangalore South", locality: "Jayanagar", score: 98.4, reason: "Led a successful local community cleaning drive.", since: 2021, tasksCompleted: 1280, lastReview: "2025-08-28", team: "GreenScape Maintenance", specialCommendations: "Community Service Medal 2025" },
+    { id: 'W004', name: "Abishek Patil", region: "Pune", locality: "Kothrud", score: 97.9, reason: "Consistently receives positive feedback from citizens.", since: 2020, tasksCompleted: 1450, lastReview: "2025-09-03", team: "Apex Cleaners Inc.", specialCommendations: "Citizen Choice Award 2024" },
 ];
 const badWorkers = [
-    { id: 'W003', name: "Amit Kumar", region: "Mumbai Central", score: 58.0, reason: "Repeatedly failed to adhere to waste segregation protocols.", since: 2022, tasksCompleted: 950, lastReview: "2025-07-15", team: "Legacy Sanitation", disciplinaryActions: 4 },
-    { id: 'W005', name: "Rina Das", region: "Howrah", score: 63.2, reason: "Unauthorized absence from duty on multiple occasions.", since: 2021, tasksCompleted: 880, lastReview: "2025-08-01", team: "Metro Sweep Co.", disciplinaryActions: 2 },
+    { id: 'W003', name: "Amit Kumar", region: "Mumbai Central", locality: "Byculla", score: 58.0, reason: "Repeatedly failed to adhere to waste segregation protocols.", since: 2022, tasksCompleted: 950, lastReview: "2025-07-15", team: "Legacy Sanitation", disciplinaryActions: 4 },
+    { id: 'W005', name: "Rina Das", region: "Howrah", locality: "Howrah Station", score: 63.2, reason: "Unauthorized absence from duty on multiple occasions.", since: 2021, tasksCompleted: 880, lastReview: "2025-08-01", team: "Metro Sweep Co.", disciplinaryActions: 2 },
 ];
 const stateReports = [
     { id: 'S01', name: "Kerala", sanitationScore: 95.2, projectsCompleted: "100%", workerWelfare: 9.8, trend: 'improving' },
@@ -102,9 +102,10 @@ interface PerformerCardProps {
     disciplinaryActions?: number;
     initiativesLed?: string;
     districtRatingChange?: string;
+    locality?: string;
 }
 const PerformerCard = (props: PerformerCardProps) => {
-    const { name, region, score, reason, isGood = true, since, projects, tasksCompleted, reportsFiled, workerSatisfaction, complianceRecord, activeWarnings, team, specialCommendations, disciplinaryActions, initiativesLed, districtRatingChange } = props;
+    const { name, region, locality, score, reason, isGood = true, since, projects, tasksCompleted, reportsFiled, workerSatisfaction, complianceRecord, activeWarnings, team, specialCommendations, disciplinaryActions, initiativesLed, districtRatingChange } = props;
     const detailIcon = projects ? <Briefcase size={14} /> : (tasksCompleted ? <CheckCircle size={14} /> : <FileText size={14} />);
     const detailLabel = projects ? "Projects" : (tasksCompleted ? "Tasks Done" : "Reports");
     const detailValue = projects || tasksCompleted || reportsFiled;
@@ -126,7 +127,10 @@ const PerformerCard = (props: PerformerCardProps) => {
             )}>
                 <div>
                     <CardTitle className={cn("font-bold text-gray-800 dark:text-gray-100 leading-tight", isWorker ? "text-base" : "text-lg")}>{name}</CardTitle>
-                    <CardDescription className={isWorker ? "text-xs" : undefined}>{region}</CardDescription>
+                    <CardDescription className={isWorker ? "text-xs" : undefined}>
+                        <div>{region}</div>
+                        {locality && <div className="text-xs text-slate-600 dark:text-slate-400">{locality}</div>}
+                    </CardDescription>
                 </div>
                  <div className={cn(
                     "font-extrabold flex items-center gap-2",
@@ -140,9 +144,9 @@ const PerformerCard = (props: PerformerCardProps) => {
             <CardContent className={cn(
                 isWorker ? "space-y-1 py-1 px-3 md:px-4" : "space-y-2 py-2 px-3 md:px-4"
             )}>
-                <p className={cn("italic mb-1", isWorker ? "text-[11px] text-gray-500 dark:text-gray-300" : "text-xs text-gray-600 dark:text-gray-300")}>"{reason}"</p>
+                {/* description removed per request - concise rows only */}
                 <div className={cn(
-                    isWorker ? "space-y-0.5 pt-1 border-t border-slate-200 dark:border-gray-700" : "space-y-1 pt-2 border-t border-slate-200 dark:border-gray-700"
+                    isWorker ? "space-y-0.5 pt-1" : "space-y-1 pt-2"
                 )}>
                     {/* Contractor Details */}
                     {!isContractor && workerSatisfaction && <DetailRow icon={<Smile size={16}/>} label="Worker Satisfaction" value={<StarRating value={workerSatisfaction} />} />}
@@ -159,15 +163,10 @@ const PerformerCard = (props: PerformerCardProps) => {
                 </div>
 
                 <div className={cn(
-                    "flex flex-wrap items-center gap-2 border-t border-slate-200 dark:border-gray-700",
+                    "pt-2",
                     isWorker ? "pt-1" : "pt-2"
                 )}>
-                    <StatPill icon={<Calendar size={14} />} label="Since" value={since} />
-                    <StatPill icon={detailIcon} label={detailLabel} value={detailValue ?? ''} />
-                    <div className="flex-grow"/>
-                    <Button variant="ghost" size="sm" className={cn("text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/20 px-2 py-1", isWorker ? "text-xs px-1 py-0.5" : undefined)}>
-                        View Full Profile
-                    </Button>
+                    {/* footer intentionally compact - removed 'Since', 'Projects/Tasks' pills and profile button */}
                 </div>
             </CardContent>
         </Card>
@@ -197,8 +196,8 @@ const PerformanceTabContent = ({ goodData, badData, type }: PerformanceTabConten
 
     return (
         <div>
-            <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-                 <div className="flex space-x-1 border-b-2 border-slate-200 dark:border-gray-700">
+              <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+                  <div className="flex space-x-1">
                      <Button variant="ghost" onClick={() => setActiveTab('good')} className={cn("font-semibold pb-3 rounded-none border-b-4", activeTab === 'good' ? 'text-green-600 border-green-600' : 'text-gray-500 border-transparent')}><Star className="mr-2 h-5 w-5"/> Good Performers</Button>
                     <Button variant="ghost" onClick={() => setActiveTab('bad')} className={cn("font-semibold pb-3 rounded-none border-b-4", activeTab === 'bad' ? 'text-red-600 border-red-600' : 'text-gray-500 border-transparent')}><ThumbsDown className="mr-2 h-5 w-5"/> Bad Performers</Button>
                 </div>
@@ -273,7 +272,7 @@ const RegionalTable = ({ data, title }: RegionalTableProps) => {
                             <TableHead className="text-right font-bold text-base text-slate-700 dark:text-slate-300">Actions</TableHead>
                         </TableRow>
                     </TableHeader>
-                    <TableBody className="bg-white dark:bg-gray-800 divide-y divide-slate-100 dark:divide-slate-700">
+                    <TableBody className="bg-white dark:bg-gray-800">
                         {data.map((item: RegionalTableData) => (
                             <TableRow key={item.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/20 transition-colors">
                                 <TableCell className="font-semibold text-lg text-gray-800 dark:text-gray-200">{item.name}</TableCell>

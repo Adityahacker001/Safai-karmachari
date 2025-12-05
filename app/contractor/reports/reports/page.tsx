@@ -14,6 +14,7 @@ import {
     Clock
 } from 'lucide-react';
 import StatCard from '@/components/ui/stat-card';
+import ViewDetailsModal, { ViewField } from '@/components/ui/view-details-modal';
 
 
 // --- Type Definitions ---
@@ -35,6 +36,8 @@ const AuroraBackground = () => (
 
 const Reports: React.FC = () => {
     const [loading, setLoading] = React.useState(true);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [selectedReport, setSelectedReport] = useState<Report | null>(null);
     // --- State for Filters ---
     const [startDate, setStartDate] = useState('2025-09-01');
     const [endDate, setEndDate] = useState('2025-09-16');
@@ -142,10 +145,13 @@ const Reports: React.FC = () => {
                                                 </button>
                                             )}
                                             {/* View button */}
-                                            <button className="flex items-center justify-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300 text-xs sm:text-sm font-semibold">
-                                                <FileText className="w-3 h-3 sm:w-4 sm:h-4" />
-                                                <span>View</span>
-                                            </button>
+                                                <button
+                                                    onClick={() => { setSelectedReport(report); setModalOpen(true); }}
+                                                    className="flex items-center justify-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300 text-xs sm:text-sm font-semibold"
+                                                >
+                                                    <FileText className="w-3 h-3 sm:w-4 sm:h-4" />
+                                                    <span>View</span>
+                                                </button>
                                         </div>
                                     </div>
                                 </div>
@@ -190,6 +196,27 @@ const Reports: React.FC = () => {
                         </div>
                     </div>
                 </div>
+                {/* View Details Modal (Universal) */}
+                <ViewDetailsModal
+                    open={modalOpen}
+                    onClose={() => { setModalOpen(false); setSelectedReport(null); }}
+                    title={selectedReport?.title ?? 'Report Details'}
+                    fields={((): ViewField[] => {
+                        if (!selectedReport) return [];
+                        return [
+                            { label: 'Report Title', value: selectedReport.title },
+                            { label: 'Description', value: selectedReport.description },
+                            { label: 'Available Formats', value: selectedReport.format.join(', ') },
+                            { label: 'Last Generated', value: selectedReport.lastGenerated },
+                            { label: 'Action', value: (
+                                <div className="flex items-center gap-2">
+                                    {selectedReport.format.includes('PDF') && <button className="px-2 py-1 text-xs rounded bg-red-500 text-white">PDF</button>}
+                                    {selectedReport.format.includes('Excel') && <button className="px-2 py-1 text-xs rounded bg-emerald-500 text-white">Excel</button>}
+                                </div>
+                            ) }
+                        ];
+                    })()}
+                />
             </div>
         
     );

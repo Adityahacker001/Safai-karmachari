@@ -556,14 +556,7 @@ export default function TrainingCoverageReportPage() {
                                             </div>
                                         </div>
 
-                                        <div className="bg-white/60 border border-white/25 rounded-xl p-4 shadow-sm">
-                                            <p className="text-sm text-slate-500">Metadata</p>
-                                            <div className="mt-2 text-sm text-slate-700">
-                                                <div>ID: <span className="font-medium">{selectedRecord.id}</span></div>
-                                                <div className="mt-1">Module: <span className="font-medium">{selectedRecord.module}</span></div>
-                                                <div className="mt-1">Trainer: <span className="font-medium">{selectedRecord.trainer}</span></div>
-                                            </div>
-                                        </div>
+                                        {/* Metadata removed per request */}
                                     </div>
                                 </div>
                             </div>
