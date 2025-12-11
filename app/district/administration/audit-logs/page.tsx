@@ -13,18 +13,107 @@ import {
   CheckCircle2,
   TrendingUp,
   AlertTriangle,
-  "use client";
+  Search,
+} from "lucide-react";
 
-  import { useEffect } from "react";
-  import { useRouter } from "next/navigation";
+function IntegratedLoader() {
+  return (
+    <div className="w-full h-full flex items-center justify-center min-h-[60vh]">
+      <style jsx>{`
+        .loader {
+          --c: no-repeat linear-gradient(#4f46e5 0 0);
+          background: 
+            var(--c),var(--c),var(--c),
+            var(--c),var(--c),var(--c),
+            var(--c),var(--c),var(--c);
+          background-size: 16px 16px;
+          animation: 
+            l32-1 1s infinite,
+            l32-2 1s infinite;
+        }
+        @keyframes l32-1 {
+          0%,100% {width:45px;height: 45px}
+          35%,65% {width:65px;height: 65px}
+        }
+        @keyframes l32-2 {
+          0%,40%  {background-position: 0 0,0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,  50% 50% }
+          60%,100%{background-position: 0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,0 0,  50% 50% }
+        }
+      `}</style>
+      <div className="loader"></div>
+    </div>
+  );
+}
 
-  export default function RedirectToAdminAuditLogs() {
-    const router = useRouter();
-    useEffect(() => {
-      router.replace("/district/administration/audit-logs");
-    }, [router]);
-    return null;
+const AuditLogs: React.FC = () => {
+  const [dateRange, setDateRange] = useState("7days");
+  const [actionFilter, setActionFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const [loading, setLoading] = useState(true);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1200);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <IntegratedLoader />;
   }
+
+  const auditData = [
+    {
+      timestamp: "2025-09-16 17:15:25",
+      action: "Grievance Created",
+      actor: "Abishek Kumar",
+      role: "Nodal Officer",
+      details:
+        "Created grievance GRV-2025-045 for contractor Clean City Services",
+    },
+    {
+      timestamp: "2025-09-16 16:30:12",
+      action: "Directive Issued",
+      actor: "District Admin",
+      role: "Admin",
+      details: "Issued directive DIR-2025-008 to all Zone A officers",
+    },
+    {
+      timestamp: "2025-09-16 15:45:08",
+      action: "User Login",
+      actor: "Priya Sharma",
+      role: "Nodal Officer",
+      details: "Successful login from Zone B office",
+    },
+    {
+      timestamp: "2025-09-16 14:20:33",
+      action: "Report Generated",
+      actor: "Amit Singh",
+      role: "Nodal Officer",
+      details: "Generated monthly welfare report for Zone C",
+    },
+    {
+      timestamp: "2025-09-16 13:55:17",
+      action: "User Role Updated",
+      actor: "System Admin",
+      role: "Super Admin",
+      details:
+        "Updated role for user Clean City Services to Active Contractor",
+    },
+    {
+      timestamp: "2025-09-16 12:30:44",
+      action: "Grievance Resolved",
+      actor: "Abishek Kumar",
+      role: "Nodal Officer",
+      details:
+        "Resolved grievance GRV-2025-042 with contractor acknowledgment",
+    },
+  ];
+
+  const filteredAuditData = auditData.filter(item => {
+    const matchesSearch = searchTerm === '' || 
+      item.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.actor.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.details.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesAction = actionFilter === 'all' || 
@@ -97,11 +186,11 @@ import {
 
   return (
     <div className="min-h-screen space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 p-3 sm:p-4 md:p-6 lg:p-8">
-      {/* Professional Header */}
       <header className="relative overflow-hidden bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl">
         <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
         <div className="relative p-4 sm:p-6 md:p-8 lg:p-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div className="flex-1">
+            <h2 className="text-sm text-white/90 font-bold mb-2">Administration</h2>
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white drop-shadow-2xl leading-tight">
               Audit Logs
             </h1>
@@ -116,7 +205,6 @@ import {
         </div>
       </header>
 
-      {/* Activity Overview */}
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
         <StatCard
           title="Total Activities"
@@ -144,10 +232,8 @@ import {
         />
       </div>
 
-      {/* Filters */}
       <div className="backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl p-4 sm:p-6 md:p-8">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 md:gap-6">
-          {/* Search Box */}
           <div className="relative flex-1 max-w-md">
             <div className="absolute inset-y-0 left-0 pl-3 sm:pl-4 flex items-center pointer-events-none">
               <Search className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-gray-400" />
@@ -160,7 +246,6 @@ import {
               className="block w-full pl-10 sm:pl-12 md:pl-14 pr-4 py-3 sm:py-4 text-sm sm:text-base border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent backdrop-blur-sm placeholder-gray-500 font-medium"
             />
           </div>
-          
           <div className="flex flex-col sm:flex-row gap-4 md:gap-6">
             <div className="flex flex-col sm:flex-row sm:items-center gap-2 md:gap-3">
               <div className="flex items-center gap-2">
@@ -205,7 +290,6 @@ import {
         </div>
       </div>
 
-      {/* Data Table */}
       <div className="backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <DataTable
@@ -219,7 +303,6 @@ import {
         </div>
       </div>
 
-      {/* Security Insights */}
       <div className="backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl p-4 sm:p-6 md:p-8">
         <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-gray-800 mb-6 sm:mb-8">
           Security Insights

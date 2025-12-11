@@ -149,9 +149,23 @@ export default function GrievanceTrackingReportPage() {
                 // ignore and fallback
             }
 
-            // Fallback: check common fields on the selected grievance
-            const fallback = selectedGrievance.idProof || selectedGrievance.documents || [];
-            if (mounted && Array.isArray(fallback)) setDocuments(fallback.map((d: any) => (typeof d === 'string' ? { name: d.split('/').pop() || d, url: d } : d)));
+                // Fallback: check common fields on the selected grievance
+                const fallback = selectedGrievance.idProof || selectedGrievance.documents || [];
+
+                // Default sample documents to show when a grievance has none
+                const defaultDocuments = [
+                    { name: 'aadhaar-front.jpg', url: '/mock-docs/aadhaar-front.jpg', mime: 'image/jpeg' },
+                    { name: 'aadhaar.pdf', url: '/mock-docs/aadhaar.pdf', mime: 'application/pdf' },
+                ];
+
+                if (mounted) {
+                    if (Array.isArray(fallback) && fallback.length > 0) {
+                        setDocuments(fallback.map((d: any) => (typeof d === 'string' ? { name: d.split('/').pop() || d, url: d } : d)));
+                    } else {
+                        // Use default sample docs so every worker shows documents
+                        setDocuments(defaultDocuments);
+                    }
+                }
         };
 
         loadDocs();

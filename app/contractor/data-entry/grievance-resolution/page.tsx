@@ -12,6 +12,7 @@ import React from "react";
 
 export default function GrievanceEntryPage() {
   const [loading, setLoading] = React.useState(true);
+  const [fileError, setFileError] = React.useState<string>('');
 
   React.useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 1200); // Simulate loading
@@ -66,8 +67,23 @@ export default function GrievanceEntryPage() {
             Fill in the details below to formally record a worker's grievance. This will generate a new Case ID.
           </CardDescription>
         </CardHeader>
-        <CardContent className="p-4 sm:p-6">
-          <form className="space-y-6 sm:space-y-8">
+        <form onSubmit={(e) => {
+          e.preventDefault();
+          const form = e.currentTarget as HTMLFormElement;
+          const fileInput = form.querySelector('#supporting-proof') as HTMLInputElement | null;
+          if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+            setFileError('Please upload supporting proof before submitting.');
+            fileInput?.focus();
+            return;
+          }
+          setFileError('');
+          // TODO: submit form data to API
+          // For now, show a console message and reset form (optional)
+          console.log('Grievance submitted', new FormData(form));
+          form.reset();
+          alert('Grievance submitted successfully');
+        }} className="space-y-6 sm:space-y-8">
+          <CardContent className="p-4 sm:p-6">
             <div className="p-4 sm:p-6 border border-gray-200 rounded-xl bg-white/95 backdrop-blur-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:border-blue-300">
               <div className="flex items-center space-x-3 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-gray-200">
                 <FileText className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600"/>
@@ -114,11 +130,13 @@ export default function GrievanceEntryPage() {
                   />
                 </div>
                 <div className="md:col-span-2">
-                  <Label htmlFor="supporting-proof" className="text-gray-700 font-semibold mb-2 block">Upload Supporting Proof (Optional)</Label>
+                  <Label htmlFor="supporting-proof" className="text-gray-700 font-semibold mb-2 block">Upload Supporting Proof</Label>
                   {/* Adjusted file input styling */}
                   <Input
                     id="supporting-proof"
                     type="file"
+                    required
+                    aria-describedby="supporting-proof-error"
                     className="border-gray-300 focus:border-indigo-600 focus:ring-3 focus:ring-indigo-200 transition-all duration-300 rounded-xl px-4 py-2.5
                                file:text-gray-700 file:bg-transparent file:border-0 file:rounded-md file:px-0 file:py-0 file:h-auto file:font-bold
                                hover:file:bg-transparent cursor-pointer file:mr-2"
@@ -127,17 +145,20 @@ export default function GrievanceEntryPage() {
                     <UploadCloud className="h-4 w-4 text-gray-400" />
                     <span>e.g., photo of unsafe equipment, screenshot of a message, etc.</span>
                   </p>
+                  {fileError && (
+                    <p id="supporting-proof-error" className="text-sm text-red-600 mt-2">{fileError}</p>
+                  )}
                 </div>
               </div>
             </div>
-          </form>
-        </CardContent>
-        <CardFooter className="flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4 p-4 sm:p-6 pt-4 border-t border-gray-200 rounded-b-xl sm:rounded-b-2xl">
-          <Button type="submit" className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold text-lg sm:text-xl py-2.5 sm:py-3.5 px-8 sm:px-10 rounded-lg sm:rounded-xl shadow-xl transition-all duration-400 ease-in-out transform hover:scale-105 hover:shadow-2xl order-1">
-            <MessageSquarePlus className="h-5 w-5 sm:h-6 sm:w-6 mr-2 sm:mr-3" />
-            Submit Grievance
-          </Button>
-        </CardFooter>
+          </CardContent>
+          <CardFooter className="flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4 p-4 sm:p-6 pt-4 rounded-b-xl sm:rounded-b-2xl">
+            <Button type="submit" className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold text-lg sm:text-xl py-2.5 sm:py-3.5 px-8 sm:px-10 rounded-lg sm:rounded-xl shadow-xl transition-all duration-400 ease-in-out transform hover:scale-105 hover:shadow-2xl order-1">
+              <MessageSquarePlus className="h-5 w-5 sm:h-6 sm:w-6 mr-2 sm:mr-3" />
+              Submit Grievance
+            </Button>
+          </CardFooter>
+        </form>
       </Card>
     </div>
   );

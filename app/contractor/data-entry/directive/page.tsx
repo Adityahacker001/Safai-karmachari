@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import DataTable from '@/components/ui/data-table';
 import StatCard from '@/components/ui/stat-card';
-import { FileText, Send, Inbox, Plus } from 'lucide-react';
+import { FileText, Send, Inbox, Plus, X } from 'lucide-react';
 import IntegratedLoader from '@/components/layout/IntegratedLoader';
 
 interface AttachmentItem {
@@ -284,19 +284,20 @@ const Directives = () => {
       {/* Root-level Directive Modal (renders outside card, centered overlay) */}
       {selectedDirective && createPortal(
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={() => setSelectedDirective(null)}>
-          <div className="relative bg-white w-[650px] max-w-[95%] rounded-xl shadow-2xl p-6 max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+          <div className="relative bg-white w-[650px] max-w-[95%] rounded-3xl shadow-2xl p-0 max-h-[90vh] overflow-hidden" onClick={(e) => e.stopPropagation()}>
             <button
               aria-label="Close directive modal"
               onClick={(e) => { e.stopPropagation(); setSelectedDirective(null); }}
-              className="absolute right-3 top-3 rounded-md p-1 text-gray-600 hover:bg-gray-100"
+              className="absolute right-3 top-3 rounded-full p-2 bg-white text-gray-700 shadow-sm hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-2"
+              title="Close"
             >
-              ×
+              <X className="w-5 h-5" />
             </button>
-            <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 px-4 py-3 rounded-lg mb-4">
+            <div className="p-8 text-white w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-t-3xl shadow-lg mb-0">
               <h2 className="text-white text-2xl font-bold">Directive Details: {selectedDirective!.directiveId}</h2>
               <p className="text-blue-100 text-sm mt-1">Detailed view of the directive and contractor actions</p>
             </div>
-            <div className="space-y-4">
+            <div className="p-6 max-h-[80vh] overflow-y-auto space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <div className="text-xs text-gray-500">Issued By</div>

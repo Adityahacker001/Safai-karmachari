@@ -182,9 +182,7 @@ export default function UserManagementReportPage() {
               {users.map((user, rowIdx) => (
                 <tr
                   key={user.userId}
-                  className={`${
-                    rowIdx % 2 === 0 ? "bg-white" : "bg-gray-50"
-                  } hover:bg-blue-100 transition`}
+                  className={`$${rowIdx % 2 === 0 ? "bg-white" : "bg-gray-50"} hover:bg-blue-100 transition`}
                 >
                   {userColumns.map((col, colIdx) => (
                     <td
