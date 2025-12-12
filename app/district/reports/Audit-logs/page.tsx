@@ -13,21 +13,61 @@ import {
   CheckCircle2,
   TrendingUp,
   AlertTriangle,
-  "use client";
+  Search
+} from "lucide-react";
 
-  import { useEffect } from "react";
-  import { useRouter } from "next/navigation";
-
-  export default function RedirectToAdminAuditLogs() {
-    const router = useRouter();
-    useEffect(() => {
-      router.replace("/district/administration/audit-logs");
-    }, [router]);
-    return null;
+// Dummy data for demonstration
+const auditData = [
+  {
+    timestamp: "2025-12-12 10:15:00",
+    action: "Login",
+    actor: "John Doe",
+    role: "Admin",
+    details: "User logged in successfully."
+  },
+  {
+    timestamp: "2025-12-12 11:00:00",
+    action: "Created",
+    actor: "Jane Smith",
+    role: "Nodal Officer",
+    details: "Created new user account."
+  },
+  {
+    timestamp: "2025-12-12 12:30:00",
+    action: "Updated",
+    actor: "Alice Brown",
+    role: "Super Admin",
+    details: "Updated system settings."
+  },
+  {
+    timestamp: "2025-12-12 13:45:00",
+    action: "Resolved",
+    actor: "Bob Lee",
+    role: "Admin",
+    details: "Resolved grievance ticket."
+  },
+  {
+    timestamp: "2025-12-12 14:20:00",
+    action: "Issued",
+    actor: "Charlie Green",
+    role: "Nodal Officer",
+    details: "Issued directive to team."
   }
+];
+
+export default function AuditLogs() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [dateRange, setDateRange] = useState("today");
+  const [actionFilter, setActionFilter] = useState("all");
+
+  // Filter logic
+  const filteredAuditData = auditData.filter((item) => {
+    const matchesSearch =
+      item.actor.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.details.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesAction = actionFilter === 'all' || 
+    const matchesAction =
+      actionFilter === "all" ||
       item.action.toLowerCase().includes(actionFilter.toLowerCase());
 
     return matchesSearch && matchesAction;
@@ -264,6 +304,4 @@ import {
       </div>
     </div>
   );
-};
-
-export default AuditLogs;
+}
