@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react"; // Added useEffect for potential data fetching
+import { useSearchParams } from 'next/navigation';
 import StatCard from '@/components/ui/stat-card';
 import type { StatCardProps } from '@/components/ui/stat-card';
 import {
@@ -200,6 +201,11 @@ export default function DashboardPage() {
       return () => clearTimeout(t);
     }, []);
 
+    // Read the `role` query param (expected values: 'sp' or 'cp')
+    const searchParams = useSearchParams();
+    const selectedRole = searchParams?.get('role') || '';
+    const dashboardTitle = selectedRole === 'cp' ? 'CP Command Dashboard' : selectedRole === 'sp' ? 'SP Command Dashboard' : 'SP/CP Command Dashboard';
+
   if (loading) return <IntegratedLoader />;
 
   return (
@@ -207,7 +213,7 @@ export default function DashboardPage() {
       {/* 🔹 Gradient Title Container (NEW) */}
       <div className="rounded-2xl mb-6 p-8 bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 shadow-lg">
         <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-white mb-2">
-          SP  Command Dashboard
+          {dashboardTitle}
         </h1>
         <p className="text-lg text-white/80 mb-2">Real-time monitoring, incident tracking, and performance overview.</p>
       </div>

@@ -434,6 +434,39 @@ export default function Home() {
         "bg-gradient-to-br from-red-500 to-rose-500",
     ];
 
+    // Mobile apps: take Workers and Citizens from stakeholderItems
+    const mobileAppItems = stakeholderItems.filter(
+        (s) => s.title === "Workers" || s.title === "Citizens"
+    );
+
+    // Map stakeholder titles to login role values used by handleLogin
+    const roleMap: Record<string, string> = {
+        "Workers": "SHG",
+        "Citizens": "national",
+        "Nodal Officers": "nodal",
+        "District Officers": "district",
+        "State Officers": "state",
+        "National Dashboard": "national",
+        "SP/CP": "sp-cp",
+        "Contractors": "contractor",
+        "Organizational Nodal": "organizational-nodal",
+        "NSKFDC": "nskfdc",
+        "DGP": "DGP",
+        "SHG": "SHG",
+    };
+
+    // Open login modal with prefilled credentials for a given stakeholder title
+    const openLoginFor = (title: string) => {
+        const mappedRole = roleMap[title] || "";
+        // Prefill demo credentials (do not change persisted data)
+        setUserId(`${mappedRole || 'user'}_demo`);
+        setPassword("Password123!");
+        setRole(mappedRole);
+        if (mappedRole === "sp-cp") setSpcpType("sp");
+        setError("");
+        setLoginOpen(true);
+    };
+
     return (
         // --- NEW --- Added overflow-x-hidden for safety
         <div className="relative min-h-screen bg-white overflow-x-hidden">
@@ -506,6 +539,102 @@ export default function Home() {
                 </div>
             </section>
 
+            {/* ---------------- STAKEHOLDERS ---------------- */}
+            <section id="stakeholders" className="py-24 bg-gray-50/50 relative"> {/* --- NEW --- Cleaner background */}
+                <div className="container mx-auto px-6 text-center relative z-10">
+                    <motion.h2
+                        className="text-3xl md:text-4xl font-bold tracking-tight mb-16 bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6 }}
+                    >
+                        Stakeholders
+                    </motion.h2>
+                    {/* --- NEW --- Added perspective for 3D tilt */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-5 gap-4 md:gap-6" style={{ perspective: "1000px" }}>
+                        {stakeholderItems
+                            .filter((s) => s.title !== "Workers" && s.title !== "Citizens")
+                            .map((s, i) => (
+                            <motion.div
+                                key={s.title}
+                                custom={i}
+                                variants={cardEntryVariants}
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true }}
+                                // --- ADJUSTED --- Softer, centered hover tilt for better balance
+                                whileHover={{ scale: 1.04, y: -6, rotateX: 6, rotateY: 0 }}
+                                whileTap={{ scale: 0.995 }}
+                                className={`relative group overflow-hidden transform-gpu will-change-transform flex flex-col items-center justify-center p-5 min-h-[14rem] rounded-2xl shadow-lg transition-all duration-300 ease-out
+                                            ${stakeholderGradients[i % stakeholderGradients.length]}
+                                            bg-[length:100%_100%] hover:bg-[length:160%_160%] hover:shadow-2xl`}
+                            >
+                                {/* Shine element */}
+                                <span className="absolute top-0 left-[-150%] w-3/4 h-full bg-white/30 transform -skew-x-20 transition-all duration-700 ease-in-out group-hover:left-[150%]" />
+
+                                    <div className="flex flex-col items-center w-full">
+                                      <s.icon className="w-10 h-10 mb-4 text-white" />
+                                      <h3 className="text-sm font-semibold text-white text-center mb-2">
+                                          {s.title}
+                                      </h3>
+                                    </div>
+
+                                    <div className="w-full mt-auto">
+                                        <Button
+                                            onClick={() => openLoginFor(s.title)}
+                                            className="w-full bg-white hover:bg-gray-100 text-black rounded-md py-2 shadow-md border border-gray-200"
+                                        >
+                                            Access Dashboard
+                                        </Button>
+                                    </div>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* ---------------- MOBILE APPS ---------------- */}
+            <section id="mobile-apps" className="py-16 bg-white">
+                <div className="container mx-auto px-6 text-center">
+                    <motion.h2
+                        className="text-3xl md:text-4xl font-bold tracking-tight mb-20 text-gray-900"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6 }}
+                    >
+                        Mobile Apps
+                    </motion.h2>
+
+                    <div className="flex flex-col md:flex-row items-center justify-center gap-20 mt-10">
+                        {mobileAppItems.map((item, idx) => (
+                            <motion.div
+                                key={item.title}
+                                custom={idx}
+                                variants={cardEntryVariants}
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true }}
+                                className={`group relative overflow-hidden transform-gpu will-change-transform flex flex-col items-center justify-between p-5 min-h-[10rem] rounded-2xl shadow-lg transition-all duration-500
+                                    max-w-sm md:max-w-md text-center
+                                    ${stakeholderGradients[idx % stakeholderGradients.length]} bg-[length:100%_100%] hover:bg-[length:140%_140%] hover:shadow-2xl hover:scale-105`}
+                            >
+                                <span className="absolute top-0 left-[-150%] w-3/4 h-full bg-white/30 transform -skew-x-20 transition-all duration-700 ease-in-out group-hover:left-[150%]" />
+
+                                <div className="flex flex-col items-center gap-3 mt-3 px-4">
+                                    <item.icon className="w-14 h-14 mb-3 text-white" />
+                                    <h3 className="text-base font-semibold mb-1 text-white">{item.title} App</h3>
+                                    <p className="text-white/90 mb-2 text-sm max-w-xs">Get the {item.title.toLowerCase()} app to access key features on the go.</p>
+                                </div>
+
+                                {/* Download button removed as requested */}
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
             {/* ---------------- IMPACT & PURPOSE ---------------- */}
             <section
                 id="impact"
@@ -550,50 +679,6 @@ export default function Home() {
                                 <p className="relative z-10 text-gray-600 text-lg leading-relaxed flex-grow">
                                     {item.desc}
                                 </p>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* ---------------- STAKEHOLDERS ---------------- */}
-            <section id="stakeholders" className="py-24 bg-gray-50/50 relative"> {/* --- NEW --- Cleaner background */}
-                <div className="container mx-auto px-6 text-center relative z-10">
-                    <motion.h2
-                        className="text-3xl md:text-4xl font-bold tracking-tight mb-16 bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent"
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6 }}
-                    >
-                        Stakeholders
-                    </motion.h2>
-                    {/* --- NEW --- Added perspective for 3D tilt */}
-                    <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6" style={{ perspective: "1000px" }}>
-                        {stakeholderItems.map((s, i) => (
-                            <motion.div
-                                key={s.title}
-                                custom={i}
-                                variants={cardEntryVariants}
-                                initial="hidden"
-                                whileInView="visible"
-                                viewport={{ once: true }}
-                                // --- NEW --- Stronger 3D tilt
-                                whileHover={{ scale: 1.1, y: -10, rotateX: 15, rotateY: 8 }}
-                                className={`relative group overflow-hidden flex flex-col items-center justify-center p-5 rounded-2xl shadow-lg transition-all duration-700 ease-in-out
-                                            ${stakeholderGradients[
-                                    i % stakeholderGradients.length
-                                ]
-                                    }
-                                            bg-[length:100%_100%] hover:bg-[length:200%_200%] hover:shadow-xl`}
-                            >
-                                {/* Shine element */}
-                                <span className="absolute top-0 left-[-150%] w-3/4 h-full bg-white/30 transform -skew-x-20 transition-all duration-700 ease-in-out group-hover:left-[150%]" />
-
-                                <s.icon className="w-10 h-10 mb-4 text-white" />
-                                <h3 className="text-sm font-semibold text-white text-center">
-                                    {s.title}
-                                </h3>
                             </motion.div>
                         ))}
                     </div>
