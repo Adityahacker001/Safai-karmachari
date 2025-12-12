@@ -118,6 +118,17 @@ export default function ShgCrPage() {
                       placeholder="Contact Number" 
                     />
                   </div>
+
+                     <div>
+                    <Label className="text-[#31694E] font-semibold text-xs md:text-sm mb-2 block">Email <span className="text-red-600 ml-1">*</span></Label>
+                    <Input 
+                      required
+                      className="w-full bg-white/80 text-gray-800 border border-gray-300 rounded-lg py-3 px-3 text-sm md:text-sm focus:ring-2 focus:ring-[#31694E] focus:border-[#31694E] transition-all" 
+                      value={leaderName} 
+                      onChange={(e) => setLeaderName(e.target.value)} 
+                      placeholder="Email" 
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -254,7 +265,7 @@ export default function ShgCrPage() {
                   type="button"
                   variant="outline"
                   className="text-[#31694E] bg-white/50 hover:bg-white/70 border-2 border-[#31694E]/40 px-6 py-2.5 rounded-xl font-semibold transition-all"
-                  onClick={() => router.push('http://localhost:3000')}
+                  onClick={() => router.push('/')}
                 >
                   Back to Home
                 </Button>
