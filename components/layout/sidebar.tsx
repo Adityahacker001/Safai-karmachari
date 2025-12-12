@@ -81,6 +81,7 @@ import {
   ListTodo,            // For Monthly Utilization Reports
   AreaChart,           // For Financial Summary Reports
 } from "lucide-react";
+import { useGlobalModal } from '@/context/GlobalModalContext';
 
 interface SidebarProps {
   role: "contractor" | "nodal" | "district" | "state" | "national" | "sp-cp" | "organizational-nodal" | "nskfdc" | "dgp" | "shg"; // Added 'shg'
@@ -138,7 +139,8 @@ const roleConfig: Record<string, RoleConfig> = {
     color: "text-purple-400",
     bgColor: "from-purple-900/30 to-slate-900",
     dataEntry: [ { name: "State-wide Compliance", icon: CheckSquare, href: "/state/data-entry/statewide-compliance" }, { name: "Policy Implementation", icon: ClipboardList, href: "/state/data-entry/policy-implementation" }, { name: "Directive Issuance", icon: FileText, href: "/state/data-entry/directive" }, { name: "Grievance Management", icon: MessageSquareWarning, href: "/state/data-entry/Grievance-managment" }, ],
-    reports: [ { name: "State Compliance", icon: BarChart3, href: "/state/reports/state-compliance" }, { name: "Grievance", icon: AlertTriangle, href: "/state/reports/grievance" }, { name: "Policy Tracking", icon: FileText, href: "/state/reports/policy-tracking" }, { name: "Performance Reports", icon: FileText, href: "/state/reports/All-reports" }, { name: 'Reports', icon: FileText, href: '/state/reports/reports' }, { name: "District Performance", icon: Building, href: "/state/reports/district-performance" }, { name: "User Management", icon: Users, href: "/state/reports/User-Management" }, { name: "Audit Logs", icon: FileText, href: "/state/reports/Audit-logs" }, ],
+    reports: [ { name: "State Compliance", icon: BarChart3, href: "/state/reports/state-compliance" }, { name: "Grievance", icon: AlertTriangle, href: "/state/reports/grievance" }, { name: "Policy Tracking", icon: FileText, href: "/state/reports/policy-tracking" }, { name: "Performance Reports", icon: FileText, href: "/state/reports/All-reports" }, { name: 'Reports', icon: FileText, href: '/state/reports/reports' }, { name: "District Performance", icon: Building, href: "/state/reports/district-performance" }, ],
+    admin: [ { name: "User Management", icon: UserCog, href: "/state/administration/user-management" }, { name: "Audit Logs", icon: FileClock, href: "/state/administration/audit-logs" }, ],
     dashboard: "/state/state-dashboard",
   },
   national: {
@@ -289,6 +291,17 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
     if (spcpQuery === "sp") displayTitle = "SP Dashboard";
     else if (spcpQuery === "cp") displayTitle = "CP Dashboard";
     else displayTitle = config.title;
+  }
+
+  // Try to access global modal API if provider is present
+  let globalOpenModal: ((t: 'contact' | 'help' | 'settings') => void) | null = null;
+  let globalCloseModal: (() => void) | null = null;
+  try {
+    const gm = useGlobalModal();
+    globalOpenModal = gm.openModal;
+    globalCloseModal = gm.closeModal;
+  } catch (e) {
+    // provider not present - footer will be inert
   }
 
   const NavLink = ({
@@ -640,9 +653,19 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
 
       {/* Footer */}
       <div className="p-4 border-t border-white/10 bg-white/5 relative z-10 space-y-1">
-        <NavLink href={`/${role}/contact-us`} icon={Contact} activeClass="" inactiveClass="text-white/60 hover:text-white text-xs">Contact Us</NavLink>
-        <NavLink href={`/${role}/help-support`} icon={HelpCircle} activeClass="" inactiveClass="text-white/60 hover:text-white text-xs">Help & Support</NavLink>
-        <NavLink href={`/${role}/settings`} icon={Settings} activeClass="" inactiveClass="text-white/60 hover:text-white text-xs">Settings</NavLink>
+        {/* Use global modal openers instead of route navigation */}
+        <button onClick={(e) => { e.preventDefault(); setIsMobileMenuOpen(false); globalOpenModal?.('contact'); }} className="w-full text-left flex items-center space-x-3 px-2 py-2 rounded-lg text-sm font-medium text-white/60 hover:text-white">
+          <Contact className="h-4 w-4" />
+          <span className="text-xs">Contact Us</span>
+        </button>
+        <button onClick={(e) => { e.preventDefault(); setIsMobileMenuOpen(false); globalOpenModal?.('help'); }} className="w-full text-left flex items-center space-x-3 px-2 py-2 rounded-lg text-sm font-medium text-white/60 hover:text-white">
+          <HelpCircle className="h-4 w-4" />
+          <span className="text-xs">Help & Support</span>
+        </button>
+        <button onClick={(e) => { e.preventDefault(); setIsMobileMenuOpen(false); globalOpenModal?.('settings'); }} className="w-full text-left flex items-center space-x-3 px-2 py-2 rounded-lg text-sm font-medium text-white/60 hover:text-white">
+          <Settings className="h-4 w-4" />
+          <span className="text-xs">Settings</span>
+        </button>
 
         <button
           onClick={(e) => {

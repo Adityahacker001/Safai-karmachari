@@ -83,8 +83,8 @@ export default function DistrictUserManagement() {
 
   return (
     <div className="min-h-screen space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8 p-3 sm:p-4 md:p-6 lg:p-8">
-      <header className="relative overflow-hidden bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl">
-        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
+      <header className="relative overflow-hidden bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-3xl"></div>
         <div className="relative p-4 sm:p-6 md:p-8 lg:p-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div className="flex-1">
             <h2 className="text-sm text-white/90 font-bold mb-2">Administration</h2>
@@ -113,8 +113,8 @@ export default function DistrictUserManagement() {
 
       {showAddUserForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <Card className="w-full max-w-2xl shadow-2xl border-0 bg-gradient-to-br from-blue-100 via-cyan-100 to-purple-100 p-1 rounded-2xl animate-fadeIn">
-            <CardHeader className="bg-gradient-to-r from-blue-500 via-cyan-500 to-purple-500 rounded-t-2xl p-6 shadow-md">
+          <Card className="w-full max-w-2xl shadow-2xl border-0 bg-gradient-to-br from-blue-100 via-cyan-100 to-purple-100 p-1 rounded-3xl animate-fadeIn">
+            <CardHeader className="bg-gradient-to-r from-blue-500 via-cyan-500 to-purple-500 rounded-3xl p-6 shadow-md">
               <CardTitle className="text-2xl text-white font-extrabold drop-shadow">Add New User</CardTitle>
               <CardDescription className="text-white/90 font-medium">Fill in the details to create a new user account.</CardDescription>
             </CardHeader>

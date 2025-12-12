@@ -319,11 +319,20 @@ function AddWorkerForm({ id, onSubmit }: { id?: string; onSubmit: (u: any) => vo
         </div>
         <div>
           <label className="text-sm font-medium text-slate-700">District</label>
-          <select value={district} onChange={(e) => setDistrict(e.target.value)} className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+            <select value={district} onChange={(e) => setDistrict(e.target.value)} className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
             <option value="">Select District</option>
-            <option>District A</option>
-            <option>District B</option>
-            <option>District C</option>
+            <option>Mumbai</option>
+            <option>Pune</option>
+            <option>Bengaluru Urban</option>
+            <option>Lucknow</option>
+            <option>Kanpur</option>
+            <option>Varanasi</option>
+            <option>Ahmedabad</option>
+            <option>Surat</option>
+            <option>Vadodara</option>
+            <option>Thane</option>
+            <option>Nagpur</option>
+            <option>Nashik</option>
           </select>
         </div>
       </div>

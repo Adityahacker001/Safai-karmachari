@@ -1,5 +1,16 @@
 import DashboardLayout from '@/components/layout/dashboard-layout';
+import { GlobalModalProvider } from '@/context/GlobalModalContext';
+import ContactUsModal from '@/components/global-modals/ContactUsModal';
+import HelpSupportModal from '@/components/global-modals/HelpSupportModal';
+import SettingsModal from '@/components/global-modals/SettingsModal';
 
 export default function SHGGlobalLayout({ children }: { children: React.ReactNode }) {
-  return <DashboardLayout role="shg" name="SHG Dashboard">{children}</DashboardLayout>;
+  return (
+    <GlobalModalProvider>
+      <DashboardLayout role="shg" name="SHG Dashboard">{children}</DashboardLayout>
+      <ContactUsModal />
+      <HelpSupportModal />
+      <SettingsModal />
+    </GlobalModalProvider>
+  );
 }
