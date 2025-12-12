@@ -1,7 +1,7 @@
-// app/(nskfdc)/sewer-death/page.tsx
+ // app/(nskfdc)/sewer-death/page.tsx
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 // This component is NOT defined here. It is imported as requested.
 // I am respecting the 'color' prop and not changing it to 'gradient'.
 import StatCard from '@/components/ui/stat-card';
@@ -12,10 +12,10 @@ import {
   CheckCircle2,
   Clock,
   DollarSign,
-  BarChart2,
+  BarChart2,  
   Users,
+  Eye,
   ChevronRight,
-  ChevronDown,
   Search,
 } from 'lucide-react';
 import {
@@ -48,6 +48,7 @@ type CaseItem = {
   policeStation: string;
   category: string;
   date: string;
+  time?: string;
   workersInvolved?: string[]; // names or ids
   deaths?: number;
   injuries?: number;
@@ -55,12 +56,14 @@ type CaseItem = {
   firStatus?: string;
   compensationSanctioned?: number;
   compensationPaid?: number;
+  compensationPaidDate?: string;
   inquiryStatus?: string;
   narrative?: string;
   attachments?: string[];
   daysPending?: number;
   sections?: string;
   workersInvolvedCount?: number;
+  notes?: string;
 };
 
 const SAMPLE_CASES: CaseItem[] = [
@@ -71,6 +74,7 @@ const SAMPLE_CASES: CaseItem[] = [
     policeStation: 'Central PS',
     category: 'Sewer Death',
     date: '2025-10-10',
+    time: '09:30',
     workersInvolved: ['Ramesh'],
     workersInvolvedCount: 1,
     deaths: 1,
@@ -80,10 +84,12 @@ const SAMPLE_CASES: CaseItem[] = [
     sections: '304A IPC',
     compensationSanctioned: 500000,
     compensationPaid: 0,
+    compensationPaidDate: '',
     inquiryStatus: 'Initiated',
     narrative: 'Worker entered septic pit without permit; no PPE available.',
     attachments: ['photo.jpg'],
     daysPending: 28,
+    notes: 'No supervisor present at time of incident.',
   },
   {
     caseId: 'NSK-002',
@@ -92,6 +98,7 @@ const SAMPLE_CASES: CaseItem[] = [
     policeStation: 'North PS',
     category: 'Sewer Injury',
     date: '2025-09-20',
+    time: '14:10',
     workersInvolved: ['Sita'],
     workersInvolvedCount: 1,
     deaths: 0,
@@ -101,10 +108,12 @@ const SAMPLE_CASES: CaseItem[] = [
     sections: '338 IPC',
     compensationSanctioned: 150000,
     compensationPaid: 150000,
+    compensationPaidDate: '2025-10-05',
     inquiryStatus: 'Completed',
     narrative: 'Worker injured while clearing obstruction, treated and compensated.',
     attachments: [],
     daysPending: 0,
+    notes: 'Victim received immediate medical attention and compensation.',
   },
 ];
 
@@ -140,7 +149,7 @@ export default function NskfdcSewerDeathPage() {
   const [fromDate, setFromDate] = useState<string>('');
   const [toDate, setToDate] = useState<string>('');
   const [fir, setFir] = useState<'all' | 'yes' | 'no'>('all');
-  const [expanded, setExpanded] = useState<string | null>(null);
+  const [selectedIncident, setSelectedIncident] = useState<CaseItem | null>(null);
   const [loading, setLoading] = useState(true);
   React.useEffect(() => {
     const t = setTimeout(() => setLoading(false), 1200);
@@ -196,9 +205,34 @@ export default function NskfdcSewerDeathPage() {
     };
   }, [cases]);
 
-  if (loading) return <IntegratedLoader />;
+  const handleDownload = useCallback((inc: CaseItem | null) => {
+    if (!inc) return;
+    try {
+      const payload = {
+        exportedAt: new Date().toISOString(),
+        source: 'NSKFDC Sewer Death - Total Incident Report',
+        incident: inc,
+      };
+      const json = JSON.stringify(payload, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const filenameBase = inc.incidentId || inc.caseId || 'incident';
+      const safeDate = (inc.date || '').replace(/[:\s]/g, '-') || new Date().toISOString().slice(0,10);
+      const filename = `${filenameBase}-${safeDate}.json`;
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 5000);
+    } catch (err) {
+      console.error('Download failed', err);
+      alert('Download failed — check console for details.');
+    }
+  }, []);
 
-  
+  if (loading) return <IntegratedLoader />;
 
   // YOUR EXISTING FUNCTIONS (UNCHANGED)
   function exportCSV() {
@@ -208,6 +242,7 @@ export default function NskfdcSewerDeathPage() {
     alert('Reload (placeholder) — implement API refresh');
   }
 
+  // handleDownload is defined above to keep hook order stable
   // Table header styles
   const tableHeaderStyle =
     'px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-white uppercase tracking-wider';
@@ -390,185 +425,276 @@ export default function NskfdcSewerDeathPage() {
       {/* 5. Charts (RE-STYLED CONTAINERS) */}
       
 
-      {/* 6. Main Table + Side Widgets (RE-STYLED) */}
-      <section className="mb-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Replaced table with PDF-style stacked incident cards (left column) */}
-        <div className="lg:col-span-2">
+      {/* 6. Main Table (full-width) + Widgets moved below */}
+      <section className="mb-8 grid grid-cols-1 gap-6">
+        {/* Table (full-width) */}
+        <div className="overflow-hidden">
           <h3 className="text-2xl font-semibold text-gray-800 mb-4">Total Incident Report</h3>
-          <div className="space-y-6">
-            {filtered.map((c) => (
-              <article key={c.caseId} className="bg-white rounded-lg shadow-sm border border-gray-100">
-                {/* Basic Details block */}
-                <div className="p-4 border-b border-gray-100">
-                  <h4 className="text-md font-semibold text-gray-800 mb-2">Basic Details</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm text-gray-700">
-                    <div>
-                      <div className="font-medium">Incident ID</div>
-                      <div className="mt-1">{c.incidentId}</div>
-                    </div>
-                    <div>
-                      <div className="font-medium">Date</div>
-                      <div className="mt-1">{c.date}</div>
-                    </div>
-                    <div>
-                      <div className="font-medium">District / Location</div>
-                      <div className="mt-1">{c.district} / {c.policeStation}</div>
-                    </div>
-                    <div>
-                      <div className="font-medium">Deaths</div>
-                      <div className="mt-1 text-red-600 font-semibold">{c.deaths ?? 0}</div>
-                    </div>
-                    <div>
-                      <div className="font-medium">FIR No</div>
-                      <div className="mt-1">{c.firNo || 'N/A'}</div>
-                    </div>
-                    <div>
-                      <div className="font-medium">Status</div>
-                      <div className="mt-1"><StatusPill status={c.inquiryStatus} /></div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Narrative Summary block */}
-                <div className="p-4 bg-gray-50 border-b border-gray-100">
-                  <h4 className="text-md font-semibold text-gray-800 mb-2">Narrative Summary</h4>
-                  <p className="text-sm text-gray-700">{c.narrative || 'No narrative provided.'}</p>
-                </div>
-
-                {/* Compensation Details block */}
-                <div className="p-4 border-b border-gray-100">
-                  <h4 className="text-md font-semibold text-gray-800 mb-2">Compensation Details</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-sm text-gray-700">
-                    <div>
-                      <div className="font-medium">Amount Sanctioned</div>
-                      <div className="mt-1">{c.compensationSanctioned ? `₹${formatINR(c.compensationSanctioned)}` : 'N/A'}</div>
-                    </div>
-                    <div>
-                      <div className="font-medium">Amount Paid</div>
-                      <div className="mt-1">{c.compensationPaid ? `₹${formatINR(c.compensationPaid)}` : '₹0'}</div>
-                    </div>
-                    <div>
-                      <div className="font-medium">Date Paid</div>
-                      <div className="mt-1">{(c.compensationPaid && c.date) ? c.date : 'N/A'}</div>
-                    </div>
-                    <div>
-                      <div className="font-medium">Days Pending</div>
-                      <div className="mt-1">{c.daysPending ?? 'N/A'}</div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Attachments block */}
-                <div className="p-4 bg-gray-50">
-                  <h4 className="text-md font-semibold text-gray-800 mb-2">Attachments</h4>
-                  <div className="text-sm text-gray-700">
-                    <ul className="list-disc list-inside space-y-1">
-                      {/* FIR */}
-                      <li>
-                        <span className="font-medium">FIR:</span>{' '}
-                        {c.attachments && c.attachments.find(a => /fir/i.test(a)) ? (
-                          <a className="text-blue-600 hover:underline" href="#">{c.attachments.find(a => /fir/i.test(a))}</a>
-                        ) : (
-                          <span className="text-gray-500">Not attached</span>
-                        )}
-                      </li>
-                      {/* Post-Mortem Report */}
-                      <li>
-                        <span className="font-medium">Post-Mortem Report:</span>{' '}
-                        {c.attachments && c.attachments.find(a => /post|mortem/i.test(a)) ? (
-                          <a className="text-blue-600 hover:underline" href="#">{c.attachments.find(a => /post|mortem/i.test(a))}</a>
-                        ) : (
-                          <span className="text-gray-500">Not attached</span>
-                        )}
-                      </li>
-                      {/* Sanction Letter */}
-                      <li>
-                        <span className="font-medium">Sanction Letter:</span>{' '}
-                        {c.attachments && c.attachments.find(a => /sanction/i.test(a)) ? (
-                          <a className="text-blue-600 hover:underline" href="#">{c.attachments.find(a => /sanction/i.test(a))}</a>
-                        ) : (
-                          <span className="text-gray-500">Not attached</span>
-                        )}
-                      </li>
-                      {/* Payment Proof */}
-                      <li>
-                        <span className="font-medium">Payment Proof:</span>{' '}
-                        {c.attachments && c.attachments.find(a => /payment|receipt/i.test(a)) ? (
-                          <a className="text-blue-600 hover:underline" href="#">{c.attachments.find(a => /payment|receipt/i.test(a))}</a>
-                        ) : (
-                          <span className="text-gray-500">Not attached</span>
-                        )}
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </article>
-            ))}
+          <div className="overflow-x-auto rounded-lg shadow-md">
+            <table className="min-w-full leading-normal">
+              <thead className="bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-t-lg">
+                <tr>
+                  <th className={`${tableHeaderStyle} rounded-tl-lg w-10`}>Sl. No.</th>
+                  <th className={tableHeaderStyle}>Incident ID</th>
+                  <th className={tableHeaderStyle}>Date</th>
+                  <th className={tableHeaderStyle}>Location</th>
+                  <th className={tableHeaderStyle}>Brief Particulars</th>
+                  <th className={tableHeaderStyle}>Deaths</th>
+                  <th className={tableHeaderStyle}>Injuries</th>
+                  <th className={tableHeaderStyle}>FIR No</th>
+                  <th className={tableHeaderStyle}>FIR Status</th>
+                  <th className={tableHeaderStyle}>Compensation Paid</th>
+                  <th className={tableHeaderStyle}>Inquiry Status</th>
+                  <th className={`${tableHeaderStyle} rounded-tr-lg`}>Action</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white">
+                {filtered.map((c, index) => (
+                  <tr key={c.caseId} className="even:bg-gray-50 hover:bg-emerald-50 transition-colors">
+                    <td className={tableCellStyle}>
+                      <p className="font-medium text-gray-900">{index + 1}</p>
+                    </td>
+                    <td className={tableCellStyle}>
+                      <p className="font-medium text-gray-900">{c.incidentId}</p>
+                    </td>
+                    <td className={tableCellStyle}>{c.date}</td>
+                    <td className={tableCellStyle}>{c.policeStation || c.district}</td>
+                    <td className={tableCellStyle}>
+                      <p className="text-sm text-gray-700">{truncate(c.narrative, 80)}</p>
+                    </td>
+                    <td className={tableCellStyle}>
+                      <p className="text-red-600 font-bold">{c.deaths ?? 0}</p>
+                    </td>
+                    <td className={tableCellStyle}>
+                      <p className="text-gray-900">{c.injuries ?? 0}</p>
+                    </td>
+                    <td className={tableCellStyle}>{c.firNo || '-'}</td>
+                    <td className={tableCellStyle}>{c.firStatus || 'N/A'}</td>
+                    <td className={tableCellStyle}>{c.compensationPaid ? `₹${formatINR(c.compensationPaid)}` : '₹0'}</td>
+                    <td className={tableCellStyle}>{c.inquiryStatus || 'N/A'}</td>
+                    <td className={tableCellStyle}>
+                      <button
+                        className="p-2 rounded-full hover:bg-gray-100"
+                        aria-label={`View ${c.incidentId}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedIncident(c);
+                        }}
+                      >
+                        <Eye className="h-5 w-5 text-emerald-600" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
+
+          {/* Modal details: show incident details in centered overlay when eye icon is clicked */}
+          <AnimatePresence>
+            {selectedIncident && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.12 }}
+                className="fixed inset-0 z-50 flex items-center justify-center"
+              >
+                <div
+                  className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+                  onClick={() => setSelectedIncident(null)}
+                />
+
+                <motion.div
+                  initial={{ scale: 0.98, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.98, opacity: 0 }}
+                  transition={{ duration: 0.18 }}
+                  className="relative w-full max-w-3xl mx-4 bg-white rounded-lg shadow-2xl border border-gray-200 p-6 z-50"
+                >
+                  <div className="flex items-start justify-between">
+                    <h3 className="text-lg font-semibold">Incident Details - {selectedIncident.incidentId}</h3>
+                    <button
+                      onClick={() => setSelectedIncident(null)}
+                      aria-label="Close details"
+                      className="text-gray-500 hover:text-gray-900 text-sm"
+                    >
+                      ×
+                    </button>
+                  </div>
+
+                  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    {/* Basic Details (left column) */}
+                    <div className="bg-emerald-50 p-4 rounded border border-emerald-100 shadow-sm">
+                      <h4 className="text-sm font-semibold text-emerald-900 mb-3">1. Basic Details</h4>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div className="text-gray-600">Incident ID</div>
+                          <div className="text-gray-900 font-medium">{selectedIncident.incidentId}</div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div className="text-gray-600">Date</div>
+                          <div className="text-gray-900">{selectedIncident.date}</div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div className="text-gray-600">Time</div>
+                          <div className="text-gray-900">{selectedIncident.time || 'N/A'}</div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div className="text-gray-600">Location</div>
+                          <div className="text-gray-900">{selectedIncident.policeStation || '-'}</div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div className="text-gray-600">District</div>
+                          <div className="text-gray-900">{selectedIncident.district}</div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div className="text-gray-600">Category</div>
+                          <div className="text-gray-900">{selectedIncident.category}</div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div className="text-gray-600">Deaths</div>
+                          <div className="text-red-600 font-semibold">{selectedIncident.deaths ?? 0}</div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div className="text-gray-600">Injuries</div>
+                          <div className="text-gray-900">{selectedIncident.injuries ?? 0}</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Narrative (spans right column full width) */}
+                    <div className="md:col-span-1 bg-sky-50 p-4 rounded border border-sky-100 shadow-sm">
+                      <h4 className="text-sm font-semibold text-sky-900 mb-2">2. Narrative Summary</h4>
+                      <p className="text-gray-700 leading-relaxed min-h-[6rem]">{selectedIncident.narrative || 'No narrative available.'}</p>
+                    </div>
+
+                    {/* FIR Details (highlighted) */}
+                    <div className="bg-red-50 p-4 rounded border border-red-200 shadow-sm">
+                      <h4 className="text-sm font-semibold text-red-700 mb-2">3. FIR Details</h4>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div className="text-gray-600">Police Station</div>
+                          <div className="text-red-700 font-semibold">{selectedIncident.policeStation || 'N/A'}</div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div className="text-gray-600">Status</div>
+                          <div className={`text-sm font-semibold ${selectedIncident.firStatus === 'Under Investigation' ? 'text-red-700' : 'text-red-600'}`}>{selectedIncident.firStatus || 'N/A'}</div>
+                        </div>
+                        {selectedIncident.firNo && (
+                          <div className="flex items-center justify-between">
+                            <div className="text-gray-600">FIR No</div>
+                            <div className="inline-flex items-center">
+                              <span className="px-2 py-0.5 rounded bg-red-100 text-red-700 font-medium">{selectedIncident.firNo}</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Compensation Details */}
+                    <div className="bg-green-50 p-4 rounded border border-green-100 shadow-sm">
+                      <h4 className="text-sm font-semibold text-green-800 mb-2">4. Compensation Details</h4>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div className="text-gray-600">Amount Sanctioned</div>
+                          <div className="text-gray-900">{selectedIncident.compensationSanctioned ? `₹${formatINR(selectedIncident.compensationSanctioned)}` : 'Not Sanctioned'}</div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div className="text-gray-600">Paid</div>
+                          <div className="text-gray-900">{selectedIncident.compensationPaid ? 'Yes' : 'No'}</div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div className="text-gray-600">Date Paid</div>
+                          <div className="text-gray-900">{selectedIncident.compensationPaidDate || 'N/A'}</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Inquiry Status */}
+                    <div className="bg-amber-50 p-4 rounded border border-amber-100 shadow-sm">
+                      <h4 className="text-sm font-semibold text-amber-900 mb-2">5. Inquiry Status</h4>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div className="text-gray-600">Inquiry Status</div>
+                          <div className="text-gray-900">{selectedIncident.inquiryStatus || 'N/A'}</div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div className="text-gray-600">Days Pending</div>
+                          <div className="text-gray-900">{selectedIncident.daysPending ?? 'N/A'}</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Misc Notes (span full width) */}
+                    <div className="md:col-span-2 bg-slate-50 p-4 rounded border border-slate-100 shadow-sm">
+                      <h4 className="text-sm font-semibold text-slate-800 mb-2">6. Miscellaneous Notes</h4>
+                      <p className="text-gray-700">{selectedIncident.notes || 'No additional notes.'}</p>
+                    </div>
+                  </div>
+
+                  <div className="mt-6 flex justify-end gap-3">
+                    <button onClick={() => setSelectedIncident(null)} className="px-4 py-2 rounded-md bg-white border border-gray-200 text-gray-700 hover:bg-gray-50">Close</button>
+                    <button
+                      onClick={() => handleDownload(selectedIncident)}
+                      className="px-4 py-2 rounded-md bg-emerald-600 text-white shadow-md hover:bg-emerald-700"
+                    >
+                      Download
+                    </button>
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
-        {/* Right column widgets */}
-        <aside className="space-y-6">
-          <div className="overflow-hidden">
+        {/* Widgets moved below the table: Escalated Districts and Top Worker Impact */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+          <div className="bg-white p-4 rounded-lg shadow-md h-full flex flex-col min-h-64">
             <h4 className="text-lg font-semibold mb-3">Escalated Districts</h4>
-            <div className="overflow-x-auto rounded-lg shadow-md">
-              {/* COLORFUL TABLE HEADER */}
-              <table className="min-w-full leading-normal">
-                <thead>
-                  <tr>
-                    <th
-                      className={`${tableHeaderStyle} bg-gradient-to-r from-red-500 to-red-600 rounded-tl-lg`}
-                    >
-                      District
-                    </th>
-                    <th
-                      className={`${tableHeaderStyle} bg-gradient-to-r from-red-500 to-red-600`}
-                    >
-                      Reason
-                    </th>
-                    <th
-                      className={`${tableHeaderStyle} bg-gradient-to-r from-red-500 to-red-600 rounded-tr-lg`}
-                    >
-                      Date
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white">
-                  <tr className="hover:bg-gray-100">
-                    <td className={tableCellStyle}>Darjeeling</td>
-                    <td className={tableCellStyle}>
-                      Pending Comp. {'>'}60 days
-                    </td>
-                    <td className={tableCellStyle}>2025-10-29</td>
-                  </tr>
-                  <tr className="even:bg-gray-50 hover:bg-gray-100">
-                    <td className={tableCellStyle}>Kolkata</td>
-                    <td className={tableCellStyle}>Pending FIRs {'>'}30 days</td>
-                    <td className={tableCellStyle}>2025-10-05</td>
-                  </tr>
-                </tbody>
-              </table>
+            <div className="flex-1 overflow-hidden">
+              <div className="overflow-x-auto h-full">
+                <table className="min-w-full leading-normal">
+                  <thead>
+                    <tr>
+                      <th className={`${tableHeaderStyle} bg-gradient-to-r from-red-400 to-red-500 rounded-tl-lg`}>District</th>
+                      <th className={`${tableHeaderStyle} bg-gradient-to-r from-red-400 to-red-500`}>Reason</th>
+                      <th className={`${tableHeaderStyle} bg-gradient-to-r from-red-400 to-red-500 rounded-tr-lg`}>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white">
+                    <tr className="hover:bg-gray-100">
+                      <td className={tableCellStyle}>Darjeeling</td>
+                      <td className={tableCellStyle}>Pending Comp. {'>'}60 days</td>
+                      <td className={tableCellStyle}>2025-10-29</td>
+                    </tr>
+                    <tr className="even:bg-gray-50 hover:bg-gray-100">
+                      <td className={tableCellStyle}>Kolkata</td>
+                      <td className={tableCellStyle}>Pending FIRs {'>'}30 days</td>
+                      <td className={tableCellStyle}>2025-10-05</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
 
-          <div className="bg-white p-4 rounded-xl shadow-lg border border-gray-200">
-            <h4 className="text-lg font-semibold mb-3">Top Worker Impact</h4>
-            <div className="flex flex-col gap-3">
+          <div className="bg-white p-4 rounded-lg shadow-md border border-gray-200 h-full flex flex-col min-h-64">
+            <div className="mb-3 rounded-md bg-emerald-50 p-3">
+              <h4 className="text-lg font-semibold text-emerald-900">Top Worker Impact</h4>
+            </div>
+            <div className="flex-1 flex flex-col gap-3 justify-start">
               <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                 <div className="text-sm font-medium">Ramesh (NSK-001)</div>
-                <div className="text-sm text-gray-700 font-medium">
-                  ₹5,00,000
-                </div>
+                <div className="text-sm text-gray-700 font-medium">₹5,00,000</div>
               </div>
               <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                 <div className="text-sm font-medium">Sita (NSK-002)</div>
-                <div className="text-sm text-gray-700 font-medium">
-                  ₹1,50,000
-                </div>
+                <div className="text-sm text-gray-700 font-medium">₹1,50,000</div>
               </div>
             </div>
           </div>
-        </aside>
+        </div>
       </section>
 
       {/* District heatmap tiles (RE-STYLED) */}
@@ -636,10 +762,12 @@ function FactSheet({ caseItem }: { caseItem: CaseItem }) {
             </h4>
             <div className="space-y-1 text-sm">
               <p>
-                <strong>FIR No:</strong> {caseItem.firNo || 'N/A'}
+                <strong>FIR No:</strong>{' '}
+                <span className="text-red-700 font-semibold">{caseItem.firNo || 'N/A'}</span>
               </p>
               <p>
-                <strong>Status:</strong> {caseItem.firStatus || 'N/A'}
+                <strong>Status:</strong>{' '}
+                <span className={`font-semibold ${caseItem.firStatus === 'Under Investigation' ? 'text-red-700' : 'text-gray-900'}`}>{caseItem.firStatus || 'N/A'}</span>
               </p>
               <p>
                 <strong>Sections:</strong> {caseItem.sections || 'N/A'}

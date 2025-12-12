@@ -1,9 +1,16 @@
 'use client';
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import DataTable from '@/components/ui/data-table';
 import StatCard from '@/components/ui/stat-card';
-import { FileText, Send, Inbox, Plus } from 'lucide-react';
+import { FileText, Send, Inbox, Plus, X } from 'lucide-react';
 import IntegratedLoader from '@/components/layout/IntegratedLoader';
+
+interface AttachmentItem {
+  name: string;
+  url?: string;
+  type?: string;
+}
 
 interface Directive {
   directiveId: string;
@@ -13,11 +20,17 @@ interface Directive {
   date: string;
   status: string;
   priority: string;
+  attachments?: Array<string | AttachmentItem>;
+  remarks?: string[];
 }
 
 const Directives = () => {
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = React.useState(true);
+  const [selectedDirective, setSelectedDirective] = useState<Directive | null>(null);
+  const [showRemarksBox, setShowRemarksBox] = useState(false);
+  const [newRemark, setNewRemark] = useState('');
+  const [attachmentFiles, setAttachmentFiles] = useState<File[]>([]);
 
   React.useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 1200); // Simulate loading
@@ -31,7 +44,9 @@ const Directives = () => {
       subject: 'PPE Distribution Protocol Update',
       date: '2024-01-20',
       status: 'Active',
-      priority: 'High'
+      priority: 'High',
+      attachments: [],
+      remarks: [],
     },
     {
       directiveId: 'DIR-2024-002',
@@ -39,7 +54,9 @@ const Directives = () => {
       subject: 'Health Checkup Schedule',
       date: '2024-01-18',
       status: 'Completed',
-      priority: 'Medium'
+      priority: 'Medium',
+      attachments: [],
+      remarks: [],
     },
     {
       directiveId: 'DIR-2024-003',
@@ -47,9 +64,13 @@ const Directives = () => {
       subject: 'Training Program Implementation',
       date: '2024-01-15',
       status: 'Pending',
-      priority: 'Medium'
+      priority: 'Medium',
+      attachments: [],
+      remarks: [],
     },
   ];
+
+  const [directives, setDirectives] = useState<Directive[]>(receivedDirectives);
 
   const receivedColumns = [
     { key: 'directiveId', header: 'Directive ID' },
@@ -119,10 +140,41 @@ const Directives = () => {
                 <div className="-mx-8 -mt-8 mb-8 rounded-t-2xl px-8 py-4" style={{background: 'linear-gradient(90deg, #e0c3fc 0%, #8ec5fc 100%)'}}>
                   <h2 className="text-2xl font-bold text-black text-center">Issue New Directive</h2>
                 </div>
-                <form className="space-y-5">
+                <form className="space-y-5" onSubmit={(e) => {
+                  e.preventDefault();
+                  const form = e.target as HTMLFormElement;
+                  const fd = new FormData(form);
+                  const title = (fd.get('title') as string) || 'Untitled Directive';
+                  const message = (fd.get('message') as string) || '';
+                  const priority = (fd.get('priority') as string) || 'Medium';
+
+                  // create attachment items (object URLs for preview)
+                  const attachments: AttachmentItem[] = attachmentFiles.map((f) => ({
+                    name: f.name,
+                    type: f.type,
+                    url: URL.createObjectURL(f),
+                  }));
+
+                  const newDirective: Directive = {
+                    directiveId: `DIR-${Date.now()}`,
+                    from: 'You',
+                    subject: title,
+                    date: new Date().toISOString().slice(0,10),
+                    status: 'Active',
+                    priority,
+                    attachments: attachments,
+                    remarks: message ? [message] : [],
+                  };
+
+                  setDirectives((prev) => [newDirective, ...prev]);
+                  setAttachmentFiles([]);
+                  setShowModal(false);
+                  // open the newly created directive so attachments are visible immediately
+                  setSelectedDirective(newDirective);
+                }}>
                   <div>
                     <label className="block text-gray-700 font-medium mb-1">Recipients</label>
-                    <select className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200">
+                    <select name="recipients" className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200">
                       <option>All Nodal Officers</option>
                       <option>District Admin</option>
                       <option>State Health Department</option>
@@ -130,19 +182,47 @@ const Directives = () => {
                   </div>
                   <div>
                     <label className="block text-gray-700 font-medium mb-1">Title</label>
-                    <input type="text" className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" placeholder="Enter directive title" />
+                    <input name="title" type="text" className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" placeholder="Enter directive title" />
                   </div>
                   <div>
                     <label className="block text-gray-700 font-medium mb-1">Message</label>
-                    <textarea className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" rows={4} placeholder="Enter directive message" />
+                    <textarea name="message" className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" rows={4} placeholder="Enter directive message" />
                   </div>
                   <div>
                     <label className="block text-gray-700 font-medium mb-1">Priority</label>
-                    <select className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200">
+                    <select name="priority" className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200">
                       <option>High</option>
-                      <option>Medium</option>
+                      <option defaultChecked>Medium</option>
                       <option>Low</option>
                     </select>
+                  </div>
+                  <div>
+                    <label className="block text-gray-700 font-medium mb-1">Attach Proof (PDF or Photo)</label>
+                    <input
+                      name="attachments"
+                      type="file"
+                      accept=".pdf,image/*"
+                      multiple
+                      onChange={(e) => {
+                        const files = e.target.files ? Array.from(e.target.files) : [];
+                        setAttachmentFiles(files);
+                      }}
+                      className="w-full"
+                    />
+                    {attachmentFiles.length > 0 && (
+                      <div className="mt-2 space-y-2">
+                        {attachmentFiles.map((f, idx) => (
+                          <div key={idx} className="flex items-center gap-3 p-2 bg-gray-50 rounded border">
+                            {f.type.startsWith('image') ? (
+                              <img src={URL.createObjectURL(f)} alt={f.name} className="h-12 w-12 object-cover rounded" />
+                            ) : (
+                              <div className="h-12 w-12 flex items-center justify-center bg-gray-100 rounded text-sm">PDF</div>
+                            )}
+                            <div className="text-sm text-gray-700">{f.name}</div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                   <div className="flex justify-end gap-3 pt-2">
                     <button type="button" className="px-5 py-2 rounded-md border border-gray-300 bg-white text-gray-700 font-medium hover:bg-gray-100" onClick={() => setShowModal(false)}>Cancel</button>
@@ -189,12 +269,157 @@ const Directives = () => {
             <DataTable
               title="Received Directives"
               columns={receivedColumns}
-              data={receivedDirectives}
+              data={directives}
               actions={true}
-              onView={(row: Directive) => console.log('View directive:', row.directiveId)}
+              onView={(row: Directive) => {
+                // Open modal with full directive details
+                setSelectedDirective(row);
+                setShowRemarksBox(false);
+                setNewRemark('');
+              }}
             />
+            {/* Directive modal removed from card; rendered at page root to float above everything */}
         </div>
       </div>
+      {/* Root-level Directive Modal (renders outside card, centered overlay) */}
+      {selectedDirective && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={() => setSelectedDirective(null)}>
+          <div className="relative bg-white w-[650px] max-w-[95%] rounded-3xl shadow-2xl p-0 max-h-[90vh] overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            <button
+              aria-label="Close directive modal"
+              onClick={(e) => { e.stopPropagation(); setSelectedDirective(null); }}
+              className="absolute right-3 top-3 rounded-full p-2 bg-white text-gray-700 shadow-sm hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-2"
+              title="Close"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <div className="p-8 text-white w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-t-3xl shadow-lg mb-0">
+              <h2 className="text-white text-2xl font-bold">Directive Details: {selectedDirective!.directiveId}</h2>
+              <p className="text-blue-100 text-sm mt-1">Detailed view of the directive and contractor actions</p>
+            </div>
+            <div className="p-6 max-h-[80vh] overflow-y-auto space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <div className="text-xs text-gray-500">Issued By</div>
+                  <div className="font-medium text-gray-900">{selectedDirective!.from || 'N/A'}</div>
+                </div>
+                <div>
+                  <div className="text-xs text-gray-500">Issue Date</div>
+                  <div className="font-medium text-gray-900">{selectedDirective!.date}</div>
+                </div>
+                <div>
+                  <div className="text-xs text-gray-500">Priority</div>
+                  <div className={`inline-block px-2 py-1 rounded-full text-sm font-medium ${selectedDirective!.priority === 'High' ? 'bg-red-200 text-red-800' : selectedDirective!.priority === 'Medium' ? 'bg-yellow-200 text-yellow-900' : 'bg-green-200 text-green-800'}`}>{selectedDirective!.priority}</div>
+                </div>
+                <div>
+                  <div className="text-xs text-gray-500">Current Status</div>
+                  <div className="font-medium text-gray-900">{selectedDirective!.status}</div>
+                </div>
+              </div>
+
+              <div>
+                <div className="text-xs text-gray-500">Full Directive</div>
+                <div className="mt-2 p-3 bg-gray-50 rounded border border-gray-100 text-sm text-gray-800">{selectedDirective!.subject}</div>
+              </div>
+
+              <div>
+                <div className="text-xs text-gray-500">Attachments</div>
+                <div className="mt-2 flex flex-col gap-2">
+                  {selectedDirective!.attachments?.length ? (
+                    selectedDirective!.attachments!.map((a, i) => {
+                      if (typeof a === 'string') {
+                        return (
+                          <div key={i} className="flex items-center justify-between bg-white border rounded px-3 py-2">
+                            <div className="text-sm text-gray-700">{a}</div>
+                            <div className="flex items-center gap-2">
+                              <a href="#" className="text-blue-600 text-sm">View</a>
+                              <a href="#" className="text-gray-600 text-sm">Download</a>
+                            </div>
+                          </div>
+                        );
+                      }
+                      const item = a as AttachmentItem;
+                      return (
+                        <div key={i} className="flex items-center justify-between bg-white border rounded px-3 py-2">
+                          <div className="flex items-center gap-3">
+                            {item.type?.startsWith('image') && item.url ? (
+                              <img src={item.url} alt={item.name} className="h-12 w-12 object-cover rounded" />
+                            ) : (
+                              <div className="h-12 w-12 flex items-center justify-center bg-gray-100 rounded text-sm">PDF</div>
+                            )}
+                            <div className="text-sm text-gray-700">{item.name}</div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            {item.url ? (
+                              <>
+                                <a href={item.url} target="_blank" rel="noreferrer" className="text-blue-600 text-sm">View</a>
+                                <a href={item.url} download={item.name} className="text-gray-600 text-sm">Download</a>
+                              </>
+                            ) : (
+                              <div className="text-sm text-gray-600">Unavailable</div>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div className="text-sm text-gray-600">No attachments provided.</div>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <div className="text-xs text-gray-500">Remarks</div>
+                <div className="mt-2 space-y-2">
+                  {selectedDirective!.remarks?.length ? (
+                    selectedDirective!.remarks!.map((r, i) => (
+                      <div key={i} className="text-sm text-gray-700 bg-white border rounded px-3 py-2">{r}</div>
+                    ))
+                  ) : (
+                    <div className="text-sm text-gray-600">No remarks yet.</div>
+                  )}
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="pt-2 flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3">
+                <button
+                  onClick={() => {
+                    const updated = { ...selectedDirective, status: 'Completed' } as Directive;
+                    setDirectives((prev) => prev.map(d => d.directiveId === updated.directiveId ? updated : d));
+                    setSelectedDirective(updated);
+                  }}
+                  className="px-4 py-2 rounded-md bg-green-600 text-white hover:bg-green-700"
+                >
+                  Mark Compliance
+                </button>
+                <div className="ml-auto flex items-center gap-2">
+                  {showRemarksBox ? (
+                    <div className="flex items-center gap-2">
+                      <input value={newRemark} onChange={(e) => setNewRemark(e.target.value)} className="px-3 py-2 border rounded" placeholder="Add remark" />
+                      <button
+                        onClick={() => {
+                          if (!newRemark.trim()) return;
+                          const updated = { ...selectedDirective } as Directive;
+                          updated.remarks = [...(updated.remarks || []), newRemark.trim()];
+                          setDirectives((prev) => prev.map(d => d.directiveId === updated.directiveId ? updated : d));
+                          setSelectedDirective(updated);
+                          setNewRemark('');
+                          setShowRemarksBox(false);
+                        }}
+                        className="px-3 py-2 rounded bg-emerald-600 text-white"
+                      >Save</button>
+                      <button onClick={() => { setShowRemarksBox(false); setNewRemark(''); }} className="px-3 py-2 rounded border">Cancel</button>
+                    </div>
+                  ) : (
+                    <button onClick={() => setShowRemarksBox(true)} className="px-3 py-2 rounded-md bg-gray-100 border">Add Remarks</button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>, document.body
+      )}
     </div>
   );
 };

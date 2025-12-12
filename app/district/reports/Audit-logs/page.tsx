@@ -13,108 +13,18 @@ import {
   CheckCircle2,
   TrendingUp,
   AlertTriangle,
-  Search,
-} from "lucide-react";
+  "use client";
 
-function IntegratedLoader() {
-  return (
-    <div className="w-full h-full flex items-center justify-center min-h-[60vh]">
-      <style jsx>{`
-        .loader {
-          --c: no-repeat linear-gradient(#4f46e5 0 0);
-          background: 
-            var(--c),var(--c),var(--c),
-            var(--c),var(--c),var(--c),
-            var(--c),var(--c),var(--c);
-          background-size: 16px 16px;
-          animation: 
-            l32-1 1s infinite,
-            l32-2 1s infinite;
-        }
-        @keyframes l32-1 {
-          0%,100% {width:45px;height: 45px}
-          35%,65% {width:65px;height: 65px}
-        }
-        @keyframes l32-2 {
-          0%,40%  {background-position: 0 0,0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,  50% 50% }
-          60%,100%{background-position: 0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,0 0,  50% 50% }
-        }
-      `}</style>
-      <div className="loader"></div>
-    </div>
-  );
-}
+  import { useEffect } from "react";
+  import { useRouter } from "next/navigation";
 
-const AuditLogs: React.FC = () => {
-  const [dateRange, setDateRange] = useState("7days");
-  const [actionFilter, setActionFilter] = useState("all");
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const [loading, setLoading] = useState(true);
-
-  React.useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1200);
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (loading) {
-    return <IntegratedLoader />;
+  export default function RedirectToAdminAuditLogs() {
+    const router = useRouter();
+    useEffect(() => {
+      router.replace("/district/administration/audit-logs");
+    }, [router]);
+    return null;
   }
-
-  const auditData = [
-    {
-      timestamp: "2025-09-16 17:15:25",
-      action: "Grievance Created",
-      actor: "Abishek Kumar",
-      role: "Nodal Officer",
-      details:
-        "Created grievance GRV-2025-045 for contractor Clean City Services",
-    },
-    {
-      timestamp: "2025-09-16 16:30:12",
-      action: "Directive Issued",
-      actor: "District Admin",
-      role: "Admin",
-      details: "Issued directive DIR-2025-008 to all Zone A officers",
-    },
-    {
-      timestamp: "2025-09-16 15:45:08",
-      action: "User Login",
-      actor: "Priya Sharma",
-      role: "Nodal Officer",
-      details: "Successful login from Zone B office",
-    },
-    {
-      timestamp: "2025-09-16 14:20:33",
-      action: "Report Generated",
-      actor: "Amit Singh",
-      role: "Nodal Officer",
-      details: "Generated monthly welfare report for Zone C",
-    },
-    {
-      timestamp: "2025-09-16 13:55:17",
-      action: "User Role Updated",
-      actor: "System Admin",
-      role: "Super Admin",
-      details:
-        "Updated role for user Clean City Services to Active Contractor",
-    },
-    {
-      timestamp: "2025-09-16 12:30:44",
-      action: "Grievance Resolved",
-      actor: "Abishek Kumar",
-      role: "Nodal Officer",
-      details:
-        "Resolved grievance GRV-2025-042 with contractor acknowledgment",
-    },
-  ];
-
-  // Filter data based on search term and filters
-  const filteredAuditData = auditData.filter(item => {
-    const matchesSearch = searchTerm === '' || 
-      item.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.actor.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.details.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesAction = actionFilter === 'all' || 

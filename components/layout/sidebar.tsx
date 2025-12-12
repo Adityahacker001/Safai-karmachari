@@ -81,6 +81,7 @@ import {
   ListTodo,            // For Monthly Utilization Reports
   AreaChart,           // For Financial Summary Reports
 } from "lucide-react";
+import { useGlobalModal } from '@/context/GlobalModalContext';
 
 interface SidebarProps {
   role: "contractor" | "nodal" | "district" | "state" | "national" | "sp-cp" | "organizational-nodal" | "nskfdc" | "dgp" | "shg"; // Added 'shg'
@@ -95,6 +96,7 @@ interface RoleConfig {
   dataEntry?: Array<{ name: string; icon: React.ElementType; href: string }>;
   manageApply?: Array<{ name: string; icon: React.ElementType; href: string }>;
   reports?: Array<{ name: string; icon: React.ElementType; href: string }>;
+  admin?: Array<{ name: string; icon: React.ElementType; href: string }>;
   "Exception reports"?: Array<{ name: string; icon: React.ElementType; href: string }>;
 
   dashboard: string;
@@ -107,7 +109,8 @@ const roleConfig: Record<string, RoleConfig> = {
     color: "text-sky-400",
     bgColor: "from-sky-900/30 to-slate-900",
     dataEntry: [ { name: "Attendance & PPE Log", icon: Clock, href: "/contractor/data-entry/attendance-ppe" }, { name: "Grievance Resolution", icon: AlertTriangle, href: "/contractor/data-entry/grievance-resolution" }, { name: "Training Assignment", icon: GraduationCap, href: "/contractor/data-entry/training-assignment" }, ],
-    reports: [ { name: "Worker Management", icon: Users, href: "/contractor/reports/worker-management" }, { name: "Attendance Reports", icon: Clock, href: "/contractor/reports/attendance" }, { name: "Grievance Tracking", icon: AlertTriangle, href: "/contractor/reports/grievance-tracking" }, { name: "Training Coverage", icon: GraduationCap, href: "/contractor/reports/training-coverage" }, { name: "Safety Compliance", icon: Shield, href: "/contractor/reports/safety-compliance" }, { name: "Audit Logs", icon: FileText, href: "/contractor/reports/audit-logs" }, { name: "User Management", icon: Users, href: "/contractor/reports/user-management" }, { name: "Reports & Analytics", icon: BarChart3, href: "/contractor/reports/reports" }, ],
+    reports: [ { name: "Worker Management", icon: Users, href: "/contractor/reports/worker-management" }, { name: "Attendance Reports", icon: Clock, href: "/contractor/reports/attendance" }, { name: "Grievance Tracking", icon: AlertTriangle, href: "/contractor/reports/grievance-tracking" }, { name: "Training Coverage", icon: GraduationCap, href: "/contractor/reports/training-coverage" }, { name: "Safety Compliance", icon: Shield, href: "/contractor/reports/safety-compliance" }, ],
+    admin: [ { name: "User Management", icon: UserCog, href: "/contractor/administration/user-management" }, { name: "Audit Logs", icon: FileClock, href: "/contractor/administration/audit-logs" }, ],
     dashboard: "/contractor/contractor-dashboard",
   },
   nodal: {
@@ -116,7 +119,8 @@ const roleConfig: Record<string, RoleConfig> = {
     color: "text-emerald-400",
     bgColor: "from-emerald-900/30 to-slate-900",
     dataEntry: [ { name: "Compliance Checklist", icon: CheckSquare, href: "/nodal/data-entry/compliance-checklist" }, { name: "Grievance Management", icon: MessageSquareWarning, href: "/nodal/data-entry/Grievance" }, { name: "Recognition Nomination", icon: Award, href: "/nodal/data-entry/recognition-nomination" }, { name: "Work Certification", icon: CheckSquare, href: "/nodal/data-entry/Work-Certification" }, ],
-    reports: [ { name: "incident management", icon: AlertTriangle, href: "/nodal/reports/incident-management" }, { name: "Financial Tracker", icon: DollarSign, href: "/nodal/reports/financial-tracker" }, { name: "Contractor Performance", icon: BarChart3, href: "/nodal/reports/contractor-performance" }, { name: "Performance Reports", icon: FileText, href: "/nodal/reports/All-reports" }, { name: "Compliance Overview", icon: CheckSquare, href: "/nodal/reports/compliance-overview" }, { name: "Recognition", icon: Award, href: "/nodal/reports/recognition" }, { name: "Audit Logs", icon: FileText, href: "/nodal/reports/audit-logs" }, { name: "User Management", icon: Users, href: "/nodal/reports/user-management" }, { name: "Reports & Analytics", icon: BarChart3, href: "/nodal/reports/reports-and-analytics" }, ],
+    reports: [ { name: "incident management", icon: AlertTriangle, href: "/nodal/reports/incident-management" }, { name: "Financial Tracker", icon: DollarSign, href: "/nodal/reports/financial-tracker" }, { name: "Contractor Performance", icon: BarChart3, href: "/nodal/reports/contractor-performance" }, { name: "Performance Reports", icon: FileText, href: "/nodal/reports/All-reports" }, { name: "Compliance Overview", icon: CheckSquare, href: "/nodal/reports/compliance-overview" }, { name: "Recognition", icon: Award, href: "/nodal/reports/recognition" }, { name: "Reports & Analytics", icon: BarChart3, href: "/nodal/reports/reports-and-analytics" }, ],
+    admin: [ { name: "User Management", icon: UserCog, href: "/nodal/administration/user-management" }, { name: "Audit Logs", icon: FileClock, href: "/nodal/administration/audit-logs" }, ],
     dashboard: "/nodal/nodal-dashboard",
   },
   district: {
@@ -126,6 +130,7 @@ const roleConfig: Record<string, RoleConfig> = {
     bgColor: "from-amber-900/30 to-slate-900",
     dataEntry: [ { name: "Recognition Review", icon: Award, href: "/district/data-entry/recognition-review" }, { name: "Directive Issuance", icon: FileText, href: "/district/data-entry/directive" }, { name: "Grievance Management", icon: MessageSquareWarning, href: "/district/data-entry/Grievance" }, ],
     reports: [ { name: "Nodal Compliance", icon: CheckSquare, href: "/district/reports/district-compliance" }, { name: "Grievance", icon: AlertTriangle, href: "/district/reports/grievance" }, { name: "Sewer Death Report", icon: Building, href: "/district/reports/sewer-death" },{ name: "Recognition System", icon: Award, href: "/district/reports/recognition-system" }, { name: 'Reports', icon: FileText, href: '/district/reports/reports' }, { name: "Unit Performance", icon: Building, href: "/district/reports/unit-performance" }, { name: "Performance Reports", icon: FileText, href: "/district/reports/All-reports" }, { name: "User Management", icon: Users, href: "/district/reports/User-Management" }, { name: "Audit Logs", icon: FileText, href: "/district/reports/Audit-logs" }, ],
+    admin: [ { name: "User Management", icon: UserCog, href: "/district/administration/user-management" }, { name: "Audit Logs", icon: FileClock, href: "/district/administration/audit-logs" }, ],
     dashboard: "/district/district-dashboard",
   },
   state: {
@@ -134,7 +139,8 @@ const roleConfig: Record<string, RoleConfig> = {
     color: "text-purple-400",
     bgColor: "from-purple-900/30 to-slate-900",
     dataEntry: [ { name: "State-wide Compliance", icon: CheckSquare, href: "/state/data-entry/statewide-compliance" }, { name: "Policy Implementation", icon: ClipboardList, href: "/state/data-entry/policy-implementation" }, { name: "Directive Issuance", icon: FileText, href: "/state/data-entry/directive" }, { name: "Grievance Management", icon: MessageSquareWarning, href: "/state/data-entry/Grievance-managment" }, ],
-    reports: [ { name: "State Compliance", icon: BarChart3, href: "/state/reports/state-compliance" }, { name: "Grievance", icon: AlertTriangle, href: "/state/reports/grievance" }, { name: "Policy Tracking", icon: FileText, href: "/state/reports/policy-tracking" }, { name: "Performance Reports", icon: FileText, href: "/state/reports/All-reports" }, { name: 'Reports', icon: FileText, href: '/state/reports/reports' }, { name: "District Performance", icon: Building, href: "/state/reports/district-performance" }, { name: "User Management", icon: Users, href: "/state/reports/User-Management" }, { name: "Audit Logs", icon: FileText, href: "/state/reports/Audit-logs" }, ],
+    reports: [ { name: "State Compliance", icon: BarChart3, href: "/state/reports/state-compliance" }, { name: "Grievance", icon: AlertTriangle, href: "/state/reports/grievance" }, { name: "Policy Tracking", icon: FileText, href: "/state/reports/policy-tracking" }, { name: "Performance Reports", icon: FileText, href: "/state/reports/All-reports" }, { name: 'Reports', icon: FileText, href: '/state/reports/reports' }, { name: "District Performance", icon: Building, href: "/state/reports/district-performance" }, ],
+    admin: [ { name: "User Management", icon: UserCog, href: "/state/administration/user-management" }, { name: "Audit Logs", icon: FileClock, href: "/state/administration/audit-logs" }, ],
     dashboard: "/state/state-dashboard",
   },
   national: {
@@ -273,6 +279,7 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
   const [isManageApplyOpen, setIsManageApplyOpen] = useState(true);
   const [isReportsOpen, setIsReportsOpen] = useState(true);
   const [isExceptionReportsOpen, setIsExceptionReportsOpen] = useState(true); // State for Exception Reports
+  const [isAdminOpen, setIsAdminOpen] = useState(true);
 
   const searchParams = useSearchParams();
   const spcpQuery = searchParams ? searchParams.get("role") : null;
@@ -284,6 +291,17 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
     if (spcpQuery === "sp") displayTitle = "SP Dashboard";
     else if (spcpQuery === "cp") displayTitle = "CP Dashboard";
     else displayTitle = config.title;
+  }
+
+  // Try to access global modal API if provider is present
+  let globalOpenModal: ((t: 'contact' | 'help' | 'settings') => void) | null = null;
+  let globalCloseModal: (() => void) | null = null;
+  try {
+    const gm = useGlobalModal();
+    globalOpenModal = gm.openModal;
+    globalCloseModal = gm.closeModal;
+  } catch (e) {
+    // provider not present - footer will be inert
   }
 
   const NavLink = ({
@@ -567,6 +585,38 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
             </div>
           )}
 
+          {/* Administration Section (moved out from Reports & Analytics) */}
+          {config.admin && config.admin.length > 0 && (
+            <div className="space-y-2">
+              <button
+                onClick={() => setIsAdminOpen(!isAdminOpen)}
+                className="w-full flex items-center justify-between px-4 py-2 text-sm font-bold text-white/90 bg-white/5 rounded-lg hover:bg-white/10 transition-all"
+              >
+                <span>Administration</span>
+                {isAdminOpen ? (
+                  <ChevronDown className="h-4 w-4" />
+                ) : (
+                  <ChevronRight className="h-4 w-4" />
+                )}
+              </button>
+              {isAdminOpen && (
+                <div className="space-y-1 pt-1 pl-4">
+                  {config.admin.map((item) => (
+                    <NavLink
+                      key={item.href}
+                      href={item.href}
+                      icon={item.icon}
+                      activeClass="bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg scale-[1.03] border border-cyan-400/50"
+                      inactiveClass="text-white/80 hover:text-white hover:scale-[1.02]"
+                    >
+                      {item.name}
+                    </NavLink>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Add Exception Reports section for NSKFDC role */}
           {role === "nskfdc" && config["Exception reports"] && (
             <div key="exception-reports" className="space-y-2">
@@ -603,9 +653,19 @@ export default function Sidebar({ role = "national" }: SidebarProps) {
 
       {/* Footer */}
       <div className="p-4 border-t border-white/10 bg-white/5 relative z-10 space-y-1">
-        <NavLink href={`/${role}/contact-us`} icon={Contact} activeClass="" inactiveClass="text-white/60 hover:text-white text-xs">Contact Us</NavLink>
-        <NavLink href={`/${role}/help-support`} icon={HelpCircle} activeClass="" inactiveClass="text-white/60 hover:text-white text-xs">Help & Support</NavLink>
-        <NavLink href={`/${role}/settings`} icon={Settings} activeClass="" inactiveClass="text-white/60 hover:text-white text-xs">Settings</NavLink>
+        {/* Use global modal openers instead of route navigation */}
+        <button onClick={(e) => { e.preventDefault(); setIsMobileMenuOpen(false); globalOpenModal?.('contact'); }} className="w-full text-left flex items-center space-x-3 px-2 py-2 rounded-lg text-sm font-medium text-white/60 hover:text-white">
+          <Contact className="h-4 w-4" />
+          <span className="text-xs">Contact Us</span>
+        </button>
+        <button onClick={(e) => { e.preventDefault(); setIsMobileMenuOpen(false); globalOpenModal?.('help'); }} className="w-full text-left flex items-center space-x-3 px-2 py-2 rounded-lg text-sm font-medium text-white/60 hover:text-white">
+          <HelpCircle className="h-4 w-4" />
+          <span className="text-xs">Help & Support</span>
+        </button>
+        <button onClick={(e) => { e.preventDefault(); setIsMobileMenuOpen(false); globalOpenModal?.('settings'); }} className="w-full text-left flex items-center space-x-3 px-2 py-2 rounded-lg text-sm font-medium text-white/60 hover:text-white">
+          <Settings className="h-4 w-4" />
+          <span className="text-xs">Settings</span>
+        </button>
 
         <button
           onClick={(e) => {

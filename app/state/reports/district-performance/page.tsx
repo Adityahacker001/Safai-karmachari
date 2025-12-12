@@ -17,13 +17,14 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 export default function DistrictPerformanceReportPage() {
     // Mock data for district performance in West Bengal
+    // Added optional fields used by the Monthly Summary modal (execSummary, actions, and incident breakdowns)
     const districts = [
-        { name: "Kolkata", score: 94, incidents: 8, grievances: 5, fatalities: 0, resolutionTime: "24 Hours", status: "Excellent" },
-        { name: "Jalpaiguri", score: 91, incidents: 4, grievances: 2, fatalities: 0, resolutionTime: "22 Hours", status: "Excellent" },
-        { name: "Purba Bardhaman", score: 88, incidents: 10, grievances: 8, fatalities: 0, resolutionTime: "30 Hours", status: "Good" },
-        { name: "Howrah", score: 85, incidents: 15, grievances: 12, fatalities: 0, resolutionTime: "36 Hours", status: "Good" },
-        { name: "South 24 Parganas", score: 78, incidents: 25, grievances: 18, fatalities: 1, resolutionTime: "45 Hours", status: "Needs Improvement" },
-        { name: "Murshidabad", score: 76, incidents: 22, grievances: 20, fatalities: 0, resolutionTime: "52 Hours", status: "Needs Improvement" },
+      { name: "Kolkata", score: 94, incidents: 8, grievances: 5, fatalities: 0, resolutionTime: "24 Hours", status: "Excellent", openWarnings: 1, mechanization: 78, welfareCompliance: 92, sewerDeaths: 0, hazardousIncidents: 1, manualScavenging: 0, injuries: 2, compCases: 1, execSummary: "Stable performance with targeted mechanization efforts.", actions: [{ date: '2025-10-01', issuedBy: 'DA Kolkata', severity: 'Low', description: 'PPE distribution and refresher training completed.' }] },
+      { name: "Jalpaiguri", score: 91, incidents: 4, grievances: 2, fatalities: 0, resolutionTime: "22 Hours", status: "Excellent", openWarnings: 0, mechanization: 65, welfareCompliance: 88, sewerDeaths: 0, hazardousIncidents: 0, manualScavenging: 0, injuries: 0, compCases: 0, execSummary: "Good compliance; continue monitoring high-risk pockets.", actions: [{ date: '2025-09-25', issuedBy: 'DA Jalpaiguri', severity: 'Low', description: 'Spot checks and PPE audits performed.' }] },
+      { name: "Purba Bardhaman", score: 88, incidents: 10, grievances: 8, fatalities: 0, resolutionTime: "30 Hours", status: "Good", openWarnings: 2, mechanization: 52, welfareCompliance: 80, sewerDeaths: 0, hazardousIncidents: 2, manualScavenging: 0, injuries: 3, compCases: 2, execSummary: "Improving but needs faster grievance resolution.", actions: [{ date: '2025-09-20', issuedBy: 'DA Purba Bardhaman', severity: 'Medium', description: 'Focused mechanization pilot launched.' }] },
+      { name: "Howrah", score: 85, incidents: 15, grievances: 12, fatalities: 0, resolutionTime: "36 Hours", status: "Good", openWarnings: 3, mechanization: 45, welfareCompliance: 75, sewerDeaths: 0, hazardousIncidents: 4, manualScavenging: 0, injuries: 5, compCases: 3, execSummary: "High incident volume in industrial zones; prioritized interventions underway.", actions: [{ date: '2025-09-10', issuedBy: 'DA Howrah', severity: 'High', description: 'Zone-level safety audits and immediate corrective orders.' }] },
+      { name: "South 24 Parganas", score: 78, incidents: 25, grievances: 18, fatalities: 1, resolutionTime: "45 Hours", status: "Needs Improvement", openWarnings: 6, mechanization: 32, welfareCompliance: 60, sewerDeaths: 1, hazardousIncidents: 10, manualScavenging: 1, injuries: 12, compCases: 8, execSummary: "Significant risks identified; fatalities reported — escalated for urgent action.", actions: [{ date: '2025-08-30', issuedBy: 'DA South 24 Parganas', severity: 'High', description: 'Emergency task force constituted and immediate PPE procurement ordered.' }] },
+      { name: "Murshidabad", score: 76, incidents: 22, grievances: 20, fatalities: 0, resolutionTime: "52 Hours", status: "Needs Improvement", openWarnings: 5, mechanization: 28, welfareCompliance: 58, sewerDeaths: 0, hazardousIncidents: 8, manualScavenging: 0, injuries: 10, compCases: 6, execSummary: "Resource constraints and training gaps impacting performance.", actions: [{ date: '2025-08-15', issuedBy: 'DA Murshidabad', severity: 'Medium', description: 'Training schedule and procurement plan proposed.' }] },
     ];
 
       // IntegratedLoader (inline copy) — do not modify anything else in this file
@@ -106,23 +107,128 @@ export default function DistrictPerformanceReportPage() {
                   <TableCell className="text-right">
                     <Dialog>
                       <DialogTrigger asChild><Button className={cn(contractorTheme.button.secondary, "!px-4 !py-2 text-sm") }><Eye className="h-4 w-4 mr-2"/>View Submitted Report</Button></DialogTrigger>
-                      <DialogContent className="p-0 overflow-hidden bg-gradient-to-br from-blue-50 via-white to-purple-100 rounded-2xl shadow-xl border-0">
-                        <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 px-6 py-4">
+                      <DialogContent className="p-0 overflow-hidden bg-gradient-to-br from-blue-50 via-white to-purple-100 rounded-2xl shadow-xl border-0 max-w-4xl w-[85vw] mx-auto">
+                        {/* Gradient header */}
+                        <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 px-6 py-4 rounded-t-2xl">
                           <DialogHeader>
                             <DialogTitle className="text-white text-2xl font-bold drop-shadow">Monthly Summary: {d.name}</DialogTitle>
                             <DialogDescription className="text-blue-100">Read-only view of the official report submitted by the District Administrator.</DialogDescription>
                           </DialogHeader>
                         </div>
-                        <div className="py-6 px-6 space-y-6 text-base">
-                          <div className="bg-blue-50 border-l-4 border-blue-400 rounded-lg p-4 shadow-sm">
-                            <span className="font-bold text-blue-700">Executive Summary:</span>
-                            <span className="block text-blue-900 mt-1">"Performance in {d.name} remains steady, although an increase in incidents in the southern zones requires attention..."</span>
-                          </div>
-                          <div className="bg-purple-50 border-l-4 border-purple-400 rounded-lg p-4 shadow-sm">
-                            <span className="font-bold text-purple-700">Actions Taken:</span>
-                            <span className="block text-purple-900 mt-1">"A formal warning has been issued to the underperforming Nodal unit..."</span>
-                          </div>
+
+                        {/* Scrollable content area */}
+                        <div className="px-6 py-6 space-y-6 text-base max-h-[70vh] overflow-y-auto">
+                          {/* 1. Summary Metrics (KPI cards) */}
+                          <section>
+                            <h4 className="text-lg font-semibold mb-3">Summary Metrics</h4>
+                            <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
+                              <div className="rounded-lg p-3 bg-white border shadow-sm">
+                                <div className="text-xs text-gray-500">Overall Compliance Score</div>
+                                <div className="text-xl font-extrabold text-purple-700">{d.score}%</div>
+                              </div>
+                              <div className="rounded-lg p-3 bg-white border shadow-sm">
+                                <div className="text-xs text-gray-500">Total Incidents (30d)</div>
+                                <div className="text-xl font-extrabold text-gray-900">{d.incidents}</div>
+                              </div>
+                              <div className="rounded-lg p-3 bg-white border shadow-sm">
+                                <div className="text-xs text-gray-500">Fatalities (YTD)</div>
+                                <div className="text-xl font-extrabold text-red-600">{d.fatalities}</div>
+                              </div>
+                              <div className="rounded-lg p-3 bg-white border shadow-sm">
+                                <div className="text-xs text-gray-500">Open Audit Warnings</div>
+                                <div className="text-xl font-extrabold text-gray-900">{d.openWarnings ?? 0}</div>
+                              </div>
+                              <div className="rounded-lg p-3 bg-white border shadow-sm">
+                                <div className="text-xs text-gray-500">Mechanization Adoption %</div>
+                                <div className="text-xl font-extrabold text-gray-900">{d.mechanization ?? '—'}%</div>
+                              </div>
+                              <div className="rounded-lg p-3 bg-white border shadow-sm">
+                                <div className="text-xs text-gray-500">Worker Welfare Compliance %</div>
+                                <div className="text-xl font-extrabold text-gray-900">{d.welfareCompliance ?? '—'}%</div>
+                              </div>
+                            </div>
+                          </section>
+
+                          {/* 2. Incident Breakdown Table */}
+                          <section>
+                            <h4 className="text-lg font-semibold mb-3">Incident Breakdown</h4>
+                            <div className="bg-white border rounded-lg overflow-x-auto">
+                              <table className="min-w-full text-sm">
+                                <thead className="bg-gray-50">
+                                  <tr>
+                                    <th className="px-4 py-2 text-left">Category</th>
+                                    <th className="px-4 py-2 text-left">Count</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr className="border-t">
+                                    <td className="px-4 py-3">Sewer Deaths</td>
+                                    <td className="px-4 py-3">{d.sewerDeaths ?? 0}</td>
+                                  </tr>
+                                  <tr className="border-t">
+                                    <td className="px-4 py-3">Hazardous Cleaning Incidents</td>
+                                    <td className="px-4 py-3">{d.hazardousIncidents ?? 0}</td>
+                                  </tr>
+                                  <tr className="border-t">
+                                    <td className="px-4 py-3">Manual Scavenging Deaths</td>
+                                    <td className="px-4 py-3">{d.manualScavenging ?? 0}</td>
+                                  </tr>
+                                  <tr className="border-t">
+                                    <td className="px-4 py-3">Worker Injuries</td>
+                                    <td className="px-4 py-3">{d.injuries ?? 0}</td>
+                                  </tr>
+                                  <tr className="border-t">
+                                    <td className="px-4 py-3">Compensation Cases Filed</td>
+                                    <td className="px-4 py-3">{d.compCases ?? 0}</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </section>
+
+                          {/* 3. Executive Summary */}
+                          <section>
+                            <h4 className="text-lg font-semibold mb-3">Executive Summary</h4>
+                            <div className="bg-white p-4 rounded-lg border shadow-sm">
+                              <p className="text-gray-800">{d.execSummary || `No executive summary provided for ${d.name}.`}</p>
+                            </div>
+                          </section>
+
+                          {/* 4. Detailed Actions Taken */}
+                          <section>
+                            <h4 className="text-lg font-semibold mb-3">Actions Taken</h4>
+                            <div className="space-y-3">
+                              {(d.actions && d.actions.length > 0) ? (
+                                d.actions.map((a: any, i: number) => (
+                                  <div key={i} className="bg-white border rounded-lg p-4 shadow-sm">
+                                    <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
+                                      <div><span className="font-medium">Action Date:</span> {a.date || '—'}</div>
+                                      <div><span className="font-medium">Issued By:</span> {a.issuedBy || '—'}</div>
+                                      <div><span className="font-medium">Severity:</span> <span className={`px-2 py-0.5 rounded-full text-xs ${a.severity === 'High' ? 'bg-red-100 text-red-700' : a.severity === 'Medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-700'}`}>{a.severity || 'Low'}</span></div>
+                                    </div>
+                                    <div className="text-gray-800">{a.description || 'No description provided.'}</div>
+                                  </div>
+                                ))
+                              ) : (
+                                <div className="bg-white border rounded-lg p-4 shadow-sm text-gray-600">No actions recorded.</div>
+                              )}
+                            </div>
+                          </section>
+
+                          {/* 5. Recommendations */}
+                          <section>
+                            <h4 className="text-lg font-semibold mb-3">Recommendations</h4>
+                            <div className="bg-white p-4 rounded-lg border shadow-sm">
+                              <ul className="list-disc pl-5 space-y-2 text-gray-800">
+                                <li>Highlight low-performing zones and assign corrective leads.</li>
+                                <li>Implement targeted training to close skill gaps.</li>
+                                <li>Increase mechanization and PPE provisioning in high-risk areas.</li>
+                                <li>Schedule follow-up audits and monitor corrective action timelines.</li>
+                              </ul>
+                            </div>
+                          </section>
                         </div>
+                        {/* end scrollable content */}
                       </DialogContent>
                     </Dialog>
                   </TableCell>

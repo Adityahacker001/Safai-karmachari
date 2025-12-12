@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -194,15 +195,29 @@ export default function RecognitionReviewPage() {
 
         {selectedNomination && (
   <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-    <DialogContent className="w-[95vw] max-w-2xl bg-white/95 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-2xl border border-white/20 overflow-hidden m-2 sm:m-4 max-h-[95vh] overflow-y-auto">
-      
-      {/* Modal Header */}
-      <DialogHeader className="bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 p-3 sm:p-4 md:p-5 rounded-t-xl sm:rounded-t-2xl shadow-lg">
-        <DialogTitle className="text-lg sm:text-xl md:text-2xl font-bold text-white drop-shadow-md">{`Review Form: ${selectedNomination.id}`}</DialogTitle>
-        <DialogDescription className="text-white/90 pt-1 text-xs sm:text-sm">
-          Reviewing nomination for <span className="font-semibold">{selectedNomination.nominee}</span>.
-        </DialogDescription>
-      </DialogHeader>
+    <DialogContent
+      hideClose
+      style={{ background: 'white', border: '0' }}
+      className="max-w-2xl p-0 shadow-2xl rounded-3xl overflow-hidden max-h-[95vh] overflow-y-auto bg-gradient-to-br from-blue-50 via-purple-50 to-pink-100 border-0 bg-transparent ring-0 mx-0 my-0 outline-none"
+    >
+        {/* Modal Header (grievance-style) */}
+        <DialogClose asChild>
+          <button className="absolute top-4 right-4 z-30 p-2 rounded-full bg-white hover:bg-gray-200 focus:outline-none shadow">
+            <X className="h-6 w-6 text-gray-800" />
+          </button>
+        </DialogClose>
+        <DialogHeader className="relative p-0 w-full rounded-t-3xl shadow-lg mb-0">
+          {/* background layer extended slightly to cover outer rounded corners */}
+          <div className="absolute -left-2 -right-2 -top-2 bottom-0 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-t-3xl" />
+          <div className="relative p-8 text-white z-20">
+            <DialogTitle className="text-lg sm:text-xl md:text-2xl font-bold text-white drop-shadow-md">{`Review Form: ${selectedNomination.id}`}</DialogTitle>
+            <DialogDescription className="text-white/90 pt-1 text-xs sm:text-sm">
+              Reviewing nomination for <span className="font-semibold">{selectedNomination.nominee}</span>.
+            </DialogDescription>
+          </div>
+        </DialogHeader>
+        {/* Thin white strip beneath the gradient header to match grievance appearance */}
+        <div className="h-3 bg-white w-full" />
 
       <div className="space-y-4 sm:space-y-6 py-3 sm:py-4 md:py-6 px-3 sm:px-4 md:px-6">
         {/* Justification Section */}

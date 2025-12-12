@@ -1,5 +1,16 @@
 import DashboardLayout from '@/components/layout/dashboard-layout';
+import { GlobalModalProvider } from '@/context/GlobalModalContext';
+import ContactUsModal from '@/components/global-modals/ContactUsModal';
+import HelpSupportModal from '@/components/global-modals/HelpSupportModal';
+import SettingsModal from '@/components/global-modals/SettingsModal';
 
-export default function orglobalLayout({ children }: { children: React.ReactNode }) {
-  return <DashboardLayout role="organizational-nodal" name="Dashboard">{children}</DashboardLayout>;
+export default function OrgNodalLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <GlobalModalProvider>
+      <DashboardLayout role="organizational-nodal" name="Dashboard">{children}</DashboardLayout>
+      <ContactUsModal />
+      <HelpSupportModal />
+      <SettingsModal />
+    </GlobalModalProvider>
+  );
 }
