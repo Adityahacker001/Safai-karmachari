@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -132,6 +133,31 @@ export default function MyShgMembersPage() {
     setMembers((m) => m.filter((x) => x.id !== id));
   };
 
+  // Deployment / availability state
+  const [selectedWorkers, setSelectedWorkers] = useState<string[]>([]);
+  const [deployments, setDeployments] = useState<any[]>([]);
+  const currentSHGId = "SHG-001"; // replace with real SHG id if available
+  const { toast } = useToast();
+
+  const handleSendAvailable = () => {
+    const selected = members.filter((m) => selectedWorkers.includes(m.id));
+    if (selected.length === 0) return;
+    const newDeployment = {
+      shgId: currentSHGId,
+      members: selected,
+      status: "submitted",
+    };
+    setDeployments((d) => [...d, newDeployment]);
+    setSelectedWorkers([]);
+    try {
+      toast({ title: "Workers sent to Nodal for validation" });
+    } catch (e) {
+      // fallback
+      // eslint-disable-next-line no-alert
+      alert("Workers sent to Nodal for validation");
+    }
+  };
+
   const [hasMounted, setHasMounted] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   React.useEffect(() => setHasMounted(true), []);
@@ -151,17 +177,7 @@ export default function MyShgMembersPage() {
           <p className="text-sm text-white/90 mt-1">Manage group members, training and bank linkage.</p>
         </div>
 
-        <div className="w-full md:w-auto">
-          <Button
-            onClick={addMember}
-            aria-label="Add Member"
-            className="w-full md:w-auto bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg shadow-md flex items-center justify-center"
-            size="sm"
-          >
-            <UserPlus className="w-4 h-4 mr-2" />
-            Add Member
-          </Button>
-        </div>
+        {/* Add Member button removed as requested */}
       </div>
 
       <Card className="shadow">
@@ -175,6 +191,7 @@ export default function MyShgMembersPage() {
           <table className="w-full text-sm text-left border-collapse min-w-[700px]">
             <thead className="text-gray-600 border-b bg-gray-50">
               <tr>
+                <th className="p-3 text-center">Available</th>
                 <th className="p-3">Name</th>
                 <th className="p-3 text-center">Age</th>
                 <th className="p-3 text-center">Gender</th>
@@ -189,6 +206,22 @@ export default function MyShgMembersPage() {
             <tbody>
               {members.map((member) => (
                 <tr key={member.id} className="border-b hover:bg-gray-50">
+                  <td className="p-3 text-center">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4"
+                      checked={selectedWorkers.includes(member.id)}
+                      onChange={(e) => {
+                        if (e.target.checked) setSelectedWorkers((s) => [...s, member.id]);
+                        else setSelectedWorkers((s) => s.filter((id) => id !== member.id));
+                      }}
+                    />
+                    {selectedWorkers.includes(member.id) && (
+                      <div className="mt-2">
+                        <Badge className="bg-green-100 text-green-800">Available</Badge>
+                      </div>
+                    )}
+                  </td>
                   <td className="p-3 font-medium">{member.name}</td>
                   <td className="p-3 text-center">{member.age}</td>
                   <td className="p-3 text-center">{member.gender}</td>
@@ -218,6 +251,16 @@ export default function MyShgMembersPage() {
           </table>
         </CardContent>
       </Card>
+
+      <div className="mt-4 flex items-center">
+        <Button
+          onClick={handleSendAvailable}
+          disabled={selectedWorkers.length === 0}
+          className={`bg-green-600 text-white ${selectedWorkers.length === 0 ? 'opacity-50 pointer-events-none' : ''}`}
+        >
+          Send Available Workers to Nodal
+        </Button>
+      </div>
 
       {/* Add Member Modal */}
       <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
