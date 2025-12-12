@@ -8,11 +8,6 @@ import { Label } from '@/components/ui/label'
 
 export default function ShgCrPage() {
   const router = useRouter()
-  const [loggedIn, setLoggedIn] = useState(false)
-  const [loginUserId, setLoginUserId] = useState('')
-  const [loginPassword, setLoginPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
-  const [loginError, setLoginError] = useState('')
 
   // Registration fields
   const [shgName, setShgName] = useState('')
@@ -28,15 +23,6 @@ export default function ShgCrPage() {
   const [nameOnId, setNameOnId] = useState('')
   const [submitMessage, setSubmitMessage] = useState('')
 
-  const handleLogin = (e?: React.FormEvent) => {
-    e?.preventDefault()
-    setLoginError('')
-    if (!loginUserId || !loginPassword) {
-      setLoginError('Please enter User ID and Password')
-      return
-    }
-    setLoggedIn(true)
-  }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files && e.target.files[0]
@@ -80,72 +66,9 @@ export default function ShgCrPage() {
       />
 
       {/* Main Container: Dynamic width for horizontal layout on registration */}
-      <div
-        className={loggedIn
-          ? `w-full max-w-[1400px] mx-auto bg-white/60 backdrop-blur-xl border border-white/70 rounded-3xl shadow-xl p-6 md:p-8 animate-in fade-in duration-700 relative z-10 transition-all ease-in-out w-full`
-          : `w-full max-w-2xl mx-auto bg-white/60 backdrop-blur-xl border border-white/70 rounded-3xl shadow-xl p-10 animate-in fade-in slide-in-from-bottom-4 duration-700 relative z-10`
-        }
-      >
-        {!loggedIn ? (
-          // ================= LOGIN FORM (Compact) =================
-          <form onSubmit={handleLogin} className="space-y-6">
-            <div className="text-center space-y-2">
-              <h2 className="text-3xl font-extrabold tracking-wide text-[#31694E]">SHG LOGIN</h2>
-              <p className="text-md text-[#658C58] font-medium">Access Your Dashboard</p>
-            </div>
-            
-            <div className="space-y-4">
-              <div>
-                <Label className="text-[#BBC863] font-semibold tracking-wide uppercase text-xs mb-2 block">User ID</Label>
-                <Input className="w-full bg-white/70 text-gray-800 border-gray-300 rounded-xl py-2 px-4 focus:ring-[#BBC863]" value={loginUserId} onChange={(e) => setLoginUserId(e.target.value)} placeholder="Enter User ID" />
-              </div>
-                {/* Extra right-side circular accents (soft, behind the form) */}
-                <div className="absolute right-10 top-24 w-[360px] h-[360px] rounded-full bg-gradient-to-tr from-[#48B3AF] to-[#A7E399] opacity-[0.14] blur-[40px] z-0 pointer-events-none" />
-                <div className="absolute right-[-20px] bottom-8 w-[220px] h-[220px] rounded-full bg-gradient-to-br from-[#4DB6AC] to-[#8EE6C1] opacity-[0.12] blur-[30px] z-0 pointer-events-none" />
-              <div>
-                <Label className="text-[#BBC863] font-semibold tracking-wide uppercase text-xs mb-2 block">Password</Label>
-                <div className="relative">
-                  <Input
-                    className="w-full bg-white/70 text-gray-800 border-gray-300 rounded-xl py-2 px-4 pr-10 focus:ring-[#BBC863]"
-                    type={showPassword ? 'text' : 'password'}
-                    value={loginPassword}
-                    onChange={(e) => setLoginPassword(e.target.value)}
-                    placeholder="Enter Password"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((s) => !s)}
-                    aria-label={showPassword ? 'Hide password' : 'Show password'}
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-900"
-                  >
-                    {showPassword ? (
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-5 0-9.27-3-11-8 1.02-2.6 2.65-4.7 4.61-6.03" />
-                        <path d="M1 1l22 22" />
-                        <path d="M9.88 9.88A3 3 0 0 0 14.12 14.12" />
-                      </svg>
-                    ) : (
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" />
-                        <circle cx="12" cy="12" r="3" />
-                      </svg>
-                    )}
-                  </button>
-                </div>
-              </div>
-            </div>
-            
-            {loginError && <div className="text-sm text-red-700 bg-red-100 border border-red-200 rounded-lg px-4 py-2">{loginError}</div>}
-            
-            <div className="flex items-center justify-center mt-6">
-              <Button type="submit" className="w-full relative overflow-hidden group bg-[linear-gradient(90deg,#658C58,#31694E)] text-white font-bold tracking-wide px-8 py-3 rounded-xl shadow-lg transition-all hover:brightness-110">
-                <span className="relative z-10">Login</span>
-              </Button>
-            </div>
-          </form>
-        ) : (
-          // ================= REGISTRATION FORM (One-Page Dashboard) =================
-          <form onSubmit={handleRegister} className="h-full flex flex-col">
+      <div className="w-full max-w-[1100px] mx-auto bg-white/60 backdrop-blur-xl border border-white/70 rounded-3xl shadow-xl p-10 animate-in fade-in slide-in-from-bottom-4 duration-700 relative z-10">
+        {/* Registration form shown by default (login removed) */}
+        <form onSubmit={handleRegister} className="h-full flex flex-col">
             {/* Compact Header */}
             <div className="text-center mb-4 pb-3 border-b-2 border-[#31694E]/20">
               <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-[#31694E] mb-1">SHG REGISTRATION</h2>
@@ -327,18 +250,18 @@ export default function ShgCrPage() {
                   <span className="relative z-10">Submit Registration</span>
                 </Button>
 
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  className="text-[#31694E] bg-white/50 hover:bg-white/70 border-2 border-[#31694E]/40 px-8 py-2.5 rounded-xl font-semibold transition-all hover:scale-105" 
-                  onClick={() => setLoggedIn(false)}
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="text-[#31694E] bg-white/50 hover:bg-white/70 border-2 border-[#31694E]/40 px-6 py-2.5 rounded-xl font-semibold transition-all"
+                  onClick={() => router.push('http://localhost:3000')}
                 >
-                  ← Back to Login
+                  Back to Home
                 </Button>
               </div>
             </div>
           </form>
-        )}
+        
       </div>
     </div>
   )
