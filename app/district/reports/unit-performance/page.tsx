@@ -74,20 +74,20 @@ const UnitPerformancePage = () => {
             {/* Professional Header */}
             <header className="relative overflow-hidden bg-gradient-to-r from-green-600/95 via-teal-600/95 to-blue-600/95 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl">
                 <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
-                <div className="relative p-4 sm:p-6 md:p-8 lg:p-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                <div className="relative p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
                     <div className="flex-1">
-                        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white drop-shadow-2xl leading-tight">
-                            Unit Performance Report
-                        </h1>
-                        <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 font-bold drop-shadow-lg mt-2">
-                            Review and compare the performance of all operational units
-                        </p>
+                                <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-black text-white drop-shadow-2xl leading-tight">
+                                    Unit Performance Report
+                                </h1>
+                                <p className="text-xs sm:text-sm md:text-base lg:text-lg text-white/90 font-bold drop-shadow-lg mt-1">
+                                    Review and compare the performance of all operational units
+                                </p>
                     </div>
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                        <div className="text-sm sm:text-base md:text-lg text-white/90 font-semibold bg-white/20 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/30">
+                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                        <div className="text-sm sm:text-base md:text-lg text-white/90 font-semibold bg-white/20 backdrop-blur-sm px-3 py-1 rounded-xl border border-white/30">
                             Last updated: {new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
                         </div>
-                        <Button className="bg-white/20 backdrop-blur-sm text-white px-4 sm:px-6 py-3 rounded-xl hover:bg-white/30 transition-all border border-white/30 font-bold">
+                        <Button className="bg-white/20 backdrop-blur-sm text-white px-3 sm:px-4 py-2 rounded-xl hover:bg-white/30 transition-all border border-white/30 font-bold">
                             <Download className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
                             <span className="text-sm sm:text-base">Export Report</span>
                         </Button>

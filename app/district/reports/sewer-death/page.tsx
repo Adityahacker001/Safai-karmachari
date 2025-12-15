@@ -203,7 +203,7 @@ export default function DistrictSewerDeathPage() {
     <main className="min-h-screen p-6 lg:p-8 text-gray-800">
       {/* Header with gradient background */}
       <div className="mb-6 rounded-2xl shadow-sm p-6 lg:p-8 text-white bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500">
-        <h1 className="text-2xl lg:text-3xl font-bold drop-shadow">District Dashboard</h1>
+        <h1 className="text-2xl lg:text-3xl font-bold drop-shadow">Sewer Death Report</h1>
         <p className="text-sm font-semibold mt-1 drop-shadow">Comprehensive district-level monitoring and management</p>
       </div>
 

@@ -138,7 +138,7 @@ const PerformerCard = (props: PerformerCardProps) => {
                     isGood ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"
                 )}>
                     {isGood ? <TrendingUp size={isWorker ? 18 : 22}/> : <TrendingDown size={isWorker ? 18 : 22}/>}
-                    <StarRating value={score} />
+                    {score.toFixed(1)}%
                 </div>
             </CardHeader>
             <CardContent className={cn(
@@ -149,7 +149,7 @@ const PerformerCard = (props: PerformerCardProps) => {
                     isWorker ? "space-y-0.5 pt-1" : "space-y-1 pt-2"
                 )}>
                     {/* Contractor Details */}
-                    {!isContractor && workerSatisfaction && <DetailRow icon={<Smile size={16}/>} label="Worker Satisfaction" value={<StarRating value={workerSatisfaction} />} />}
+                    {!isContractor && workerSatisfaction && <DetailRow icon={<Smile size={16}/>} label="Worker Satisfaction" value={`${workerSatisfaction}%`} />}
                     {!isContractor && complianceRecord && <DetailRow icon={<ShieldCheck size={16}/>} label="Compliance Record" value={complianceRecord} />}
                     {activeWarnings && <DetailRow icon={<FileWarning size={16}/>} label="Active Warnings" value={activeWarnings} className="text-red-600 dark:text-red-400" />}
 
@@ -277,9 +277,9 @@ const RegionalTable = ({ data, title }: RegionalTableProps) => {
                             <TableRow key={item.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/20 transition-colors">
                                 <TableCell className="font-semibold text-lg text-gray-800 dark:text-gray-200">{item.name}</TableCell>
                                 <TableCell className="flex justify-center items-center pt-5"><TrendIcon trend={item.trend} /></TableCell>
-                                <TableCell className="text-center font-bold text-xl text-blue-600 dark:text-blue-400"><StarRating value={item.sanitationScore} /></TableCell>
+                                <TableCell className="text-center font-bold text-xl text-blue-600 dark:text-blue-400">{item.sanitationScore.toFixed(1)}%</TableCell>
                                 <TableCell className="text-center font-medium text-lg text-gray-700 dark:text-gray-300">{item.projectsCompleted}</TableCell>
-                                <TableCell className="text-center font-bold text-xl text-purple-600 dark:text-purple-400"><StarRating value={item.workerWelfare * 10} /></TableCell>
+                                <TableCell className="text-center font-bold text-xl text-purple-600 dark:text-purple-400">{item.workerWelfare.toFixed(1)}/10</TableCell>
                                 <TableCell className="text-right"><Button variant="outline" size="sm">View Report</Button></TableCell>
                             </TableRow>
                         ))}
