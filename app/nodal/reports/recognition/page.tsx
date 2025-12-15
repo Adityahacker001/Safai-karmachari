@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import StatCard from "@/components/ui/stat-card";
-import DataTable from "@/components/ui/data-table";
+import { Button } from "@/components/ui/button";
 import { Award, Trophy, Medal, Star, TrendingUp, TrendingDown } from "lucide-react";
 // ...existing code...
 
@@ -90,11 +90,51 @@ const Recognition = () => {
         <h2 className="text-xl font-bold text-gray-800 mb-6 tracking-tight">Contractor Leaderboard</h2>
         <div className="overflow-x-auto">
           <div className="min-w-full">
-            <DataTable
-              title="Contractor Leaderboard"
-              columns={leaderboardColumns}
-              data={contractorLeaderboard}
-            />
+            <div className="overflow-hidden rounded-lg border border-gray-100 shadow-md">
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                  <thead className="bg-gray-50 dark:bg-gray-800 sticky top-0">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Rank</th>
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Contractor</th>
+                      <th className="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Recognition Score</th>
+                      <th className="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Gold</th>
+                      <th className="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Silver</th>
+                      <th className="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Bronze</th>
+                      <th className="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Total Workers</th>
+                      <th className="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Trend</th>
+                      <th className="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-100 dark:divide-gray-800">
+                    {contractorLeaderboard.map((row) => (
+                      <tr key={row.rank} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                        <td className="px-4 py-3 align-middle">
+                          <div className="inline-flex items-center px-2.5 py-1 rounded-full bg-gray-100 text-sm font-medium text-gray-800">{row.rank}</div>
+                        </td>
+                        <td className="px-4 py-3 align-middle">
+                          <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">{row.contractor}</div>
+                          <div className="text-xs text-gray-500">&nbsp;</div>
+                        </td>
+                        <td className="px-4 py-3 text-center align-middle">
+                          <div className="text-sm font-bold text-indigo-600 dark:text-indigo-400">{typeof row.recognitionScore === 'number' ? row.recognitionScore.toFixed(1) : row.recognitionScore}</div>
+                        </td>
+                        <td className="px-4 py-3 text-center align-middle">{row.goldWorkers}</td>
+                        <td className="px-4 py-3 text-center align-middle">{row.silverWorkers}</td>
+                        <td className="px-4 py-3 text-center align-middle">{row.bronzeWorkers}</td>
+                        <td className="px-4 py-3 text-center align-middle">{row.totalWorkers}</td>
+                        <td className="px-4 py-3 text-center align-middle">
+                          <span className={"inline-flex items-center px-2 py-1 rounded-full text-xs font-medium " + (row.trend === 'up' ? 'bg-green-100 text-green-800' : row.trend === 'down' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800')}>{row.trend[0].toUpperCase() + row.trend.slice(1)}</span>
+                        </td>
+                        <td className="px-4 py-3 text-right align-middle">
+                          <Button variant="ghost" size="sm" className="text-indigo-600">View</Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>
