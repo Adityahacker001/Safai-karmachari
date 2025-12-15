@@ -7,6 +7,7 @@
 'use new'; // For Next.js App Router
 
 import React, { useState, useMemo, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import IntegratedLoader from '@/components/layout/IntegratedLoader';
 import {
   ResponsiveContainer, PieChart, Pie, Cell, Tooltip as RechartsTooltip, Legend,
@@ -80,24 +81,40 @@ const GradientButton: React.FC<GradientButtonProps> = ({ text, icon: Icon, onCli
 
 // 5. Success Modal
 const SuccessModal: React.FC<{ isOpen: boolean; onClose: () => void; ticketId: string }> = ({ isOpen, onClose, ticketId }) => {
-    if (!isOpen) return null;
-    return (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-modal-enter">
-            <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md text-center">
-                <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4 animate-pulse" />
-                <h2 className="text-2xl font-bold text-slate-800 mb-2">Submission Successful!</h2>
-                <p className="text-slate-600 mb-4">Your grievance has been logged. Your Ticket ID is:</p>
-                <p className="text-lg font-bold text-indigo-700 bg-indigo-50 px-4 py-2 rounded-lg inline-block border border-indigo-200">{ticketId}</p>
-                <p className="text-xs text-slate-500 mt-4">Please keep this ID for future reference. We will update you via your preferred method.</p>
-                <GradientButton text="Okay, Got it!" onClick={onClose} className="mt-6 w-full" />
-            </div>
-        </div>
-    );
+  useEffect(() => {
+    if (!isOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = prev; };
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+
+  return createPortal(
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-modal-enter" style={{ WebkitBackdropFilter: 'blur(8px)', backdropFilter: 'blur(8px)' }}>
+      <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md text-center">
+        <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4 animate-pulse" />
+        <h2 className="text-2xl font-bold text-slate-800 mb-2">Submission Successful!</h2>
+        <p className="text-slate-600 mb-4">Your grievance has been logged. Your Ticket ID is:</p>
+        <p className="text-lg font-bold text-indigo-700 bg-indigo-50 px-4 py-2 rounded-lg inline-block border border-indigo-200">{ticketId}</p>
+        <p className="text-xs text-slate-500 mt-4">Please keep this ID for future reference. We will update you via your preferred method.</p>
+        <GradientButton text="Okay, Got it!" onClick={onClose} className="mt-6 w-full" />
+      </div>
+    </div>,
+    document.body
+  );
 };
 
 // 6. View Details Modal (similar to previous examples)
 type DetailsModalProps = { item: any | null; isOpen: boolean; onClose: () => void; };
 const ViewDetailsModal: React.FC<DetailsModalProps> = ({ item, isOpen, onClose }) => {
+  useEffect(() => {
+    if (!isOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = prev; };
+  }, [isOpen]);
+
   if (!isOpen || !item) return null;
   // Simple timeline component
   const Timeline = () => (
@@ -109,8 +126,8 @@ const ViewDetailsModal: React.FC<DetailsModalProps> = ({ item, isOpen, onClose }
       </div>
   );
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-modal-enter">
+  return createPortal(
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-modal-enter" style={{ WebkitBackdropFilter: 'blur(8px)', backdropFilter: 'blur(8px)' }}>
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col">
         <div className="flex justify-between items-center p-5 border-b border-slate-200 bg-gradient-to-r from-indigo-50 to-sky-50">
           <h2 className="text-xl font-semibold text-slate-800 flex items-center gap-2"><FileQuestion className="w-6 h-6 text-indigo-600" /> Grievance Details</h2>
@@ -140,7 +157,8 @@ const ViewDetailsModal: React.FC<DetailsModalProps> = ({ item, isOpen, onClose }
           <button onClick={onClose} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all hover:scale-[1.03] shadow-md"><X className="w-4 h-4" /> Close</button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 const DetailItem: React.FC<{ label: string; value: React.ReactNode; className?: string; isBlock?: boolean }> = 
