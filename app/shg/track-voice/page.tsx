@@ -5,6 +5,7 @@
 'use client'; // For Next.js App Router
 
 import React, { useState, useMemo, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import {
   ResponsiveContainer, PieChart, Pie, Cell, Tooltip as RechartsTooltip, Legend,
   BarChart, Bar, XAxis, YAxis, CartesianGrid, LineChart, Line
@@ -83,154 +84,146 @@ const DetailsDrawer: React.FC<{ item: any | null; isOpen: boolean; onClose: () =
     { date: '2025-11-25', performedBy: 'District Coordinator', summary: 'Under review.' },
   ] : [];
 
-  return (
-    <>
-      {isOpen && (
-        <div
-          className="
-            fixed inset-0
-            w-screen h-screen
-            z-[999999]
-            bg-black/50 
-            backdrop-blur-[16px] backdrop-saturate-150
-            flex items-center justify-center
-            overflow-y-auto
-            p-6
-          "
-        >
-          <div
-            className="
-              bg-white/80 backdrop-blur-xl 
-              border border-slate-200/60 
-              rounded-2xl shadow-2xl 
-              w-full max-w-3xl p-8 
-              relative
-            "
-          >
-            <button onClick={onClose} className="absolute top-4 right-4 text-slate-500 hover:text-slate-700">
-              <X className="w-6 h-6" />
-            </button>
+  if (typeof document === 'undefined') return null;
+  if (!isOpen) return null;
 
-            <div className="overflow-y-auto max-h-[80vh] space-y-4 overflow-x-hidden">
-              <h2 className="text-xl font-semibold text-slate-800 flex items-center gap-2">
-                <Info className="w-6 h-6 text-indigo-600" /> Submission Details
-              </h2>
+  return createPortal(
+    <div
+      className="fixed inset-0 w-screen h-screen z-[999999] bg-black/50 backdrop-blur-[16px] backdrop-saturate-150 flex items-center justify-center overflow-y-auto p-6"
+      style={{ WebkitBackdropFilter: 'blur(16px)', backdropFilter: 'blur(16px)' }}
+    >
+      <div
+        className="
+          bg-white/80 backdrop-blur-xl 
+          border border-slate-200/60 
+          rounded-2xl shadow-2xl 
+          w-full max-w-3xl p-8 
+          relative
+        "
+      >
+        <button onClick={onClose} className="absolute top-4 right-4 text-slate-500 hover:text-slate-700">
+          <X className="w-6 h-6" />
+        </button>
 
-              {item && (
-                <div>
-                  <h3 className="text-lg font-bold text-indigo-700">{item.ticketId}</h3>
+        <div className="overflow-y-auto max-h-[80vh] space-y-4 overflow-x-hidden">
+          <h2 className="text-xl font-semibold text-slate-800 flex items-center gap-2">
+            <Info className="w-6 h-6 text-indigo-600" /> Submission Details
+          </h2>
 
-                  <div className="flex gap-2 mt-2">
-                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">{daysPending} Days Old</span>
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${item.category === 'Complaint' ? 'bg-red-100 text-red-700' : item.category === 'Feedback' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'}`}>{item.category}</span>
-                  </div>
+          {item && (
+            <div>
+              <h3 className="text-lg font-bold text-indigo-700">{item.ticketId}</h3>
 
-                  <div className="grid grid-cols-2 gap-4 text-sm mt-4">
-                    <DetailItem label="Category" value={item.category} />
-                    <DetailItem label="Sub-Category" value={item.subCategory || 'N/A'} />
-                    <DetailItem label="Date Submitted" value={new Date(item.dateSub).toLocaleDateString('en-GB')} />
-                    <DetailItem label="Current Status" value={<SubmissionStatusBadge status={item.status as Status} />} />
-                  </div>
+              <div className="flex gap-2 mt-2">
+                <span className="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">{daysPending} Days Old</span>
+                <span className={`px-3 py-1 rounded-full text-xs font-medium ${item.category === 'Complaint' ? 'bg-red-100 text-red-700' : item.category === 'Feedback' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'}`}>{item.category}</span>
+              </div>
 
-                  <DetailItem label="Description" value={item.description} isBlock />
-                  <DetailItem label="Last Action Taken / Remarks" value={item.actionTaken || item.remarks || 'No action recorded yet.'} isBlock />
+              <div className="grid grid-cols-2 gap-4 text-sm mt-4">
+                <DetailItem label="Category" value={item.category} />
+                <DetailItem label="Sub-Category" value={item.subCategory || 'N/A'} />
+                <DetailItem label="Date Submitted" value={new Date(item.dateSub).toLocaleDateString('en-GB')} />
+                <DetailItem label="Current Status" value={<SubmissionStatusBadge status={item.status as Status} />} />
+              </div>
 
-                  {/* Submitter Details */}
-                  {submitterDetails && (
-                    <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg mt-2">
-                      <h3 className="text-md font-semibold text-slate-700">Submitter Details</h3>
-                      <div className="grid grid-cols-2 gap-4 text-sm mt-2">
-                        <DetailItem label="Submitted By" value={submitterDetails.name} />
-                        <DetailItem label="SHG Name" value={submitterDetails.shgName} />
-                        <DetailItem label="SHG ID" value={submitterDetails.shgId} />
-                        <DetailItem label="Mobile Number" value={submitterDetails.mobile} />
-                        <DetailItem label="Location" value={submitterDetails.location} isBlock />
-                      </div>
-                    </div>
-                  )}
+              <DetailItem label="Description" value={item.description} isBlock />
+              <DetailItem label="Last Action Taken / Remarks" value={item.actionTaken || item.remarks || 'No action recorded yet.'} isBlock />
 
-                  {/* Routing Details */}
-                  {routingDetails && (
-                    <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg mt-3">
-                      <h3 className="text-md font-semibold text-slate-700">Routing / Department Flow</h3>
-                      <DetailItem label="Currently With" value={routingDetails.current} />
-                      <DetailItem label="Forwarded To" value={routingDetails.forwardedTo} />
-                      <DetailItem label="Previous Level" value={routingDetails.previous} />
-                      <DetailItem label="SLA / Expected Resolution" value={routingDetails.sla} />
-                    </div>
-                  )}
-
-                  {/* Attachments */}
-                  <div className="mt-3">
-                    <h3 className="text-md font-semibold text-slate-700">Attachments</h3>
-                    {item.attachments?.length ? (
-                      <div className="space-y-2 mt-2">
-                        {item.attachments.map((file: string, idx: number) => (
-                          <div key={idx} className="flex justify-between items-center text-sm bg-slate-50 p-2 rounded border border-slate-200">
-                            <span>{file}</span>
-                            <button className="text-indigo-600 hover:underline">View</button>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-sm text-slate-500 mt-2">No supporting documents uploaded.</p>
-                    )}
-                  </div>
-
-                  {/* Action History */}
-                  <div className="mt-3">
-                    <h3 className="text-md font-semibold text-slate-700">Action History</h3>
-                    <div className="space-y-2 mt-2">
-                      {actionLogs.map((log, i) => (
-                        <div key={i} className="p-3 bg-slate-50 rounded-lg border border-slate-200">
-                          <p className="text-xs text-slate-500">{log.date}</p>
-                          <p className="text-sm font-medium text-slate-700">{log.performedBy}</p>
-                          <p className="text-sm text-slate-600">{log.summary}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Escalation block */}
-                  {item.status === 'Escalated' && (
-                    <div className="p-4 bg-red-50 border border-red-200 rounded-lg mt-3">
-                      <h3 className="text-md font-semibold text-red-700">Escalation Details</h3>
-                      <DetailItem label="Escalation Level" value="Level 1" />
-                      <DetailItem label="Escalated To" value="State Officer" />
-                      <DetailItem label="Escalated On" value="2025-11-30" />
-                    </div>
-                  )}
-
-                  <h4 className="text-md font-semibold text-slate-700 pt-3 border-t border-slate-200">Timeline</h4>
-                  <div className="mt-2 pl-5 border-l-2 border-indigo-200 relative w-full max-w-full overflow-x-hidden space-y-4">
-                    <div className="relative"><span className="absolute -left-[27px] top-0.5 w-4 h-4 bg-indigo-500 rounded-full border-4 border-white ring-1 ring-indigo-200"></span><p className="text-xs font-semibold text-indigo-700">Submitted</p><p className="text-xs text-slate-500">{new Date(item.dateSub).toLocaleString('en-GB')}</p></div>
-                    {item.status !== 'Pending' && <div className="relative"><span className="absolute -left-[27px] top-0.5 w-4 h-4 bg-blue-500 rounded-full border-4 border-white ring-1 ring-blue-200"></span><p className="text-xs font-semibold text-blue-700">Reviewed / Action Taken</p><p className="text-xs text-slate-500">{new Date(item.lastUpdate).toLocaleString('en-GB')}</p></div>}
-                    {item.status === 'Resolved' && <div className="relative"><span className="absolute -left-[27px] top-0.5 w-4 h-4 bg-green-500 rounded-full border-4 border-white ring-1 ring-green-200"></span><p className="text-xs font-semibold text-green-700">Resolved</p><p className="text-xs text-slate-500">{new Date(item.lastUpdate).toLocaleString('en-GB')}</p></div>}
-                    {item.status === 'Escalated' && <div className="relative"><span className="absolute -left-[27px] top-0.5 w-4 h-4 bg-red-500 rounded-full border-4 border-white ring-1 ring-red-200"></span><p className="text-xs font-semibold text-red-700">Escalated</p><p className="text-xs text-slate-500">{new Date(item.lastUpdate).toLocaleString('en-GB')}</p></div>}
+              {/* Submitter Details */}
+              {submitterDetails && (
+                <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg mt-2">
+                  <h3 className="text-md font-semibold text-slate-700">Submitter Details</h3>
+                  <div className="grid grid-cols-2 gap-4 text-sm mt-2">
+                    <DetailItem label="Submitted By" value={submitterDetails.name} />
+                    <DetailItem label="SHG Name" value={submitterDetails.shgName} />
+                    <DetailItem label="SHG ID" value={submitterDetails.shgId} />
+                    <DetailItem label="Mobile Number" value={submitterDetails.mobile} />
+                    <DetailItem label="Location" value={submitterDetails.location} isBlock />
                   </div>
                 </div>
               )}
 
-              {/* Footer actions inside modal */}
-              <div className="flex flex-col sm:flex-row justify-between items-center p-0 gap-3">
-                {canEscalate && (
-                  <button className="flex w-full sm:w-auto items-center justify-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-white bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 shadow-md transition-all hover:scale-[1.03]">
-                    <ArrowUpCircle className="w-4 h-4" /> Escalate Issue
-                  </button>
-                )}
+              {/* Routing Details */}
+              {routingDetails && (
+                <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg mt-3">
+                  <h3 className="text-md font-semibold text-slate-700">Routing / Department Flow</h3>
+                  <DetailItem label="Currently With" value={routingDetails.current} />
+                  <DetailItem label="Forwarded To" value={routingDetails.forwardedTo} />
+                  <DetailItem label="Previous Level" value={routingDetails.previous} />
+                  <DetailItem label="SLA / Expected Resolution" value={routingDetails.sla} />
+                </div>
+              )}
 
-                <div className={`flex gap-3 ${canEscalate ? 'w-full sm:w-auto justify-end' : 'w-full justify-end'}`}>
-                  <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all hover:scale-[1.03]"><Printer className="w-3.5 h-3.5" /> Print</button>
-                  <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all hover:scale-[1.03]"><FileDown className="w-3.5 h-3.5" /> PDF</button>
-                  <button onClick={onClose} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all hover:scale-[1.03] shadow-md"><X className="w-4 h-4" /> Close</button>
+              {/* Attachments */}
+              <div className="mt-3">
+                <h3 className="text-md font-semibold text-slate-700">Attachments</h3>
+                {item.attachments?.length ? (
+                  <div className="space-y-2 mt-2">
+                    {item.attachments.map((file: string, idx: number) => (
+                      <div key={idx} className="flex justify-between items-center text-sm bg-slate-50 p-2 rounded border border-slate-200">
+                        <span>{file}</span>
+                        <button className="text-indigo-600 hover:underline">View</button>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-slate-500 mt-2">No supporting documents uploaded.</p>
+                )}
+              </div>
+
+              {/* Action History */}
+              <div className="mt-3">
+                <h3 className="text-md font-semibold text-slate-700">Action History</h3>
+                <div className="space-y-2 mt-2">
+                  {actionLogs.map((log, i) => (
+                    <div key={i} className="p-3 bg-slate-50 rounded-lg border border-slate-200">
+                      <p className="text-xs text-slate-500">{log.date}</p>
+                      <p className="text-sm font-medium text-slate-700">{log.performedBy}</p>
+                      <p className="text-sm text-slate-600">{log.summary}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
 
+              {/* Escalation block */}
+              {item.status === 'Escalated' && (
+                <div className="p-4 bg-red-50 border border-red-200 rounded-lg mt-3">
+                  <h3 className="text-md font-semibold text-red-700">Escalation Details</h3>
+                  <DetailItem label="Escalation Level" value="Level 1" />
+                  <DetailItem label="Escalated To" value="State Officer" />
+                  <DetailItem label="Escalated On" value="2025-11-30" />
+                </div>
+              )}
+
+              <h4 className="text-md font-semibold text-slate-700 pt-3 border-t border-slate-200">Timeline</h4>
+              <div className="mt-2 pl-5 border-l-2 border-indigo-200 relative w-full max-w-full overflow-x-hidden space-y-4">
+                <div className="relative"><span className="absolute -left-[27px] top-0.5 w-4 h-4 bg-indigo-500 rounded-full border-4 border-white ring-1 ring-indigo-200"></span><p className="text-xs font-semibold text-indigo-700">Submitted</p><p className="text-xs text-slate-500">{new Date(item.dateSub).toLocaleString('en-GB')}</p></div>
+                {item.status !== 'Pending' && <div className="relative"><span className="absolute -left-[27px] top-0.5 w-4 h-4 bg-blue-500 rounded-full border-4 border-white ring-1 ring-blue-200"></span><p className="text-xs font-semibold text-blue-700">Reviewed / Action Taken</p><p className="text-xs text-slate-500">{new Date(item.lastUpdate).toLocaleString('en-GB')}</p></div>}
+                {item.status === 'Resolved' && <div className="relative"><span className="absolute -left-[27px] top-0.5 w-4 h-4 bg-green-500 rounded-full border-4 border-white ring-1 ring-green-200"></span><p className="text-xs font-semibold text-green-700">Resolved</p><p className="text-xs text-slate-500">{new Date(item.lastUpdate).toLocaleString('en-GB')}</p></div>}
+                {item.status === 'Escalated' && <div className="relative"><span className="absolute -left-[27px] top-0.5 w-4 h-4 bg-red-500 rounded-full border-4 border-white ring-1 ring-red-200"></span><p className="text-xs font-semibold text-red-700">Escalated</p><p className="text-xs text-slate-500">{new Date(item.lastUpdate).toLocaleString('en-GB')}</p></div>}
+              </div>
+            </div>
+          )}
+
+          {/* Footer actions inside modal */}
+          <div className="flex flex-col sm:flex-row justify-between items-center p-0 gap-3">
+            {canEscalate && (
+              <button className="flex w-full sm:w-auto items-center justify-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-white bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 shadow-md transition-all hover:scale-[1.03]">
+                <ArrowUpCircle className="w-4 h-4" /> Escalate Issue
+              </button>
+            )}
+
+            <div className={`flex gap-3 ${canEscalate ? 'w-full sm:w-auto justify-end' : 'w-full justify-end'}`}>
+              <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all hover:scale-[1.03]"><Printer className="w-3.5 h-3.5" /> Print</button>
+              <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all hover:scale-[1.03]"><FileDown className="w-3.5 h-3.5" /> PDF</button>
+              <button onClick={onClose} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all hover:scale-[1.03] shadow-md"><X className="w-4 h-4" /> Close</button>
             </div>
           </div>
+
         </div>
-      )}
-    </>
+      </div>
+    </div>,
+    document.body
   );
 };
 

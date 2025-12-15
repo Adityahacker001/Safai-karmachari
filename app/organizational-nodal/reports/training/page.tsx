@@ -161,7 +161,7 @@ export default function TrainingReportPage() {
     <div className="w-full max-w-full p-4 sm:p-6 lg:p-8 space-y-8 min-h-screen">
       {/* Header (title only — icon removed to keep text placement) */}
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <div className="w-full bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-600 rounded-lg p-6 shadow-md">
+        <div className="w-full bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-500 rounded-2xl overflow-hidden p-6 shadow-md">
           <h1 className="text-3xl font-bold text-white">
             Training Completion Report
           </h1>
@@ -250,29 +250,29 @@ export default function TrainingReportPage() {
 
 
       {/* Table Section */}
-      <Card className="shadow-xl border border-gray-100 rounded-lg bg-white overflow-hidden">
-        <CardHeader className="border-b p-4 bg-gradient-to-r from-cyan-50 to-blue-50">
-           <CardTitle className="text-lg font-semibold text-gray-800">Training Records Table</CardTitle>
+      <Card className="shadow-xl border border-gray-100 rounded-[16px] bg-white overflow-hidden">
+        <CardHeader className="border-b p-4 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-500 rounded-t-[16px] overflow-hidden">
+           <CardTitle className="text-lg font-semibold text-white">Training Records Table</CardTitle>
         </CardHeader>
-        <CardContent className="p-4">
+        <CardContent className="p-4 rounded-b-[16px] bg-white">
           <div className="overflow-x-auto w-full">
-            <div className="inline-block min-w-full align-middle bg-white rounded-lg shadow-sm overflow-hidden">
+            <div className="inline-block min-w-full align-middle bg-transparent shadow-sm overflow-hidden">
               <Table className="min-w-full">
                 <TableHeader>
-                  <TableRow className="bg-gradient-to-r from-cyan-100 to-blue-50">
-                    <TableHead className="w-[50px] font-semibold text-gray-800">Sl.</TableHead>
-                    <TableHead className="min-w-[150px] font-semibold text-gray-800">Worker Name</TableHead>
-                    <TableHead className="min-w-[200px] font-semibold text-gray-800">Training Module</TableHead>
-                    <TableHead className="min-w-[120px] font-semibold text-gray-800">Completion Date</TableHead>
-                    <TableHead className="min-w-[150px] font-semibold text-gray-800">Trainer Name</TableHead>
-                    <TableHead className="min-w-[100px] font-semibold text-gray-800">Status</TableHead>
+                  <TableRow className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-500">
+                    <TableHead className="w-[50px] font-semibold text-white">Sl.</TableHead>
+                    <TableHead className="min-w-[150px] font-semibold text-white">Worker Name</TableHead>
+                    <TableHead className="min-w-[200px] font-semibold text-white">Training Module</TableHead>
+                    <TableHead className="min-w-[120px] font-semibold text-white">Completion Date</TableHead>
+                    <TableHead className="min-w-[150px] font-semibold text-white">Trainer Name</TableHead>
+                    <TableHead className="min-w-[100px] font-semibold text-white">Status</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filteredData.map((row, i) => (
                     <TableRow key={row.id} className={cn("transition-colors duration-150", i % 2 === 0 ? "bg-white" : "bg-slate-50") + " hover:bg-cyan-50/40"}>
                       <TableCell className="font-medium text-gray-700">{i + 1}</TableCell>
-                      <TableCell className="font-semibold text-blue-700 cursor-pointer hover:underline">{row.workerName}</TableCell>
+                      <TableCell className="font-semibold text-emerald-700 cursor-pointer hover:underline">{row.workerName}</TableCell>
                       <TableCell className="text-gray-700">{row.trainingModule}</TableCell>
                       <TableCell className="text-gray-700">{row.completionDate || "N/A"}</TableCell>
                       <TableCell className="text-gray-700">{row.trainerName}</TableCell>
