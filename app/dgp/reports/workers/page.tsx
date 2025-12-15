@@ -640,13 +640,15 @@ export default function WorkersReportPage() {
     return () => clearTimeout(timer);
   }, []);
   return (
-    <div className="min-h-screen p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 font-inter">
-      <div className="max-w-screen-2xl mx-auto relative">
-        {loading && (
-          <div className="absolute inset-0 z-50 flex items-center justify-center" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div className="min-h-screen p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 font-inter relative">
+      {loading && (
+        <div className="absolute inset-0 z-[9999] flex items-center justify-center bg-white/80 backdrop-blur-sm">
+          <div className="flex items-center justify-center">
             <IntegratedLoader />
           </div>
-        )}
+        </div>
+      )}
+      <div className="max-w-screen-2xl mx-auto relative">
         {!loading && (
           <>
             <Header />
