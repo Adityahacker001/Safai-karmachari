@@ -443,7 +443,7 @@ export default function DGPOnboardingReport() {
         className="min-h-screen p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 font-sans text-navy-900"
       >
         <main className="max-w-8xl mx-auto">
-          {/* --- Enhanced Header --- */}
+          {/* --- Enhanced Header --- --*/}
           <header className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 relative">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-indigo-600/95 to-purple-600/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 shadow-xl"></div>
             <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10 rounded-xl sm:rounded-2xl"></div>
