@@ -782,12 +782,15 @@ export default function DGPOnboardingReport() {
               <div className="p-4 rounded-xl bg-gradient-to-br from-white to-pink-50 border border-pink-100">
                 <h3 className="font-semibold mb-3 text-pink-700">Compliance Indicators</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
-                  {Object.entries(selectedDistrict.compliance).map(([key, val]) => (
-                    <div key={key} className="flex items-center justify-between bg-white/95 p-3 rounded-lg shadow-sm">
-                      <div className="capitalize text-sm text-slate-700">{key.replace(/([A-Z])/g, ' $1').trim()}</div>
-                      <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm ${val === 'Yes' ? 'bg-emerald-600 text-white' : (val === 'No' ? 'bg-red-600 text-white' : 'bg-amber-500 text-white')}`}>{val}</div>
-                    </div>
-                  ))}
+                  {Object.entries(selectedDistrict.compliance).map(([key, val]) => {
+                    const value = val as string;
+                    return (
+                      <div key={key} className="flex items-center justify-between bg-white/95 p-3 rounded-lg shadow-sm">
+                        <div className="capitalize text-sm text-slate-700">{key.replace(/([A-Z])/g, ' $1').trim()}</div>
+                        <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm ${value === 'Yes' ? 'bg-emerald-600 text-white' : (value === 'No' ? 'bg-red-600 text-white' : 'bg-amber-500 text-white')}`}>{value}</div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
