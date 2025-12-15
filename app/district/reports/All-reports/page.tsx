@@ -5,16 +5,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Building2, Users, ShieldCheck, Map, MapPin, TrendingUp, TrendingDown, Star, ThumbsDown, FileText, Briefcase, CheckCircle, Calendar, ArrowUpRight, ArrowRight, ArrowDownRight, Search, SlidersHorizontal, Award, FileWarning, Smile, Frown, Lightbulb, BarChart } from "lucide-react";
+import { Building2, Users, ShieldCheck, Map, MapPin, TrendingUp, TrendingDown, ThumbsDown, FileText, Briefcase, CheckCircle, Calendar, ArrowUpRight, ArrowRight, ArrowDownRight, Search, SlidersHorizontal, Award, FileWarning, Smile, Frown, Lightbulb, BarChart } from "lucide-react";
 // --- STAR RATING COMPONENT ---
 function StarRating({ value, max = 5 }: { value: number; max?: number }) {
-    // value is expected in 0-100, map to 0-5
-    const stars = Math.round((value / 100) * max);
+    // value is expected in 0-100, display as percentage
+    const display = value.toFixed(1);
     return (
         <span className="flex items-center gap-0.5">
-            {[...Array(max)].map((_, i) => (
-                <Star key={i} className={i < stars ? "text-yellow-400 fill-yellow-400" : "text-gray-300"} size={20} fill={i < stars ? "#facc15" : "none"} />
-            ))}
+            {display}%
         </span>
     );
 }
@@ -231,7 +229,7 @@ const PerformanceTabContent = ({ goodData, badData, type }: PerformanceTabConten
         <div>
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
                  <div className="flex space-x-1 border-b-2 border-gray-200/50">
-                     <Button variant="ghost" onClick={() => setActiveTab('good')} className={cn("font-semibold pb-3 rounded-none border-b-4 text-xs sm:text-sm", activeTab === 'good' ? 'text-green-600 border-green-600' : 'text-gray-500 border-transparent')}><Star className="mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5"/> <span className="hidden sm:inline">Good </span>Performers</Button>
+                     <Button variant="ghost" onClick={() => setActiveTab('good')} className={cn("font-semibold pb-3 rounded-none border-b-4 text-xs sm:text-sm", activeTab === 'good' ? 'text-green-600 border-green-600' : 'text-gray-500 border-transparent')}><span className="mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5"></span> <span className="hidden sm:inline">Good </span>Performers</Button>
                     <Button variant="ghost" onClick={() => setActiveTab('bad')} className={cn("font-semibold pb-3 rounded-none border-b-4 text-xs sm:text-sm", activeTab === 'bad' ? 'text-red-600 border-red-600' : 'text-gray-500 border-transparent')}><ThumbsDown className="mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5"/> <span className="hidden sm:inline">Bad </span>Performers</Button>
                 </div>
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
