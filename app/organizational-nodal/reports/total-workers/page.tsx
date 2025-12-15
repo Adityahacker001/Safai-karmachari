@@ -322,24 +322,24 @@ export default function TotalWorkersReportPage() {
       </div>
 
       {/* Table Section */}
-      <Card className="shadow-xl border border-gray-100 rounded-lg bg-white overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-teal-50 to-blue-50 border-b p-4">
-           <CardTitle className="text-lg font-semibold text-gray-800">
+      <Card className="shadow-xl border border-gray-100 rounded-[16px] bg-white overflow-hidden">
+        <CardHeader className="bg-gradient-to-r from-teal-700 to-blue-700 border-b p-4 rounded-t-[16px]">
+           <CardTitle className="text-lg font-semibold text-white">
             Total Workers Report
            </CardTitle>
         </CardHeader>
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <Table className="min-w-[1200px]">
-              <TableHeader className="bg-gradient-to-r from-indigo-100 via-blue-50 to-teal-50">
+        <CardContent className="p-0 rounded-b-[16px] overflow-hidden">
+          <div className="overflow-x-auto overflow-hidden rounded-b-[16px]">
+            <Table className="min-w-[1200px] overflow-hidden">
+              <TableHeader className="bg-gradient-to-r from-indigo-600 via-blue-600 to-teal-600 rounded-t-[16px] overflow-hidden">
                 <TableRow>
-                  <TableHead className="w-[50px] font-semibold text-gray-800">Sl.</TableHead>
-                  <TableHead className="min-w-[150px] font-semibold text-gray-800">Worker Name</TableHead>
-                  <TableHead className="min-w-[150px] font-semibold text-gray-800">Contractor</TableHead>
-                  <TableHead className="min-w-[150px] font-semibold text-gray-800">Category</TableHead>
-                  <TableHead className="min-w-[150px] font-semibold text-gray-800">Assigned Location</TableHead>
-                  <TableHead className="min-w-[100px] font-semibold text-gray-800">Status</TableHead>
-                  <TableHead className="w-[80px] font-semibold text-gray-800 text-center">Actions</TableHead>
+                  <TableHead className="w-[50px] font-semibold text-white">Sl.</TableHead>
+                  <TableHead className="min-w-[150px] font-semibold text-white">Worker Name</TableHead>
+                  <TableHead className="min-w-[150px] font-semibold text-white">Contractor</TableHead>
+                  <TableHead className="min-w-[150px] font-semibold text-white">Category</TableHead>
+                  <TableHead className="min-w-[150px] font-semibold text-white">Assigned Location</TableHead>
+                  <TableHead className="min-w-[100px] font-semibold text-white">Status</TableHead>
+                  <TableHead className="w-[80px] font-semibold text-white text-center">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

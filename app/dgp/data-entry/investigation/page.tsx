@@ -435,7 +435,7 @@ export default function InvestigationProgressEntry() {
           className="min-h-screen p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8"
         >
           {/* --- Enhanced Sticky Header --- */}
-          <header className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 border-b-4 border-gradient-to-r from-yellow-400 to-orange-500 shadow-2xl px-3 sm:px-4 md:px-6 lg:px-10 overflow-hidden">
+          <header className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 border-b-4 border-gradient-to-r from-yellow-400 to-orange-500 shadow-2xl px-3 sm:px-4 md:px-6 lg:px-10 overflow-hidden rounded-2xl">
             <div className="absolute inset-0 bg-black/10"></div>
             <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-purple-500/20"></div>
             <div className="relative z-10 mx-auto max-w-7xl py-4 sm:py-6">

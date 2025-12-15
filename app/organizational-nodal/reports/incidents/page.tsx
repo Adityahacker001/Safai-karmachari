@@ -204,8 +204,8 @@ export default function TotalIncidentReportPage() {
     <div className="w-full min-h-screen p-4 sm:p-6 lg:p-8 space-y-8">
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <div className="w-full rounded-xl bg-gradient-to-r from-purple-500 via-pink-400 to-yellow-300 px-6 py-8 shadow-md flex items-center">
-          <h1 className="text-4xl font-extrabold bg-gradient-to-r from-white via-yellow-50 to-pink-100 bg-clip-text text-transparent tracking-tight drop-shadow-md">
+        <div className="w-full rounded-2xl overflow-hidden bg-gradient-to-r from-purple-600 via-pink-500 to-yellow-400 px-6 py-8 shadow-md flex items-center">
+          <h1 className="text-4xl font-extrabold text-white tracking-tight drop-shadow-md">
             Total Incident Report
           </h1>
         </div>
@@ -278,31 +278,31 @@ export default function TotalIncidentReportPage() {
       </Card>
 
       {/* Table Section */}
-      <Card className="shadow-xl border border-gray-100 rounded-lg bg-white overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-purple-400 via-pink-300 to-yellow-200 border-b p-4">
-           <div className="rounded-lg bg-white px-4 py-6 flex items-center">
-             <CardTitle className="text-2xl font-extrabold text-gray-900 tracking-tight">
+      <Card className="shadow-xl border border-gray-100 rounded-[16px] bg-white overflow-hidden">
+        <CardHeader className="bg-gradient-to-r from-purple-500 via-pink-400 to-yellow-300 border-b p-4 rounded-t-[16px] overflow-hidden">
+           <div className="px-4 py-6 flex items-center">
+             <CardTitle className="text-2xl font-extrabold text-white tracking-tight">
                Total Incident Report
              </CardTitle>
            </div>
         </CardHeader>
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <Table className="min-w-[1200px]">
-              <TableHeader className="bg-gradient-to-r from-purple-100 via-pink-100 to-yellow-50">
+        <CardContent className="p-0 rounded-b-[16px] overflow-hidden">
+          <div className="overflow-x-auto overflow-hidden rounded-b-[16px]">
+            <Table className="min-w-[1200px] overflow-hidden">
+              <TableHeader className="bg-gradient-to-r from-purple-300 via-pink-200 to-yellow-100 rounded-b-[16px] overflow-hidden">
                 <TableRow>
                   <TableHead className="w-[40px]"></TableHead> {/* For expand button */}
-                  <TableHead className="w-[80px] font-semibold text-gray-800">Sl.</TableHead>
-                  <TableHead className="min-w-[130px] font-semibold text-gray-800">Incident ID</TableHead>
-                  <TableHead className="min-w-[120px] font-semibold text-gray-800">Date</TableHead>
-                  <TableHead className="min-w-[150px] font-semibold text-gray-800">Location</TableHead>
-                  <TableHead className="min-w-[200px] font-semibold text-gray-800">Brief Particulars</TableHead>
-                  <TableHead className="text-center font-semibold text-gray-800">Deaths</TableHead>
-                  <TableHead className="text-center font-semibold text-gray-800">Injuries</TableHead>
-                  <TableHead className="min-w-[120px] font-semibold text-gray-800">FIR No</TableHead>
-                  <TableHead className="min-w-[120px] font-semibold text-gray-800">FIR Status</TableHead>
-                  <TableHead className="min-w-[120px] font-semibold text-gray-800">Compensation</TableHead>
-                  <TableHead className="min-w-[120px] font-semibold text-gray-800">Inquiry Status</TableHead>
+                  <TableHead className="w-[80px] font-semibold text-blue-900">Sl.</TableHead>
+                  <TableHead className="min-w-[130px] font-semibold text-blue-900">Incident ID</TableHead>
+                  <TableHead className="min-w-[120px] font-semibold text-blue-900">Date</TableHead>
+                  <TableHead className="min-w-[150px] font-semibold text-blue-900">Location</TableHead>
+                  <TableHead className="min-w-[200px] font-semibold text-blue-900">Brief Particulars</TableHead>
+                  <TableHead className="text-center font-semibold text-blue-900">Deaths</TableHead>
+                  <TableHead className="text-center font-semibold text-blue-900">Injuries</TableHead>
+                  <TableHead className="min-w-[120px] font-semibold text-blue-900">FIR No</TableHead>
+                  <TableHead className="min-w-[120px] font-semibold text-blue-900">FIR Status</TableHead>
+                  <TableHead className="min-w-[120px] font-semibold text-blue-900">Compensation</TableHead>
+                  <TableHead className="min-w-[120px] font-semibold text-blue-900">Inquiry Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
