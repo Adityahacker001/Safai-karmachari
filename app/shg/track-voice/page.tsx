@@ -299,7 +299,7 @@ const TrackMyVoicePage = () => {
               <p className="text-white/90 mt-1">View & track issues, feedback, and suggestions raised by you.</p>
             </div>
             <div className="w-full md:w-auto">
-              <span className="px-4 py-2 rounded-full bg-white/10 text-sm font-semibold text-white shadow-sm border border-white/20"> Your voice creates change 💪✨ </span>
+              <span className="px-4 py-2 rounded-full bg-white/10 text-sm font-semibold text-white shadow-sm border border-white/20"> Your voice creates change </span>
             </div>
           </div>
         </header>
