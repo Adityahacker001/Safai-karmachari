@@ -148,7 +148,7 @@ export default function InitiateAwardPage() {
                                                         className={
                                                             nom.status === 'Pending Final Vote'
                                                                 ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold shadow-md hover:from-blue-600 hover:to-purple-700 transition-all transform hover:scale-105'
-                                                                : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-300 cursor-not-allowed'
+                                                                : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all cursor-pointer'
                                                         }
                                                     >
                                                         {nom.status === 'Pending Final Vote' ? 'Review & Vote' : 'View Details'}

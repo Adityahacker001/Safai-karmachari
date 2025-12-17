@@ -74,6 +74,7 @@ const sentDirectives = [
 
 export default function DirectiveTrackingReportPage() {
 	const [showModal, setShowModal] = useState(false);
+	const [openDialogId, setOpenDialogId] = useState<string | null>(null);
 
 	// Summary counts
 	const [loading, setLoading] = React.useState(true);
@@ -196,7 +197,7 @@ export default function DirectiveTrackingReportPage() {
 
 			{/* Enhanced Summary Cards */}
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
-				<div className="bg-gradient-to-r from-green-500 to-emerald-500 p-6 rounded-xl shadow-lg text-white">
+				<div className="bg-gradient-to-r from-emerald-600 to-green-700 p-6 rounded-xl shadow-lg text-white">
 					<div className="flex items-center justify-between">
 						<div>
 							<p className="text-sm font-medium">Issued Directives</p>
@@ -208,7 +209,7 @@ export default function DirectiveTrackingReportPage() {
 						<Send className="w-10 h-10 opacity-90" />
 					</div>
 				</div>
-				<div className="bg-gradient-to-r from-yellow-500 to-orange-500 p-6 rounded-xl shadow-lg text-white">
+				<div className="bg-gradient-to-r from-yellow-600 to-orange-600 p-6 rounded-xl shadow-lg text-white">
 					<div className="flex items-center justify-between">
 						<div>
 							<p className="text-sm font-medium">High Priority</p>
@@ -294,23 +295,80 @@ export default function DirectiveTrackingReportPage() {
 										}`}>{d.status}</span>
 									</td>
 									<td className="px-6 py-4 whitespace-nowrap text-right">
-										<Dialog>
+										<Dialog open={openDialogId === d.id} onOpenChange={(open) => setOpenDialogId(open ? d.id : null)}>
 											<DialogTrigger asChild>
 												<Button className={cn(contractorTheme.button.secondary, "!px-4 !py-2 text-sm") }><Eye className="h-4 w-4 mr-2"/>View</Button>
 											</DialogTrigger>
 											<DialogContent className="max-w-2xl">
 												<DialogHeader>
-													<DialogTitle>Directive Details</DialogTitle>
-													<DialogDescription>More info about this directive and MOCA data.</DialogDescription>
+													<DialogTitle className="text-2xl font-bold">Directive Details</DialogTitle>
+													<DialogDescription>Complete information about this directive and MOCA data alignment.</DialogDescription>
 												</DialogHeader>
-												<div className="py-4">
-													<div className="rounded-2xl shadow-lg bg-gradient-to-br from-white via-blue-50 to-emerald-50 p-2">
-														<p className="font-semibold">Directive: {d.subject}</p>
-														<p>MOCA: {d.moca}</p>
-														{/* Add more details as needed */}
+												<div className="py-4 space-y-4">
+													<div className="rounded-2xl shadow-lg bg-gradient-to-br from-white via-blue-50 to-emerald-50 p-6 space-y-4">
+														<div className="grid grid-cols-2 gap-4">
+															<div>
+																<p className="text-sm font-semibold text-gray-600">Directive ID</p>
+																<p className="text-lg font-bold text-purple-800">{d.id}</p>
+															</div>
+															<div>
+																<p className="text-sm font-semibold text-gray-600">MOCA Reference</p>
+																<p className="text-lg font-bold text-blue-800">{d.moca}</p>
+															</div>
+														</div>
+														
+														<div className="border-t border-gray-200 pt-4">
+															<p className="text-sm font-semibold text-gray-600 mb-2">Recipients</p>
+															<p className="text-base font-medium text-gray-800">{d.to}</p>
+														</div>
+														
+														<div className="border-t border-gray-200 pt-4">
+															<p className="text-sm font-semibold text-gray-600 mb-2">Subject</p>
+															<p className="text-base font-medium text-gray-900">{d.subject}</p>
+														</div>
+														
+														<div className="grid grid-cols-2 gap-4 border-t border-gray-200 pt-4">
+															<div>
+																<p className="text-sm font-semibold text-gray-600">Issue Date</p>
+																<p className="text-base font-medium text-gray-800">{d.date}</p>
+															</div>
+															<div>
+																<p className="text-sm font-semibold text-gray-600">Deadline</p>
+																<p className="text-base font-bold text-red-600">{d.deadline}</p>
+															</div>
+														</div>
+														
+														<div className="grid grid-cols-2 gap-4 border-t border-gray-200 pt-4">
+															<div>
+																<p className="text-sm font-semibold text-gray-600 mb-2">Priority Level</p>
+																<span className={`inline-block px-4 py-2 rounded-full text-sm font-bold shadow-md ${
+																	d.priority === "High"
+																		? "bg-red-100 text-red-800 border border-red-300"
+																		: d.priority === "Medium"
+																		? "bg-yellow-100 text-yellow-900 border border-yellow-300"
+																		: "bg-green-100 text-green-800 border border-green-300"
+																}`}>{d.priority}</span>
+															</div>
+															<div>
+																<p className="text-sm font-semibold text-gray-600 mb-2">Current Status</p>
+																<span className={`inline-block px-4 py-2 rounded-full text-sm font-bold shadow-md ${
+																	d.status === "Active"
+																	? "bg-blue-100 text-blue-800 border border-blue-300"
+																	: d.status === "Completed"
+																	? "bg-green-100 text-green-800 border border-green-300"
+																	: d.status === "Pending"
+																	? "bg-yellow-100 text-yellow-800 border border-yellow-300"
+																	: d.status === "In Progress"
+																	? "bg-orange-100 text-orange-800 border border-orange-300"
+																	: d.status === "Overdue"
+																	? "bg-red-100 text-red-800 border border-red-300"
+																	: "bg-gray-100 text-gray-800 border border-gray-300"
+																}`}>{d.status}</span>
+															</div>
+														</div>
 													</div>
 												</div>
-												<DialogFooter><Button className={cn(contractorTheme.button.secondary)}>Close</Button></DialogFooter>
+												<DialogFooter><Button onClick={() => setOpenDialogId(null)} className={cn(contractorTheme.button.secondary)}>Close</Button></DialogFooter>
 											</DialogContent>
 										</Dialog>
 									</td>

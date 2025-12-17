@@ -1,39 +1,84 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import IntegratedLoader from '../../../../components/layout/IntegratedLoader';
-import { Download, FileText, Calendar, BarChart3, ChevronRight, Eye, FileSpreadsheet } from 'lucide-react';
+import StatCard from '@/components/ui/stat-card';
+import { Download, FileText, Calendar, BarChart3, ChevronRight, Eye, FileSpreadsheet, X } from 'lucide-react';
 
 // --- Re-defining components within the file for a self-contained structure ---
 
 
 import { ReactNode } from 'react';
 
-interface StatCardProps {
-  title: string;
-  value: string | number;
-  icon: React.ElementType;
-  color: 'blue' | 'green' | 'purple' | 'yellow';
+// Dialog Components
+interface DialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  children: ReactNode;
 }
-const StatCard = ({ title, value, icon: Icon, color }: StatCardProps) => {
-  const colorSchemes: Record<StatCardProps['color'], string> = {
-    blue: 'from-sky-400 to-blue-600',
-    green: 'from-emerald-400 to-green-600',
-    purple: 'from-purple-500 to-indigo-600',
-    yellow: 'from-amber-400 to-orange-500',
-  };
-  return (
-    <div className={`relative bg-gradient-to-br ${colorSchemes[color]} p-6 rounded-2xl shadow-lg text-white overflow-hidden transition-transform transform hover:-translate-y-1.5 duration-300`}>
-      <Icon className="absolute -right-6 -bottom-6 h-28 w-28 text-white/10" />
-      <div className="relative">
-        <p className="font-semibold text-lg text-white/90">{title}</p>
-        <p className="text-5xl font-bold mt-2">{value}</p>
+
+const Dialog = ({ open, onOpenChange, children }: DialogProps) => {
+  if (!open) return null;
+
+  const modal = (
+    <div
+      className="fixed inset-0 z-[99999] bg-black/90 backdrop-blur-xl flex items-center justify-center p-0 overflow-auto min-h-screen min-w-full"
+      onClick={() => onOpenChange(false)}
+    >
+      <div
+        className="bg-white rounded-lg w-[92%] md:max-w-4xl max-h-[92vh] overflow-y-auto relative mx-auto my-6 shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          onClick={() => onOpenChange(false)}
+          className="absolute right-4 top-4 rounded-sm opacity-95 bg-white/20 hover:bg-white/30 transition-opacity focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 z-50"
+        >
+          <X className="h-4 w-4" />
+          <span className="sr-only">Close</span>
+        </button>
+        {children}
       </div>
     </div>
   );
+
+  if (typeof document !== 'undefined') {
+    return createPortal(modal, document.body);
+  }
+  return null;
 };
 
+const DialogContent = ({ className = '', children }: { className?: string; children: ReactNode }) => (
+  <div className={`p-6 ${className}`}>{children}</div>
+);
+
+const DialogHeader = ({ children }: { children: ReactNode }) => (
+  <div className="flex flex-col space-y-1.5 text-center sm:text-left mb-4">{children}</div>
+);
+
+const DialogTitle = ({ className = '', children }: { className?: string; children: ReactNode }) => (
+  <h3 className={`text-lg font-semibold leading-none tracking-tight ${className}`}>{children}</h3>
+);
+
+const DialogDescription = ({ className = '', children }: { className?: string; children: ReactNode }) => (
+  <p className={`text-sm text-gray-600 ${className}`}>{children}</p>
+);
+
+const DialogFooter = ({ children }: { children: ReactNode }) => (
+  <div className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 mt-6">{children}</div>
+);
+
+interface Report {
+  title: string;
+  description: string;
+  type: string;
+  lastGenerated: string;
+  size: string;
+  category: string;
+}
 
 export default function Reports() {
+  const [selectedReport, setSelectedReport] = useState<Report | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 900);
@@ -114,13 +159,14 @@ export default function Reports() {
         <StatCard title="Total Reports" value="24" icon={FileText} color="purple" />
         <StatCard title="Downloads This Month" value="156" icon={Download} color="green" />
         <StatCard title="Last Updated" value="Today" icon={Calendar} color="blue" />
-        <StatCard title="Auto-Generated" value="18" icon={BarChart3} color="yellow" />
+        <StatCard title="Auto-Generated" value="18" icon={BarChart3} color="orange" />
       </div>
 
       {/* Enhanced Pre-Built Reports */}
       <div className="space-y-4 sm:space-y-6">
-        <div className="backdrop-blur-xl bg-white/20 rounded-2xl shadow-2xl p-4 sm:p-6">
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900">Reports</h2>
+        <div className="relative overflow-hidden bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 rounded-2xl shadow-2xl p-4 sm:p-6 border border-white/20">
+          <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
+          <h2 className="relative text-xl sm:text-2xl md:text-3xl font-black text-white drop-shadow-lg">Reports</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
           {preBuiltReports.map((report, index) => {
@@ -146,7 +192,10 @@ export default function Reports() {
                     <p className="text-xs text-slate-400 mb-3">Last generated: {report.lastGenerated}</p>
                     <div className="flex items-center justify-between gap-2">
                         <button
-                            onClick={() => handleDownload(report.title)}
+                            onClick={() => {
+                              setSelectedReport(report);
+                              setIsDialogOpen(true);
+                            }}
                             className="flex-1 flex items-center justify-center space-x-2 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all duration-300"
                         >
                             <Eye className="w-4 h-4" />
@@ -213,6 +262,79 @@ export default function Reports() {
             </button>
         </div>
       </div>
+
+      {/* Report View Dialog */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-gray-900 pr-8">
+              {selectedReport?.title}
+            </DialogTitle>
+            <DialogDescription>
+              {selectedReport?.category} Report - Generated on {selectedReport?.lastGenerated}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-6">
+            {/* Report Details */}
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6">
+              <h4 className="font-semibold text-gray-900 mb-3 text-lg">Report Information</h4>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-gray-600">Category</p>
+                  <p className="font-semibold text-gray-900">{selectedReport?.category}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600">Format</p>
+                  <p className="font-semibold text-gray-900">{selectedReport?.type}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600">File Size</p>
+                  <p className="font-semibold text-gray-900">{selectedReport?.size}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600">Last Generated</p>
+                  <p className="font-semibold text-gray-900">{selectedReport?.lastGenerated}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Description */}
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-2">Description</h4>
+              <p className="text-gray-700 leading-relaxed">{selectedReport?.description}</p>
+            </div>
+
+            {/* Sample Data Preview */}
+            <div className="bg-gray-50 rounded-lg p-6">
+              <h4 className="font-semibold text-gray-900 mb-3">Report Contents Preview</h4>
+              <div className="text-sm text-gray-700 space-y-2">
+                <p>• Comprehensive data analysis and insights</p>
+                <p>• Statistical breakdowns by region and category</p>
+                <p>• Trend analysis and performance metrics</p>
+                <p>• Comparative data with previous periods</p>
+                <p>• Actionable recommendations and next steps</p>
+              </div>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <button
+              onClick={() => setIsDialogOpen(false)}
+              className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-all duration-300 font-semibold"
+            >
+              Close
+            </button>
+            <button
+              onClick={() => handleDownload(selectedReport?.title || '')}
+              className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 font-semibold flex items-center space-x-2"
+            >
+              <Download className="w-4 h-4" />
+              <span>Download Report</span>
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

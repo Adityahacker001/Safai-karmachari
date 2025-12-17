@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import IntegratedLoader from '@/components/layout/IntegratedLoader';
+import StatCard from '@/components/ui/stat-card';
 import { MessageCircle, CheckCircle, Clock, AlertTriangle, Eye, Filter, User, MapPin, Calendar, Flag, X, ArrowLeft } from 'lucide-react';
 
 // --- Helper components defined within the file ---
@@ -32,13 +34,16 @@ interface DialogProps {
 
 const Dialog = ({ open, onOpenChange, children }: DialogProps) => {
   if (!open) return null;
-  
-  return (
-    <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg max-w-6xl max-h-[90vh] overflow-y-auto w-full relative">
+
+  const modal = (
+    <div
+      className="fixed inset-0 z-[99999] bg-black/80 backdrop-blur-xl flex items-center justify-center p-4 min-h-screen"
+      onClick={() => onOpenChange(false)}
+    >
+      <div className="bg-white rounded-lg max-w-6xl max-h-[90vh] overflow-y-auto w-full relative" onClick={(e) => e.stopPropagation()}>
         <button
           onClick={() => onOpenChange(false)}
-          className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 z-10"
+          className="absolute right-4 top-4 rounded-sm opacity-90 bg-white/20 hover:bg-white/30 transition-opacity focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 z-50"
         >
           <X className="h-4 w-4" />
           <span className="sr-only">Close</span>
@@ -47,6 +52,11 @@ const Dialog = ({ open, onOpenChange, children }: DialogProps) => {
       </div>
     </div>
   );
+
+  if (typeof document !== 'undefined') {
+    return createPortal(modal, document.body);
+  }
+  return null;
 };
 
 const DialogContent = ({ className = '', children }: { className?: string; children: ReactNode }) => (
@@ -65,34 +75,6 @@ const DialogDescription = ({ className = '', children }: { className?: string; c
   <p className={`text-sm text-gray-600 ${className}`}>{children}</p>
 );
 
-// Updated KPI Card Component to match the new design
-
-interface KPICardProps {
-  title: string;
-  value: string | number;
-  icon: React.ElementType;
-  color: 'yellow' | 'blue' | 'purple' | 'green';
-}
-const KPICard = ({ title, value, icon: Icon, color }: KPICardProps) => {
-  const colorSchemes: Record<KPICardProps['color'], string> = {
-    yellow: 'bg-gradient-to-br from-amber-400 to-orange-500',
-    blue: 'bg-gradient-to-br from-sky-400 to-blue-600',
-    purple: 'bg-gradient-to-br from-purple-500 to-indigo-600',
-    green: 'bg-gradient-to-br from-emerald-400 to-green-500',
-  };
-  const scheme = colorSchemes[color] || colorSchemes.blue;
-  return (
-    <div className={`relative ${scheme} p-6 rounded-2xl shadow-lg text-white overflow-hidden transition-transform transform hover:-translate-y-1 duration-300`}>
-      <Icon className="absolute -right-5 -bottom-5 h-28 w-28 text-white/20 transform" />
-      <div className="relative">
-        <p className="font-semibold text-lg">{title}</p>
-        <p className="text-5xl font-bold mt-2">{value}</p>
-      </div>
-    </div>
-  );
-};
-
-
 export default function Grievances() {
   // Loader state
   const [loading, setLoading] = useState(true);
@@ -107,10 +89,10 @@ export default function Grievances() {
   const [currentView, setCurrentView] = useState<'districts' | 'grievances' | 'details'>('districts');
 
   const kpiData = [
-    { title: 'Total Grievances', value: 2486, icon: MessageCircle, color: 'blue' },
-    { title: 'Verified', value: 2362, icon: CheckCircle, color: 'green' },
-    { title: 'Pending', value: 173, icon: Clock, color: 'yellow' },
-    { title: 'Escalated (this month)', value: 124, icon: AlertTriangle, color: 'purple' }, // Changed to purple for the new design
+    { title: 'Total Grievances', value: 2486, icon: MessageCircle, color: 'blue' as const },
+    { title: 'Verified', value: 2362, icon: CheckCircle, color: 'green' as const },
+    { title: 'Pending', value: 173, icon: Clock, color: 'orange' as const },
+    { title: 'Escalated (this month)', value: 124, icon: AlertTriangle, color: 'purple' as const },
   ];
 
   const grievanceData = [
@@ -340,12 +322,12 @@ export default function Grievances() {
       {/* Enhanced KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
         {kpiData.map((kpi) => (
-          <KPICard
+          <StatCard
             key={kpi.title}
             title={kpi.title}
             value={kpi.value.toLocaleString()}
             icon={kpi.icon}
-            color={kpi.color as 'yellow' | 'blue' | 'purple' | 'green'}
+            color={kpi.color}
           />
         ))}
       </div>

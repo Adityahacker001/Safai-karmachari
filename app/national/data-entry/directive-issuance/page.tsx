@@ -28,7 +28,7 @@ export default function DirectiveIssuancePage() {
     <div className="min-h-screen bg-slate-50 p-4 md:p-8 space-y-8 font-sans">
       
       {/* Professional Header */}
-      <header className="relative overflow-hidden bg-gradient-to-r from-blue-700 via-indigo-700 to-violet-700 rounded-3xl shadow-xl border-b-4 border-blue-900">
+      <header className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-purple-600 to-purple-700 rounded-3xl shadow-xl border-b-4 border-blue-900">
         {/* Subtle texture overlay */}
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
         

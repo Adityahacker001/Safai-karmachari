@@ -1,11 +1,75 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import IntegratedLoader from '../../../../components/layout/IntegratedLoader';
-import { Filter, Download, Eye, CheckCircle, XCircle, Shield, User, LayoutDashboard, ChevronRight } from 'lucide-react';
+import { Filter, Download, Eye, CheckCircle, XCircle, Shield, User, LayoutDashboard, ChevronRight, X, MapPin, Clock } from 'lucide-react';
 import StatCard from "@/components/ui/stat-card";
+
+// Dialog Components
+interface DialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  children: React.ReactNode;
+}
+
+const Dialog = ({ open, onOpenChange, children }: DialogProps) => {
+  if (!open) return null;
+  
+  return (
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      onClick={() => onOpenChange(false)}
+    >
+      <div 
+        className="bg-white/70 backdrop-blur-2xl rounded-lg max-w-xl max-h-[85vh] overflow-y-auto w-full relative shadow-2xl border border-white/30"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          onClick={() => onOpenChange(false)}
+          className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 z-10 bg-white/50 p-2 rounded-full hover:bg-white/80"
+        >
+          <X className="h-4 w-4" />
+          <span className="sr-only">Close</span>
+        </button>
+        {children}
+      </div>
+    </div>
+  );
+};
+
+const DialogContent = ({ className = '', children }: { className?: string; children: React.ReactNode }) => (
+  <div className={`p-6 ${className}`}>{children}</div>
+);
+
+const DialogHeader = ({ children }: { children: React.ReactNode }) => (
+  <div className="flex flex-col space-y-1.5 text-center sm:text-left mb-4">{children}</div>
+);
+
+const DialogTitle = ({ className = '', children }: { className?: string; children: React.ReactNode }) => (
+  <h3 className={`text-lg font-semibold leading-none tracking-tight ${className}`}>{children}</h3>
+);
+
+const DialogDescription = ({ className = '', children }: { className?: string; children: React.ReactNode }) => (
+  <p className={`text-sm text-gray-600 ${className}`}>{children}</p>
+);
+
+const DialogFooter = ({ children }: { children: React.ReactNode }) => (
+  <div className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 mt-6">{children}</div>
+);
+
+interface AuditLog {
+  timestamp: string;
+  action: string;
+  user: string;
+  role: string;
+  details: string;
+  status: string;
+  location: string;
+}
 
 // --- Main AuditLogs Component (moved to Administration) ---
 export default function AuditLogs() {
+    const [selectedLog, setSelectedLog] = useState<AuditLog | null>(null);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
         const timer = setTimeout(() => setLoading(false), 900);
@@ -193,7 +257,13 @@ export default function AuditLogs() {
                                     <td className="py-3 sm:py-4 px-3 sm:px-6 text-center"><StatusPill status={row.status as 'Success' | 'Failed' | 'Warning'} /></td>
                                     <td className="py-3 sm:py-4 px-3 sm:px-6 text-sm sm:text-base text-slate-700">{row.location}</td>
                                     <td className="py-3 sm:py-4 px-3 sm:px-6 text-right">
-                                        <button className="p-1 sm:p-2 text-slate-500 hover:text-indigo-600 hover:bg-indigo-100 rounded-full transition-all">
+                                        <button 
+                                            onClick={() => {
+                                                setSelectedLog(row);
+                                                setIsDialogOpen(true);
+                                            }}
+                                            className="p-1 sm:p-2 text-slate-500 hover:text-indigo-600 hover:bg-indigo-100 rounded-full transition-all"
+                                        >
                                             <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
                                         </button>
                                     </td>
@@ -203,6 +273,102 @@ export default function AuditLogs() {
                     </table>
                 </div>
             </div>
+
+            {/* Audit Log Details Dialog */}
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle className="text-2xl font-bold text-gray-900 pr-8">
+                            Audit Log Details
+                        </DialogTitle>
+                        <DialogDescription>
+                            Complete information about this system activity
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    {selectedLog && (
+                        <div className="space-y-6">
+                            {/* Main Information */}
+                            <div className="bg-gradient-to-r from-blue-50/50 to-indigo-50/50 backdrop-blur-sm rounded-lg p-6 border border-blue-200/30">
+                                <h4 className="font-semibold text-gray-900 mb-4 text-lg">Activity Information</h4>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <p className="text-sm text-gray-600 mb-1">Action Type</p>
+                                        <p className="font-semibold text-gray-900">{selectedLog.action}</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-gray-600 mb-1">Status</p>
+                                        <StatusPill status={selectedLog.status as 'Success' | 'Failed' | 'Warning'} />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-gray-600 mb-1 flex items-center gap-2">
+                                            <Clock className="w-4 h-4" />Timestamp
+                                        </p>
+                                        <p className="font-semibold text-gray-900">{selectedLog.timestamp}</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-gray-600 mb-1 flex items-center gap-2">
+                                            <MapPin className="w-4 h-4" />Location
+                                        </p>
+                                        <p className="font-semibold text-gray-900">{selectedLog.location}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* User Information */}
+                            <div className="bg-gradient-to-r from-purple-50/50 to-pink-50/50 backdrop-blur-sm rounded-lg p-6 border border-purple-200/30">
+                                <h4 className="font-semibold text-gray-900 mb-4 text-lg flex items-center gap-2">
+                                    <User className="w-5 h-5" />User Information
+                                </h4>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <p className="text-sm text-gray-600 mb-1">User Name</p>
+                                        <p className="font-semibold text-gray-900">{selectedLog.user}</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-gray-600 mb-1">Role</p>
+                                        <RolePill role={selectedLog.role as 'National Admin' | 'State Officer' | 'District Officer' | 'Nodal Officer' | 'N/A'} />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Activity Details */}
+                            <div>
+                                <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                                    <Shield className="w-5 h-5" />Activity Details
+                                </h4>
+                                <div className="bg-gray-50/60 backdrop-blur-sm rounded-lg p-4 border border-gray-200/40">
+                                    <p className="text-gray-700 leading-relaxed">{selectedLog.details}</p>
+                                </div>
+                            </div>
+
+                            {/* Additional Information */}
+                            <div className="bg-yellow-50/60 backdrop-blur-sm border border-yellow-200/50 rounded-lg p-4">
+                                <p className="text-sm text-yellow-800">
+                                    <strong>Note:</strong> This activity has been logged for security and compliance purposes. 
+                                    All audit logs are retained according to data retention policies.
+                                </p>
+                            </div>
+                        </div>
+                    )}
+
+                    <DialogFooter>
+                        <button
+                            onClick={() => setIsDialogOpen(false)}
+                            className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-all duration-300 font-semibold"
+                        >
+                            Close
+                        </button>
+                        <button
+                            onClick={() => console.log('Export single log:', selectedLog)}
+                            className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 font-semibold flex items-center space-x-2"
+                        >
+                            <Download className="w-4 h-4" />
+                            <span>Export Log</span>
+                        </button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }

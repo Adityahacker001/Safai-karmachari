@@ -402,26 +402,26 @@ export default function Home() {
     ];
 
     const stakeholderItems = [
-        { icon: Users, title: "Workers" },
-        { icon: Smartphone, title: "Citizens" },
+         { icon: Globe, title: "National Dashboard" },
+         { icon: Globe, title: "NSKFDC", route: "nskfdc/nskfdc-dashboard" },
+         { icon: MapPin, title: "State Officers" },
+          { icon: Shield, title: "DGP", route: "dgp/dgp-dashboard" },
+           { icon: Building, title: "District Officers" },
+           { icon: Smartphone, title: "SP/CP", route: "sp-cp/sp-cp-dashboard" },
+            {
+            icon: Users,
+            title: "Organizational Nodal",
+            route: "organizational-nodal/organizational-nodal-dashboard",
+        },
         { icon: Shield, title: "Nodal Officers" },
-        { icon: Building, title: "District Officers" },
-        { icon: MapPin, title: "State Officers" },
-        { icon: Globe, title: "National Dashboard" },
-        { icon: Smartphone, title: "SP/CP", route: "sp-cp/sp-cp-dashboard" },
+        { icon: Building, title: "SHG", route: "shg/shg-dashboard" },
         {
             icon: Building,
             title: "Contractors",
             route: "contractor/contractor-dashboard",
         },
-        {
-            icon: Users,
-            title: "Organizational Nodal",
-            route: "organizational-nodal/organizational-nodal-dashboard",
-        },
-        { icon: Globe, title: "NSKFDC", route: "nskfdc/nskfdc-dashboard" },
-        { icon: Shield, title: "DGP", route: "dgp/dgp-dashboard" },
-        { icon: Building, title: "SHG", route: "shg/shg-dashboard" },
+        { icon: Users, title: "Workers" },
+        { icon: Smartphone, title: "Citizens" },
     ];
 
     // Array of gradients for the stakeholder cards

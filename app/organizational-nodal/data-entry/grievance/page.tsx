@@ -367,14 +367,17 @@ function ColorSection({ title, icon, children, color, }: { title: string; icon: 
 
 // FormField component (Enhanced styling, Icon)
 function InputField({ label, name, type = "text", value, placeholder, onChange, readOnly = false, icon: Icon, }: { label: string; name?: string; type?: string; value: string | number; placeholder?: string; onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; readOnly?: boolean; icon?: React.ElementType; }) {
+  // Don't show icon for date inputs (they have native icons)
+  const showIcon = Icon && type !== "date";
+  
   return (
     <div className="relative">
       <Label htmlFor={name || label} className="block text-sm font-medium text-gray-700 mb-1.5">{label}</Label>
       <div className="relative rounded-lg shadow-sm">
-           {Icon && <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><Icon className="h-5 w-5 text-gray-400" /></div>}
+           {showIcon && <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none"><Icon className="h-5 w-5 text-gray-400" /></div>}
             <Input
               id={name || label} name={name} type={type} value={value} readOnly={readOnly} placeholder={placeholder} onChange={onChange}
-              className={`block w-full pl-10 p-2.5 border-gray-300 rounded-lg text-sm transition duration-150 ${
+              className={`block w-full ${showIcon ? 'pl-11' : 'pl-3'} pr-3 py-2.5 border-gray-300 rounded-lg text-sm transition duration-150 ${
                 readOnly ? "bg-gray-100 text-gray-600 cursor-not-allowed focus:ring-0 focus:border-gray-300" : "bg-white focus:ring-2 focus:ring-indigo-300 focus:border-indigo-500 hover:border-gray-400"
               }`}
             />
