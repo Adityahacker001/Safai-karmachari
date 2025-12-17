@@ -20,7 +20,7 @@ import {
     AlertTriangle,
     Menu,
     X,
-    LayoutDashboard, // Added for mockup
+    LayoutDashboard, // Added for 
     BarChart2,      // Added for mockup
     Bell,           // Added for mockup
 } from "lucide-react";
