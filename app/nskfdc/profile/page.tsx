@@ -365,7 +365,7 @@ const NskfdcProfilePage = () => {
           onActivate={setActiveTab}
         />
 
-        {/* --- 3. Profile Info Section --- */}
+        {/* --- 3. Profile Info Section ----- */}
         <section ref={profileRef} className="scroll-mt-24">
           <Card title="Organizational & Personal Details" icon={User}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
