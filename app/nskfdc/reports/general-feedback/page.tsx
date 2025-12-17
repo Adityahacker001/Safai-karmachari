@@ -4,7 +4,7 @@
 
 'use client'; // Next.js App Router ke liye
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import {
   ResponsiveContainer, PieChart, Pie, Cell, Tooltip as RechartsTooltip, Legend,
   BarChart, Bar, XAxis, YAxis, CartesianGrid, LineChart, Line
@@ -95,6 +95,68 @@ type FeedbackModalProps = { item: any | null; isOpen: boolean; onClose: () => vo
 const ViewDetailsModal: React.FC<FeedbackModalProps> = ({ item, isOpen, onClose }) => {
   if (!isOpen || !item) return null;
 
+  const printRef = useRef<HTMLDivElement | null>(null);
+
+  const printItem = () => {
+    try {
+      const content = printRef.current?.innerHTML;
+      const newWin = window.open('', '_blank', 'width=800,height=600');
+      if (!newWin) return;
+      newWin.document.open();
+      newWin.document.write(`<!doctype html><html><head>${document.head.innerHTML}</head><body>${content}</body></html>`);
+      newWin.document.close();
+      newWin.focus();
+      setTimeout(() => newWin.print(), 250);
+    } catch (err) {
+      console.error('Printing failed', err);
+    }
+  };
+
+  const downloadItemPDF = async () => {
+    try {
+      const el = printRef.current;
+      if (!el) return printItem();
+
+      const html2canvasMod = await import('html2canvas').catch(() => null);
+      const jsPDFMod = await import('jspdf').catch(() => null);
+
+      if (!html2canvasMod || !jsPDFMod) return printItem();
+
+      const html2canvas = html2canvasMod.default ?? html2canvasMod;
+      const { jsPDF } = jsPDFMod;
+
+      const canvas = await html2canvas(el as HTMLElement, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+      const imgData = canvas.toDataURL('image/png');
+
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const margin = 10;
+      const usableWidth = pageWidth - margin * 2;
+
+      const pxToMm = 0.264583;
+      const imgWidthMm = canvas.width * pxToMm;
+      const imgHeightMm = canvas.height * pxToMm;
+      const scaledImgHeight = (usableWidth * imgHeightMm) / imgWidthMm;
+
+      let position = 0;
+      pdf.addImage(imgData, 'PNG', margin, margin, usableWidth, scaledImgHeight);
+
+      let heightLeft = scaledImgHeight - (pageHeight - margin * 2);
+      while (heightLeft > -1) {
+        pdf.addPage();
+        position -= (pageHeight - margin * 2);
+        pdf.addImage(imgData, 'PNG', margin, position + margin, usableWidth, scaledImgHeight);
+        heightLeft -= (pageHeight - margin * 2);
+      }
+
+      pdf.save(`${item.feedbackId || 'feedback'}.pdf`);
+    } catch (err) {
+      console.error('PDF generation failed, falling back to print', err);
+      printItem();
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col scale-100 animate-modal-enter">
@@ -104,7 +166,7 @@ const ViewDetailsModal: React.FC<FeedbackModalProps> = ({ item, isOpen, onClose 
           <button onClick={onClose} className="p-2 rounded-full hover:bg-slate-200 text-slate-500"><X className="w-6 h-6" /></button>
         </div>
         {/* Body */}
-        <div className="p-6 space-y-5 overflow-y-auto">
+        <div ref={printRef} className="p-6 space-y-5 overflow-y-auto">
           <h3 className="text-lg font-bold text-indigo-700">{item.feedbackId}</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <DetailItem label="Source" value={item.source} />
@@ -117,8 +179,8 @@ const ViewDetailsModal: React.FC<FeedbackModalProps> = ({ item, isOpen, onClose 
         </div>
         {/* Footer Actions */}
         <div className="flex justify-end items-center p-4 border-t border-slate-200 bg-slate-50 gap-3">
-          <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all duration-200 hover:scale-[1.03]"><Printer className="w-4 h-4" /> Print</button>
-          <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all duration-200 hover:scale-[1.03]"><FileDown className="w-4 h-4" /> Download PDF</button>
+          <button onClick={printItem} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all duration-200 hover:scale-[1.03]"><Printer className="w-4 h-4" /> Print</button>
+          <button onClick={downloadItemPDF} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all duration-200 hover:scale-[1.03]"><FileDown className="w-4 h-4" /> Download PDF</button>
           <button onClick={onClose} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all duration-200 hover:scale-[1.03] shadow-md"><X className="w-4 h-4" /> Close</button>
         </div>
       </div>

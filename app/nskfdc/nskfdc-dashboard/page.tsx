@@ -173,6 +173,20 @@ const getHeatmapColor = (util: number) => {
   return 'bg-red-500 hover:bg-red-600';
 };
 
+// Custom label renderer for pie slices (shows numeric value centered in slice)
+const renderPieValueLabel = (props: any) => {
+  const { cx, cy, midAngle, innerRadius, outerRadius, value } = props;
+  const RADIAN = Math.PI / 180;
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+  return (
+    <text x={x} y={y} fill="#fff" textAnchor="middle" dominantBaseline="central" style={{ fontSize: 14, fontWeight: 800 }}>
+      {value}
+    </text>
+  );
+};
+
 // --- 4. Main Page Component ---
 const NskfdcDashboardPage = () => {
   const [loading, setLoading] = React.useState(true);
@@ -318,15 +332,26 @@ const NskfdcDashboardPage = () => {
               Scheme Distribution
             </h3>
             <div className="flex-1 min-h-[200px]">
-              <ResponsiveContainer width="100%" height={220}>
+              <ResponsiveContainer width="100%" height={240}>
                 <PieChart>
-                  <Pie data={pieData01} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
+                  <Pie
+                    data={pieData01}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={84}
+                    innerRadius={42}
+                    paddingAngle={4}
+                    label={renderPieValueLabel}
+                    labelLine={false}
+                  >
                     {pieData01.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={PIE_COLORS_01[index % PIE_COLORS_01.length]} />
                     ))}
                   </Pie>
                   <Tooltip />
-                  <Legend />
+                  <Legend layout="horizontal" verticalAlign="bottom" align="center" />
                 </PieChart>
               </ResponsiveContainer>
             </div>
