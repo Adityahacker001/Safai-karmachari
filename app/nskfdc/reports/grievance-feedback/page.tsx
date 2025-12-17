@@ -4,7 +4,8 @@
 
 'use client'; // Next.js App Router ke liye
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import {
   ResponsiveContainer, PieChart, Pie, Cell, Tooltip as RechartsTooltip, Legend,
   BarChart, Bar, XAxis, YAxis, CartesianGrid, LineChart, Line
@@ -116,6 +117,79 @@ type GrievanceModalProps = {
 const GrievanceModal: React.FC<GrievanceModalProps> = ({ grievance, isOpen, onClose }) => {
   if (!isOpen || !grievance) return null;
 
+  const printRef = useRef<HTMLDivElement | null>(null);
+
+  const printGrievance = () => {
+    try {
+      const content = printRef.current?.innerHTML;
+      const newWin = window.open('', '_blank', 'width=800,height=600');
+      if (!newWin) return;
+      newWin.document.open();
+      newWin.document.write(`<!doctype html><html><head>${document.head.innerHTML}</head><body>${content}</body></html>`);
+      newWin.document.close();
+      newWin.focus();
+      // Give browser a moment to render styles then open print
+      setTimeout(() => {
+        newWin.print();
+      }, 250);
+    } catch (err) {
+      console.error('Printing failed', err);
+    }
+  };
+
+  const downloadGrievancePDF = async () => {
+    try {
+      const el = printRef.current;
+      if (!el) return printGrievance();
+
+      // Try to dynamically import html2canvas and jspdf
+      const html2canvasMod = await import('html2canvas').catch(() => null);
+      const jsPDFMod = await import('jspdf').catch(() => null);
+
+      if (!html2canvasMod || !jsPDFMod) {
+        // Fallback to print dialog if libraries aren't available
+        return printGrievance();
+      }
+
+      const html2canvas = html2canvasMod.default ?? html2canvasMod;
+      const { jsPDF } = jsPDFMod;
+
+      // Render element to canvas (higher scale for better quality)
+      const canvas = await html2canvas(el as HTMLElement, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+      const imgData = canvas.toDataURL('image/png');
+
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pageWidth = pdf.internal.pageSize.getWidth(); // 210mm for A4
+      const pageHeight = pdf.internal.pageSize.getHeight(); // 297mm for A4
+      const margin = 10; // mm
+      const usableWidth = pageWidth - margin * 2;
+
+      // Calculate image height in mm to maintain aspect ratio
+      const pxToMm = 0.264583; // 1px = 0.264583 mm (approx at 96dpi)
+      const imgWidthMm = (canvas.width * pxToMm) * (1 / 1); // canvas width in mm
+      const imgHeightMm = (canvas.height * pxToMm) * (1 / 1);
+
+      // But we want to fit width to usableWidth, so compute scaled height
+      const scaledImgHeight = (usableWidth * imgHeightMm) / imgWidthMm;
+
+      let position = 0;
+      pdf.addImage(imgData, 'PNG', margin, margin, usableWidth, scaledImgHeight);
+
+      let heightLeft = scaledImgHeight - (pageHeight - margin * 2);
+      while (heightLeft > -1) {
+        pdf.addPage();
+        position -= (pageHeight - margin * 2);
+        pdf.addImage(imgData, 'PNG', margin, position + margin, usableWidth, scaledImgHeight);
+        heightLeft -= (pageHeight - margin * 2);
+      }
+
+      pdf.save(`${grievance.grievanceId || 'grievance'}.pdf`);
+    } catch (err) {
+      console.error('PDF generation failed, falling back to print', err);
+      printGrievance();
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col scale-100 animate-modal-enter">
@@ -131,7 +205,7 @@ const GrievanceModal: React.FC<GrievanceModalProps> = ({ grievance, isOpen, onCl
         </div>
         
         {/* Body */}
-        <div className="p-6 space-y-5 overflow-y-auto">
+        <div ref={printRef} className="p-6 space-y-5 overflow-y-auto">
           <h3 className="text-lg font-bold text-indigo-700">{grievance.grievanceId}</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <DetailItem label="Source" value={grievance.source} />
@@ -147,11 +221,11 @@ const GrievanceModal: React.FC<GrievanceModalProps> = ({ grievance, isOpen, onCl
         </div>
 
         {/* Footer Actions */}
-        <div className="flex justify-end items-center p-4 border-t border-slate-200 bg-slate-50 gap-3">
-          <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all duration-200 hover:scale-[1.03]">
+          <div className="flex justify-end items-center p-4 border-t border-slate-200 bg-slate-50 gap-3">
+          <button onClick={printGrievance} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all duration-200 hover:scale-[1.03]">
             <Printer className="w-4 h-4" /> Print
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all duration-200 hover:scale-[1.03]">
+          <button onClick={downloadGrievancePDF} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all duration-200 hover:scale-[1.03]">
             <FileDown className="w-4 h-4" /> Download PDF
           </button>
           <button 
@@ -193,84 +267,99 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({ data, isOpen, onClose }) 
     data.forEach(item => { counts[item.type] = (counts[item.type] || 0) + 1; });
     return Object.entries(counts).map(([name, value]) => ({ name, value }));
   }, [data]);
-  
-  // Mock monthly trend data
+
   const monthlyTrend = [
     { month: 'May', received: 15, resolved: 10 }, { month: 'Jun', received: 18, resolved: 12 },
     { month: 'Jul', received: 25, resolved: 18 }, { month: 'Aug', received: 22, resolved: 20 },
     { month: 'Sep', received: 30, resolved: 25 }, { month: 'Oct', received: 35, resolved: 28 },
   ];
 
-  const PIE_COLORS: Record<Status, string> = { Resolved: '#10B981', Pending: '#F59E0B', Escalated: '#EF4444', 'In Progress': '#3B82F6' }; // Green, Yellow, Red, Blue
+  const PIE_COLORS: Record<Status, string> = { Resolved: '#10B981', Pending: '#F59E0B', Escalated: '#EF4444', 'In Progress': '#3B82F6' };
 
-  return (
-    <div 
-      className={`fixed inset-y-0 right-0 z-50 w-full max-w-lg bg-white shadow-xl transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
-    >
-      <div className="flex justify-between items-center p-6 border-b border-slate-200 bg-slate-50">
-        <h2 className="text-xl font-semibold text-slate-800 flex items-center gap-2">
-          <BarChart3 className="w-6 h-6 text-indigo-600" />
-          Grievance Insights
-        </h2>
-        <button onClick={onClose} className="p-2 rounded-full hover:bg-slate-200 text-slate-500">
-          <X className="w-6 h-6" />
-        </button>
-      </div>
-      <div className="p-6 space-y-8 overflow-y-auto h-[calc(100vh-80px)]">
-        {/* Status Distribution Pie Chart */}
-        <div>
-          <h3 className="text-lg font-medium text-slate-700 mb-4">Status Distribution</h3>
-          <div className="h-64 w-full">
-            <ResponsiveContainer>
-              <PieChart>
-                <Pie data={statusCounts} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
-                  {statusCounts.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={PIE_COLORS[entry.name as Status]} />
-                  ))}
-                </Pie>
-                <RechartsTooltip formatter={(value, name) => [`${value} Grievances`, name]} />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
+  if (!isOpen) return null;
+
+  const content = (
+    <div className="fixed inset-0 z-[9999] flex">
+      <div className="fixed inset-0 bg-black/30" onClick={onClose} />
+
+      <aside className="ml-auto pointer-events-auto bg-white rounded-l-lg shadow-xl w-full max-w-sm md:max-w-md h-full overflow-y-auto insights-drawer" style={{ backgroundColor: '#ffffff' }}>
+        <div className="flex items-center justify-between p-4 border-b border-slate-200 bg-white">
+          <div className="flex items-center gap-3">
+            <svg className="w-5 h-5 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 12h18" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <h3 className="text-lg font-semibold text-slate-800">Grievance Insights</h3>
           </div>
-        </div>
-        
-        {/* Grievances by Type Bar Chart */}
-        <div>
-          <h3 className="text-lg font-medium text-slate-700 mb-4">Grievances by Type</h3>
-          <div className="h-80 w-full">
-            <ResponsiveContainer>
-              <BarChart data={typeCounts} layout="vertical" margin={{ top: 5, right: 30, left: 100, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
-                <XAxis type="number" fontSize={10} />
-                <YAxis dataKey="name" type="category" fontSize={10} width={100} interval={0} />
-                <RechartsTooltip />
-                <Bar dataKey="value" fill="#8884d8" name="Count" barSize={20} />
-              </BarChart>
-            </ResponsiveContainer>
+          <div>
+            <button onClick={onClose} className="inline-flex items-center justify-center p-2 rounded-md text-slate-600 hover:bg-slate-100">
+              <X className="w-5 h-5" />
+            </button>
           </div>
         </div>
 
-        {/* Monthly Trend Line Chart */}
-        <div>
-           <h3 className="text-lg font-medium text-slate-700 mb-4">Monthly Grievance Trend</h3>
-           <div className="h-64 w-full">
-             <ResponsiveContainer>
-               <LineChart data={monthlyTrend} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
-                 <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0"/>
-                 <XAxis dataKey="month" fontSize={10} />
-                 <YAxis fontSize={10}/>
-                 <RechartsTooltip />
-                 <Legend />
-                 <Line type="monotone" dataKey="received" name="Received" stroke="#3B82F6" strokeWidth={2} activeDot={{ r: 6 }}/>
-                 <Line type="monotone" dataKey="resolved" name="Resolved" stroke="#10B981" strokeWidth={2} />
-               </LineChart>
-             </ResponsiveContainer>
-           </div>
+        <div className="p-4 space-y-6 overflow-y-auto" style={{ height: '100%' }}>
+          <div>
+            <h4 className="text-sm font-medium text-slate-700 mb-3">Status Distribution</h4>
+            <div className="h-40 w-full flex items-center justify-center">
+              <ResponsiveContainer width={160} height={160}>
+                <PieChart>
+                  <Pie data={statusCounts} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={70} label>
+                    {statusCounts.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={PIE_COLORS[entry.name as Status]} />
+                    ))}
+                  </Pie>
+                  <RechartsTooltip formatter={(value, name) => [`${value} Grievances`, name]} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="mt-3 flex items-center justify-between text-xs text-slate-600 gap-2 flex-wrap">
+              <div className="inline-flex items-center gap-2"><span className="w-2.5 h-2.5 bg-yellow-400 rounded-full"/> Pending</div>
+              <div className="inline-flex items-center gap-2"><span className="w-2.5 h-2.5 bg-emerald-500 rounded-full"/> Resolved</div>
+              <div className="inline-flex items-center gap-2"><span className="w-2.5 h-2.5 bg-red-500 rounded-full"/> Escalated</div>
+              <div className="inline-flex items-center gap-2"><span className="w-2.5 h-2.5 bg-sky-500 rounded-full"/> In Progress</div>
+            </div>
+          </div>
+
+          <div>
+            <h4 className="text-sm font-medium text-slate-700 mb-3">Grievances by Type</h4>
+            <div className="h-56 w-full">
+              <ResponsiveContainer>
+                <BarChart data={typeCounts} layout="vertical" margin={{ top: 5, right: 20, left: 80, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+                  <XAxis type="number" fontSize={10} />
+                  <YAxis dataKey="name" type="category" fontSize={10} width={100} interval={0} />
+                  <RechartsTooltip />
+                  <Bar dataKey="value" fill="#8884d8" name="Count" barSize={18} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div>
+            <h4 className="text-sm font-medium text-slate-700 mb-3">Monthly Grievance Trend</h4>
+            <div className="h-40 w-full">
+              <ResponsiveContainer>
+                <LineChart data={monthlyTrend} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0"/>
+                  <XAxis dataKey="month" fontSize={10} />
+                  <YAxis fontSize={10}/>
+                  <RechartsTooltip />
+                  <Legend />
+                  <Line type="monotone" dataKey="received" name="Received" stroke="#3B82F6" strokeWidth={2} activeDot={{ r: 6 }}/>
+                  <Line type="monotone" dataKey="resolved" name="Resolved" stroke="#10B981" strokeWidth={2} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
         </div>
-      </div>
+      </aside>
     </div>
   );
+
+  if (typeof document !== 'undefined' && document.body) {
+    return createPortal(content, document.body);
+  }
+
+  return content;
 };
 
 
@@ -577,8 +666,7 @@ const GrievanceReportPage = () => {
           isOpen={isInsightsOpen} 
           onClose={() => setIsInsightsOpen(false)} 
         />
-        {/* Backdrop for Insights Panel */}
-        {isInsightsOpen && <div className="fixed inset-0 bg-black/30 z-40" onClick={() => setIsInsightsOpen(false)}></div>}
+        {/* Backdrop removed — InsightsPanel now portals its own overlay to document.body */}
 
       </div>
     </div>

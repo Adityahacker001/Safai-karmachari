@@ -220,6 +220,9 @@ const DirectionComplianceReportPage = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null);
   const [isInsightsOpen, setIsInsightsOpen] = useState(false);
+  const [viewerOpen, setViewerOpen] = useState(false);
+  const [viewerUrl, setViewerUrl] = useState<string | null>(null);
+  const [viewerStatus, setViewerStatus] = useState<'idle' | 'loading' | 'not-found' | 'ready'>('idle');
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFilters(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -299,11 +302,62 @@ const DirectionComplianceReportPage = () => {
   }, [filteredData]);
 
   // Mock View Document Function
+  // View Document Function — opens the document in a new browser tab
+  // Mock View Document Function (kept for fallback if needed)
   const viewDocument = (url: string | null) => {
-    if (url) alert(`Opening document: ${url}`);
-    else alert('No document uploaded.');
+    if (!url) {
+      alert('No document uploaded.');
+      return;
+    }
+    try {
+      const href = url.startsWith('http') ? url : `${typeof window !== 'undefined' ? window.location.origin : ''}${url}`;
+      window.open(href, '_blank', 'noopener,noreferrer');
+    } catch (err) {
+      try { window.location.href = url; } catch (e) { alert(`Unable to open document: ${url}`); }
+    }
   };
 
+  // Show document inline (drawer) — checks resource before embedding to avoid iframe 404s
+  const showDocumentInline = async (url: string | null) => {
+    setViewerOpen(true);
+    setViewerUrl(null);
+    setViewerStatus('loading');
+
+    if (!url) {
+      // immediate not-found state
+      setViewerStatus('not-found');
+      return;
+    }
+
+    // normalize URL to absolute for fetch
+    const href = url.startsWith('http') ? url : (typeof window !== 'undefined' ? `${window.location.origin}${url}` : url);
+
+    try {
+      // Try HEAD first; some servers disallow HEAD so fallback to GET
+      let res = null;
+      try {
+        res = await fetch(href, { method: 'HEAD' });
+      } catch (e) {
+        // HEAD failed, try GET
+        res = await fetch(href, { method: 'GET' });
+      }
+
+      if (res && res.ok) {
+        setViewerUrl(href);
+        setViewerStatus('ready');
+      } else {
+        setViewerStatus('not-found');
+      }
+    } catch (err) {
+      setViewerStatus('not-found');
+    }
+  };
+
+  const closeViewer = () => {
+    setViewerOpen(false);
+    setViewerStatus('idle');
+    setTimeout(() => setViewerUrl(null), 200);
+  };
 
   if (loading) return (
     <div className="w-full h-full flex items-center justify-center min-h-[60vh]">
@@ -454,11 +508,13 @@ const DirectionComplianceReportPage = () => {
                     <td className="px-4 py-3 text-slate-700 whitespace-nowrap border-r border-slate-100">{item.dateComplied ? new Date(item.dateComplied).toLocaleDateString('en-GB') : '—'}</td>
                     <td className="px-4 py-3 whitespace-nowrap border-r border-slate-100">
                       {item.proofUrl ? (
-                        <button onClick={() => viewDocument(item.proofUrl)} className="flex items-center gap-1 text-indigo-600 hover:underline hover:text-indigo-800">
+                        <button onClick={() => showDocumentInline(item.proofUrl)} className="flex items-center gap-1 text-indigo-600 hover:underline hover:text-indigo-800">
                           <LinkIcon className="w-4 h-4" /> View
                         </button>
                       ) : (
-                        <span className="text-slate-400 text-xs">Not Uploaded</span>
+                        <button onClick={() => showDocumentInline(null)} className="flex items-center gap-1 text-slate-400 text-xs hover:underline">
+                          Not Uploaded
+                        </button>
                       )}
                     </td>
                     <td className="px-4 py-3 text-slate-500 text-xs truncate max-w-xs border-r border-slate-100">{item.remarks}</td>
@@ -519,6 +575,41 @@ const DirectionComplianceReportPage = () => {
         />
         {/* Backdrop for Insights Panel */}
         {isInsightsOpen && <div className="fixed inset-0 bg-black/30 z-40" onClick={() => setIsInsightsOpen(false)}></div>}
+
+        {/* Document Viewer Modal (centered, compact) */}
+        {viewerOpen && (
+          <>
+            <div className="fixed inset-0 bg-black/30 z-50" onClick={closeViewer}></div>
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
+              <div className="pointer-events-auto bg-white rounded-lg shadow-xl w-full max-w-xl max-h-[80vh] overflow-hidden">
+                <div className="flex items-center justify-between p-3 border-b border-slate-200">
+                  <h3 className="text-md font-semibold text-slate-800">Document Viewer</h3>
+                  <button onClick={closeViewer} className="p-2 rounded-full hover:bg-slate-100">
+                    <X className="w-5 h-5 text-slate-600" />
+                  </button>
+                </div>
+                <div className="p-3 overflow-auto" style={{ maxHeight: 'calc(80vh - 56px)' }}>
+                  {viewerStatus === 'loading' && (
+                    <div className="w-full h-40 flex items-center justify-center text-slate-500">Loading document…</div>
+                  )}
+                  {viewerStatus === 'not-found' && (
+                    <div className="w-full h-40 flex items-center justify-center text-slate-500">No document uploaded for this direction.</div>
+                  )}
+                  {viewerStatus === 'ready' && viewerUrl && (
+                    <div className="w-full">
+                      <iframe
+                        src={viewerUrl}
+                        className="w-full border rounded-md"
+                        style={{ height: '60vh' }}
+                        title="Proof Document"
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </>
+        )}
 
       </div>
     </div>

@@ -4,7 +4,8 @@
 
 'use client'; // Next.js App Router ke liye
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import {
   ResponsiveContainer, PieChart, Pie, Cell, Tooltip as RechartsTooltip, Legend,
   BarChart, Bar, XAxis, YAxis, CartesianGrid, LineChart, Line
@@ -108,6 +109,68 @@ const ViewDetailsModal: React.FC<UtilizationModalProps> = ({ item, isOpen, onClo
   const { percent, status } = calculateUtilization(item.amtSanctioned, item.amtUtilized);
   const balance = item.amtSanctioned - item.amtUtilized;
 
+  const printRef = useRef<HTMLDivElement | null>(null);
+
+  const printSummary = () => {
+    try {
+      const content = printRef.current?.innerHTML;
+      const newWin = window.open('', '_blank', 'width=800,height=600');
+      if (!newWin) return;
+      newWin.document.open();
+      newWin.document.write(`<!doctype html><html><head>${document.head.innerHTML}</head><body>${content}</body></html>`);
+      newWin.document.close();
+      newWin.focus();
+      setTimeout(() => newWin.print(), 250);
+    } catch (err) {
+      console.error('Printing failed', err);
+    }
+  };
+
+  const downloadSummary = async () => {
+    try {
+      const el = printRef.current;
+      if (!el) return printSummary();
+
+      const html2canvasMod = await import('html2canvas').catch(() => null);
+      const jsPDFMod = await import('jspdf').catch(() => null);
+
+      if (!html2canvasMod || !jsPDFMod) return printSummary();
+
+      const html2canvas = html2canvasMod.default ?? html2canvasMod;
+      const { jsPDF } = jsPDFMod;
+
+      const canvas = await html2canvas(el as HTMLElement, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+      const imgData = canvas.toDataURL('image/png');
+
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const margin = 10;
+      const usableWidth = pageWidth - margin * 2;
+
+      const pxToMm = 0.264583;
+      const imgWidthMm = canvas.width * pxToMm;
+      const imgHeightMm = canvas.height * pxToMm;
+      const scaledImgHeight = (usableWidth * imgHeightMm) / imgWidthMm;
+
+      let position = 0;
+      pdf.addImage(imgData, 'PNG', margin, margin, usableWidth, scaledImgHeight);
+
+      let heightLeft = scaledImgHeight - (pageHeight - margin * 2);
+      while (heightLeft > -1) {
+        pdf.addPage();
+        position -= (pageHeight - margin * 2);
+        pdf.addImage(imgData, 'PNG', margin, position + margin, usableWidth, scaledImgHeight);
+        heightLeft -= (pageHeight - margin * 2);
+      }
+
+      pdf.save(`${item.schemeId || 'scheme'}.pdf`);
+    } catch (err) {
+      console.error('PDF generation failed, falling back to print', err);
+      printSummary();
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col scale-100 animate-modal-enter">
@@ -115,7 +178,7 @@ const ViewDetailsModal: React.FC<UtilizationModalProps> = ({ item, isOpen, onClo
           <h2 className="text-xl font-semibold text-slate-800 flex items-center gap-2"><Info className="w-6 h-6 text-indigo-600" /> Utilization Details</h2>
           <button onClick={onClose} className="p-2 rounded-full hover:bg-slate-200 text-slate-500"><X className="w-6 h-6" /></button>
         </div>
-        <div className="p-6 space-y-5 overflow-y-auto">
+        <div ref={printRef} className="p-6 space-y-5 overflow-y-auto">
           <h3 className="text-lg font-bold text-indigo-700">{item.schemeName} ({item.schemeId})</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <DetailItem label="State" value={item.state} />
@@ -130,8 +193,8 @@ const ViewDetailsModal: React.FC<UtilizationModalProps> = ({ item, isOpen, onClo
           </div>
         </div>
         <div className="flex justify-end items-center p-4 border-t border-slate-200 bg-slate-50 gap-3">
-          <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all duration-200 hover:scale-[1.03]"><Printer className="w-4 h-4" /> Print Summary</button>
-          <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all duration-200 hover:scale-[1.03]"><FileDown className="w-4 h-4" /> Download PDF</button>
+          <button onClick={printSummary} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all duration-200 hover:scale-[1.03]"><Printer className="w-4 h-4" /> Print Summary</button>
+          <button onClick={downloadSummary} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-all duration-200 hover:scale-[1.03]"><FileDown className="w-4 h-4" /> Download PDF</button>
           <button onClick={onClose} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all duration-200 hover:scale-[1.03] shadow-md"><X className="w-4 h-4" /> Close</button>
         </div>
       </div>
@@ -168,60 +231,84 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({ data, isOpen, onClose }) 
 
   const PIE_COLORS: Record<UtilizationStatus, string> = { 'Fully Utilized': '#10B981', 'Partially Utilized': '#F59E0B', 'Not Utilized': '#EF4444' };
 
-  return (
-    <div className={`fixed inset-y-0 right-0 z-50 w-full max-w-lg bg-white shadow-xl transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-      <div className="flex justify-between items-center p-6 border-b border-slate-200 bg-slate-50">
-        <h2 className="text-xl font-semibold text-slate-800 flex items-center gap-2"><BarChart3 className="w-6 h-6 text-indigo-600" /> Utilization Insights</h2>
-        <button onClick={onClose} className="p-2 rounded-full hover:bg-slate-200 text-slate-500"><X className="w-6 h-6" /></button>
-      </div>
-      <div className="p-6 space-y-8 overflow-y-auto h-[calc(100vh-80px)]">
-        {/* Status Distribution Pie Chart */}
-        <div>
-          <h3 className="text-lg font-medium text-slate-700 mb-4">Utilization Status Distribution</h3>
-          <div className="h-64 w-full">
-            <ResponsiveContainer>
-              <PieChart>
-                <Pie data={statusCounts} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
-                  {statusCounts.map((entry, index) => ( <Cell key={`cell-${index}`} fill={PIE_COLORS[entry.name as UtilizationStatus]} /> ))} </Pie>
-                <RechartsTooltip formatter={(value, name) => [`${value} Schemes`, name]} /> <Legend />
-              </PieChart>
-            </ResponsiveContainer>
+  if (!isOpen) return null;
+  if (typeof document === 'undefined') return null;
+
+  const content = (
+    <div className="fixed inset-0 z-50 flex">
+      <div className="fixed inset-0 bg-black/40" onClick={onClose} />
+
+      <aside className="ml-auto pointer-events-auto bg-white rounded-l-lg shadow-2xl w-full max-w-sm md:max-w-md h-full overflow-y-auto">
+        <div className="flex items-center justify-between p-4 border-b border-slate-200 bg-white">
+          <div className="flex items-center gap-3">
+            <BarChart3 className="w-5 h-5 text-indigo-600" />
+            <h3 className="text-lg font-semibold text-slate-800">Utilization Insights</h3>
+          </div>
+          <div>
+            <button onClick={onClose} className="inline-flex items-center justify-center p-2 rounded-md text-slate-600 hover:bg-slate-100">
+              <X className="w-5 h-5" />
+            </button>
           </div>
         </div>
-        {/* State-wise Utilization Bar Chart */}
-        <div>
-          <h3 className="text-lg font-medium text-slate-700 mb-4">Top 10 States by Utilization Amount</h3>
-          <div className="h-80 w-full">
-            <ResponsiveContainer>
-              <BarChart data={stateUtilization} layout="vertical" margin={{ top: 5, right: 30, left: 80, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
-                <XAxis type="number" fontSize={10} tickFormatter={(value) => `₹${value/100000}L`} />
-                <YAxis dataKey="name" type="category" fontSize={10} width={80} interval={0} />
-                <RechartsTooltip formatter={(value) => [formatCurrency(value as number), 'Utilized']} />
-                <Bar dataKey="utilized" fill="#82ca9d" name="Utilized Amount" barSize={20} />
-              </BarChart>
-            </ResponsiveContainer>
+
+        <div className="p-4 space-y-6 overflow-y-auto" style={{ height: '100%' }}>
+          {/* Status Distribution Pie Chart */}
+          <div>
+            <h4 className="text-sm font-medium text-slate-700 mb-3">Utilization Status Distribution</h4>
+            <div className="h-40 w-full flex items-center justify-center">
+              <ResponsiveContainer width={160} height={160}>
+                <PieChart>
+                  <Pie data={statusCounts} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={70} label>
+                    {statusCounts.map((entry, index) => ( <Cell key={`cell-${index}`} fill={PIE_COLORS[entry.name as UtilizationStatus]} /> ))}
+                  </Pie>
+                  <RechartsTooltip formatter={(value, name) => [`${value} Schemes`, name]} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
           </div>
+
+          {/* State-wise Utilization Bar Chart */}
+          <div>
+            <h4 className="text-sm font-medium text-slate-700 mb-3">Top States by Utilization</h4>
+            <div className="h-44 w-full">
+              <ResponsiveContainer>
+                <BarChart data={stateUtilization} layout="vertical" margin={{ top: 5, right: 10, left: 60, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+                  <XAxis type="number" fontSize={10} tickFormatter={(value) => `₹${value/100000}L`} />
+                  <YAxis dataKey="name" type="category" fontSize={10} width={80} interval={0} />
+                  <RechartsTooltip formatter={(value) => [formatCurrency(value as number), 'Utilized']} />
+                  <Bar dataKey="utilized" fill="#82ca9d" name="Utilized Amount" barSize={14} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* Monthly Utilization Trend Line Chart */}
+          <div>
+            <h4 className="text-sm font-medium text-slate-700 mb-3">Monthly Utilization Trend</h4>
+            <div className="h-40 w-full">
+              <ResponsiveContainer>
+                <LineChart data={monthlyTrend} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0"/>
+                  <XAxis dataKey="month" fontSize={10} />
+                  <YAxis fontSize={10} tickFormatter={(value) => `₹${value/100000}L`}/>
+                  <RechartsTooltip formatter={(value) => formatCurrency(value as number)} />
+                  <Line type="monotone" dataKey="utilized" name="Amount Utilized" stroke="#10B981" strokeWidth={2} activeDot={{ r: 5 }}/>
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
         </div>
-        {/* Monthly Utilization Trend Line Chart */}
-        <div>
-           <h3 className="text-lg font-medium text-slate-700 mb-4">Monthly Utilization Trend</h3>
-           <div className="h-64 w-full">
-             <ResponsiveContainer>
-               <LineChart data={monthlyTrend} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                 <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0"/>
-                 <XAxis dataKey="month" fontSize={10} />
-                 <YAxis fontSize={10} tickFormatter={(value) => `₹${value/100000}L`}/>
-                 <RechartsTooltip formatter={(value) => formatCurrency(value as number)} />
-                 <Legend />
-                 <Line type="monotone" dataKey="utilized" name="Amount Utilized" stroke="#10B981" strokeWidth={2} activeDot={{ r: 6 }}/>
-               </LineChart>
-             </ResponsiveContainer>
-           </div>
-        </div>
-      </div>
+      </aside>
     </div>
   );
+
+  if (typeof document !== 'undefined' && document.body) {
+    return createPortal(content, document.body);
+  }
+
+  return content;
 };
 
 
@@ -413,7 +500,6 @@ const SchemeUtilizationPage = () => {
         {/* Modals & Panels */}
         <ViewDetailsModal item={selectedItem} isOpen={isModalOpen} onClose={closeModal} />
         <InsightsPanel data={filteredData} isOpen={isInsightsOpen} onClose={() => setIsInsightsOpen(false)} />
-        {isInsightsOpen && <div className="fixed inset-0 bg-black/30 z-40" onClick={() => setIsInsightsOpen(false)}></div>}
       </div>
     </div>
   );

@@ -785,7 +785,7 @@ export default function DGPOnboardingReport() {
                   {Object.entries(selectedDistrict.compliance).map(([key, val]) => (
                     <div key={key} className="flex items-center justify-between bg-white/95 p-3 rounded-lg shadow-sm">
                       <div className="capitalize text-sm text-slate-700">{key.replace(/([A-Z])/g, ' $1').trim()}</div>
-                      <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm ${val === 'Yes' ? 'bg-emerald-600 text-white' : (val === 'No' ? 'bg-red-600 text-white' : 'bg-amber-500 text-white')}`}>{val}</div>
+                      <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm ${val === 'Yes' ? 'bg-emerald-600 text-white' : (val === 'No' ? 'bg-red-600 text-white' : 'bg-amber-500 text-white')}`}>{String(val)}</div>
                     </div>
                   ))}
                 </div>

@@ -242,6 +242,100 @@ export default function NskfdcSewerDeathPage() {
     alert('Reload (placeholder) — implement API refresh');
   }
 
+  // Create a printable window containing only the incident details and trigger print (Save as PDF)
+  function downloadIncidentPDF(inc: CaseItem | null) {
+    if (!inc) return;
+    const win = window.open('', '_blank', 'width=900,height=700');
+    if (!win) {
+      alert('Popup blocked. Please allow popups for this site to download PDF.');
+      return;
+    }
+
+    const html = `
+      <html>
+        <head>
+          <title>Incident ${inc.incidentId || inc.caseId}</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <style>
+            body{font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; color:#111; padding:24px}
+            h1{font-size:20px; margin-bottom:6px}
+            .section{border:1px solid #e6e6e6;padding:12px;margin-bottom:12px;border-radius:6px}
+            .k{font-weight:600;color:#333;width:220px;display:inline-block}
+            .v{color:#111}
+            .grid{display:flex;flex-wrap:wrap}
+            .col{flex:1 1 50%;min-width:240px;padding:6px 12px}
+            .small{font-size:12px;color:#666}
+          </style>
+        </head>
+        <body>
+          <h1>Incident Details — ${inc.incidentId || inc.caseId}</h1>
+          <div class="small">Generated: ${new Date().toLocaleString()}</div>
+
+          <div class="section">
+            <div style="font-weight:700;margin-bottom:8px">Basic Details</div>
+            <div class="grid">
+              <div class="col"><span class="k">Incident ID:</span><span class="v">${inc.incidentId}</span></div>
+              <div class="col"><span class="k">Case ID:</span><span class="v">${inc.caseId}</span></div>
+              <div class="col"><span class="k">Date / Time:</span><span class="v">${inc.date}${inc.time ? ' ' + inc.time : ''}</span></div>
+              <div class="col"><span class="k">District:</span><span class="v">${inc.district}</span></div>
+              <div class="col"><span class="k">Police Station:</span><span class="v">${inc.policeStation}</span></div>
+              <div class="col"><span class="k">Category:</span><span class="v">${inc.category}</span></div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div style="font-weight:700;margin-bottom:8px">Narrative</div>
+            <div class="v">${(inc.narrative || 'N/A').replace(/\n/g, '<br/>')}</div>
+          </div>
+
+          <div class="section">
+            <div style="font-weight:700;margin-bottom:8px">FIR & Inquiry</div>
+            <div class="grid">
+              <div class="col"><span class="k">FIR No:</span><span class="v">${inc.firNo || 'N/A'}</span></div>
+              <div class="col"><span class="k">FIR Status:</span><span class="v">${inc.firStatus || 'N/A'}</span></div>
+              <div class="col"><span class="k">Inquiry Status:</span><span class="v">${inc.inquiryStatus || 'N/A'}</span></div>
+              <div class="col"><span class="k">Days Pending:</span><span class="v">${inc.daysPending ?? 'N/A'}</span></div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div style="font-weight:700;margin-bottom:8px">Compensation</div>
+            <div class="grid">
+              <div class="col"><span class="k">Sanctioned:</span><span class="v">${inc.compensationSanctioned ? '₹' + formatINR(inc.compensationSanctioned) : 'N/A'}</span></div>
+              <div class="col"><span class="k">Paid:</span><span class="v">${inc.compensationPaid ? '₹' + formatINR(inc.compensationPaid) : '₹0'}</span></div>
+              <div class="col"><span class="k">Date Paid:</span><span class="v">${inc.compensationPaidDate || 'N/A'}</span></div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div style="font-weight:700;margin-bottom:8px">Counts</div>
+            <div class="grid">
+              <div class="col"><span class="k">Deaths:</span><span class="v">${inc.deaths ?? 0}</span></div>
+              <div class="col"><span class="k">Injuries:</span><span class="v">${inc.injuries ?? 0}</span></div>
+              <div class="col"><span class="k">Workers Involved:</span><span class="v">${(inc.workersInvolved || []).join(', ') || 'N/A'}</span></div>
+            </div>
+          </div>
+
+          <div class="small">This report contains only the details for the selected incident.</div>
+        </body>
+      </html>
+    `;
+
+    win.document.write(html);
+    win.document.close();
+    // Give browser a moment to render then trigger print
+    setTimeout(() => {
+      try {
+        win.focus();
+        win.print();
+        // Optionally close the tab after print
+        // win.close();
+      } catch (e) {
+        console.error('Print failed', e);
+      }
+    }, 500);
+  }
+
   // handleDownload is defined above to keep hook order stable
   // Table header styles
   const tableHeaderStyle =
@@ -636,7 +730,7 @@ export default function NskfdcSewerDeathPage() {
                   <div className="mt-6 flex justify-end gap-3">
                     <button onClick={() => setSelectedIncident(null)} className="px-4 py-2 rounded-md bg-white border border-gray-200 text-gray-700 hover:bg-gray-50">Close</button>
                     <button
-                      onClick={() => handleDownload(selectedIncident)}
+                      onClick={() => downloadIncidentPDF(selectedIncident)}
                       className="px-4 py-2 rounded-md bg-emerald-600 text-white shadow-md hover:bg-emerald-700"
                     >
                       Download

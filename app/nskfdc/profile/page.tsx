@@ -4,7 +4,7 @@
 
 'use client'; // Next.js App Router ke liye
 
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import {
   User,
   ShieldCheck,
@@ -106,7 +106,9 @@ type NavigationTabsProps = {
   };
 };
 
-const NavigationTabs: React.FC<NavigationTabsProps> = ({ onScrollTo, refs }) => {
+type NavigationTabsProps2 = NavigationTabsProps & { activeTab: string; onActivate: (name: string) => void };
+
+const NavigationTabs: React.FC<NavigationTabsProps2> = ({ onScrollTo, refs, activeTab, onActivate }) => {
   const tabs = [
     { name: 'Profile Info', icon: User, ref: refs.profileRef },
     { name: 'Access Rights', icon: ShieldCheck, ref: refs.accessRef },
@@ -120,8 +122,9 @@ const NavigationTabs: React.FC<NavigationTabsProps> = ({ onScrollTo, refs }) => 
         {tabs.map((tab) => (
           <button
             key={tab.name}
-            onClick={() => onScrollTo(tab.ref)}
-            className="flex-1 flex flex-col md:flex-row items-center justify-center space-x-0 md:space-x-2 p-3 md:p-4 text-sm font-semibold text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:z-10 transition-all duration-200"
+            onClick={() => { onActivate(tab.name); onScrollTo(tab.ref); }}
+            aria-current={activeTab === tab.name ? 'true' : undefined}
+            className={`flex-1 flex flex-col md:flex-row items-center justify-center space-x-0 md:space-x-2 p-3 md:p-4 text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:z-10 ${activeTab === tab.name ? 'bg-indigo-50 text-indigo-700' : 'text-slate-600 hover:bg-indigo-50 hover:text-indigo-600'}`}
           >
             <tab.icon className="w-5 h-5 mb-1 md:mb-0" />
             <span className="text-xs md:text-sm">{tab.name}</span>
@@ -264,6 +267,7 @@ const ActivityItem: React.FC<ActivityItemProps> = ({ icon: Icon, title, descript
 
 const NskfdcProfilePage = () => {
   const [loading, setLoading] = React.useState(true);
+  const [activeTab, setActiveTab] = useState('Profile Info');
 
   React.useEffect(() => {
     const t = setTimeout(() => setLoading(false), 1200);
@@ -282,6 +286,30 @@ const NskfdcProfilePage = () => {
       block: 'start',
     });
   };
+
+  // Track which section is in view and update activeTab
+  useEffect(() => {
+    const sections: { ref: React.RefObject<HTMLElement>; name: string }[] = [
+      { ref: profileRef, name: 'Profile Info' },
+      { ref: accessRef, name: 'Access Rights' },
+      { ref: activityRef, name: 'Activity Log' },
+    ];
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const found = sections.find(s => s.ref.current === entry.target);
+            if (found) setActiveTab(found.name);
+          }
+        });
+      },
+      { root: null, rootMargin: '-40% 0px -40% 0px', threshold: 0 }
+    );
+
+    sections.forEach(s => { if (s.ref.current) observer.observe(s.ref.current); });
+    return () => { sections.forEach(s => { if (s.ref.current) observer.unobserve(s.ref.current); }); };
+  }, []);
 
   // Mock Data
   const accessRightsData = [
@@ -333,6 +361,8 @@ const NskfdcProfilePage = () => {
         <NavigationTabs
           onScrollTo={scrollToSection}
           refs={{ profileRef, accessRef, docsRef, activityRef }}
+          activeTab={activeTab}
+          onActivate={setActiveTab}
         />
 
         {/* --- 3. Profile Info Section --- */}
