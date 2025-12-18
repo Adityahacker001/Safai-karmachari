@@ -378,7 +378,7 @@ const GrievanceFeedbackPage = () => {
         </div>
 
         {/* --- 2. Form --- */}
-        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 p-8 max-w-2xl mx-auto mt-10 mb-10">
+        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 p-8 w-full max-w-full mt-10 mb-10">
           <h2 className="text-2xl font-bold text-indigo-700 mb-6 flex items-center gap-2">
             <FileText className="w-6 h-6 text-pink-500" />
             Register Grievance
