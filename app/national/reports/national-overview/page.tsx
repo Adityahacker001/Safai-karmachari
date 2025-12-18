@@ -312,7 +312,7 @@ export default function NationalOverviewReportPage() {
       {/* Professional Performance Table */}
       <Card className="backdrop-blur-xl bg-white/20 rounded-2xl shadow-2xl overflow-hidden">
         <CardHeader className="bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-blue-500/20 backdrop-blur-sm border-b border-purple-200 p-4 sm:p-6 md:p-8">
-            <CardTitle className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-gray-900 drop-shadow-lg">National Performance</CardTitle>
+            <CardTitle className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent drop-shadow-lg">National Performance</CardTitle>
             <CardDescription className="text-sm sm:text-base md:text-lg text-gray-700 font-semibold mt-2">
                 This master table aggregates key performance indicators from all state-level reports
             </CardDescription>
