@@ -100,7 +100,7 @@ export default function RecognitionNominationPage() {
       </div>
 
       <Card className="max-w-4xl mx-auto bg-white shadow-lg rounded-2xl">
-        <CardHeader className={cn(contractorTheme.card.header)}>
+        <CardHeader className={cn(contractorTheme.card.header, "rounded-t-2xl")}>
           <CardTitle className={cn(contractorTheme.card.title, "flex items-center space-x-4")}>
             <Award className="h-9 w-9" />
             <span>Nomination Form</span>

@@ -65,7 +65,7 @@ export default function DistrictPerformanceReportPage() {
 
   return (
     <div className={cn("min-h-screen space-y-8 p-6 md:p-8")}>
-      <div className="rounded-xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500">
+      <div className="rounded-2xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500">
         <div className="flex items-start justify-between gap-4">
           <div>
             <h2 className="text-3xl md:text-4xl font-extrabold text-white">District Performance Report</h2>
@@ -80,7 +80,7 @@ export default function DistrictPerformanceReportPage() {
 
       <Card className={cn(contractorTheme.table.container)}>
         {/* Stronger, harder header color per request */}
-        <CardHeader className="p-6 md:p-8 bg-gradient-to-r from-purple-700 to-pink-600 text-white shadow-lg">
+        <CardHeader className="p-6 md:p-8 bg-gradient-to-r from-purple-700 to-pink-600 text-white shadow-lg rounded-2xl">
             <CardTitle className="text-2xl md:text-3xl font-bold">Master Performance Roster</CardTitle>
             <CardDescription className="text-white/90 mt-2">Detailed metrics aggregated from each district's monthly summary report.</CardDescription>
         </CardHeader>

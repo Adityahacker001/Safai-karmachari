@@ -56,45 +56,111 @@ export default function StateDashboard() {
 
   if (loading) return <IntegratedLoader />;
   // Updated Graph1 with modern curved gradient line chart
-  const Graph1 = () => (
-    <div className="flex flex-col items-center justify-center h-64 bg-gradient-to-br from-blue-100 via-blue-50 to-white rounded-2xl border border-blue-200 shadow-md">
-      <span className="text-lg font-bold text-blue-700 mb-2">State Sanitation Trend</span>
-      <div className="w-full h-40 flex items-center justify-center relative">
-        <svg width="90%" height="100%" viewBox="0 0 300 100">
-          <defs>
-            {/* Gradient for the line */}
-            <linearGradient id="lineGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.9" />
-              <stop offset="100%" stopColor="#93c5fd" stopOpacity="0.2" />
-            </linearGradient>
-            {/* Shadow effect */}
-            <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
-              <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#3b82f6" floodOpacity="0.3"/>
-            </filter>
-          </defs>
-          {/* Area under curve */}
-          <path 
-            d="M0,80 C40,60 80,65 120,40 C160,30 200,50 240,20 C260,22 280,25 300,22 L300,100 L0,100 Z" 
-            fill="url(#lineGradient)" 
-          />
-          {/* Curved line with shadow */}
-          <path 
-            d="M0,80 C40,60 80,65 120,40 C160,30 200,50 240,20 C260,22 280,25 300,22" 
-            fill="none" 
-            stroke="#2563eb" 
-            strokeWidth="3.5" 
-            filter="url(#shadow)" 
-          />
-          {/* Data points */}
-          <circle cx="40" cy="60" r="4" fill="#2563eb" />
-          <circle cx="120" cy="40" r="4" fill="#2563eb" />
-          <circle cx="200" cy="50" r="4" fill="#2563eb" />
-          <circle cx="280" cy="25" r="4" fill="#2563eb" />
-        </svg>
+  const Graph1 = () => {
+    const points = [
+      { x: 70, y: 70, label: 'Apr', value: 82 },
+      { x: 110, y: 65, label: 'May', value: 78 },
+      { x: 150, y: 50, label: 'Jun', value: 62 },
+      { x: 190, y: 44, label: 'Jul', value: 55 },
+      { x: 230, y: 36, label: 'Aug', value: 48 },
+      { x: 270, y: 28, label: 'Sep', value: 42 },
+    ];
+    const [active, setActive] = React.useState<number | null>(null);
+    const containerRef = React.useRef<HTMLDivElement | null>(null);
+
+    React.useEffect(() => {
+      const onDocClick = () => setActive(null);
+      document.addEventListener('click', onDocClick);
+      return () => document.removeEventListener('click', onDocClick);
+    }, []);
+
+    return (
+      <div ref={containerRef} className="flex flex-col items-center justify-center h-64 bg-gradient-to-br from-blue-100 via-blue-50 to-white rounded-2xl border border-blue-200 shadow-md">
+        <span className="text-lg font-bold text-blue-700 mb-2">State Sanitation Trend</span>
+        <div className="w-full h-40 flex items-center justify-center relative" onClick={(e) => e.stopPropagation()}>
+          <svg width="92%" height="100%" viewBox="0 0 340 120" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="3" stdDeviation="4" floodColor="#2563eb" floodOpacity="0.18"/>
+              </filter>
+            </defs>
+
+            {/* background grid */}
+            <g stroke="#e6eefc" strokeWidth="1">
+              <line x1="40" x2="300" y1="20" y2="20" />
+              <line x1="40" x2="300" y1="45" y2="45" />
+              <line x1="40" x2="300" y1="70" y2="70" />
+              <line x1="40" x2="300" y1="95" y2="95" />
+            </g>
+
+            {/* Y-axis labels */}
+            <g fill="#6b7280" fontSize="10" textAnchor="end">
+              <text x="36" y="22">100</text>
+              <text x="36" y="47">75</text>
+              <text x="36" y="72">50</text>
+              <text x="36" y="97">25</text>
+            </g>
+
+            {/* X-axis labels (months) */}
+            <g fill="#6b7280" fontSize="10" textAnchor="middle">
+              <text x="60" y="112">Apr</text>
+              <text x="110" y="112">May</text>
+              <text x="160" y="112">Jun</text>
+              <text x="210" y="112">Jul</text>
+              <text x="260" y="112">Aug</text>
+              <text x="310" y="112">Sep</text>
+            </g>
+
+            {/* area + connecting line + dots */}
+            <defs>
+              <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#bfdbfe" stopOpacity="0.35" />
+                <stop offset="100%" stopColor="#bfdbfe" stopOpacity="0.02" />
+              </linearGradient>
+            </defs>
+
+            {/* approximate smooth path */}
+            <path d="M70,70 C90,68 110,66 130,58 C150,50 170,48 190,44 C210,42 230,38 250,32 270,28" fill="none" stroke="#1e40af" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" filter="url(#shadow)" />
+
+            {/* area under curve */}
+            <path d="M70,70 C90,68 110,66 130,58 C150,50 170,48 190,44 C210,42 230,38 250,32 270,28 L270,98 L70,98 Z" fill="url(#areaGrad)" />
+
+            {points.map((p, i) => (
+              <g key={i}>
+                <circle
+                  cx={p.x}
+                  cy={p.y}
+                  r={6}
+                  fill="#1e40af"
+                  className="cursor-pointer"
+                  onClick={(e) => { e.stopPropagation(); setActive(prev => prev === i ? null : i); }}
+                />
+                <title>{`${p.label}: ${p.value}%`}</title>
+              </g>
+            ))}
+
+            {/* subtle x-axis line */}
+            <line x1="40" x2="300" y1="100" y2="100" stroke="#dbeafe" strokeWidth="1" />
+          </svg>
+
+          {/* Tooltip rendered absolutely inside container using percentage positions */}
+          {active !== null && (
+            (() => {
+              const p = points[active];
+              const left = `${(p.x / 340) * 100}%`;
+              const top = `${(p.y / 120) * 100}%`;
+              return (
+                <div className="absolute pointer-events-auto -translate-y-8" style={{ left, top, transform: 'translate(-50%, -100%)' }}>
+                  <div className="bg-slate-900 text-white text-xs px-2 py-1 rounded-md shadow-md">{p.value}%</div>
+                </div>
+              );
+            })()
+          )}
+        </div>
+        <span className="text-xs text-gray-500">Monthly sanitation performance (mock)</span>
       </div>
-      <span className="text-xs text-gray-500">Monthly sanitation performance (mock)</span>
-    </div>
-  );
+    );
+  };
 
   // Updated Graph2 with 3D styled bars and gradient
   const Graph2 = () => (

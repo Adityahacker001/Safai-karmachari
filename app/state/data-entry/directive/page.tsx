@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import DataTable from '@/components/ui/data-table';
-import { FileText, Plus } from 'lucide-react';
+import { FileText, Plus, X } from 'lucide-react';
 import StatCard from '@/components/ui/stat-card';
 
 function IntegratedLoader() {
@@ -44,13 +44,13 @@ const Directives = () => {
     { directiveId: 'DIR-2024-002', from: 'District Office', to: 'Zone A Officers', title: 'Training Schedule Update', date: '2024-01-18', status: 'Pending', responses: '2/8' },
   ];
   const sentDirectives = [
-    { directiveId: 'DIR-2024-003', from: 'District Office', to: 'All Contractors', title: 'Attendance Reporting Changes', date: '2024-01-15', status: 'Completed', responses: '15/15' }
+    { directiveId: 'SENT-2024-001', from: 'District Office', to: 'All Contractors', title: 'Attendance Reporting Changes', date: '2024-01-15', status: 'Completed', responses: '15/15' }
   ];
 
   // Columns for both tables
 
   const columns = [
-    { key: 'id', header: 'Directive ID', sortable: true },
+    { key: 'directiveId', header: 'Directive ID', sortable: true },
     { key: 'title', header: 'Title', sortable: true },
     { 
       key: 'from', 
@@ -112,6 +112,7 @@ const Directives = () => {
     message: '',
     priority: 'High',
   });
+  const [selectedDirective, setSelectedDirective] = useState<any | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -273,11 +274,21 @@ const Directives = () => {
             <tbody>
               {receivedDirectives.map((row, idx) => (
                 <tr key={idx} className="bg-white hover:bg-pink-50 transition-colors">
-                  {columns.map((col, cIdx) => (
-                    <td key={cIdx} className="px-4 py-2 border border-gray-300">
-                      {col.render ? col.render((row as any)[col.key]) : (row as any)[col.key]}
-                    </td>
-                  ))}
+                  {columns.map((col, cIdx) => {
+                    if (col.key === 'action') {
+                      return (
+                        <td key={cIdx} className="px-4 py-2 border border-gray-300">
+                          <div className="flex space-x-2">
+                            <button onClick={() => setSelectedDirective(row)} className="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors">View</button>
+                            <button className="px-3 py-1 bg-gray-50 text-gray-600 rounded-lg hover:bg-gray-100 transition-colors">Edit</button>
+                          </div>
+                        </td>
+                      );
+                    }
+                    return (
+                      <td key={cIdx} className="px-4 py-2 border border-gray-300">{col.render ? col.render((row as any)[col.key]) : (row as any)[col.key]}</td>
+                    );
+                  })}
                 </tr>
               ))}
             </tbody>
@@ -299,16 +310,90 @@ const Directives = () => {
             <tbody>
               {sentDirectives.map((row, idx) => (
                 <tr key={idx} className="bg-white hover:bg-pink-50 transition-colors">
-                  {columns.map((col, cIdx) => (
-                    <td key={cIdx} className="px-4 py-2 border border-gray-300">
-                      {col.render ? col.render((row as any)[col.key]) : (row as any)[col.key]}
-                    </td>
-                  ))}
+                  {columns.map((col, cIdx) => {
+                    if (col.key === 'action') {
+                      return (
+                        <td key={cIdx} className="px-4 py-2 border border-gray-300">
+                          <div className="flex space-x-2">
+                            <button onClick={() => setSelectedDirective(row)} className="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors">View</button>
+                            <button className="px-3 py-1 bg-gray-50 text-gray-600 rounded-lg hover:bg-gray-100 transition-colors">Edit</button>
+                          </div>
+                        </td>
+                      );
+                    }
+                    return (
+                      <td key={cIdx} className="px-4 py-2 border border-gray-300">{col.render ? col.render((row as any)[col.key]) : (row as any)[col.key]}</td>
+                    );
+                  })}
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+      )}
+
+      {/* Slide-over drawer details panel when a directive is selected */}
+      {selectedDirective && (
+        <>
+          <div className="fixed inset-0 z-40 bg-black/30" onClick={() => setSelectedDirective(null)} />
+          <aside className="fixed inset-y-0 right-0 z-50 w-full max-w-lg bg-white shadow-xl transform transition-transform duration-300 ease-in-out">
+            <div className="flex items-center justify-between p-6 border-b border-slate-200">
+              <div className="flex items-center gap-3">
+                <FileText className="w-5 h-5 text-indigo-600" />
+                <div>
+                  <h2 className="text-lg font-semibold text-slate-800">Directive Details</h2>
+                  <p className="text-xs text-slate-500">{selectedDirective.directiveId}</p>
+                </div>
+              </div>
+              <button onClick={() => setSelectedDirective(null)} className="p-2 rounded-md text-slate-600 hover:bg-slate-100">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-6 overflow-y-auto h-[calc(100vh-96px)]">
+              <form className="space-y-4">
+                <div>
+                  <label className="block text-xs text-slate-500 mb-1">Title</label>
+                  <div className="w-full rounded-md border border-slate-200 p-3 bg-slate-50 text-slate-800">{selectedDirective.title}</div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs text-slate-500 mb-1">From</label>
+                    <div className="w-full rounded-md border border-slate-200 p-3 bg-white text-slate-800">{selectedDirective.from}</div>
+                  </div>
+                  <div>
+                    <label className="block text-xs text-slate-500 mb-1">To</label>
+                    <div className="w-full rounded-md border border-slate-200 p-3 bg-white text-slate-800">{selectedDirective.to}</div>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-xs text-slate-500 mb-1">Date</label>
+                    <div className="w-full rounded-md border border-slate-200 p-3 bg-white text-slate-800">{selectedDirective.date}</div>
+                  </div>
+                  <div>
+                    <label className="block text-xs text-slate-500 mb-1">Status</label>
+                    <div className="w-full rounded-md border border-slate-200 p-3 bg-white text-slate-800">{selectedDirective.status}</div>
+                  </div>
+                  <div>
+                    <label className="block text-xs text-slate-500 mb-1">Responses</label>
+                    <div className="w-full rounded-md border border-slate-200 p-3 bg-white text-slate-800">{selectedDirective.responses}</div>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs text-slate-500 mb-1">Message</label>
+                  <div className="w-full rounded-md border border-slate-200 p-3 bg-white text-slate-800 whitespace-pre-wrap">{selectedDirective.message || '—'}</div>
+                </div>
+
+                <div className="flex justify-end gap-3 pt-4 border-t border-slate-100 pt-4">
+                  <button type="button" onClick={() => setSelectedDirective(null)} className="px-4 py-2 rounded-md border border-slate-200 bg-white text-slate-700">Close</button>
+                  <button type="button" className="px-4 py-2 rounded-md bg-indigo-600 text-white">Acknowledge</button>
+                </div>
+              </form>
+            </div>
+          </aside>
+        </>
       )}
     </div>
   );
