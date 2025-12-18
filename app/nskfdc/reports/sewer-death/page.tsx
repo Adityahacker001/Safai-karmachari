@@ -32,6 +32,7 @@ import {
   Legend,
   LineChart,
   Line,
+  LabelList,
 } from 'recharts';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, RefreshCw, Filter as FilterIcon } from 'lucide-react';
@@ -123,7 +124,8 @@ const PIE_DATA = [
   { name: 'Sewer Injuries', value: 22 },
   { name: 'Hazardous Exposure', value: 6 },
 ];
-const PASTEL_COLORS = ['#A7F3D0', '#BFDBFE', '#FDE68A', '#FBCFE8'];
+// Deeper, more saturated palette for better visibility
+const PASTEL_COLORS = ['#50d1a8ff', '#5b87e8ff', '#e39740ff', '#e95799ff'];
 
 const INVESTIGATION_DATA = [
   { district: 'Kolkata', Initiated: 5, 'In Progress': 3, Completed: 8 },
@@ -393,7 +395,17 @@ export default function NskfdcSewerDeathPage() {
           <div className="h-72 w-full">
             <ResponsiveContainer>
               <PieChart>
-                <Pie data={PIE_DATA} dataKey="value" nameKey="name" innerRadius={60} outerRadius={100} paddingAngle={4} stroke="none">
+                <Pie
+                  data={PIE_DATA}
+                  dataKey="value"
+                  nameKey="name"
+                  innerRadius={60}
+                  outerRadius={100}
+                  paddingAngle={4}
+                  stroke="none"
+                  labelLine={false}
+                  label={({ value }: any) => String(value)}
+                >
                   {PIE_DATA.map((d, i) => (
                     <Cell key={d.name} fill={PASTEL_COLORS[i % PASTEL_COLORS.length]} />
                   ))}
@@ -414,9 +426,15 @@ export default function NskfdcSewerDeathPage() {
                 <YAxis fontSize={12} />
                 <RechartsTooltip />
                 <Legend />
-                <Bar dataKey="Initiated" stackId="a" fill="#BFDBFE" />
-                <Bar dataKey="In Progress" stackId="a" fill="#FDE68A" />
-                <Bar dataKey="Completed" stackId="a" fill="#A7F3D0" />
+                <Bar dataKey="Initiated" stackId="a" fill="#2563EB">
+                  <LabelList dataKey="Initiated" position="top" formatter={(val: any) => String(val)} />
+                </Bar>
+                <Bar dataKey="In Progress" stackId="a" fill="#D97706">
+                  <LabelList dataKey="In Progress" position="top" formatter={(val: any) => String(val)} />
+                </Bar>
+                <Bar dataKey="Completed" stackId="a" fill="#059669">
+                  <LabelList dataKey="Completed" position="top" formatter={(val: any) => String(val)} />
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
           </div>
