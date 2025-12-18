@@ -5,7 +5,6 @@
 'use client'; // Next.js App Router ke liye
 
 import React, { useState, useMemo, useRef } from 'react';
-import { createPortal } from 'react-dom';
 import {
   ResponsiveContainer, PieChart, Pie, Cell, Tooltip as RechartsTooltip, Legend,
   BarChart, Bar, XAxis, YAxis, CartesianGrid, LineChart, Line
@@ -276,90 +275,61 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({ data, isOpen, onClose }) 
 
   const PIE_COLORS: Record<Status, string> = { Resolved: '#10B981', Pending: '#F59E0B', Escalated: '#EF4444', 'In Progress': '#3B82F6' };
 
-  if (!isOpen) return null;
-
-  const content = (
-    <div className="fixed inset-0 z-[9999] flex">
-      <div className="fixed inset-0 bg-black/30" onClick={onClose} />
-
-      <aside className="ml-auto pointer-events-auto bg-white rounded-l-lg shadow-xl w-full max-w-sm md:max-w-md h-full overflow-y-auto insights-drawer" style={{ backgroundColor: '#ffffff' }}>
-        <div className="flex items-center justify-between p-4 border-b border-slate-200 bg-white">
-          <div className="flex items-center gap-3">
-            <svg className="w-5 h-5 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 12h18" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            <h3 className="text-lg font-semibold text-slate-800">Grievance Insights</h3>
-          </div>
-          <div>
-            <button onClick={onClose} className="inline-flex items-center justify-center p-2 rounded-md text-slate-600 hover:bg-slate-100">
-              <X className="w-5 h-5" />
-            </button>
+  return (
+    <div className={`fixed inset-y-0 right-0 z-50 w-full max-w-lg bg-white shadow-xl transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div className="flex justify-between items-center p-6 border-b border-slate-200 bg-slate-50">
+        <h2 className="text-xl font-semibold text-slate-800 flex items-center gap-2">
+          <BarChart3 className="w-6 h-6 text-indigo-600" /> Grievance Insights
+        </h2>
+        <button onClick={onClose} className="p-2 rounded-full hover:bg-slate-200 text-slate-500">
+          <X className="w-6 h-6" />
+        </button>
+      </div>
+      <div className="p-6 space-y-8 overflow-y-auto h-[calc(100vh-80px)]">
+        {/* Status Distribution Pie Chart */}
+        <div>
+          <h3 className="text-lg font-medium text-slate-700 mb-4">Status Distribution</h3>
+          <div className="h-64 w-full">
+            <ResponsiveContainer>
+              <PieChart>
+                <Pie data={statusCounts} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
+                  {statusCounts.map((entry, index) => ( <Cell key={`cell-${index}`} fill={PIE_COLORS[entry.name as Status]} /> ))}
+                </Pie>
+                <RechartsTooltip formatter={(value, name) => [`${value} Grievances`, name]} /> <Legend />
+              </PieChart>
+            </ResponsiveContainer>
           </div>
         </div>
-
-        <div className="p-4 space-y-6 overflow-y-auto" style={{ height: '100%' }}>
-          <div>
-            <h4 className="text-sm font-medium text-slate-700 mb-3">Status Distribution</h4>
-            <div className="h-40 w-full flex items-center justify-center">
-              <ResponsiveContainer width={160} height={160}>
-                <PieChart>
-                  <Pie data={statusCounts} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={70} label>
-                    {statusCounts.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={PIE_COLORS[entry.name as Status]} />
-                    ))}
-                  </Pie>
-                  <RechartsTooltip formatter={(value, name) => [`${value} Grievances`, name]} />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-            <div className="mt-3 flex items-center justify-between text-xs text-slate-600 gap-2 flex-wrap">
-              <div className="inline-flex items-center gap-2"><span className="w-2.5 h-2.5 bg-yellow-400 rounded-full"/> Pending</div>
-              <div className="inline-flex items-center gap-2"><span className="w-2.5 h-2.5 bg-emerald-500 rounded-full"/> Resolved</div>
-              <div className="inline-flex items-center gap-2"><span className="w-2.5 h-2.5 bg-red-500 rounded-full"/> Escalated</div>
-              <div className="inline-flex items-center gap-2"><span className="w-2.5 h-2.5 bg-sky-500 rounded-full"/> In Progress</div>
-            </div>
+        {/* Grievances by Type Bar Chart */}
+        <div>
+          <h3 className="text-lg font-medium text-slate-700 mb-4">Grievances by Type</h3>
+          <div className="h-64 w-full">
+            <ResponsiveContainer>
+              <BarChart data={typeCounts} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+                <XAxis dataKey="name" fontSize={10} /> <YAxis fontSize={10} /> <RechartsTooltip />
+                <Bar dataKey="value" fill="#8884d8" name="Count" />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
-
-          <div>
-            <h4 className="text-sm font-medium text-slate-700 mb-3">Grievances by Type</h4>
-            <div className="h-56 w-full">
-              <ResponsiveContainer>
-                <BarChart data={typeCounts} layout="vertical" margin={{ top: 5, right: 20, left: 80, bottom: 5 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
-                  <XAxis type="number" fontSize={10} />
-                  <YAxis dataKey="name" type="category" fontSize={10} width={100} interval={0} />
-                  <RechartsTooltip />
-                  <Bar dataKey="value" fill="#8884d8" name="Count" barSize={18} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-
-          <div>
-            <h4 className="text-sm font-medium text-slate-700 mb-3">Monthly Grievance Trend</h4>
-            <div className="h-40 w-full">
-              <ResponsiveContainer>
-                <LineChart data={monthlyTrend} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0"/>
-                  <XAxis dataKey="month" fontSize={10} />
-                  <YAxis fontSize={10}/>
-                  <RechartsTooltip />
-                  <Legend />
-                  <Line type="monotone" dataKey="received" name="Received" stroke="#3B82F6" strokeWidth={2} activeDot={{ r: 6 }}/>
-                  <Line type="monotone" dataKey="resolved" name="Resolved" stroke="#10B981" strokeWidth={2} />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-
         </div>
-      </aside>
+        {/* Monthly Trend Line Chart */}
+        <div>
+           <h3 className="text-lg font-medium text-slate-700 mb-4">Monthly Grievance Trend</h3>
+           <div className="h-64 w-full">
+             <ResponsiveContainer>
+               <LineChart data={monthlyTrend} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                 <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0"/> <XAxis dataKey="month" fontSize={10} /> <YAxis fontSize={10}/>
+                 <RechartsTooltip /> <Legend />
+                 <Line type="monotone" dataKey="received" name="Grievances Received" stroke="#3B82F6" strokeWidth={2} activeDot={{ r: 6 }}/>
+                 <Line type="monotone" dataKey="resolved" name="Grievances Resolved" stroke="#10B981" strokeWidth={2} />
+               </LineChart>
+             </ResponsiveContainer>
+           </div>
+        </div>
+      </div>
     </div>
   );
-
-  if (typeof document !== 'undefined' && document.body) {
-    return createPortal(content, document.body);
-  }
-
-  return content;
 };
 
 
@@ -666,7 +636,7 @@ const GrievanceReportPage = () => {
           isOpen={isInsightsOpen} 
           onClose={() => setIsInsightsOpen(false)} 
         />
-        {/* Backdrop removed — InsightsPanel now portals its own overlay to document.body */}
+        {isInsightsOpen && <div className="fixed inset-0 bg-black/30 z-40" onClick={() => setIsInsightsOpen(false)}></div>}
 
       </div>
     </div>
