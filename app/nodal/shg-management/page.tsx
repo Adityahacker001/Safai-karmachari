@@ -329,7 +329,7 @@ export default function SHGManagementPage() {
 
             {/* Table */}
             <Card className="bg-white shadow-lg rounded-2xl overflow-hidden">
-                <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+                <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-t-2xl">
                     <CardTitle className="text-xl font-bold">SHG Directory</CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">

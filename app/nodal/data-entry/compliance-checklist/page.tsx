@@ -155,7 +155,7 @@ export default function ComplianceChecklistPage() {
             />
           </div>
           <Card className="bg-white shadow-lg rounded-2xl overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+            <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-t-2xl">
               <CardTitle className="text-xl font-bold">Contractor List</CardTitle>
               <CardDescription className="text-blue-100">List of all contractors in your zone</CardDescription>
             </CardHeader>
