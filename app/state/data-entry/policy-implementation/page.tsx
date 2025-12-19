@@ -83,7 +83,7 @@ export default function PolicyImplementationLogPage() {
   return (
     <div className={cn("min-h-screen space-y-8 p-6 md:p-8")}>
       {/* District-style title/banner */}
-      <div className="w-full rounded-xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 text-white">
+      <div className="w-full rounded-2xl shadow-2xl p-6 md:p-8 min-h-[96px] mb-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 text-white">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="flex items-center space-x-4">
             <div className="w-12" aria-hidden />
@@ -98,7 +98,7 @@ export default function PolicyImplementationLogPage() {
         {/* Left Column: Log New Policy Form */}
         <div className="lg:col-span-3">
           <Card className={cn(contractorTheme.card.container)}>
-            <CardHeader className={cn(contractorTheme.card.header)}>
+            <CardHeader className={cn(contractorTheme.card.header, 'rounded-2xl')}>
               <CardTitle className={cn(contractorTheme.card.title, "flex items-center space-x-2")}>
                 <Plus className="h-5 w-5" />
                 <span>Log New Policy Initiative</span>

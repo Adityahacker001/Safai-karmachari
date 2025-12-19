@@ -32,6 +32,7 @@ const UserManagement = () => {
   const [role, setRole] = React.useState("District Officer");
   const [stateSel, setStateSel] = React.useState("");
   const [districtSel, setDistrictSel] = React.useState("");
+  const [selectedUser, setSelectedUser] = React.useState<any | null>(null);
 
   const resetForm = () => { setFullName(""); setEmail(""); setPassword(""); setRole("District Officer"); setStateSel(""); setDistrictSel(""); };
 
@@ -75,7 +76,12 @@ const UserManagement = () => {
     { key: "district", header: "District", sortable: true },
     { key: "status", header: "Status", render: (value: string) => (<div className="flex items-center space-x-2">{getStatusIcon(value)}<span className={`text-sm font-medium ${ value === "Active" ? "text-green-600" : value === "Inactive" ? "text-red-600" : "text-yellow-600" }`}>{value}</span></div>) },
     { key: "lastLogin", header: "Last Login", sortable: true },
-    { key: "action", header: "Actions", render: (_value: any, row: any) => (<div className="flex space-x-2"><button className="flex items-center space-x-1 px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg" onClick={() => alert(`Viewing user: ${row.name}`)}><Eye className="w-3 h-3"/><span>View</span></button><button className="flex items-center space-x-1 px-3 py-1 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg" onClick={() => alert(`Editing user: ${row.name}`)}><span>Edit</span></button></div>) },
+    { key: "action", header: "Actions", render: (_value: any, row: any) => (
+      <div className="flex space-x-2">
+        <button className="flex items-center space-x-1 px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg" onClick={() => setSelectedUser(row)}><Eye className="w-3 h-3"/><span>View</span></button>
+        <button className="flex items-center space-x-1 px-3 py-1 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg" onClick={() => alert(`Editing user: ${row.name}`)}><span>Edit</span></button>
+      </div>
+    ) },
   ];
 
   const actionButton = (
@@ -197,6 +203,57 @@ const UserManagement = () => {
       <div className="excel-table">
         <DataTable title="User Management" columns={columns} data={userData} tableClassName="excel-table" />
       </div>
+      {/* Centered modal details for selected user */}
+      {selectedUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/30" onClick={() => setSelectedUser(null)} />
+          <div className="relative w-full max-w-2xl mx-4">
+            <div className="bg-white rounded-lg shadow-2xl overflow-hidden">
+              <div className="flex items-start justify-between bg-gradient-to-r from-indigo-600 to-violet-500 p-5">
+                <div>
+                  <h2 className="text-xl font-bold text-white">User Details</h2>
+                  <p className="text-sm text-white/90">{selectedUser.id}</p>
+                </div>
+                <button className="text-white/90 p-1 rounded-full hover:bg-white/10" onClick={() => setSelectedUser(null)} aria-label="Close details">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="p-6 bg-white">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="text-xs text-slate-500">Name</label>
+                    <div className="mt-1 text-sm font-medium text-slate-800">{selectedUser.name}</div>
+                  </div>
+                  <div>
+                    <label className="text-xs text-slate-500">Email</label>
+                    <div className="mt-1 text-sm text-slate-800">{selectedUser.email}</div>
+                  </div>
+                  <div>
+                    <label className="text-xs text-slate-500">Role</label>
+                    <div className="mt-1 text-sm text-slate-800">{selectedUser.role}</div>
+                  </div>
+                  <div>
+                    <label className="text-xs text-slate-500">District</label>
+                    <div className="mt-1 text-sm text-slate-800">{selectedUser.district}</div>
+                  </div>
+                  <div>
+                    <label className="text-xs text-slate-500">Status</label>
+                    <div className="mt-1 text-sm text-slate-800">{selectedUser.status}</div>
+                  </div>
+                  <div>
+                    <label className="text-xs text-slate-500">Last Login</label>
+                    <div className="mt-1 text-sm text-slate-800">{selectedUser.lastLogin}</div>
+                  </div>
+                </div>
+                <div className="mt-6 flex justify-end gap-3">
+                  <button onClick={() => setSelectedUser(null)} className="px-4 py-2 rounded-md border border-gray-200 text-gray-700">Close</button>
+                  <button className="px-4 py-2 rounded-md bg-indigo-600 text-white">Reset Password</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
