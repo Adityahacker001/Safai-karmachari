@@ -143,7 +143,7 @@ export default function StatCard({
           
           {/* Value */}
           <div className="relative mt-1 sm:mt-2">
-            <p className="text-lg sm:text-2xl lg:text-3xl xl:text-4xl font-bold group-hover:scale-105 transition-transform duration-300 relative z-10 text-white leading-none">
+            <p className="text-lg sm:text-2xl lg:text-3xl xl:text-4xl font-bold transform transition-transform duration-300 relative z-10 text-white leading-none group-hover:-translate-y-1">
               {value}
             </p>
             {/* Subtle Underline Effect */}
