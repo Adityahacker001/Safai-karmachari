@@ -127,15 +127,19 @@ export default function StateDashboard() {
 
             {points.map((p, i) => (
               <g key={i}>
-                <circle
-                  cx={p.x}
-                  cy={p.y}
-                  r={6}
-                  fill="#1e40af"
-                  className="cursor-pointer"
-                  onClick={(e) => { e.stopPropagation(); setActive(prev => prev === i ? null : i); }}
-                />
-                <title>{`${p.label}: ${p.value}%`}</title>
+                {i !== 5 && (
+                  <>
+                    <circle
+                      cx={p.x}
+                      cy={p.y}
+                      r={6}
+                      fill="#1e40af"
+                      className="cursor-pointer"
+                      onClick={(e) => { e.stopPropagation(); setActive(prev => prev === i ? null : i); }}
+                    />
+                    <title>{`${p.label}: ${p.value}%`}</title>
+                  </>
+                )}
               </g>
             ))}
 
